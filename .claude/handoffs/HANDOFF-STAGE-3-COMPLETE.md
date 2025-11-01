@@ -132,61 +132,67 @@ All tests passing (28/28). Server uses port 3000.
 
 ## GIT STATUS
 
-**Branch:** stage3-prep
-**Commits:** 4 new commits (not pushed to remote)
+**Branch:** stage3-prep (synced with origin)
+**All commits pushed and merged to main** ✅
+
+**Stage 3 Commits:**
 - 928ca59: Ship assignment + control restrictions
 - 9c11b7b: Real-time ship state synchronization
 - 62c6bd2: Connection manager and game reset
 - f897982: Complete test coverage for multiplayer
+- f68f8c3: Stage 3 implementation summary
+- ff2a1e6: Stage 3 completion handoff document
+- fc773fa: Token-optimized stage plan (Stages 4-9)
 
-**Changes:**
+**Files Added:**
 - server.js: Ship assignment, state tracking, authorization
 - public/index.html: Control restrictions, visual labels, ship state display
-- tests/unit/multiplayer.test.js: NEW - 17 multiplayer tests
-- tests/integration/stage3.test.js: NEW - 4 Puppeteer tests
-
-**To sync:**
-```bash
-git push                          # Push stage3-prep to remote
-git checkout main
-git merge stage3-prep
-git push
-git checkout stage3-prep
-```
+- tests/unit/multiplayer.test.js: 17 multiplayer tests
+- tests/integration/stage3.test.js: 4 Puppeteer tests
+- .claude/STAGE-PLAN.md: Development roadmap (Stages 4-9)
+- .claude/STAGE3-SUMMARY.md: Implementation summary
+- .claude/handoffs/HANDOFF-STAGE-3-COMPLETE.md: This document
 
 ---
 
-## STAGE 4 SUGGESTIONS
+## NEXT STAGE: STAGE 4
 
-**Option A: Combat Rounds / Turn System**
-- Add round counter
-- Enforce turn order (Scout → Corsair → repeat)
-- "End Turn" button
-- Initiative system
-- Time: 2-3 hours
+**See `.claude/STAGE-PLAN.md` for complete development roadmap (Stages 4-9)**
 
-**Option B: Weapon Selection**
-- Multiple weapons per ship
-- Different damage types
-- Weapon stats (range, damage, accuracy)
-- Ammo tracking
-- Time: 2-3 hours
+### Stage 4: Combat Rounds & Turn System
+**Target Tokens:** 90,000
+**Estimated Time:** 2-3 hours
+**Status:** Ready to start
 
-**Option C: Character/Crew System**
-- Assign crew to ships
-- Pilot, Gunner, Engineer roles
-- Skill checks for actions
-- Crew damage/injuries
-- Time: 3-4 hours
+**Key Features:**
+- Round counter (Round 1, 2, 3...)
+- Turn order enforcement (Scout → Corsair → repeat)
+- "End Turn" button (disabled until your turn)
+- Initiative system (2d6 + pilot skill, high goes first)
+- Turn indicator: "Your Turn" / "Opponent's Turn"
+- Round history log
 
-**Option D: Movement/Positioning**
-- 2D grid or hex map
-- Ship movement
-- Range calculated from positions
-- Line of sight
-- Time: 4-5 hours
+**Deliverables:**
+- Turn-based combat working
+- Initiative determines first player
+- Cannot attack out of turn
+- Round counter visible to both players
+- 20 new tests (turn order, initiative, round progression)
 
-**Recommended:** Start with Option A (Combat Rounds) as it's foundational for the others.
+**Technical Scope:**
+- Server: Track currentRound, currentPlayerTurn, initiative
+- Server: Validate combat only on your turn
+- Client: Enable/disable attack based on turn
+- Client: Visual turn indicator
+- Event: `turnChange` broadcast
+
+**Why This Stage:**
+- Foundational for all future features
+- Relatively straightforward (low risk)
+- Well-scoped for 90k tokens
+- Natural progression from multiplayer sync
+
+**Subsequent Stages:** See STAGE-PLAN.md for Stages 5-9 details
 
 ---
 
@@ -229,9 +235,15 @@ node server.js
 
 ### Step 4: Tell New Claude
 Just say:
-> "Continue from handoff document. Start Stage 4 with [Option A/B/C/D]."
+> "Continue from handoff document. Start Stage 4."
 
-Or ask Claude to review options and recommend one.
+Claude will follow the token-optimized plan in `.claude/STAGE-PLAN.md`.
+
+**Token Budget Awareness:**
+- New conversation = 200,000 tokens
+- Stage 4 target = 90,000 tokens (45% of budget)
+- Leaves 110,000 tokens buffer for iteration/debugging
+- If approaching 90k, Claude will wrap up and prepare handoff for Stage 5
 
 ---
 
