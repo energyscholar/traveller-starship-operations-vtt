@@ -472,7 +472,43 @@
     socket.on('gameState', (data) => {
       console.log('[STATE] Game state received:', data);
       gameState = data;
+      if (data.shipStates) {
+        updateShipDisplay(data.shipStates);
+      }
     });
+
+    // Stage 3: Receive ship state updates (hull changes)
+    socket.on('shipStateUpdate', (data) => {
+      console.log('[STATE] Ship state update:', data.ships);
+      updateShipDisplay(data.ships);
+    });
+
+    // Update UI to show current ship hull values
+    function updateShipDisplay(ships) {
+      // Update attacker select options
+      const scoutOption = attackerSelect.querySelector('option[value="scout"]');
+      const corsairOptionAttacker = attackerSelect.querySelector('option[value="corsair"]');
+
+      if (scoutOption) {
+        scoutOption.textContent = `Scout (Skill +2, Armor 2, Hull ${ships.scout.hull}/${ships.scout.maxHull})`;
+      }
+      if (corsairOptionAttacker) {
+        corsairOptionAttacker.textContent = `Corsair (Skill +1, Armor 4, Hull ${ships.corsair.hull}/${ships.corsair.maxHull})`;
+      }
+
+      // Update target select options
+      const scoutOptionTarget = targetSelect.querySelector('option[value="scout"]');
+      const corsairOptionTarget = targetSelect.querySelector('option[value="corsair"]');
+
+      if (scoutOptionTarget) {
+        scoutOptionTarget.textContent = `Scout (Skill +2, Armor 2, Hull ${ships.scout.hull}/${ships.scout.maxHull})`;
+      }
+      if (corsairOptionTarget) {
+        corsairOptionTarget.textContent = `Corsair (Skill +1, Armor 4, Hull ${ships.corsair.hull}/${ships.corsair.maxHull})`;
+      }
+
+      console.log(`[UI] Updated ship displays - Scout: ${ships.scout.hull}/${ships.scout.maxHull}, Corsair: ${ships.corsair.hull}/${ships.corsair.maxHull}`);
+    }
 
     socket.on('disconnect', () => {
       console.log('[SOCKET] Disconnected');

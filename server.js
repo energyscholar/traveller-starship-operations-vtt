@@ -22,6 +22,29 @@ app.use(express.json());
 let connectionCount = 0;
 const connections = new Map();
 
+// Stage 3: Track persistent ship state (hull, etc.)
+const shipState = {
+  scout: {
+    hull: SHIPS.scout.hull,
+    maxHull: SHIPS.scout.maxHull,
+    armor: SHIPS.scout.armor,
+    pilotSkill: SHIPS.scout.pilotSkill
+  },
+  corsair: {
+    hull: SHIPS.corsair.hull,
+    maxHull: SHIPS.corsair.maxHull,
+    armor: SHIPS.corsair.armor,
+    pilotSkill: SHIPS.corsair.pilotSkill
+  }
+};
+
+// Helper: Reset ship states to full hull
+function resetShipStates() {
+  shipState.scout.hull = SHIPS.scout.maxHull;
+  shipState.corsair.hull = SHIPS.corsair.maxHull;
+  console.log('[GAME] Ship states reset');
+}
+
 // Helper: Get available ship for new player
 function getAvailableShip() {
   const assignedShips = Array.from(connections.values())
@@ -79,7 +102,13 @@ io.on('connection', (socket) => {
   // Send current game state to new player
   socket.emit('gameState', {
     assignments: getShipAssignments(),
-    totalPlayers: connections.size
+    totalPlayers: connections.size,
+    shipStates: shipState
+  });
+
+  // Broadcast updated ship states to all players
+  io.emit('shipStateUpdate', {
+    ships: shipState
   });
   
   // Handle "hello" messages (Stage 1)
@@ -114,35 +143,69 @@ io.on('connection', (socket) => {
       return;
     }
 
-    // Get ships
-    const attacker = SHIPS[data.attacker];
-    const target = SHIPS[data.target];
+    // Get base ships for stats
+    const attackerBase = SHIPS[data.attacker];
+    const targetBase = SHIPS[data.target];
 
-    if (!attacker || !target) {
+    if (!attackerBase || !targetBase) {
       socket.emit('combatError', { message: 'Invalid ship' });
       return;
     }
-    
+
+    // Use current ship state (with current hull values)
+    const attackerShip = {
+      ...attackerBase,
+      hull: shipState[data.attacker].hull
+    };
+    const targetShip = {
+      ...targetBase,
+      hull: shipState[data.target].hull
+    };
+
+    // Check if target is already destroyed
+    if (targetShip.hull <= 0) {
+      socket.emit('combatError', {
+        message: `${targetBase.name} is already destroyed!`
+      });
+      return;
+    }
+
     // Resolve combat
-    const result = resolveAttack(attacker, target, {
+    const result = resolveAttack(attackerShip, targetShip, {
       range: data.range,
       dodge: data.dodge,
       seed: data.seed
     });
-    
+
     const breakdown = getAttackBreakdown(result);
-    
+
     console.log(`[COMBAT] Result: ${result.hit ? 'HIT' : 'MISS'}`);
     if (result.hit) {
-      console.log(`[COMBAT] Damage: ${result.damage} (${target.hull} → ${result.newHull} hull)`);
+      console.log(`[COMBAT] Damage: ${result.damage} (${targetShip.hull} → ${result.newHull} hull)`);
+
+      // Update persistent ship state
+      const oldHull = shipState[data.target].hull;
+      shipState[data.target].hull = result.newHull;
+
+      console.log(`[STATE] ${targetBase.name} hull: ${oldHull} → ${shipState[data.target].hull}`);
+
+      // Check for victory
+      if (shipState[data.target].hull <= 0) {
+        console.log(`[VICTORY] ${attackerBase.name} has destroyed ${targetBase.name}!`);
+      }
     }
-    
+
     // Broadcast result to all tabs
     io.emit('combatResult', {
-      fromTab: connectionId,
+      fromPlayer: connectionId,
       result: result,
       breakdown: breakdown,
       timestamp: Date.now()
+    });
+
+    // Broadcast updated ship states
+    io.emit('shipStateUpdate', {
+      ships: shipState
     });
   });
   
