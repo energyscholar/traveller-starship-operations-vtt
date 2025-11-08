@@ -23,6 +23,28 @@ app.use(express.json());
 let connectionCount = 0;
 const connections = new Map();
 
+// Stage 8.8: Track active space combat sessions
+const activeCombats = new Map();
+
+// Stage 8.8: Generate default crew for a ship
+function generateDefaultCrew(shipType) {
+  if (shipType === 'scout') {
+    return [
+      { id: 'pilot_1', name: 'Miller', role: 'pilot', skill: 2, health: 10, maxHealth: 10 },
+      { id: 'gunner_1', name: 'Chen', role: 'gunner', skill: 1, health: 10, maxHealth: 10 },
+      { id: 'engineer_1', name: 'Rodriguez', role: 'engineer', skill: 1, health: 10, maxHealth: 10 }
+    ];
+  } else if (shipType === 'free_trader') {
+    return [
+      { id: 'pilot_1', name: 'Johnson', role: 'pilot', skill: 1, health: 10, maxHealth: 10 },
+      { id: 'gunner_1', name: 'Smith', role: 'gunner', skill: 1, health: 10, maxHealth: 10 },
+      { id: 'gunner_2', name: 'Davis', role: 'gunner', skill: 1, health: 10, maxHealth: 10 },
+      { id: 'engineer_1', name: 'Wilson', role: 'engineer', skill: 1, health: 10, maxHealth: 10 }
+    ];
+  }
+  return [];
+}
+
 // Stage 5: Initialize ammo for each weapon
 function initializeAmmo(ship) {
   const ammo = {};
@@ -703,6 +725,247 @@ io.on('connection', (socket) => {
         if (s && s.spaceSelection) {
           s.spaceSelection.ready = false;
         }
+      });
+
+      // Initialize combat state
+      const combatId = `${player1.id}_${player2.id}`;
+      if (!activeCombats.has(combatId)) {
+        activeCombats.set(combatId, {
+          id: combatId,
+          player1: {
+            id: player1.id,
+            ship: player1.spaceSelection.ship,
+            hull: player1.spaceSelection.ship === 'scout' ? 20 : 30,
+            maxHull: player1.spaceSelection.ship === 'scout' ? 20 : 30,
+            armour: player1.spaceSelection.ship === 'scout' ? 4 : 2,
+            turrets: player1.spaceSelection.ship === 'scout' ? 1 : 2,
+            crew: generateDefaultCrew(player1.spaceSelection.ship),
+            criticals: []
+          },
+          player2: {
+            id: player2.id,
+            ship: player2.spaceSelection.ship,
+            hull: player2.spaceSelection.ship === 'scout' ? 20 : 30,
+            maxHull: player2.spaceSelection.ship === 'scout' ? 20 : 30,
+            armour: player2.spaceSelection.ship === 'scout' ? 4 : 2,
+            turrets: player2.spaceSelection.ship === 'scout' ? 1 : 2,
+            crew: generateDefaultCrew(player2.spaceSelection.ship),
+            criticals: []
+          },
+          range: finalRange,
+          round: 1,
+          activePlayer: player1.id,
+          turnComplete: { [player1.id]: false, [player2.id]: false }
+        });
+        console.log(`[SPACE COMBAT] Combat state initialized: ${combatId}`);
+      }
+    }
+  });
+
+  // ======== STAGE 8.8: SPACE COMBAT RESOLUTION ========
+
+  // Handle fire action
+  socket.on('space:fire', (data) => {
+    console.log(`[SPACE:FIRE] Player ${connectionId} firing`, data);
+
+    // Find combat for this player
+    let combat = null;
+    let attackerPlayer = null;
+    let defenderPlayer = null;
+    let attackerSocket = null;
+    let defenderSocket = null;
+
+    for (const [combatId, c] of activeCombats.entries()) {
+      if (c.player1.id === socket.id) {
+        combat = c;
+        attackerPlayer = c.player1;
+        defenderPlayer = c.player2;
+        attackerSocket = socket;
+        defenderSocket = io.sockets.sockets.get(c.player2.id);
+        break;
+      } else if (c.player2.id === socket.id) {
+        combat = c;
+        attackerPlayer = c.player2;
+        defenderPlayer = c.player1;
+        attackerSocket = socket;
+        defenderSocket = io.sockets.sockets.get(c.player1.id);
+        break;
+      }
+    }
+
+    if (!combat) {
+      console.log(`[SPACE:FIRE] No active combat found for player ${connectionId}`);
+      return;
+    }
+
+    // Check if it's this player's turn
+    if (combat.activePlayer !== socket.id) {
+      console.log(`[SPACE:FIRE] Not player's turn: ${connectionId}`);
+      socket.emit('space:notYourTurn', { message: 'Wait for your turn!' });
+      return;
+    }
+
+    // Resolve attack using combat library
+    const attackResult = combat_lib.resolveSpaceCombatAttack(
+      attackerPlayer,
+      defenderPlayer,
+      {
+        range: combat.range,
+        weapon: data.weapon || 0,
+        turret: data.turret || 0
+      }
+    );
+
+    console.log(`[SPACE:FIRE] Attack result:`, attackResult);
+
+    if (attackResult.hit) {
+      // Apply damage
+      defenderPlayer.hull -= attackResult.damage;
+      if (defenderPlayer.hull < 0) defenderPlayer.hull = 0;
+
+      console.log(`[SPACE:FIRE] HIT! ${attackResult.damage} damage. Hull: ${defenderPlayer.hull}/${defenderPlayer.maxHull}`);
+
+      // Broadcast hit to both players
+      attackerSocket.emit('space:attackResult', {
+        hit: true,
+        damage: attackResult.damage,
+        targetHull: defenderPlayer.hull,
+        attackRoll: attackResult.attackRoll,
+        total: attackResult.total
+      });
+
+      defenderSocket.emit('space:attacked', {
+        hit: true,
+        damage: attackResult.damage,
+        hull: defenderPlayer.hull,
+        maxHull: defenderPlayer.maxHull
+      });
+
+      // Check for critical hits
+      const hullPercent = (defenderPlayer.hull / defenderPlayer.maxHull) * 100;
+      if (hullPercent <= 50 && attackResult.damage > 0 && Math.random() < 0.3) {
+        const criticalSystems = ['Turret', 'Sensors', 'Maneuver Drive', 'Jump Drive', 'Power Plant'];
+        const criticalSystem = criticalSystems[Math.floor(Math.random() * criticalSystems.length)];
+
+        defenderPlayer.criticals.push(criticalSystem);
+
+        io.to(combat.player1.id).to(combat.player2.id).emit('space:critical', {
+          target: defenderPlayer.id === combat.player1.id ? 'player1' : 'player2',
+          system: criticalSystem,
+          damage: attackResult.damage
+        });
+
+        console.log(`[SPACE:CRITICAL] ${criticalSystem} damaged!`);
+      }
+
+      // Check for victory
+      if (defenderPlayer.hull <= 0) {
+        const winner = attackerPlayer.id === combat.player1.id ? 'player1' : 'player2';
+        const loser = defenderPlayer.id === combat.player1.id ? 'player1' : 'player2';
+
+        console.log(`[SPACE:VICTORY] ${winner} wins! ${loser} destroyed.`);
+
+        io.to(combat.player1.id).to(combat.player2.id).emit('space:combatEnd', {
+          winner,
+          loser,
+          finalHull: {
+            player1: combat.player1.hull,
+            player2: combat.player2.hull
+          },
+          rounds: combat.round
+        });
+
+        // Clean up combat
+        activeCombats.delete(combat.id);
+        return;
+      }
+    } else {
+      console.log(`[SPACE:FIRE] MISS!`);
+
+      // Broadcast miss to both players
+      attackerSocket.emit('space:attackResult', {
+        hit: false,
+        attackRoll: attackResult.attackRoll,
+        total: attackResult.total,
+        targetNumber: attackResult.targetNumber
+      });
+
+      defenderSocket.emit('space:attacked', {
+        hit: false
+      });
+    }
+
+    // Mark turn as complete for this player
+    combat.turnComplete[socket.id] = true;
+
+    // Check if both players have completed their turns
+    if (combat.turnComplete[combat.player1.id] && combat.turnComplete[combat.player2.id]) {
+      // Start new round
+      combat.round++;
+      combat.turnComplete = { [combat.player1.id]: false, [combat.player2.id]: false };
+
+      console.log(`[SPACE:ROUND] Starting round ${combat.round}`);
+
+      io.to(combat.player1.id).to(combat.player2.id).emit('space:newRound', {
+        round: combat.round,
+        player1Hull: combat.player1.hull,
+        player2Hull: combat.player2.hull
+      });
+    } else {
+      // Switch active player
+      combat.activePlayer = combat.activePlayer === combat.player1.id ? combat.player2.id : combat.player1.id;
+
+      io.to(combat.player1.id).to(combat.player2.id).emit('space:turnChange', {
+        activePlayer: combat.activePlayer,
+        round: combat.round
+      });
+    }
+  });
+
+  // Handle end turn
+  socket.on('space:endTurn', () => {
+    console.log(`[SPACE:END_TURN] Player ${connectionId} ending turn`);
+
+    // Find combat for this player
+    let combat = null;
+
+    for (const [combatId, c] of activeCombats.entries()) {
+      if (c.player1.id === socket.id || c.player2.id === socket.id) {
+        combat = c;
+        break;
+      }
+    }
+
+    if (!combat) {
+      console.log(`[SPACE:END_TURN] No active combat found for player ${connectionId}`);
+      return;
+    }
+
+    // Mark turn as complete for this player
+    combat.turnComplete[socket.id] = true;
+
+    console.log(`[SPACE:END_TURN] Turn complete for ${connectionId}`);
+
+    // Check if both players have completed their turns
+    if (combat.turnComplete[combat.player1.id] && combat.turnComplete[combat.player2.id]) {
+      // Start new round
+      combat.round++;
+      combat.turnComplete = { [combat.player1.id]: false, [combat.player2.id]: false };
+
+      console.log(`[SPACE:ROUND] Starting round ${combat.round}`);
+
+      io.to(combat.player1.id).to(combat.player2.id).emit('space:newRound', {
+        round: combat.round,
+        player1Hull: combat.player1.hull,
+        player2Hull: combat.player2.hull
+      });
+    } else {
+      // Switch active player
+      combat.activePlayer = combat.activePlayer === combat.player1.id ? combat.player2.id : combat.player1.id;
+
+      io.to(combat.player1.id).to(combat.player2.id).emit('space:turnChange', {
+        activePlayer: combat.activePlayer,
+        round: combat.round
       });
     }
   });

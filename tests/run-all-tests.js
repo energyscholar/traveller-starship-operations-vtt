@@ -37,8 +37,9 @@ const unitTests = [
 
 // Integration tests
 const integrationTests = [
-  'tests/integration/space-ship-selection.test.js',  // Stage 8.6
-  'tests/integration/space-combat-hud.test.js'       // Stage 8.7
+  'tests/integration/space-ship-selection.test.js',     // Stage 8.6
+  'tests/integration/space-combat-hud.test.js',         // Stage 8.7
+  'tests/integration/space-combat-resolution.test.js'   // Stage 8.8
 ];
 
 let totalPassed = 0;

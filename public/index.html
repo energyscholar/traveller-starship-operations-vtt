@@ -2572,21 +2572,27 @@
       combatLog.scrollTop = combatLog.scrollHeight;
     }
 
-    // Listen for combat events from server
-    socket.on('space:hit', (data) => {
-      console.log('[HIT]', data);
-      addLogEntry(`HIT! ${data.damage} damage dealt`, 'hit');
+    // Listen for combat events from server (Stage 8.8)
+    socket.on('space:attackResult', (data) => {
+      console.log('[ATTACK RESULT]', data);
 
-      // Update hull if it's our ship that was hit
-      if (data.target === 'player') {
-        currentShipData.hull -= data.damage;
-        updateShipHUD();
+      if (data.hit) {
+        addLogEntry(`HIT! ${data.damage} damage dealt (Roll: ${data.attackRoll}, Total: ${data.total})`, 'hit');
+      } else {
+        addLogEntry(`MISS! (Roll: ${data.attackRoll}, Total: ${data.total}, Need: ${data.targetNumber})`, 'miss');
       }
     });
 
-    socket.on('space:miss', (data) => {
-      console.log('[MISS]', data);
-      addLogEntry('MISS! Attack failed', 'miss');
+    socket.on('space:attacked', (data) => {
+      console.log('[ATTACKED]', data);
+
+      if (data.hit) {
+        addLogEntry(`Enemy hits! ${data.damage} damage taken!`, 'hit');
+        currentShipData.hull = data.hull;
+        updateShipHUD();
+      } else {
+        addLogEntry('Enemy misses!', 'miss');
+      }
     });
 
     socket.on('space:critical', (data) => {
@@ -2602,12 +2608,61 @@
       addLogEntry(`Round ${data.round} begins!`, 'system');
 
       // Re-enable buttons
-      fireButton.disabled = false;
+      updateFireButtonState();
       endTurnButton.disabled = false;
       useDefaultButton.disabled = false;
 
       // Restart turn timer
       startTurnTimer();
+    });
+
+    socket.on('space:turnChange', (data) => {
+      console.log('[TURN CHANGE]', data);
+
+      const isMyTurn = data.activePlayer === socket.id;
+      if (isMyTurn) {
+        addLogEntry('Your turn!', 'system');
+        updateFireButtonState();
+        endTurnButton.disabled = false;
+        useDefaultButton.disabled = false;
+        startTurnTimer();
+      } else {
+        addLogEntry('Opponent\'s turn...', 'system');
+        fireButton.disabled = true;
+        endTurnButton.disabled = true;
+        useDefaultButton.disabled = true;
+        stopTurnTimer();
+      }
+    });
+
+    socket.on('space:combatEnd', (data) => {
+      console.log('[COMBAT END]', data);
+
+      stopTurnTimer();
+
+      const isWinner = (data.winner === 'player1' && currentShipData.ship === selectedShip);
+
+      if (isWinner) {
+        addLogEntry(`🎉 VICTORY! Enemy ship destroyed in ${data.rounds} rounds!`, 'system');
+      } else {
+        addLogEntry(`💥 DEFEAT! Your ship was destroyed in ${data.rounds} rounds.`, 'system');
+      }
+
+      // Disable all combat buttons
+      fireButton.disabled = true;
+      endTurnButton.disabled = true;
+      useDefaultButton.disabled = true;
+
+      // Show victory/defeat message
+      setTimeout(() => {
+        alert(isWinner ? `VICTORY!\n\nEnemy destroyed in ${data.rounds} rounds!\n\nYour Hull: ${currentShipData.hull}/${currentShipData.maxHull}`
+                        : `DEFEAT!\n\nYour ship was destroyed in ${data.rounds} rounds.`);
+      }, 500);
+    });
+
+    socket.on('space:notYourTurn', (data) => {
+      console.log('[NOT YOUR TURN]', data);
+      addLogEntry(data.message, 'system');
     });
 
     console.log('========================================');
