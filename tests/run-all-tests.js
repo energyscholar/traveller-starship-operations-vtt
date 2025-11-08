@@ -35,12 +35,20 @@ const unitTests = [
   'tests/unit/xss-validation.test.js'
 ];
 
+// Integration tests
+const integrationTests = [
+  'tests/integration/space-ship-selection.test.js'  // Stage 8.6
+];
+
 let totalPassed = 0;
 let totalFailed = 0;
 let suitesRun = 0;
 let suitesFailed = 0;
 
-for (const testFile of unitTests) {
+// Run all tests (unit + integration)
+const allTests = [...unitTests, ...integrationTests];
+
+for (const testFile of allTests) {
   const testPath = path.join(__dirname, '..', testFile);
 
   if (!fs.existsSync(testPath)) {

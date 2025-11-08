@@ -490,10 +490,235 @@
       color: #4CAF50;
       font-weight: bold;
     }
+
+    /* Stage 8.6: Ship Selection Screen */
+    #ship-selection-screen {
+      display: block;
+    }
+
+    #space-combat-screen {
+      display: none;
+    }
+
+    .mode-selector {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .mode-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .mode-btn.selected {
+      background: rgba(0, 255, 0, 0.2);
+      border-color: #00ff00;
+    }
+
+    .ship-selection-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .ship-option {
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .ship-option:hover {
+      background: rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .ship-option.selected {
+      background: rgba(0, 255, 0, 0.2);
+      border-color: #00ff00;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .ship-option-header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #00ff00;
+    }
+
+    .ship-option-type {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+
+    .ship-option-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .ship-option-description {
+      font-size: 13px;
+      opacity: 0.9;
+      font-style: italic;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .range-selection {
+      margin-bottom: 20px;
+    }
+
+    .range-selection label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .range-selection select {
+      width: 100%;
+    }
+
+    .ready-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .ready-indicators {
+      display: flex;
+      gap: 15px;
+      flex: 1;
+    }
+
+    .ready-indicator {
+      flex: 1;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .ready-indicator.ready {
+      background: rgba(0, 255, 0, 0.2);
+      color: #00ff00;
+    }
+
+    .ready-indicator.waiting {
+      background: rgba(255, 165, 0, 0.2);
+      color: #ffa500;
+    }
+
+    #ready-button {
+      min-width: 150px;
+      flex-shrink: 0;
+    }
+
+    #ready-status {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="header">
+      <h1>⚔️ Traveller Combat VTT</h1>
+      <div class="stage">STAGE 8.6: SPACE COMBAT SHIP SELECTION</div>
+    </div>
+
+    <!-- Stage 8.6: Ship Selection Screen -->
+    <div id="ship-selection-screen">
+      <div class="card">
+        <h2>🚀 Select Your Spacecraft</h2>
+
+        <div class="ship-selection-grid">
+          <div class="ship-option" id="ship-option-scout" data-ship="scout">
+            <div class="ship-option-header">⚡ Scout</div>
+            <div class="ship-option-type">Type-S Scout/Courier</div>
+            <div class="ship-option-stats">
+              <div>Hull: <strong>20</strong></div>
+              <div>Armour: <strong>4</strong></div>
+              <div>Thrust: <strong>2</strong></div>
+              <div>Turrets: <strong>1</strong></div>
+            </div>
+            <div class="ship-option-description">
+              Fast exploration vessel with triple turret (pulse laser, sandcaster, missiles)
+            </div>
+          </div>
+
+          <div class="ship-option" id="ship-option-free_trader" data-ship="free_trader">
+            <div class="ship-option-header">📦 Free Trader</div>
+            <div class="ship-option-type">Type-A Free Trader</div>
+            <div class="ship-option-stats">
+              <div>Hull: <strong>30</strong></div>
+              <div>Armour: <strong>2</strong></div>
+              <div>Thrust: <strong>1</strong></div>
+              <div>Turrets: <strong>2</strong></div>
+            </div>
+            <div class="ship-option-description">
+              Versatile merchant vessel with dual beam laser turrets
+            </div>
+          </div>
+        </div>
+
+        <div class="range-selection">
+          <label for="range-select">Starting Range:</label>
+          <select id="range-select">
+            <option value="Adjacent">Adjacent</option>
+            <option value="Close">Close</option>
+            <option value="Short" selected>Short</option>
+            <option value="Medium">Medium</option>
+            <option value="Long">Long</option>
+            <option value="Very Long">Very Long</option>
+            <option value="Distant">Distant</option>
+          </select>
+        </div>
+
+        <div class="ready-section">
+          <div class="ready-indicators">
+            <div class="ready-indicator waiting" id="player-ready-indicator">
+              ⏱ Select ship and range
+            </div>
+            <div class="ready-indicator waiting" id="opponent-ready-indicator">
+              ⏱ Waiting for opponent...
+            </div>
+          </div>
+          <button id="ready-button" disabled>Ready</button>
+        </div>
+
+        <div id="ready-status"></div>
+      </div>
+    </div>
+
+    <!-- Personal Combat Screen (hidden initially for now) -->
+    <div id="personal-combat-screen" style="display: none;">
     <div class="header">
       <h1>⚔️ Traveller Combat VTT</h1>
       <div class="stage">STAGE 4: COMBAT ROUNDS & TURNS</div>
@@ -1561,6 +1786,129 @@
     console.log('4. Click "End Turn" to pass to opponent');
     console.log('Click "Run Tests" button to verify functionality');
     console.log('========================================');
+
+    // ======== STAGE 8.6: SHIP SELECTION UI ========
+
+    const shipSelectionScreen = document.getElementById('ship-selection-screen');
+    const personalCombatScreen = document.getElementById('personal-combat-screen');
+    const readyButton = document.getElementById('ready-button');
+    const playerReadyIndicator = document.getElementById('player-ready-indicator');
+    const opponentReadyIndicator = document.getElementById('opponent-ready-indicator');
+    const readyStatusText = document.getElementById('ready-status');
+    const rangeSelect = document.getElementById('range-select');
+
+    let selectedShip = null;
+    let selectedRange = 'Short';
+    let playerReady = false;
+    let opponentReady = false;
+
+    // Ship selection handlers
+    document.querySelectorAll('.ship-option').forEach(option => {
+      option.addEventListener('click', function() {
+        // Remove selection from all options
+        document.querySelectorAll('.ship-option').forEach(opt => {
+          opt.classList.remove('selected');
+        });
+
+        // Select this option
+        this.classList.add('selected');
+        selectedShip = this.dataset.ship;
+
+        console.log(`[SHIP SELECTION] Selected ${selectedShip}`);
+
+        // Emit ship selection to server
+        socket.emit('space:shipSelected', { ship: selectedShip });
+
+        // Update ready button state
+        updateReadyButton();
+      });
+    });
+
+    // Range selection handler
+    rangeSelect.addEventListener('change', function() {
+      selectedRange = this.value;
+      console.log(`[RANGE SELECTION] Selected ${selectedRange}`);
+
+      // Emit range selection to server
+      socket.emit('space:rangeSelected', { range: selectedRange });
+
+      // Update ready button state
+      updateReadyButton();
+    });
+
+    // Ready button handler
+    readyButton.addEventListener('click', function() {
+      if (!selectedShip || !selectedRange) {
+        alert('Please select a ship and starting range!');
+        return;
+      }
+
+      playerReady = true;
+      readyButton.disabled = true;
+      readyButton.innerHTML = 'Waiting...';
+
+      console.log(`[READY] Player ready with ${selectedShip} at ${selectedRange} range`);
+
+      // Emit ready status to server
+      socket.emit('space:playerReady', {
+        ship: selectedShip,
+        range: selectedRange
+      });
+
+      // Update UI
+      playerReadyIndicator.className = 'ready-indicator ready';
+      playerReadyIndicator.innerHTML = '✓ Ready';
+      readyStatusText.innerHTML = 'Waiting for opponent...';
+    });
+
+    // Update ready button state
+    function updateReadyButton() {
+      if (selectedShip && selectedRange && !playerReady) {
+        readyButton.disabled = false;
+      } else {
+        readyButton.disabled = true;
+      }
+    }
+
+    // Listen for opponent ready status
+    socket.on('space:opponentReady', (data) => {
+      console.log('[OPPONENT READY]', data);
+      opponentReady = true;
+      opponentReadyIndicator.className = 'ready-indicator ready';
+      opponentReadyIndicator.innerHTML = '✓ Ready';
+
+      // Check if both players are ready
+      if (playerReady && opponentReady) {
+        readyStatusText.innerHTML = 'Starting combat...';
+      }
+    });
+
+    // Listen for combat start
+    socket.on('space:combatStart', (data) => {
+      console.log('[COMBAT START]', data);
+
+      // Hide ship selection, show combat screen
+      shipSelectionScreen.style.display = 'none';
+
+      // For now, show personal combat screen (will be replaced with space combat UI in 8.7)
+      personalCombatScreen.style.display = 'block';
+
+      readyStatusText.innerHTML = 'Combat started!';
+    });
+
+    // Initialize range selection
+    selectedRange = rangeSelect.value;
+
+    console.log('========================================');
+    console.log('TRAVELLER COMBAT VTT - STAGE 8.6');
+    console.log('========================================');
+    console.log('Space Combat Ship Selection loaded');
+    console.log('1. Select your spacecraft (Scout or Free Trader)');
+    console.log('2. Choose starting range (Adjacent to Distant)');
+    console.log('3. Click "Ready" when ready to fight');
+    console.log('4. Combat starts when both players ready');
+    console.log('========================================');
   </script>
+  </div> <!-- Close personal-combat-screen -->
 </body>
 </html>

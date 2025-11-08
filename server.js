@@ -640,6 +640,73 @@ io.on('connection', (socket) => {
     }
   });
   
+  // ======== STAGE 8.6: SPACE COMBAT SHIP SELECTION ========
+
+  // Track ship selection state per socket
+  socket.spaceSelection = {
+    ship: null,
+    range: null,
+    ready: false
+  };
+
+  socket.on('space:shipSelected', (data) => {
+    console.log(`[SPACE] Player ${connectionId} selected ship: ${data.ship}`);
+    socket.spaceSelection.ship = data.ship;
+  });
+
+  socket.on('space:rangeSelected', (data) => {
+    console.log(`[SPACE] Player ${connectionId} selected range: ${data.range}`);
+    socket.spaceSelection.range = data.range;
+  });
+
+  socket.on('space:playerReady', (data) => {
+    console.log(`[SPACE] Player ${connectionId} ready with ${data.ship} at ${data.range}`);
+
+    socket.spaceSelection.ship = data.ship;
+    socket.spaceSelection.range = data.range;
+    socket.spaceSelection.ready = true;
+
+    // Notify other players that this player is ready
+    socket.broadcast.emit('space:opponentReady', {
+      ship: data.ship,
+      range: data.range
+    });
+
+    // Check if both players are ready
+    const allSockets = Array.from(connections.keys()).map(id => io.sockets.sockets.get(id));
+    const readyPlayers = allSockets.filter(s => s && s.spaceSelection && s.spaceSelection.ready);
+
+    console.log(`[SPACE] ${readyPlayers.length}/${allSockets.length} players ready`);
+
+    if (readyPlayers.length >= 2) {
+      // Both players ready - start combat!
+      const player1 = readyPlayers[0];
+      const player2 = readyPlayers[1];
+
+      // Use the last player's range selection
+      const finalRange = player2.spaceSelection.range || player1.spaceSelection.range || 'Short';
+
+      console.log(`[SPACE COMBAT] Starting! Range: ${finalRange}`);
+      console.log(`[SPACE COMBAT] Ships: ${player1.spaceSelection.ship} vs ${player2.spaceSelection.ship}`);
+
+      // Broadcast combat start to both players
+      io.emit('space:combatStart', {
+        range: finalRange,
+        ships: {
+          player1: player1.spaceSelection.ship,
+          player2: player2.spaceSelection.ship
+        }
+      });
+
+      // Reset ready state
+      readyPlayers.forEach(s => {
+        if (s && s.spaceSelection) {
+          s.spaceSelection.ready = false;
+        }
+      });
+    }
+  });
+
   socket.on('disconnect', () => {
     const conn = connections.get(socket.id);
     const duration = Date.now() - conn.connected;

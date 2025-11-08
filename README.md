@@ -56,8 +56,8 @@ Visit `http://localhost:3000` in your browser.
   - 7 range bands (Adjacent → Distant)
   - Spacecraft weapons (Beam/Pulse Lasers)
   - Hull damage & critical hits
-  - Ship selection UI
-  - Space combat HUD
+  - ✅ Ship selection UI (Stage 8.6 complete)
+  - Space combat HUD (Stage 8.7 in progress)
 
 ### 📋 Planned (Stages 9-16)
 - **Stage 9:** Movement, Thrust, Advanced Initiative
