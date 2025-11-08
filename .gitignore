@@ -22,3 +22,7 @@ npm-debug.log*
 coverage/
 .nyc_output/
 test-screenshot-*.png
+
+# Reference Materials
+reference/
+*.pdf
