@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://traveller-combat-vtt/schemas/weapon.schema.json",
+  "title": "Weapon Definition",
+  "description": "Traveller ship weapon specification",
+  "type": "object",
+  "required": ["id", "name", "type", "damage", "traits"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique weapon identifier (snake_case)",
+      "pattern": "^[a-z_]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "type": {
+      "type": "string",
+      "description": "Weapon category",
+      "enum": ["energy", "projectile", "missile", "defense"]
+    },
+    "damage": {
+      "type": "string",
+      "description": "Damage dice formula (e.g., '2d6', '3d6', '0d6' for non-damaging weapons)",
+      "pattern": "^[0-9]d6$"
+    },
+    "traits": {
+      "type": "object",
+      "description": "Weapon characteristics",
+      "properties": {
+        "ammo": {
+          "type": ["number", "null"],
+          "description": "Ammunition count (null = unlimited)",
+          "minimum": 0
+        },
+        "rangeRestriction": {
+          "type": ["array", "null"],
+          "description": "Allowed range bands (null = all ranges)",
+          "items": {
+            "type": "string",
+            "enum": ["adjacent", "close", "short", "medium", "long", "very_long", "distant"]
+          }
+        },
+        "rangeBonuses": {
+          "type": "object",
+          "description": "DM bonuses at specific ranges",
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

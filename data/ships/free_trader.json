@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "free_trader",
+  "type": "free_trader",
+  "name": "Free Trader",
+  "tonnage": 200,
+  "role": "trading",
+  "hull": 30,
+  "armour": 2,
+  "thrust": 1,
+  "turrets": [
+    {
+      "id": "turret1",
+      "type": "single",
+      "weapons": ["beam_laser"]
+    },
+    {
+      "id": "turret2",
+      "type": "single",
+      "weapons": ["beam_laser"]
+    }
+  ],
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 2,
+    "engineer": 1,
+    "sensors": 0,
+    "marines": 0
+  }
+}

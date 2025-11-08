@@ -1,0 +1,82 @@
+{
+  "$schema": "../schemas/weapon.schema.json",
+  "version": 1,
+  "description": "Traveller weapon registry - normalized weapon definitions",
+  "weapons": [
+    {
+      "id": "pulse_laser",
+      "name": "Pulse Laser",
+      "type": "energy",
+      "damage": "2d6",
+      "traits": {
+        "ammo": null,
+        "rangeRestriction": null,
+        "rangeBonuses": {}
+      }
+    },
+    {
+      "id": "beam_laser",
+      "name": "Beam Laser",
+      "type": "energy",
+      "damage": "1d6",
+      "traits": {
+        "ammo": null,
+        "rangeRestriction": ["adjacent", "close", "short", "medium"],
+        "rangeBonuses": {}
+      }
+    },
+    {
+      "id": "missile_rack",
+      "name": "Missile Rack",
+      "type": "missile",
+      "damage": "4d6",
+      "traits": {
+        "ammo": 12,
+        "rangeRestriction": null,
+        "rangeBonuses": {
+          "long": 2,
+          "very_long": 2,
+          "distant": 2
+        }
+      }
+    },
+    {
+      "id": "sandcaster",
+      "name": "Sandcaster",
+      "type": "defense",
+      "damage": "0d6",
+      "traits": {
+        "ammo": 20,
+        "rangeRestriction": ["adjacent", "close"],
+        "rangeBonuses": {}
+      }
+    },
+    {
+      "id": "particle_beam",
+      "name": "Particle Beam",
+      "type": "energy",
+      "damage": "3d6",
+      "traits": {
+        "ammo": null,
+        "rangeRestriction": null,
+        "rangeBonuses": {
+          "short": 1
+        }
+      }
+    },
+    {
+      "id": "railgun",
+      "name": "Railgun",
+      "type": "projectile",
+      "damage": "3d6",
+      "traits": {
+        "ammo": 200,
+        "rangeRestriction": null,
+        "rangeBonuses": {
+          "medium": 1,
+          "long": 1
+        }
+      }
+    }
+  ]
+}

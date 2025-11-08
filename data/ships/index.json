@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "description": "Ship index for fast lookups without loading full ship data",
+  "ships": [
+    {
+      "id": "scout",
+      "name": "Scout",
+      "tonnage": 100,
+      "role": "exploration",
+      "file": "scout.json"
+    },
+    {
+      "id": "free_trader",
+      "name": "Free Trader",
+      "tonnage": 200,
+      "role": "trading",
+      "file": "free_trader.json"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "scout",
+  "type": "scout",
+  "name": "Scout",
+  "tonnage": 100,
+  "role": "exploration",
+  "hull": 20,
+  "armour": 4,
+  "thrust": 2,
+  "turrets": [
+    {
+      "id": "turret1",
+      "type": "triple",
+      "weapons": ["pulse_laser", "sandcaster", "missile_rack"]
+    }
+  ],
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 1,
+    "engineer": 1,
+    "sensors": 0,
+    "marines": 0
+  }
+}

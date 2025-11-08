@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://traveller-combat-vtt/schemas/ship.schema.json",
+  "title": "Ship Definition",
+  "description": "Traveller spacecraft specification",
+  "type": "object",
+  "required": ["id", "type", "name", "tonnage", "role", "hull", "armour", "thrust", "turrets"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique ship identifier (snake_case)",
+      "pattern": "^[a-z_]+$"
+    },
+    "type": {
+      "type": "string",
+      "description": "Ship type identifier (same as id for templates)",
+      "pattern": "^[a-z_]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "tonnage": {
+      "type": "number",
+      "description": "Ship displacement in tons",
+      "minimum": 10,
+      "maximum": 1000000
+    },
+    "role": {
+      "type": "string",
+      "description": "Ship role/class",
+      "enum": ["exploration", "trading", "military", "piracy", "patrol", "transport", "mining"]
+    },
+    "hull": {
+      "type": "number",
+      "description": "Maximum hull points",
+      "minimum": 1
+    },
+    "armour": {
+      "type": "number",
+      "description": "Armour rating",
+      "minimum": 0
+    },
+    "thrust": {
+      "type": "number",
+      "description": "Thrust rating (movement points)",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "turrets": {
+      "type": "array",
+      "description": "Weapon turret configurations",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "weapons"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Turret identifier",
+            "pattern": "^turret[0-9]+$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Turret mount type",
+            "enum": ["single", "double", "triple", "barbette", "bay"]
+          },
+          "weapons": {
+            "type": "array",
+            "description": "Weapon IDs (references to weapons.json)",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 3
+          }
+        }
+      }
+    },
+    "crewRequirements": {
+      "type": "object",
+      "description": "Minimum crew composition",
+      "properties": {
+        "pilot": {"type": "number", "minimum": 0},
+        "gunner": {"type": "number", "minimum": 0},
+        "engineer": {"type": "number", "minimum": 0},
+        "sensors": {"type": "number", "minimum": 0},
+        "marines": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}
