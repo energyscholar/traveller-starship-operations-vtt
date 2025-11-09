@@ -66,10 +66,15 @@
 ---
 
 ## Acceptance Criteria
-- [ ] Severity scales with damage (1-6)
-- [ ] All 11 crit locations have effects
-- [ ] M-Drive hits reduce Thrust
-- [ ] Sensor hits reduce range
-- [ ] Weapon hits disable turrets
-- [ ] Engineer can repair crits
-- [ ] Jump misjump on damage/proximity
+- [x] Severity scales with damage (1-6) ✅
+- [x] All 11 crit locations have effects ✅
+- [x] M-Drive hits reduce Thrust ✅
+- [x] Sensor hits reduce range ✅
+- [x] Weapon hits disable turrets ✅
+- [x] Engineer can repair crits ✅
+- [ ] Jump misjump on damage/proximity (DEFERRED to Stage 12 - Jump Drive mechanics)
+- [x] Critical hits integrated into combat resolution ✅
+- [x] Sustained damage triggers (every 10% hull lost) ✅
+- [x] 83 unit tests passing ✅
+- [x] Integration tests created and verified ✅
+- [x] Incremental refactoring: lib/critical-hits.js and lib/damage-effects.js ✅
