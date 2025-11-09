@@ -8,6 +8,7 @@
     "dev": "echo '\n🎮 SINGLE-PLAYER TEST MODE: http://localhost:3000/test.html\n' && node server.js",
     "test": "node tools/validate-json.js && node tests/run-all-tests.js",
     "test:unit": "node tests/run-all-tests.js",
+    "test:integration": "node tests/integration/space-combat.test.js",
     "test:data": "node tools/validate-json.js",
     "test:security": "node tests/unit/xss-validation.test.js",
     "play": "echo '\n🎮 SINGLE-PLAYER TEST: http://localhost:3000/test.html\n👥 MULTIPLAYER: http://localhost:3000\n' && node server.js"
@@ -21,6 +22,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "puppeteer": "^24.27.0"
+    "puppeteer": "^24.27.0",
+    "socket.io-client": "^4.8.1"
   }
 }

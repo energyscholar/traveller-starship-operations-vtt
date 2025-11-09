@@ -800,28 +800,30 @@ io.on('connection', (socket) => {
       // Initialize combat state
       const combatId = `${player1.id}_${player2.id}`;
       if (!activeCombats.has(combatId)) {
+        // Helper function to create player combat data from ship selection
+        const createPlayerData = (player) => {
+          const shipType = player.spaceSelection.ship;
+          const shipData = SHIPS[shipType];
+          const crew = generateDefaultCrew(shipType);
+
+          return {
+            id: player.id,
+            name: shipData ? shipData.name : shipType,
+            ship: shipType,
+            hull: shipData ? shipData.hull : 20,
+            maxHull: shipData ? shipData.maxHull : 20,
+            armor: shipData ? shipData.armor : 2,
+            pilotSkill: shipData ? shipData.pilotSkill : 0,
+            turrets: shipType === 'scout' ? 1 : 2,
+            crew: crew,
+            criticals: []
+          };
+        };
+
         activeCombats.set(combatId, {
           id: combatId,
-          player1: {
-            id: player1.id,
-            ship: player1.spaceSelection.ship,
-            hull: player1.spaceSelection.ship === 'scout' ? 20 : 30,
-            maxHull: player1.spaceSelection.ship === 'scout' ? 20 : 30,
-            armour: player1.spaceSelection.ship === 'scout' ? 4 : 2,
-            turrets: player1.spaceSelection.ship === 'scout' ? 1 : 2,
-            crew: generateDefaultCrew(player1.spaceSelection.ship),
-            criticals: []
-          },
-          player2: {
-            id: player2.id,
-            ship: player2.spaceSelection.ship,
-            hull: player2.spaceSelection.ship === 'scout' ? 20 : 30,
-            maxHull: player2.spaceSelection.ship === 'scout' ? 20 : 30,
-            armour: player2.spaceSelection.ship === 'scout' ? 4 : 2,
-            turrets: player2.spaceSelection.ship === 'scout' ? 1 : 2,
-            crew: generateDefaultCrew(player2.spaceSelection.ship),
-            criticals: []
-          },
+          player1: createPlayerData(player1),
+          player2: createPlayerData(player2),
           range: finalRange,
           round: 1,
           activePlayer: player1.id,
@@ -883,13 +885,17 @@ io.on('connection', (socket) => {
     }
 
     // Resolve attack using combat library
-    const attackResult = combat_lib.resolveSpaceCombatAttack(
+    // Get the actual weapon object from SHIPS constant
+    const shipData = SHIPS[attackerPlayer.ship];
+    const weaponIndex = data.weapon || 0;
+    const weaponObj = shipData && shipData.weapons ? shipData.weapons[weaponIndex] : null;
+
+    const attackResult = resolveAttack(
       attackerPlayer,
       defenderPlayer,
       {
-        range: combat.range,
-        weapon: data.weapon || 0,
-        turret: data.turret || 0
+        range: combat.range.toLowerCase(),  // Normalize range to lowercase
+        weapon: weaponObj
       }
     );
 
