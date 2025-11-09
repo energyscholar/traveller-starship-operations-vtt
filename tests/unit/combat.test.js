@@ -18,10 +18,10 @@ console.log('========================================\n');
 // Test 1: Basic hit (roll exactly 8)
 console.log('Test 1: Roll 6 + skill 2 = 8 (exactly hits)');
 const scout = { ...SHIPS.scout };
-const corsair = { ...SHIPS.corsair };
+const free_trader = { ...SHIPS.free_trader };
 // Note: We can't force exact dice rolls without modifying the RNG
 // So we'll test the math instead
-const result1 = resolveAttack(scout, corsair, { range: 'medium', dodge: 'none' });
+const result1 = resolveAttack(scout, free_trader, { range: 'medium', dodge: 'none' });
 assert(result1.attackTotal === result1.attackRoll.total + 2 + 0 - 0, 'Attack math correct');
 console.log(`   Rolled: ${result1.attackRoll.total}, Total: ${result1.attackTotal}\n`);
 
@@ -46,13 +46,13 @@ console.log(`   Damage: 3 - 4 = 0 (not negative)\n`);
 
 // Test 4: Dodge modifier
 console.log('Test 4: Dodge affects attack roll');
-const result4 = resolveAttack(scout, corsair, { range: 'medium', dodge: 'full' });
+const result4 = resolveAttack(scout, free_trader, { range: 'medium', dodge: 'full' });
 assert(result4.dodgeDM === RULES.dodgeDMs.full, 'Dodge DM applied');
 console.log(`   Dodge DM: ${result4.dodgeDM} (full dodge)\n`);
 
 // Test 5: Range modifier
 console.log('Test 5: Range affects attack roll');
-const result5 = resolveAttack(scout, corsair, { range: 'long', dodge: 'none' });
+const result5 = resolveAttack(scout, free_trader, { range: 'long', dodge: 'none' });
 assert(result5.rangeDM === RULES.rangeDMs.long, 'Range DM applied');
 console.log(`   Range DM: ${result5.rangeDM} (long range)\n`);
 
@@ -64,9 +64,9 @@ console.log(`   Target: ${RULES.attackTarget}\n`);
 // Test 7: Hull reduction
 console.log('Test 7: Hull points reduce correctly');
 if (result1.hit && result1.damage > 0) {
-  const expectedHull = corsair.hull - result1.damage;
+  const expectedHull = free_trader.hull - result1.damage;
   assert(result1.newHull === expectedHull, 'Hull reduces by damage amount');
-  console.log(`   Hull: ${corsair.hull} - ${result1.damage} = ${result1.newHull}\n`);
+  console.log(`   Hull: ${free_trader.hull} - ${result1.damage} = ${result1.newHull}\n`);
 } else {
   console.log('   (Skipped - no damage dealt)\n');
 }

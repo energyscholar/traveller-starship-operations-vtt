@@ -24,7 +24,7 @@ function getAvailableShip(connections) {
     .filter(ship => ship !== null);
 
   if (!assignedShips.includes('scout')) return 'scout';
-  if (!assignedShips.includes('corsair')) return 'corsair';
+  if (!assignedShips.includes('free_trader')) return 'free_trader';
   return null;
 }
 
@@ -35,7 +35,7 @@ mockConnections.set('socket1', { id: 1, ship: ship1 });
 
 // Second player
 const ship2 = getAvailableShip(mockConnections);
-assert(ship2 === 'corsair', 'Second player assigned corsair');
+assert(ship2 === 'free_trader', 'Second player assigned free_trader');
 mockConnections.set('socket2', { id: 2, ship: ship2 });
 
 // Third player (spectator)
@@ -61,32 +61,32 @@ const shipState = {
     maxHull: SHIPS.scout.maxHull,
     armor: SHIPS.scout.armor
   },
-  corsair: {
-    hull: SHIPS.corsair.hull,
-    maxHull: SHIPS.corsair.maxHull,
-    armor: SHIPS.corsair.armor
+  free_trader: {
+    hull: SHIPS.free_trader.hull,
+    maxHull: SHIPS.free_trader.maxHull,
+    armor: SHIPS.free_trader.armor
   }
 };
 
 assert(shipState.scout.hull === 10, 'Scout initialized with 10 hull');
-assert(shipState.corsair.hull === 15, 'Corsair initialized with 15 hull');
+assert(shipState.free_trader.hull === 15, 'Free Trader initialized with 15 hull');
 assert(shipState.scout.hull === shipState.scout.maxHull, 'Scout starts at max hull');
-assert(shipState.corsair.hull === shipState.corsair.maxHull, 'Corsair starts at max hull');
+assert(shipState.free_trader.hull === shipState.free_trader.maxHull, 'Free Trader starts at max hull');
 console.log('');
 
 // Test 4: Ship state reset
 console.log('Test 4: Ship state reset after damage');
 shipState.scout.hull = 3; // Simulate damage
-shipState.corsair.hull = 8;
+shipState.free_trader.hull = 8;
 
 function resetShipStates(state, baseShips) {
   state.scout.hull = baseShips.scout.maxHull;
-  state.corsair.hull = baseShips.corsair.maxHull;
+  state.free_trader.hull = baseShips.free_trader.maxHull;
 }
 
 resetShipStates(shipState, SHIPS);
 assert(shipState.scout.hull === 10, 'Scout reset to full hull');
-assert(shipState.corsair.hull === 15, 'Corsair reset to full hull');
+assert(shipState.free_trader.hull === 15, 'Free Trader reset to full hull');
 console.log('');
 
 // Test 5: Authorization check
@@ -96,9 +96,9 @@ function canPlayerAttackWith(playerShip, attackerShip) {
 }
 
 assert(canPlayerAttackWith('scout', 'scout') === true, 'Scout player can attack with scout');
-assert(canPlayerAttackWith('scout', 'corsair') === false, 'Scout player cannot attack with corsair');
-assert(canPlayerAttackWith('corsair', 'corsair') === true, 'Corsair player can attack with corsair');
-assert(canPlayerAttackWith('corsair', 'scout') === false, 'Corsair player cannot attack with scout');
+assert(canPlayerAttackWith('scout', 'free_trader') === false, 'Scout player cannot attack with free_trader');
+assert(canPlayerAttackWith('free_trader', 'free_trader') === true, 'Free Trader player can attack with free_trader');
+assert(canPlayerAttackWith('free_trader', 'scout') === false, 'Free Trader player cannot attack with scout');
 assert(canPlayerAttackWith(null, 'scout') === false, 'Spectator cannot attack with scout');
 console.log('');
 
@@ -106,21 +106,21 @@ console.log('');
 console.log('Test 6: Ship assignment tracking');
 const testConnections = new Map();
 testConnections.set('s1', { id: 1, ship: 'scout' });
-testConnections.set('s2', { id: 2, ship: 'corsair' });
+testConnections.set('s2', { id: 2, ship: 'free_trader' });
 testConnections.set('s3', { id: 3, ship: null });
 
 function getShipAssignments(connections) {
-  const assignments = { scout: null, corsair: null };
+  const assignments = { scout: null, free_trader: null };
   connections.forEach((conn) => {
     if (conn.ship === 'scout') assignments.scout = conn.id;
-    if (conn.ship === 'corsair') assignments.corsair = conn.id;
+    if (conn.ship === 'free_trader') assignments.free_trader = conn.id;
   });
   return assignments;
 }
 
 const assignments = getShipAssignments(testConnections);
 assert(assignments.scout === 1, 'Scout assigned to player 1');
-assert(assignments.corsair === 2, 'Corsair assigned to player 2');
+assert(assignments.free_trader === 2, 'Free Trader assigned to player 2');
 console.log('');
 
 console.log('========================================');

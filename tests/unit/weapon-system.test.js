@@ -37,7 +37,7 @@ function testPulseLaserDamage() {
 function testBeamLaserDamage() {
   console.log('Test 2: Beam Laser damage (3d6)');
 
-  const weapon = SHIPS.corsair.weapons.find(w => w.id === 'beamLaser');
+  const weapon = SHIPS.free_trader.weapons.find(w => w.id === 'beamLaser');
   const roller = new DiceRoller(123);
   const damageRoll = rollDamageDice(roller, weapon.damage);
 
@@ -80,12 +80,12 @@ function testWeaponDamageInCombat() {
   console.log('Test 4: Weapon damage applied in combat');
 
   const scout = { ...SHIPS.scout, hull: 10 };
-  const corsair = { ...SHIPS.corsair, hull: 15 };
+  const free_trader = { ...SHIPS.free_trader, hull: 15 };
 
   // Use missiles (4d6)
   const missile = SHIPS.scout.weapons.find(w => w.id === 'missiles');
 
-  const result = resolveAttack(scout, corsair, {
+  const result = resolveAttack(scout, free_trader, {
     range: 'medium',
     dodge: 'none',
     weapon: missile,
@@ -108,12 +108,12 @@ function testMissileLongRangeBonus() {
   console.log('Test 5: Missile long range bonus (+2 DM)');
 
   const scout = { ...SHIPS.scout, hull: 10 };
-  const corsair = { ...SHIPS.corsair, hull: 15 };
+  const free_trader = { ...SHIPS.free_trader, hull: 15 };
 
   const missile = SHIPS.scout.weapons.find(w => w.id === 'missiles');
 
   // Attack at long range with missiles
-  const result = resolveAttack(scout, corsair, {
+  const result = resolveAttack(scout, free_trader, {
     range: 'long',
     dodge: 'none',
     weapon: missile,
@@ -132,7 +132,7 @@ function testMissileLongRangeBonus() {
 function testBeamLaserRangeRestriction() {
   console.log('Test 6: Beam Laser range restriction (close-medium only)');
 
-  const beamLaser = SHIPS.corsair.weapons.find(w => w.id === 'beamLaser');
+  const beamLaser = SHIPS.free_trader.weapons.find(w => w.id === 'beamLaser');
 
   if (!beamLaser.rangeRestriction) {
     throw new Error('Beam Laser should have range restriction');
@@ -165,14 +165,14 @@ function testMissilesHaveAmmo() {
   console.log('Test 7: Missiles have ammo (6 shots)');
 
   const scoutMissiles = SHIPS.scout.weapons.find(w => w.id === 'missiles');
-  const corsairMissiles = SHIPS.corsair.weapons.find(w => w.id === 'missiles');
+  const free_traderMissiles = SHIPS.free_trader.weapons.find(w => w.id === 'missiles');
 
   if (scoutMissiles.ammo !== 6) {
     throw new Error(`Scout missiles should have 6 ammo, got ${scoutMissiles.ammo}`);
   }
 
-  if (corsairMissiles.ammo !== 6) {
-    throw new Error(`Corsair missiles should have 6 ammo, got ${corsairMissiles.ammo}`);
+  if (free_traderMissiles.ammo !== 6) {
+    throw new Error(`Free Trader missiles should have 6 ammo, got ${free_traderMissiles.ammo}`);
   }
 
   console.log('✅ PASS: Missiles start with 6 ammo\n');
@@ -182,7 +182,7 @@ function testLasersHaveUnlimitedAmmo() {
   console.log('Test 8: Lasers have unlimited ammo');
 
   const pulseLaser = SHIPS.scout.weapons.find(w => w.id === 'pulseLaser');
-  const beamLaser = SHIPS.corsair.weapons.find(w => w.id === 'beamLaser');
+  const beamLaser = SHIPS.free_trader.weapons.find(w => w.id === 'beamLaser');
 
   if (pulseLaser.ammo !== null) {
     throw new Error('Pulse Laser should have unlimited ammo (null)');
@@ -254,7 +254,7 @@ function testAmmoIndependentPerShip() {
 
   const shipState = {
     scout: { ammo: { missiles: 6 } },
-    corsair: { ammo: { missiles: 6 } }
+    free_trader: { ammo: { missiles: 6 } }
   };
 
   // Scout fires missiles
@@ -264,16 +264,16 @@ function testAmmoIndependentPerShip() {
     throw new Error('Scout ammo should be 5');
   }
 
-  if (shipState.corsair.ammo.missiles !== 6) {
-    throw new Error('Corsair ammo should still be 6');
+  if (shipState.free_trader.ammo.missiles !== 6) {
+    throw new Error('Free Trader ammo should still be 6');
   }
 
-  // Corsair fires missiles
-  shipState.corsair.ammo.missiles--;
-  shipState.corsair.ammo.missiles--;
+  // Free Trader fires missiles
+  shipState.free_trader.ammo.missiles--;
+  shipState.free_trader.ammo.missiles--;
 
-  if (shipState.corsair.ammo.missiles !== 4) {
-    throw new Error('Corsair ammo should be 4');
+  if (shipState.free_trader.ammo.missiles !== 4) {
+    throw new Error('Free Trader ammo should be 4');
   }
 
   if (shipState.scout.ammo.missiles !== 5) {
@@ -281,7 +281,7 @@ function testAmmoIndependentPerShip() {
   }
 
   console.log('✅ PASS: Ammo tracked independently');
-  console.log(`   Scout: 5, Corsair: 4\n`);
+  console.log(`   Scout: 5, Free Trader: 4\n`);
 }
 
 // ========================================
@@ -308,24 +308,24 @@ function testScoutHasTwoWeapons() {
   console.log('✅ PASS: Scout has Pulse Laser and Missiles\n');
 }
 
-function testCorsairHasTwoWeapons() {
-  console.log('Test 14: Corsair has two weapons');
+function testFree TraderHasTwoWeapons() {
+  console.log('Test 14: Free Trader has two weapons');
 
-  if (SHIPS.corsair.weapons.length !== 2) {
-    throw new Error(`Corsair should have 2 weapons, got ${SHIPS.corsair.weapons.length}`);
+  if (SHIPS.free_trader.weapons.length !== 2) {
+    throw new Error(`Free Trader should have 2 weapons, got ${SHIPS.free_trader.weapons.length}`);
   }
 
-  const weaponIds = SHIPS.corsair.weapons.map(w => w.id);
+  const weaponIds = SHIPS.free_trader.weapons.map(w => w.id);
 
   if (!weaponIds.includes('beamLaser')) {
-    throw new Error('Corsair should have Beam Laser');
+    throw new Error('Free Trader should have Beam Laser');
   }
 
   if (!weaponIds.includes('missiles')) {
-    throw new Error('Corsair should have Missiles');
+    throw new Error('Free Trader should have Missiles');
   }
 
-  console.log('✅ PASS: Corsair has Beam Laser and Missiles\n');
+  console.log('✅ PASS: Free Trader has Beam Laser and Missiles\n');
 }
 
 function testWeaponHasRequiredFields() {
@@ -357,13 +357,13 @@ function testWeaponSelectionInCombat() {
   console.log('Test 16: Weapon selection in combat');
 
   const scout = { ...SHIPS.scout, hull: 10 };
-  const corsair = { ...SHIPS.corsair, hull: 15 };
+  const free_trader = { ...SHIPS.free_trader, hull: 15 };
 
   const pulseLaser = SHIPS.scout.weapons.find(w => w.id === 'pulseLaser');
   const missiles = SHIPS.scout.weapons.find(w => w.id === 'missiles');
 
   // Attack with Pulse Laser
-  const result1 = resolveAttack(scout, corsair, {
+  const result1 = resolveAttack(scout, free_trader, {
     range: 'medium',
     dodge: 'none',
     weapon: pulseLaser,
@@ -375,7 +375,7 @@ function testWeaponSelectionInCombat() {
   }
 
   // Attack with Missiles
-  const result2 = resolveAttack(scout, corsair, {
+  const result2 = resolveAttack(scout, free_trader, {
     range: 'medium',
     dodge: 'none',
     weapon: missiles,
@@ -394,10 +394,10 @@ function testDefaultWeaponSelection() {
   console.log('Test 17: Default weapon selection (first weapon)');
 
   const scout = { ...SHIPS.scout, hull: 10 };
-  const corsair = { ...SHIPS.corsair, hull: 15 };
+  const free_trader = { ...SHIPS.free_trader, hull: 15 };
 
   // No weapon specified, should use first weapon
-  const result = resolveAttack(scout, corsair, {
+  const result = resolveAttack(scout, free_trader, {
     range: 'medium',
     dodge: 'none',
     seed: 300
@@ -414,20 +414,20 @@ function testDifferentWeaponsDifferentDamage() {
   console.log('Test 18: Different weapons deal different damage');
 
   const scout = { ...SHIPS.scout, hull: 10 };
-  const corsair = { ...SHIPS.corsair, hull: 15 };
+  const free_trader = { ...SHIPS.free_trader, hull: 15 };
 
   const pulseLaser = SHIPS.scout.weapons.find(w => w.id === 'pulseLaser');
   const missiles = SHIPS.scout.weapons.find(w => w.id === 'missiles');
 
   // Force hits by using adjacent range and scout's good skill
-  const result1 = resolveAttack(scout, corsair, {
+  const result1 = resolveAttack(scout, free_trader, {
     range: 'adjacent',
     dodge: 'none',
     weapon: pulseLaser,
     seed: 1000
   });
 
-  const result2 = resolveAttack(scout, corsair, {
+  const result2 = resolveAttack(scout, free_trader, {
     range: 'adjacent',
     dodge: 'none',
     weapon: missiles,
@@ -466,22 +466,22 @@ function testBothShipsHaveMissiles() {
   console.log('Test 20: Both ships have missiles');
 
   const scoutMissiles = SHIPS.scout.weapons.find(w => w.id === 'missiles');
-  const corsairMissiles = SHIPS.corsair.weapons.find(w => w.id === 'missiles');
+  const free_traderMissiles = SHIPS.free_trader.weapons.find(w => w.id === 'missiles');
 
   if (!scoutMissiles) {
     throw new Error('Scout should have missiles');
   }
 
-  if (!corsairMissiles) {
-    throw new Error('Corsair should have missiles');
+  if (!free_traderMissiles) {
+    throw new Error('Free Trader should have missiles');
   }
 
   // Both should have same missile properties
-  if (scoutMissiles.damage !== corsairMissiles.damage) {
+  if (scoutMissiles.damage !== free_traderMissiles.damage) {
     throw new Error('Missiles should have same damage on both ships');
   }
 
-  if (scoutMissiles.ammo !== corsairMissiles.ammo) {
+  if (scoutMissiles.ammo !== free_traderMissiles.ammo) {
     throw new Error('Missiles should have same ammo on both ships');
   }
 
@@ -513,7 +513,7 @@ async function runAllTests() {
 
     // Weapon selection tests (8)
     testScoutHasTwoWeapons,
-    testCorsairHasTwoWeapons,
+    testFree TraderHasTwoWeapons,
     testWeaponHasRequiredFields,
     testWeaponSelectionInCombat,
     testDefaultWeaponSelection,

@@ -50,13 +50,13 @@ console.log('--- BASIC SANITIZATION (5 tests) ---\n');
 
 test('Allow valid alphanumeric names', () => {
   assertEqual(validateShipName('Scout Ship'), 'Scout Ship');
-  assertEqual(validateShipName('Corsair123'), 'Corsair123');
+  assertEqual(validateShipName('Free Trader123'), 'Free Trader123');
   assertEqual(validateShipName('The Wanderer'), 'The Wanderer');
 });
 
 test('Trim leading/trailing whitespace', () => {
   assertEqual(validateShipName('  Scout  '), 'Scout');
-  assertEqual(validateShipName('\tCorsair\n'), 'Corsair');
+  assertEqual(validateShipName('\tFree Trader\n'), 'Free Trader');
 });
 
 test('Enforce 50 character limit', () => {

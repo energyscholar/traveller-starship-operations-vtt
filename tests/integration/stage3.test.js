@@ -75,8 +75,8 @@ async function runTests() {
     });
 
     console.log(`${BLUE}  Player 2: ${assignment2.myShip} (ID: ${assignment2.myPlayerId})${RESET}`);
-    if (assignment2.myShip === 'corsair' && assignment2.myPlayerId === 2) {
-      console.log(`${GREEN}  ✅ Player 2 assigned Corsair${RESET}`);
+    if (assignment2.myShip === 'free_trader' && assignment2.myPlayerId === 2) {
+      console.log(`${GREEN}  ✅ Player 2 assigned Free Trader${RESET}`);
     } else {
       throw new Error(`Player 2 assignment failed: ${JSON.stringify(assignment2)}`);
     }
@@ -106,8 +106,8 @@ async function runTests() {
       };
     });
 
-    if (controls2.attackerValue === 'corsair' && controls2.attackerDisabled === true) {
-      console.log(`${GREEN}  ✅ Player 2 locked to Corsair${RESET}`);
+    if (controls2.attackerValue === 'free_trader' && controls2.attackerDisabled === true) {
+      console.log(`${GREEN}  ✅ Player 2 locked to Free Trader${RESET}`);
     } else {
       throw new Error(`Control restriction failed for Player 2`);
     }
@@ -119,7 +119,7 @@ async function runTests() {
     await page1.evaluate(() => {
       socket.emit('combat', {
         attacker: 'scout',
-        target: 'corsair',
+        target: 'free_trader',
         range: 'medium',
         dodge: 'none',
         seed: Date.now()
@@ -130,13 +130,13 @@ async function runTests() {
 
     // Check both players see updated hull
     const hull1 = await page1.evaluate(() => {
-      const corsairOption = document.querySelector('#targetSelect option[value="corsair"]');
-      return corsairOption ? corsairOption.textContent : null;
+      const free_traderOption = document.querySelector('#targetSelect option[value="free_trader"]');
+      return free_traderOption ? free_traderOption.textContent : null;
     });
 
     const hull2 = await page2.evaluate(() => {
-      const corsairOption = document.querySelector('#targetSelect option[value="corsair"]');
-      return corsairOption ? corsairOption.textContent : null;
+      const free_traderOption = document.querySelector('#targetSelect option[value="free_trader"]');
+      return free_traderOption ? free_traderOption.textContent : null;
     });
 
     console.log(`${BLUE}  Player 1 sees: ${hull1}${RESET}`);
@@ -159,14 +159,14 @@ async function runTests() {
 
     const resetHull = await page1.evaluate(() => {
       const scoutOption = document.querySelector('#attackerSelect option[value="scout"]');
-      const corsairOption = document.querySelector('#targetSelect option[value="corsair"]');
+      const free_traderOption = document.querySelector('#targetSelect option[value="free_trader"]');
       return {
         scout: scoutOption ? scoutOption.textContent : null,
-        corsair: corsairOption ? corsairOption.textContent : null
+        free_trader: free_traderOption ? free_traderOption.textContent : null
       };
     });
 
-    if (resetHull.scout.includes('10/10') && resetHull.corsair.includes('15/15')) {
+    if (resetHull.scout.includes('10/10') && resetHull.free_trader.includes('15/15')) {
       console.log(`${GREEN}  ✅ Ships reset to full hull${RESET}`);
     } else {
       throw new Error(`Reset failed: ${JSON.stringify(resetHull)}`);

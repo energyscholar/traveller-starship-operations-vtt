@@ -16,6 +16,11 @@ const io = require('socket.io')(server, {
 });
 
 const { resolveAttack, formatAttackResult, getAttackBreakdown, SHIPS, CREW, applyCrew, engineerRepair, hexDistance, rangeFromDistance, validateMove, GRID_SIZE } = require('./lib/combat');
+
+// Ship selection mapping (for backwards compatibility during transition)
+const SHIP_ALIASES = {
+  'free_trader': 'free_trader'  // Legacy alias
+};
 const { DiceRoller } = require('./lib/dice');
 
 // Serve static files from public directory
@@ -31,7 +36,7 @@ const activeCombats = new Map();
 
 // Stage 9: Create dummy opponent for single-player testing
 function createDummyPlayer(player1) {
-  // Choose opposite ship from player 1
+  // Choose opposite ship from player 1 (Scout vs Free Trader)
   const oppositeShip = player1.spaceSelection.ship === 'scout' ? 'free_trader' : 'scout';
 
   return {
@@ -93,29 +98,29 @@ const shipState = {
     position: { q: 2, r: 2 },  // Stage 7: Starting position on grid
     movement: SHIPS.scout.movement
   },
-  corsair: {
-    hull: SHIPS.corsair.hull,
-    maxHull: SHIPS.corsair.maxHull,
-    armor: SHIPS.corsair.armor,
-    pilotSkill: SHIPS.corsair.pilotSkill,
-    ammo: initializeAmmo(SHIPS.corsair),  // Stage 5: Track ammo per weapon
+  free_trader: {
+    hull: SHIPS.free_trader.hull,
+    maxHull: SHIPS.free_trader.maxHull,
+    armor: SHIPS.free_trader.armor,
+    pilotSkill: SHIPS.free_trader.pilotSkill,
+    ammo: initializeAmmo(SHIPS.free_trader),  // Stage 5: Track ammo per weapon
     crew: {  // Stage 6: Track crew assignments
-      pilot: {...CREW.corsair[0]},  // Default: assign all crew
-      gunner: {...CREW.corsair[1]},
-      engineer: {...CREW.corsair[2]}
+      pilot: {...CREW.free_trader[0]},  // Default: assign all crew
+      gunner: {...CREW.free_trader[1]},
+      engineer: {...CREW.free_trader[2]}
     },
     position: { q: 7, r: 7 },  // Stage 7: Starting position on grid
-    movement: SHIPS.corsair.movement
+    movement: SHIPS.free_trader.movement
   }
 };
 
 // Stage 4: Track game state (rounds, turns, initiative)
 const gameState = {
   currentRound: 0,
-  currentTurn: null, // 'scout' or 'corsair'
+  currentTurn: null, // 'scout' or 'free_trader'
   initiative: {
     scout: null,
-    corsair: null
+    free_trader: null
   },
   roundHistory: []
 };
@@ -125,11 +130,11 @@ const gameState = {
 // Stage 7: Also reset positions
 function resetShipStates() {
   shipState.scout.hull = SHIPS.scout.maxHull;
-  shipState.corsair.hull = SHIPS.corsair.maxHull;
+  shipState.free_trader.hull = SHIPS.free_trader.maxHull;
   shipState.scout.ammo = initializeAmmo(SHIPS.scout);
-  shipState.corsair.ammo = initializeAmmo(SHIPS.corsair);
+  shipState.free_trader.ammo = initializeAmmo(SHIPS.free_trader);
   shipState.scout.position = { q: 2, r: 2 };  // Reset to starting position
-  shipState.corsair.position = { q: 7, r: 7 };  // Reset to starting position
+  shipState.free_trader.position = { q: 7, r: 7 };  // Reset to starting position
   gameLog.info(' Ship states reset (hull + ammo + positions)');
 }
 
@@ -140,16 +145,16 @@ function getAvailableShip() {
     .filter(ship => ship !== null);
 
   if (!assignedShips.includes('scout')) return 'scout';
-  if (!assignedShips.includes('corsair')) return 'corsair';
+  if (!assignedShips.includes('free_trader')) return 'free_trader';
   return null; // No ships available (spectator mode)
 }
 
 // Helper: Get all current assignments
 function getShipAssignments() {
-  const assignments = { scout: null, corsair: null };
+  const assignments = { scout: null, free_trader: null };
   connections.forEach((conn, socketId) => {
     if (conn.ship === 'scout') assignments.scout = conn.id;
-    if (conn.ship === 'corsair') assignments.corsair = conn.id;
+    if (conn.ship === 'free_trader') assignments.free_trader = conn.id;
   });
   return assignments;
 }
@@ -162,29 +167,29 @@ function rollInitiative() {
   const scoutRoll = dice.roll2d6();
   const scoutInitiative = scoutRoll.total + shipState.scout.pilotSkill;
 
-  const corsairRoll = dice.roll2d6();
-  const corsairInitiative = corsairRoll.total + shipState.corsair.pilotSkill;
+  const free_traderRoll = dice.roll2d6();
+  const free_traderInitiative = free_traderRoll.total + shipState.free_trader.pilotSkill;
 
   gameState.initiative.scout = {
     roll: scoutRoll,
     total: scoutInitiative
   };
 
-  gameState.initiative.corsair = {
-    roll: corsairRoll,
-    total: corsairInitiative
+  gameState.initiative.free_trader = {
+    roll: free_traderRoll,
+    total: free_traderInitiative
   };
 
   gameLog.info(`Scout: ${scoutRoll.total} + ${shipState.scout.pilotSkill} = ${scoutInitiative}`);
-  gameLog.info(`Corsair: ${corsairRoll.total} + ${shipState.corsair.pilotSkill} = ${corsairInitiative}`);
+  gameLog.info(`Free Trader: ${free_traderRoll.total} + ${shipState.free_trader.pilotSkill} = ${free_traderInitiative}`);
 
   // Determine who goes first (handle ties by re-rolling)
-  if (scoutInitiative > corsairInitiative) {
+  if (scoutInitiative > free_traderInitiative) {
     gameState.currentTurn = 'scout';
     gameLog.info('Scout goes first');
-  } else if (corsairInitiative > scoutInitiative) {
-    gameState.currentTurn = 'corsair';
-    gameLog.info('Corsair goes first');
+  } else if (free_traderInitiative > scoutInitiative) {
+    gameState.currentTurn = 'free_trader';
+    gameLog.info('Free Trader goes first');
   } else {
     // Tie - Scout wins ties (simple tiebreaker)
     gameState.currentTurn = 'scout';
@@ -193,7 +198,7 @@ function rollInitiative() {
 
   return {
     scout: gameState.initiative.scout,
-    corsair: gameState.initiative.corsair,
+    free_trader: gameState.initiative.free_trader,
     firstTurn: gameState.currentTurn
   };
 }
@@ -226,9 +231,9 @@ function endTurn() {
 
   // Switch to other player
   if (gameState.currentTurn === 'scout') {
-    gameState.currentTurn = 'corsair';
-  } else if (gameState.currentTurn === 'corsair') {
-    // Corsair's turn ends, round ends, new round starts
+    gameState.currentTurn = 'free_trader';
+  } else if (gameState.currentTurn === 'free_trader') {
+    // Free Trader's turn ends, round ends, new round starts
     return startNewRound();
   }
 
@@ -246,7 +251,7 @@ function resetGameState() {
   gameState.currentRound = 0;
   gameState.currentTurn = null;
   gameState.initiative.scout = null;
-  gameState.initiative.corsair = null;
+  gameState.initiative.free_trader = null;
   gameState.roundHistory = [];
   gameLog.info(' Game state reset');
 }
@@ -604,7 +609,7 @@ io.on('connection', (socket) => {
     }
 
     // Check if destination is occupied by another ship
-    const otherShip = data.ship === 'scout' ? 'corsair' : 'scout';
+    const otherShip = data.ship === 'scout' ? 'free_trader' : 'scout';
     const otherPos = shipState[otherShip].position;
     if (otherPos.q === data.to.q && otherPos.r === data.to.r) {
       socket.emit('moveError', {
@@ -621,8 +626,8 @@ io.on('connection', (socket) => {
 
     // Calculate new range between ships
     const scoutPos = shipState.scout.position;
-    const corsairPos = shipState.corsair.position;
-    const distance = hexDistance(scoutPos, corsairPos);
+    const free_traderPos = shipState.free_trader.position;
+    const distance = hexDistance(scoutPos, free_traderPos);
     const range = rangeFromDistance(distance);
 
     combatLog.info(` Ships now at distance ${distance} (${range})`);
@@ -678,9 +683,9 @@ io.on('connection', (socket) => {
 
     // Check if both players are connected
     const assignments = getShipAssignments();
-    if (!assignments.scout || !assignments.corsair) {
+    if (!assignments.scout || !assignments.free_trader) {
       socket.emit('gameError', {
-        message: 'Need both Scout and Corsair players to start game'
+        message: 'Need both Scout and Free Trader players to start game'
       });
       return;
     }

@@ -16,7 +16,7 @@ function createGameState() {
     currentTurn: null,
     initiative: {
       scout: null,
-      corsair: null
+      free_trader: null
     },
     roundHistory: []
   };
@@ -31,11 +31,11 @@ function createShipState() {
       armor: SHIPS.scout.armor,
       pilotSkill: SHIPS.scout.pilotSkill
     },
-    corsair: {
-      hull: SHIPS.corsair.hull,
-      maxHull: SHIPS.corsair.maxHull,
-      armor: SHIPS.corsair.armor,
-      pilotSkill: SHIPS.corsair.pilotSkill
+    free_trader: {
+      hull: SHIPS.free_trader.hull,
+      maxHull: SHIPS.free_trader.maxHull,
+      armor: SHIPS.free_trader.armor,
+      pilotSkill: SHIPS.free_trader.pilotSkill
     }
   };
 }
@@ -47,29 +47,29 @@ function rollInitiative(shipState, gameState) {
   const scoutRoll = dice.roll2d6();
   const scoutInitiative = scoutRoll.total + shipState.scout.pilotSkill;
 
-  const corsairRoll = dice.roll2d6();
-  const corsairInitiative = corsairRoll.total + shipState.corsair.pilotSkill;
+  const free_traderRoll = dice.roll2d6();
+  const free_traderInitiative = free_traderRoll.total + shipState.free_trader.pilotSkill;
 
   gameState.initiative.scout = {
     roll: scoutRoll,
     total: scoutInitiative
   };
 
-  gameState.initiative.corsair = {
-    roll: corsairRoll,
-    total: corsairInitiative
+  gameState.initiative.free_trader = {
+    roll: free_traderRoll,
+    total: free_traderInitiative
   };
 
   // Determine who goes first (Scout wins ties)
-  if (scoutInitiative >= corsairInitiative) {
+  if (scoutInitiative >= free_traderInitiative) {
     gameState.currentTurn = 'scout';
   } else {
-    gameState.currentTurn = 'corsair';
+    gameState.currentTurn = 'free_trader';
   }
 
   return {
     scout: gameState.initiative.scout,
-    corsair: gameState.initiative.corsair,
+    free_trader: gameState.initiative.free_trader,
     firstTurn: gameState.currentTurn
   };
 }
@@ -97,9 +97,9 @@ function endTurn(gameState) {
   const previousTurn = gameState.currentTurn;
 
   if (gameState.currentTurn === 'scout') {
-    gameState.currentTurn = 'corsair';
-  } else if (gameState.currentTurn === 'corsair') {
-    // Corsair's turn ends, round ends
+    gameState.currentTurn = 'free_trader';
+  } else if (gameState.currentTurn === 'free_trader') {
+    // Free Trader's turn ends, round ends
     return { newRound: true };
   }
 
@@ -121,21 +121,21 @@ function testInitiativeCalculation() {
 
   const result = rollInitiative(shipState, gameState);
 
-  // Scout has +2 pilot skill, Corsair has +1
+  // Scout has +2 pilot skill, Free Trader has +1
   const scoutRollTotal = result.scout.roll.total;
-  const corsairRollTotal = result.corsair.roll.total;
+  const free_traderRollTotal = result.free_trader.roll.total;
 
   if (result.scout.total !== scoutRollTotal + 2) {
     throw new Error(`Scout initiative wrong: ${result.scout.total} !== ${scoutRollTotal} + 2`);
   }
 
-  if (result.corsair.total !== corsairRollTotal + 1) {
-    throw new Error(`Corsair initiative wrong: ${result.corsair.total} !== ${corsairRollTotal} + 1`);
+  if (result.free_trader.total !== free_traderRollTotal + 1) {
+    throw new Error(`Free Trader initiative wrong: ${result.free_trader.total} !== ${free_traderRollTotal} + 1`);
   }
 
   console.log('✅ PASS: Initiative calculation correct');
   console.log(`   Scout: ${scoutRollTotal} + 2 = ${result.scout.total}`);
-  console.log(`   Corsair: ${corsairRollTotal} + 1 = ${result.corsair.total}\n`);
+  console.log(`   Free Trader: ${free_traderRollTotal} + 1 = ${result.free_trader.total}\n`);
 }
 
 function testInitiativeRange() {
@@ -150,14 +150,14 @@ function testInitiativeRange() {
     throw new Error(`Scout initiative out of range: ${result.scout.total}`);
   }
 
-  // Corsair: 2d6 (2-12) + 1 = 3-13
-  if (result.corsair.total < 3 || result.corsair.total > 13) {
-    throw new Error(`Corsair initiative out of range: ${result.corsair.total}`);
+  // Free Trader: 2d6 (2-12) + 1 = 3-13
+  if (result.free_trader.total < 3 || result.free_trader.total > 13) {
+    throw new Error(`Free Trader initiative out of range: ${result.free_trader.total}`);
   }
 
   console.log('✅ PASS: Initiative values in valid range');
   console.log(`   Scout: ${result.scout.total} (4-14 range)`);
-  console.log(`   Corsair: ${result.corsair.total} (3-13 range)\n`);
+  console.log(`   Free Trader: ${result.free_trader.total} (3-13 range)\n`);
 }
 
 function testInitiativeHigherGoesFirst() {
@@ -167,22 +167,22 @@ function testInitiativeHigherGoesFirst() {
 
   // Run multiple times to test different scenarios
   let scoutWins = 0;
-  let corsairWins = 0;
+  let free_traderWins = 0;
   let ties = 0;
 
   for (let i = 0; i < 100; i++) {
     const freshState = createGameState();
     const result = rollInitiative(shipState, freshState);
 
-    if (result.scout.total > result.corsair.total) {
+    if (result.scout.total > result.free_trader.total) {
       scoutWins++;
       if (freshState.currentTurn !== 'scout') {
         throw new Error('Scout should go first when initiative is higher');
       }
-    } else if (result.corsair.total > result.scout.total) {
-      corsairWins++;
-      if (freshState.currentTurn !== 'corsair') {
-        throw new Error('Corsair should go first when initiative is higher');
+    } else if (result.free_trader.total > result.scout.total) {
+      free_traderWins++;
+      if (freshState.currentTurn !== 'free_trader') {
+        throw new Error('Free Trader should go first when initiative is higher');
       }
     } else {
       ties++;
@@ -194,7 +194,7 @@ function testInitiativeHigherGoesFirst() {
   }
 
   console.log('✅ PASS: Higher initiative goes first');
-  console.log(`   Scout wins: ${scoutWins}, Corsair wins: ${corsairWins}, Ties: ${ties}\n`);
+  console.log(`   Scout wins: ${scoutWins}, Free Trader wins: ${free_traderWins}, Ties: ${ties}\n`);
 }
 
 function testInitiativeTiebreaker() {
@@ -203,7 +203,7 @@ function testInitiativeTiebreaker() {
 
   // Force a tie by setting equal pilot skills
   shipState.scout.pilotSkill = 0;
-  shipState.corsair.pilotSkill = 0;
+  shipState.free_trader.pilotSkill = 0;
 
   let tieCount = 0;
   let scoutWonTie = 0;
@@ -213,18 +213,18 @@ function testInitiativeTiebreaker() {
     const dice = new DiceRoller(i); // Seeded for reproducibility
 
     const scoutRoll = dice.roll2d6();
-    const corsairRoll = dice.roll2d6();
+    const free_traderRoll = dice.roll2d6();
 
     const scoutInit = scoutRoll.total;
-    const corsairInit = corsairRoll.total;
+    const free_traderInit = free_traderRoll.total;
 
-    if (scoutInit === corsairInit) {
+    if (scoutInit === free_traderInit) {
       tieCount++;
       // Scout should win ties
       gameState.initiative.scout = { roll: scoutRoll, total: scoutInit };
-      gameState.initiative.corsair = { roll: corsairRoll, total: corsairInit };
+      gameState.initiative.free_trader = { roll: free_traderRoll, total: free_traderInit };
 
-      if (scoutInit >= corsairInit) {
+      if (scoutInit >= free_traderInit) {
         gameState.currentTurn = 'scout';
         scoutWonTie++;
       }
@@ -246,7 +246,7 @@ function testInitiativeStoredInGameState() {
 
   rollInitiative(shipState, gameState);
 
-  if (!gameState.initiative.scout || !gameState.initiative.corsair) {
+  if (!gameState.initiative.scout || !gameState.initiative.free_trader) {
     throw new Error('Initiative not stored in game state');
   }
 
@@ -254,13 +254,13 @@ function testInitiativeStoredInGameState() {
     throw new Error('Scout initiative missing roll or total');
   }
 
-  if (!gameState.initiative.corsair.roll || !gameState.initiative.corsair.total) {
-    throw new Error('Corsair initiative missing roll or total');
+  if (!gameState.initiative.free_trader.roll || !gameState.initiative.free_trader.total) {
+    throw new Error('Free Trader initiative missing roll or total');
   }
 
   console.log('✅ PASS: Initiative stored in game state');
   console.log(`   Scout: ${gameState.initiative.scout.total}`);
-  console.log(`   Corsair: ${gameState.initiative.corsair.total}\n`);
+  console.log(`   Free Trader: ${gameState.initiative.free_trader.total}\n`);
 }
 
 // ========================================
@@ -292,8 +292,8 @@ function testFirstRoundStartsAtOne() {
   console.log('✅ PASS: First round is round 1\n');
 }
 
-function testTurnOrderScoutThenCorsair() {
-  console.log('Test 8: Turn order is Scout → Corsair');
+function testTurnOrderScoutThenFree Trader() {
+  console.log('Test 8: Turn order is Scout → Free Trader');
   const shipState = createShipState();
   const gameState = createGameState();
 
@@ -305,8 +305,8 @@ function testTurnOrderScoutThenCorsair() {
   // End turn
   const turnResult = endTurn(gameState);
 
-  if (firstTurn === 'scout' && turnResult.currentTurn !== 'corsair') {
-    throw new Error('After Scout, Corsair should go');
+  if (firstTurn === 'scout' && turnResult.currentTurn !== 'free_trader') {
+    throw new Error('After Scout, Free Trader should go');
   }
 
   console.log('✅ PASS: Turn order correct');
@@ -332,8 +332,8 @@ function testEndTurnSwitchesPlayer() {
   console.log(`   Before: ${initialTurn}, After: ${newTurn}\n`);
 }
 
-function testCorsairEndTurnStartsNewRound() {
-  console.log('Test 10: Ending Corsair turn starts new round');
+function testFree TraderEndTurnStartsNewRound() {
+  console.log('Test 10: Ending Free Trader turn starts new round');
   const shipState = createShipState();
   const gameState = createGameState();
 
@@ -344,14 +344,14 @@ function testCorsairEndTurnStartsNewRound() {
     endTurn(gameState);
   }
 
-  // Corsair's turn
+  // Free Trader's turn
   const result = endTurn(gameState);
 
   if (!result.newRound) {
-    throw new Error('Ending Corsair turn should start new round');
+    throw new Error('Ending Free Trader turn should start new round');
   }
 
-  console.log('✅ PASS: Ending Corsair turn starts new round\n');
+  console.log('✅ PASS: Ending Free Trader turn starts new round\n');
 }
 
 function testCurrentTurnTracksActivePlayer() {
@@ -365,8 +365,8 @@ function testCurrentTurnTracksActivePlayer() {
 
   startNewRound(shipState, gameState);
 
-  if (gameState.currentTurn !== 'scout' && gameState.currentTurn !== 'corsair') {
-    throw new Error(`currentTurn should be scout or corsair, got ${gameState.currentTurn}`);
+  if (gameState.currentTurn !== 'scout' && gameState.currentTurn !== 'free_trader') {
+    throw new Error(`currentTurn should be scout or free_trader, got ${gameState.currentTurn}`);
   }
 
   console.log('✅ PASS: currentTurn tracks active player');
@@ -385,7 +385,7 @@ function testRoundIncrements() {
 
   // End Scout's turn
   endTurn(gameState);
-  // End Corsair's turn (starts round 2)
+  // End Free Trader's turn (starts round 2)
   endTurn(gameState);
   startNewRound(shipState, gameState);
 
@@ -413,7 +413,7 @@ function testMultipleRoundsProgress() {
     if (gameState.currentTurn === 'scout') {
       endTurn(gameState);
     }
-    // Corsair's turn ends round
+    // Free Trader's turn ends round
   }
 
   console.log('✅ PASS: Multiple rounds progress correctly');
@@ -431,18 +431,18 @@ function testCannotSkipTurns() {
   // End turn once
   const result = endTurn(gameState);
 
-  // If first turn was Scout, second should be Corsair
+  // If first turn was Scout, second should be Free Trader
   if (firstTurn === 'scout') {
     if (result.newRound) {
       throw new Error('Should not start new round after Scout turn');
     }
-    if (gameState.currentTurn !== 'corsair') {
-      throw new Error(`Turn should be corsair, got ${gameState.currentTurn}`);
+    if (gameState.currentTurn !== 'free_trader') {
+      throw new Error(`Turn should be free_trader, got ${gameState.currentTurn}`);
     }
   } else {
-    // If first turn was Corsair, ending turn starts new round
+    // If first turn was Free Trader, ending turn starts new round
     if (!result.newRound) {
-      throw new Error('Should start new round after Corsair turn');
+      throw new Error('Should start new round after Free Trader turn');
     }
   }
 
@@ -468,14 +468,14 @@ function testTurnOrderConsistentAcrossRounds() {
     }
   }
 
-  // Should have mix of scout and corsair going first
+  // Should have mix of scout and free_trader going first
   // (unless very unlucky with dice)
   const scoutFirst = firstTurns.filter(t => t === 'scout').length;
-  const corsairFirst = firstTurns.filter(t => t === 'corsair').length;
+  const free_traderFirst = firstTurns.filter(t => t === 'free_trader').length;
 
   console.log('✅ PASS: Initiative varies by round');
   console.log(`   Scout went first: ${scoutFirst}/10 rounds`);
-  console.log(`   Corsair went first: ${corsairFirst}/10 rounds\n`);
+  console.log(`   Free Trader went first: ${free_traderFirst}/10 rounds\n`);
 }
 
 // ========================================
@@ -514,12 +514,12 @@ function testRoundHistoryStoresInitiative() {
     throw new Error('Round history should store initiative');
   }
 
-  if (!history.initiative.scout || !history.initiative.corsair) {
+  if (!history.initiative.scout || !history.initiative.free_trader) {
     throw new Error('Round history should store both ship initiatives');
   }
 
   console.log('✅ PASS: Round history stores initiative');
-  console.log(`   Scout: ${history.initiative.scout.total}, Corsair: ${history.initiative.corsair.total}\n`);
+  console.log(`   Scout: ${history.initiative.scout.total}, Free Trader: ${history.initiative.free_trader.total}\n`);
 }
 
 function testRoundHistoryAccumulates() {
@@ -570,7 +570,7 @@ function testResetClearsGameState() {
   gameState.currentRound = 0;
   gameState.currentTurn = null;
   gameState.initiative.scout = null;
-  gameState.initiative.corsair = null;
+  gameState.initiative.free_trader = null;
   gameState.roundHistory = [];
 
   if (gameState.currentRound !== 0) {
@@ -604,9 +604,9 @@ async function runAllTests() {
     // Turn order tests (10)
     testRoundStartsAtZero,
     testFirstRoundStartsAtOne,
-    testTurnOrderScoutThenCorsair,
+    testTurnOrderScoutThenFree Trader,
     testEndTurnSwitchesPlayer,
-    testCorsairEndTurnStartsNewRound,
+    testFree TraderEndTurnStartsNewRound,
     testCurrentTurnTracksActivePlayer,
     testRoundIncrements,
     testMultipleRoundsProgress,

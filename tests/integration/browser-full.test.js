@@ -114,7 +114,7 @@ async function runTests() {
           });
           socket.emit('combat', {
             attacker: 'scout',
-            target: 'corsair',
+            target: 'free_trader',
             range: 'medium',
             dodge: 'none',
             seed: Date.now()
@@ -144,7 +144,7 @@ async function runTests() {
           });
           socket.emit('combat', {
             attacker: 'scout',
-            target: 'corsair',
+            target: 'free_trader',
             range: 'adjacent', // +2 bonus
             dodge: 'none',
             seed: Date.now()
@@ -179,7 +179,7 @@ async function runTests() {
           });
           socket.emit('combat', {
             attacker: 'scout',
-            target: 'corsair',
+            target: 'free_trader',
             range: 'veryLong', // -4 penalty
             dodge: 'full', // -2 penalty
             seed: Date.now()
@@ -208,7 +208,7 @@ async function runTests() {
           });
           socket.emit('combat', {
             attacker: 'scout',
-            target: 'corsair',
+            target: 'free_trader',
             range: 'long',
             dodge: 'none',
             seed: Date.now()
@@ -236,7 +236,7 @@ async function runTests() {
           });
           socket.emit('combat', {
             attacker: 'scout',
-            target: 'corsair',
+            target: 'free_trader',
             range: 'medium',
             dodge: 'partial',
             seed: Date.now()

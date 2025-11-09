@@ -204,7 +204,7 @@ async function testAttackResolution() {
     await waitForEvent(player2, 'welcome');
 
     player1.emit('space:playerReady', { ship: 'scout', range: 'Medium' });
-    player2.emit('space:playerReady', { ship: 'corsair', range: 'Medium' });
+    player2.emit('space:playerReady', { ship: 'free_trader', range: 'Medium' });
 
     await waitForEvent(player1, 'space:combatStart');
     await waitForEvent(player1, 'space:turnChange');

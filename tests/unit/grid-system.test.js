@@ -47,8 +47,8 @@ test('Scout has 3 movement points', () => {
   assertEqual(SHIPS.scout.movement, 3, 'Scout should have 3 movement points');
 });
 
-test('Corsair has 2 movement points', () => {
-  assertEqual(SHIPS.corsair.movement, 2, 'Corsair should have 2 movement points');
+test('Free Trader has 2 movement points', () => {
+  assertEqual(SHIPS.free_trader.movement, 2, 'Free Trader should have 2 movement points');
 });
 
 test('Ship can move within movement points', () => {

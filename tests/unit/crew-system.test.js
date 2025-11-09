@@ -51,7 +51,7 @@ console.log('--- CREW SKILL APPLICATION (8 tests) ---\n');
 
 test('Gunner skill adds to attack roll', () => {
   const scout = { ...SHIPS.scout };
-  const corsair = { ...SHIPS.corsair };
+  const free_trader = { ...SHIPS.free_trader };
 
   // Scout gunner has skill +2
   const gunner = CREW.scout.find(c => c.role === 'gunner');
@@ -61,8 +61,8 @@ test('Gunner skill adds to attack roll', () => {
   const scoutWithCrew = applyCrew(scout, { gunner: gunner });
 
   // Attack with and without crew should differ by gunner skill
-  const noCrew = resolveAttack(scout, corsair, { seed: 12345, range: 'medium' });
-  const withCrew = resolveAttack(scoutWithCrew, corsair, { seed: 12345, range: 'medium' });
+  const noCrew = resolveAttack(scout, free_trader, { seed: 12345, range: 'medium' });
+  const withCrew = resolveAttack(scoutWithCrew, free_trader, { seed: 12345, range: 'medium' });
 
   // With crew should have +2 to attack from gunner skill
   assertEqual(withCrew.gunnerSkill, 2, 'Should have gunner skill +2');
@@ -129,13 +129,13 @@ test('Multiple crew can be assigned to ship', () => {
 
 test('Crew skills stack correctly (pilot + gunner)', () => {
   const scout = { ...SHIPS.scout };
-  const corsair = { ...SHIPS.corsair };
+  const free_trader = { ...SHIPS.free_trader };
   const pilot = CREW.scout.find(c => c.role === 'pilot');
   const gunner = CREW.scout.find(c => c.role === 'gunner');
 
   const scoutWithCrew = applyCrew(scout, { pilot, gunner });
 
-  const result = resolveAttack(scoutWithCrew, corsair, { seed: 12345, range: 'medium' });
+  const result = resolveAttack(scoutWithCrew, free_trader, { seed: 12345, range: 'medium' });
 
   // Should have pilot skill for pilotSkill (initiative/dodge)
   assertEqual(result.skill, 2, 'Should use pilot skill for base skill');
@@ -143,23 +143,23 @@ test('Crew skills stack correctly (pilot + gunner)', () => {
   assertEqual(result.gunnerSkill, 2, 'Should have gunner skill bonus');
 });
 
-test('Corsair crew has different skill levels', () => {
-  const pilot = CREW.corsair.find(c => c.role === 'pilot');
-  const gunner = CREW.corsair.find(c => c.role === 'gunner');
-  const engineer = CREW.corsair.find(c => c.role === 'engineer');
+test('Free Trader crew has different skill levels', () => {
+  const pilot = CREW.free_trader.find(c => c.role === 'pilot');
+  const gunner = CREW.free_trader.find(c => c.role === 'gunner');
+  const engineer = CREW.free_trader.find(c => c.role === 'engineer');
 
-  // Corsair crew should be less skilled (generic pirates vs trained scouts)
-  assertEqual(pilot.skills.pilot, 1, 'Corsair pilot should have skill +1');
-  assertEqual(gunner.skills.gunner, 1, 'Corsair gunner should have skill +1');
-  assertEqual(engineer.skills.engineering, 0, 'Corsair engineer should have skill +0');
+  // Free Trader crew should be less skilled (generic pirates vs trained scouts)
+  assertEqual(pilot.skills.pilot, 1, 'Free Trader pilot should have skill +1');
+  assertEqual(gunner.skills.gunner, 1, 'Free Trader gunner should have skill +1');
+  assertEqual(engineer.skills.engineering, 0, 'Free Trader engineer should have skill +0');
 });
 
 test('No crew assigned means no skill bonuses', () => {
   const scout = { ...SHIPS.scout };
-  const corsair = { ...SHIPS.corsair };
+  const free_trader = { ...SHIPS.free_trader };
 
   // Scout with no crew should use ship default pilotSkill only
-  const result = resolveAttack(scout, corsair, { seed: 12345, range: 'medium' });
+  const result = resolveAttack(scout, free_trader, { seed: 12345, range: 'medium' });
 
   assertEqual(result.skill, scout.pilotSkill, 'Should use ship default pilot skill');
   assertEqual(result.gunnerSkill, undefined, 'Should have no gunner skill bonus');
