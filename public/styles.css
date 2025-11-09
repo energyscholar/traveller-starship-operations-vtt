@@ -666,6 +666,18 @@
       opacity: 0.8;
     }
 
+    .hud-player-info {
+      font-size: 12px;
+      margin-top: 6px;
+      opacity: 0.9;
+      color: #00ff00;
+    }
+
+    .player-separator {
+      margin: 0 6px;
+      opacity: 0.5;
+    }
+
     .hud-stats {
       display: flex;
       gap: 20px;
@@ -745,7 +757,8 @@
       align-items: center;
       cursor: pointer;
       user-select: none;
-      padding: 5px 0;
+      padding: 0;
+      margin-bottom: 5px;
       transition: opacity 0.2s;
     }
 
@@ -755,6 +768,7 @@
 
     .crew-panel-header h3 {
       margin: 0;
+      font-size: 16px;
     }
 
     .collapse-icon {
@@ -779,18 +793,18 @@
     }
 
     #crew-panel {
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .crew-role {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px;
+      gap: 8px;
+      padding: 5px 8px;
       background: rgba(0, 0, 0, 0.2);
-      border-radius: 5px;
-      margin-bottom: 5px;
-      font-size: 14px;
+      border-radius: 4px;
+      margin-bottom: 3px;
+      font-size: 13px;
     }
 
     .role-name {
@@ -813,29 +827,38 @@
     }
 
     .gunner-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .gunner-controls-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      align-items: end;
     }
 
     .gunner-controls .control-group {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
     }
 
     .gunner-controls .control-group label {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
       color: #00ff00;
     }
 
     .gunner-controls select {
       width: 100%;
+      font-size: 13px;
+      padding: 6px;
     }
 
     .fire-button {
-      grid-column: span 2;
+      width: 100%;
       padding: 15px;
       font-size: 18px;
       font-weight: bold;

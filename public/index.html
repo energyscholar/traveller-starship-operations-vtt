@@ -37,7 +37,7 @@
             <div class="ship-option-header">⚡ Scout</div>
             <div class="ship-option-type">Type-S Scout/Courier</div>
             <div class="ship-option-stats">
-              <div>Hull: <strong>20</strong></div>
+              <div>Hull: <strong>40</strong></div>
               <div>Armour: <strong>4</strong></div>
               <div>Thrust: <strong>2</strong></div>
               <div>Turrets: <strong>1</strong></div>
@@ -51,7 +51,7 @@
             <div class="ship-option-header">📦 Free Trader</div>
             <div class="ship-option-type">Type-A Free Trader</div>
             <div class="ship-option-stats">
-              <div>Hull: <strong>30</strong></div>
+              <div>Hull: <strong>80</strong></div>
               <div>Armour: <strong>2</strong></div>
               <div>Thrust: <strong>1</strong></div>
               <div>Turrets: <strong>2</strong></div>
@@ -93,26 +93,18 @@
 
     <!-- Stage 8.7: Space Combat HUD -->
     <div id="space-combat-hud" style="display: none;">
-      <div class="header">
-        <h1>🚀 Traveller Space Combat</h1>
-        <div class="stage">MULTIPLAYER COMBAT</div>
-
-        <!-- Player indicator in combat -->
-        <div class="player-indicator combat">
-          <div class="player-badge">
-            <span class="player-icon">👤</span>
-            <span id="combat-player-number"></span>
-          </div>
-          <div class="player-ship" id="combat-player-ship"></div>
-        </div>
-      </div>
-
-      <!-- Ship Status HUD -->
+      <!-- Compact Ship Status HUD -->
       <div class="card">
         <div class="hud-top">
           <div class="hud-ship-info">
             <div class="hud-ship-name" id="ship-name">Scout</div>
             <div class="hud-ship-type">Type-S Scout/Courier</div>
+            <div class="hud-player-info">
+              <span class="player-icon">👤</span>
+              <span id="combat-player-number"></span>
+              <span class="player-separator">•</span>
+              <span id="combat-player-ship"></span>
+            </div>
           </div>
           <div class="hud-stats">
             <div class="hud-stat">
@@ -132,7 +124,7 @@
 
         <div class="hud-hull-section">
           <div class="hud-hull-label">
-            Hull: <span id="hull-current">20</span> / <span id="hull-max">20</span>
+            Hull: <span id="hull-current">40</span> / <span id="hull-max">40</span>
           </div>
           <div class="hud-hull-bar">
             <div class="hud-hull-fill" id="hull-bar-fill" style="width: 100%;"></div>
@@ -174,25 +166,27 @@
       <div class="card">
         <h3>🎯 Gunner Actions</h3>
         <div class="gunner-controls">
-          <div class="control-group">
-            <label for="turret-select">Turret:</label>
-            <select id="turret-select">
-              <option value="0">Turret 1 (Triple)</option>
-            </select>
-          </div>
-          <div class="control-group">
-            <label for="target-select">Target:</label>
-            <select id="target-select">
-              <option value="opponent">Enemy Ship</option>
-            </select>
-          </div>
-          <div class="control-group">
-            <label for="weapon-select">Weapon:</label>
-            <select id="weapon-select">
-              <option value="0">Pulse Laser (2d6)</option>
-              <option value="1">Sandcaster (Defense)</option>
-              <option value="2">Missiles (4d6, 6 shots)</option>
-            </select>
+          <div class="gunner-controls-row">
+            <div class="control-group">
+              <label for="turret-select">Turret:</label>
+              <select id="turret-select">
+                <option value="0">Turret 1 (Triple)</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label for="target-select">Target:</label>
+              <select id="target-select">
+                <option value="opponent">Enemy Ship</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label for="weapon-select">Weapon:</label>
+              <select id="weapon-select">
+                <option value="0">Pulse Laser (2d6)</option>
+                <option value="1">Sandcaster (Defense)</option>
+                <option value="2">Missiles (4d6, 6 shots)</option>
+              </select>
+            </div>
           </div>
           <button id="fire-button" class="fire-button" disabled>🔥 FIRE!</button>
         </div>

@@ -1223,8 +1223,8 @@
         ship: selectedShip,
         range: data.range || selectedRange,
         round: 1,
-        hull: selectedShip === 'scout' ? 20 : 30,
-        maxHull: selectedShip === 'scout' ? 20 : 30,
+        hull: selectedShip === 'scout' ? 40 : 80,
+        maxHull: selectedShip === 'scout' ? 40 : 80,
         armour: selectedShip === 'scout' ? 4 : 2,
         turrets: selectedShip === 'scout' ? 1 : 2
       };
