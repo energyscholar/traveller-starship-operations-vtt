@@ -1,7 +1,19 @@
 # Technical Debt Tracker
 
-**Last Updated:** 2025-11-08
-**Current Stage:** 8.1 Complete (awaiting 8.2)
+**Last Updated:** 2025-11-09
+**Current Stage:** 10 Complete (Ready for Stage 11)
+
+---
+
+## Documentation TODOs
+
+### HIGH PRIORITY
+- **Extract and Summarize High Guard Rules**
+  - **Purpose:** Create comprehensive reference for advanced ship design and combat
+  - **Location:** Save to `.claude/MONGOOSE-TRAVELLER-HIGH-GUARD.md`
+  - **Scope:** Ship construction, advanced weapons, capital ship combat
+  - **Effort:** 2-3 hours
+  - **Priority:** Before implementing advanced ship features in Stage 13+
 
 ---
 
