@@ -889,6 +889,13 @@ io.on('connection', (socket) => {
       return;
     }
 
+    // STAGE 11: Check if player has already fired this round
+    if (combat.turnComplete[socket.id]) {
+      combatLog.info(`[SPACE:FIRE] Player already fired this round: ${connectionId}`);
+      socket.emit('space:alreadyFired', { message: 'You already fired this round!' });
+      return;
+    }
+
     // Resolve attack using combat library
     // Get the actual weapon object from SHIPS constant
     const shipData = SHIPS[attackerPlayer.ship];

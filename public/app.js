@@ -1400,24 +1400,38 @@
     }
 
     // Add entry to combat log
+    // STAGE 11: Newest entries at top (prepend instead of append)
     function addLogEntry(message, type = '') {
       const entry = document.createElement('div');
       entry.className = 'log-entry' + (type ? ' ' + type : '');
       entry.textContent = message;
-      spaceCombatLog.appendChild(entry);
 
-      // Auto-scroll to bottom
-      spaceCombatLog.scrollTop = spaceCombatLog.scrollHeight;
+      // Insert at beginning (newest first)
+      if (spaceCombatLog.firstChild) {
+        spaceCombatLog.insertBefore(entry, spaceCombatLog.firstChild);
+      } else {
+        spaceCombatLog.appendChild(entry);
+      }
+
+      // Keep log from growing infinitely (max 100 entries)
+      while (spaceCombatLog.children.length > 100) {
+        spaceCombatLog.removeChild(spaceCombatLog.lastChild);
+      }
     }
 
     // Listen for combat events from server (Stage 8.8)
     socket.on('space:attackResult', (data) => {
       console.log('[ATTACK RESULT]', data);
 
+      // STAGE 11: Fix combat log formatting - properly format dice rolls
+      const rollText = data.attackRoll && data.attackRoll.dice
+        ? `[${data.attackRoll.dice.join(',')}]=${data.attackRoll.total}`
+        : data.total || '?';
+
       if (data.hit) {
-        addLogEntry(`HIT! ${data.damage} damage dealt (Roll: ${data.attackRoll}, Total: ${data.total})`, 'hit');
+        addLogEntry(`HIT! ${data.damage} damage dealt (Roll: ${rollText}, Total: ${data.total})`, 'hit');
       } else {
-        addLogEntry(`MISS! (Roll: ${data.attackRoll}, Total: ${data.total}, Need: ${data.targetNumber})`, 'miss');
+        addLogEntry(`MISS! (Roll: ${rollText}, Total: ${data.total}, Need: ${data.targetNumber})`, 'miss');
       }
     });
 
