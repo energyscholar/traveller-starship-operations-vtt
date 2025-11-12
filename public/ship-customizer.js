@@ -31,7 +31,10 @@ async function loadShipTemplates() {
     const response = await fetch('/data/ships/index.json');
     const index = await response.json();
 
-    for (const shipId of index.ships) {
+    // Handle both array of strings and array of objects
+    const shipIds = index.ships.map(ship => typeof ship === 'string' ? ship : ship.id);
+
+    for (const shipId of shipIds) {
       const shipResponse = await fetch(`/data/ships/${shipId}.json`);
       const shipData = await shipResponse.json();
       shipTemplates[shipId] = shipData;

@@ -29,6 +29,10 @@ const { useSandcaster, canUseSandcaster, interceptMissile } = require('./lib/wea
 
 // Serve static files from public directory
 app.use(express.static('public'));
+// Serve lib directory for client-side modules (Stage 12.4)
+app.use('/lib', express.static('lib'));
+// Serve data directory for ship templates (Stage 12)
+app.use('/data', express.static('data'));
 app.use(express.json());
 
 // Track connections and ship assignments
@@ -144,22 +148,29 @@ function makeAIDecision(combat, aiPlayer) {
   const rangeIndex = rangeBands.indexOf(currentRange);
   const isLongRange = rangeIndex >= 4;  // Long or further
 
-  // Find available weapons
-  const turrets = aiData.turrets;
+  // Find available weapons from SHIPS data structure
+  const shipData = SHIPS[aiData.ship];
+  if (!shipData || !shipData.weapons) {
+    combatLog.info(`[AI] No ship data or weapons found for ${aiData.ship}`);
+    combatLog.info(`[AI] No valid actions available, ending turn`);
+    return {
+      action: 'endTurn',
+      params: {}
+    };
+  }
+
   let missileWeapon = null;
   let laserWeapon = null;
 
-  for (let t = 0; t < turrets.length; t++) {
-    const turret = aiData.weapons[t];
-    if (!turret) continue;
-
-    for (let w = 0; w < turret.length; w++) {
-      const weapon = turret[w];
-      if (weapon.type === 'Missile' && aiData.ammo && aiData.ammo.missiles > 0) {
-        missileWeapon = { turret: t, weapon: w };
-      } else if (weapon.type.includes('Laser')) {
-        laserWeapon = { turret: t, weapon: w };
-      }
+  // Check each weapon in the ship's weapons array
+  for (let w = 0; w < shipData.weapons.length; w++) {
+    const weapon = shipData.weapons[w];
+    if (weapon.id === 'missiles' && aiData.ammo && aiData.ammo.missiles > 0) {
+      missileWeapon = { turret: 0, weapon: w };  // Use turret 0 as default
+      combatLog.info(`[AI] Found missile weapon at index ${w}`);
+    } else if (weapon.id && weapon.id.includes('Laser')) {
+      laserWeapon = { turret: 0, weapon: w };
+      combatLog.info(`[AI] Found laser weapon at index ${w}: ${weapon.name}`);
     }
   }
 
