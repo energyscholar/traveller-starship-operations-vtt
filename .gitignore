@@ -89,3 +89,10 @@ debug-*.json
 # Temporary files
 *.tmp
 *.temp
+
+# Stage 13: Automated Testing Artifacts
+tests/automated/screenshots/
+tests/automated/*.png
+tests/automated/*.jpg
+.puppeteer_cache/
+

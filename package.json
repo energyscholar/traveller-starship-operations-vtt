@@ -11,6 +11,9 @@
     "test:integration": "node tests/integration/space-combat.test.js",
     "test:data": "node tools/validate-json.js",
     "test:security": "node tests/unit/xss-validation.test.js",
+    "test:auto": "jest tests/automated --runInBand",
+    "test:auto:smoke": "jest tests/automated/01-launch.test.js",
+    "test:validate-registry": "node tests/automated/validate-registry.js",
     "play": "echo '\n🎮 SINGLE-PLAYER TEST: http://localhost:3000/test.html\n👥 MULTIPLAYER: http://localhost:3000\n' && node server.js"
   },
   "dependencies": {
@@ -22,7 +25,13 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "puppeteer": "^24.27.0",
+    "jest": "^29.7.0",
+    "puppeteer": "^24.29.1",
     "socket.io-client": "^4.8.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 30000,
+    "verbose": true
   }
 }

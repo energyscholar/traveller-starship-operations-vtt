@@ -10,19 +10,38 @@
 
     // Route to appropriate screen based on URL parameter
     function initializeApp() {
-      if (mode === 'battle') {
+      // Handle invalid modes by defaulting to menu
+      const validModes = ['battle', 'solo', 'customize'];
+      const normalizedMode = mode ? mode.toLowerCase().trim() : null;
+
+      if (normalizedMode && !validModes.includes(normalizedMode)) {
+        console.warn(`Invalid mode '${mode}' - defaulting to main menu`);
+        // Redirect to main menu with clean URL
+        window.history.replaceState({}, '', '/');
+        // Fall through to show menu
+      }
+
+      if (normalizedMode === 'battle') {
         // Battle mode: Show ship selection (existing behavior)
         mainMenuScreen.style.display = 'none';
         shipSelectionScreen.style.display = 'block';
         spaceCombatHud.style.display = 'none';
-        // Socket.io and combat system will initialize below
+        console.log('App initialized in battle mode (multiplayer)');
         return 'battle';
-      } else if (mode === 'customize') {
+      } else if (normalizedMode === 'solo') {
+        // Solo mode: Show ship selection with solo flag
+        mainMenuScreen.style.display = 'none';
+        shipSelectionScreen.style.display = 'block';
+        spaceCombatHud.style.display = 'none';
+        console.log('App initialized in solo mode (vs AI)');
+        return 'solo';
+      } else if (normalizedMode === 'customize') {
         // Customize mode: Redirect to ship-customizer.html (Stage 12.3)
+        console.log('Redirecting to ship customizer...');
         window.location.href = '/ship-customizer.html';
         return 'customize';
       } else {
-        // No mode specified: Show main menu
+        // Default: Show main menu (no mode specified or invalid mode)
         mainMenuScreen.style.display = 'block';
         shipSelectionScreen.style.display = 'none';
         spaceCombatHud.style.display = 'none';
@@ -31,10 +50,14 @@
         document.getElementById('btn-space-battle').addEventListener('click', () => {
           window.location.href = '/?mode=battle';
         });
+        document.getElementById('btn-solo-battle').addEventListener('click', () => {
+          window.location.href = '/?mode=solo';
+        });
         document.getElementById('btn-customize-ship').addEventListener('click', () => {
           window.location.href = '/ship-customizer.html';
         });
 
+        console.log('App initialized in menu mode');
         return 'menu';
       }
     }
@@ -42,13 +65,22 @@
     // Initialize routing
     const appMode = initializeApp();
 
-    // Only initialize combat system if in battle mode
-    if (appMode !== 'battle') {
+    // Only initialize combat system if in battle or solo mode
+    if (appMode !== 'battle' && appMode !== 'solo') {
       // Don't initialize Socket.io or combat system for other modes
-      console.log(`App initialized in '${appMode}' mode - skipping combat initialization`);
-      // Stop script execution here for non-battle modes
-      throw new Error('STOP_EXECUTION_NON_BATTLE_MODE');
+      console.log(`Skipping combat initialization for '${appMode}' mode`);
+      // Clean exit - don't throw error, just stop execution
+      // This allows the menu to work properly
+      if (typeof module !== 'undefined' && module.exports) {
+        module.exports = { appMode }; // For testing
+      }
+      // Return early - no error thrown
+    } else {
+      // Battle or solo mode continues below with combat initialization
+      initializeCombatSystem();
     }
+
+    function initializeCombatSystem() {
 
     // ======== CLIENT LOGGING SYSTEM ========
     // Lightweight client logger that sends logs to server
@@ -1175,12 +1207,13 @@
       readyButton.textContent = '✓ Ready';
       readyButton.style.backgroundColor = '#4CAF50';
 
-      console.log(`[READY] Player ready with ${selectedShip} at ${selectedRange} range`);
+      console.log(`[READY] Player ready with ${selectedShip} at ${selectedRange} range (mode: ${appMode})`);
 
       // Emit ready status to server
       socket.emit('space:playerReady', {
         ship: selectedShip,
-        range: selectedRange
+        range: selectedRange,
+        soloMode: appMode === 'solo'  // Tell server if this is solo mode
       });
 
       // Update UI
@@ -1799,3 +1832,5 @@
         console.log('[FEEDBACK] Submitted feedback');
       });
     }
+
+    } // End of initializeCombatSystem()

@@ -53,6 +53,233 @@ function createDummyPlayer(player1) {
   };
 }
 
+// Helper function to check if a player is the AI opponent
+function isDummyAI(playerId) {
+  return playerId === 'dummy_ai';
+}
+
+// Helper function to safely emit to a player (skips dummy AI)
+function emitToPlayer(io, playerId, eventName, data) {
+  if (isDummyAI(playerId)) {
+    // Don't emit to dummy AI - it has no socket
+    return false;
+  }
+
+  const socket = io.sockets.sockets.get(playerId);
+  if (socket && socket.connected) {
+    socket.emit(eventName, data);
+    return true;
+  }
+  return false;
+}
+
+// ======== SOLO MODE AI OPPONENT SYSTEM ========
+//
+// FUTURE ENHANCEMENT: Advanced AI Opponent System (Stage 15+)
+// TODO: Implement GM-configurable AI system with:
+// - Multiple difficulty levels (Easy, Normal, Hard, Expert)
+// - Different AI personality types (Aggressive, Defensive, Tactical, Reckless)
+// - Proper tactical decision making (range management, ammo conservation)
+// - Learning/adaptive behavior based on player patterns
+// - GM override controls to manually control AI during combat
+// - Configurable via game settings UI
+//
+// Current Implementation: Simple random AI for testing purposes
+// - Primarily attacks (70% of time)
+// - Uses defensive actions occasionally (20% dodge, 10% other)
+// - Prioritizes point defense against missiles
+// - Heavy use of sandcasters when damaged
+// - Range-based weapon selection (lasers close, missiles long)
+// - Random element ensures all features get exercised for testing
+//
+
+// Simple AI decision-making for dummy opponent
+// Returns: { action: 'fire'|'dodge'|'sandcaster'|'endTurn', params: {...} }
+function makeAIDecision(combat, aiPlayer) {
+  const humanPlayer = aiPlayer === combat.player1 ? combat.player2 : combat.player1;
+  const aiData = aiPlayer === combat.player1 ? combat.player1 : combat.player2;
+  const currentRange = combat.range;
+
+  // Check for incoming missiles
+  const incomingMissiles = combat.missileTracker ?
+    combat.missileTracker.getMissilesTargeting(aiData.id) : [];
+
+  // Random number for decision weights
+  const roll = Math.random() * 100;
+
+  // HIGH PRIORITY: Point defense if missiles incoming (50% chance)
+  if (incomingMissiles.length > 0 && roll < 50) {
+    combatLog.info(`[AI] Incoming missiles detected, attempting point defense`);
+    return {
+      action: 'pointDefense',
+      params: {
+        targetMissileId: incomingMissiles[0].id
+      }
+    };
+  }
+
+  // MEDIUM PRIORITY: Use sandcaster if available and recently hit (30% chance if damaged)
+  const healthPercent = (aiData.hull / aiData.maxHull) * 100;
+  if (aiData.ammo && aiData.ammo.sandcaster > 0 && healthPercent < 90 && roll < 30) {
+    combatLog.info(`[AI] Using sandcaster (hull at ${healthPercent.toFixed(0)}%)`);
+    return {
+      action: 'sandcaster',
+      params: {}
+    };
+  }
+
+  // MEDIUM PRIORITY: Dodge maneuver (10% chance)
+  if (roll < 40) {  // 40-30 = 10% since sandcaster used 30%
+    combatLog.info(`[AI] Performing dodge maneuver`);
+    return {
+      action: 'dodge',
+      params: {}
+    };
+  }
+
+  // DEFAULT: Attack with appropriate weapon based on range
+  // Long+ range: Use missiles if available, otherwise laser
+  // Close-Medium: Use laser
+  const rangeBands = ['Adjacent', 'Close', 'Short', 'Medium', 'Long', 'Very Long', 'Distant'];
+  const rangeIndex = rangeBands.indexOf(currentRange);
+  const isLongRange = rangeIndex >= 4;  // Long or further
+
+  // Find available weapons
+  const turrets = aiData.turrets;
+  let missileWeapon = null;
+  let laserWeapon = null;
+
+  for (let t = 0; t < turrets.length; t++) {
+    const turret = aiData.weapons[t];
+    if (!turret) continue;
+
+    for (let w = 0; w < turret.length; w++) {
+      const weapon = turret[w];
+      if (weapon.type === 'Missile' && aiData.ammo && aiData.ammo.missiles > 0) {
+        missileWeapon = { turret: t, weapon: w };
+      } else if (weapon.type.includes('Laser')) {
+        laserWeapon = { turret: t, weapon: w };
+      }
+    }
+  }
+
+  // Choose weapon based on range
+  let chosenWeapon = null;
+  if (isLongRange && missileWeapon && aiData.ammo.missiles > 0) {
+    chosenWeapon = missileWeapon;
+    combatLog.info(`[AI] Attacking at long range with missile`);
+  } else if (laserWeapon) {
+    chosenWeapon = laserWeapon;
+    combatLog.info(`[AI] Attacking with laser`);
+  }
+
+  if (chosenWeapon) {
+    return {
+      action: 'fire',
+      params: {
+        turret: chosenWeapon.turret,
+        weapon: chosenWeapon.weapon,
+        target: 'opponent'
+      }
+    };
+  }
+
+  // Fallback: End turn if no valid action
+  combatLog.info(`[AI] No valid actions available, ending turn`);
+  return {
+    action: 'endTurn',
+    params: {}
+  };
+}
+
+// Execute AI turn automatically
+function executeAITurn(combat, io) {
+  if (!isDummyAI(combat.activePlayer)) {
+    combatLog.error(`[AI] executeAITurn called but active player is not AI: ${combat.activePlayer}`);
+    return;
+  }
+
+  const aiPlayer = combat.activePlayer === combat.player1.id ? combat.player1 : combat.player2;
+  const humanPlayer = combat.activePlayer === combat.player1.id ? combat.player2 : combat.player1;
+
+  combatLog.info(`[AI] Executing turn for ${aiPlayer.ship}`);
+
+  // Make AI decision
+  const decision = makeAIDecision(combat, aiPlayer);
+
+  combatLog.info(`[AI] Decision: ${decision.action}`, decision.params);
+
+  // Execute the chosen action
+  switch (decision.action) {
+    case 'fire':
+      // TODO: Call fire logic directly
+      combatLog.info(`[AI] Would fire weapon (turret ${decision.params.turret}, weapon ${decision.params.weapon})`);
+      break;
+
+    case 'pointDefense':
+      // TODO: Call point defense logic
+      combatLog.info(`[AI] Would use point defense on missile ${decision.params.targetMissileId}`);
+      break;
+
+    case 'sandcaster':
+      // TODO: Call sandcaster logic
+      combatLog.info(`[AI] Would use sandcaster`);
+      break;
+
+    case 'dodge':
+      // TODO: Call dodge logic
+      combatLog.info(`[AI] Would perform dodge maneuver`);
+      break;
+
+    case 'endTurn':
+      // Just end turn
+      combatLog.info(`[AI] Ending turn with no action`);
+      break;
+  }
+
+  // Mark AI turn as complete
+  combat.turnComplete[combat.activePlayer] = true;
+
+  // Check if both players completed turns (trigger next round or turn change)
+  if (combat.turnComplete[combat.player1.id] && combat.turnComplete[combat.player2.id]) {
+    // New round
+    combat.round++;
+    combat.turnComplete = { [combat.player1.id]: false, [combat.player2.id]: false };
+    combat.activePlayer = (combat.round % 2 === 1) ? combat.player1.id : combat.player2.id;
+
+    const newRoundData = {
+      round: combat.round,
+      player1Hull: combat.player1.hull,
+      player2Hull: combat.player2.hull,
+      activePlayer: combat.activePlayer
+    };
+
+    emitToPlayer(io, combat.player1.id, 'space:newRound', newRoundData);
+    emitToPlayer(io, combat.player2.id, 'space:newRound', newRoundData);
+    combatLog.info(`[AI] New round ${combat.round} started`);
+
+    // If new round starts with AI, trigger AI turn again
+    if (isDummyAI(combat.activePlayer)) {
+      combatLog.info(`[AI] New round starts with AI turn, executing...`);
+      setTimeout(() => {
+        executeAITurn(combat, io);
+      }, 1500);
+    }
+  } else {
+    // Switch to other player
+    combat.activePlayer = combat.activePlayer === combat.player1.id ? combat.player2.id : combat.player1.id;
+
+    const turnChangeData = {
+      activePlayer: combat.activePlayer,
+      round: combat.round
+    };
+
+    emitToPlayer(io, combat.player1.id, 'space:turnChange', turnChangeData);
+    emitToPlayer(io, combat.player2.id, 'space:turnChange', turnChangeData);
+    combatLog.info(`[AI] Turn switched to ${combat.activePlayer === combat.player1.id ? 'Player 1' : 'Player 2'}`);
+  }
+}
+
 // Stage 8.8: Generate default crew for a ship
 function generateDefaultCrew(shipType) {
   if (shipType === 'scout') {
@@ -827,19 +1054,25 @@ io.on('connection', (socket) => {
       range: data.range
     });
 
-    // Check if both players are ready (or single player for testing)
+    // Check if both players are ready
     const allSockets = Array.from(connections.keys()).map(id => io.sockets.sockets.get(id));
     const readyPlayers = allSockets.filter(s => s && s.spaceSelection && s.spaceSelection.ready);
 
     combatLog.info(` ${readyPlayers.length}/${allSockets.length} players ready`);
 
-    // TEST MODE: Allow single player to start combat (for testing purposes)
-    const testMode = readyPlayers.length === 1 && allSockets.length === 1;
+    // Check if player requested solo mode (vs AI)
+    const soloMode = data.soloMode === true;
 
-    if (readyPlayers.length >= 2 || testMode) {
-      // Both players ready - start combat! (or single player in test mode)
+    // Start combat if: (1) 2 players ready, OR (2) solo mode with 1 player
+    if (readyPlayers.length >= 2 || (soloMode && readyPlayers.length === 1)) {
       const player1 = readyPlayers[0];
-      const player2 = testMode ? createDummyPlayer(player1) : readyPlayers[1];
+      const player2 = soloMode && readyPlayers.length === 1 ? createDummyPlayer(player1) : readyPlayers[1];
+
+      if (soloMode && readyPlayers.length === 1) {
+        combatLog.info(` SOLO MODE: Starting with AI opponent`);
+      } else {
+        combatLog.info(` MULTIPLAYER MODE: Both players ready`);
+      }
 
       // Use the last player's range selection
       const finalRange = player2.spaceSelection.range || player1.spaceSelection.range || 'Short';
@@ -909,10 +1142,12 @@ io.on('connection', (socket) => {
         combatLog.info(` Combat state initialized: ${combatId}`);
 
         // Notify both players who goes first (Player 1 always starts)
-        io.emit('space:turnChange', {
+        const turnChangeData = {
           activePlayer: player1.id,
           round: 1
-        });
+        };
+        emitToPlayer(io, player1.id, 'space:turnChange', turnChangeData);
+        emitToPlayer(io, player2.id, 'space:turnChange', turnChangeData);
         combatLog.info(` Initial turn set to player1: ${player1.id}`);
       }
     }
@@ -1006,34 +1241,37 @@ io.on('connection', (socket) => {
       }
 
       // HOTFIX: Safe emit to defender with null check and disconnect handling
-      if (defenderSocket && defenderSocket.connected) {
-        defenderSocket.emit('space:attacked', {
-          hit: true,
-          damage: attackResult.damage,
-          hull: defenderPlayer.hull,
-          maxHull: defenderPlayer.maxHull
-        });
-      } else {
-        // Defender disconnected - forfeit combat
-        socketLog.error(` Defender socket disconnected during combat! Combat: ${combat.id}, Defender: ${defenderPlayer.id}`);
-        combatLog.info(`[SPACE:FORFEIT] ${defenderPlayer.id} disconnected, awarding victory to ${attackerPlayer.id}`);
-
-        // Award victory to attacker
-        activeCombats.delete(combat.id);
-
-        if (attackerSocket && attackerSocket.connected) {
-          attackerSocket.emit('space:combatEnd', {
-            winner: attackerPlayer.id === combat.player1.id ? 'player1' : 'player2',
-            loser: defenderPlayer.id === combat.player1.id ? 'player1' : 'player2',
-            reason: 'opponent_disconnected',
-            finalHull: {
-              player1: combat.player1.hull,
-              player2: combat.player2.hull
-            },
-            rounds: combat.round
+      // Skip emit if defender is AI, but don't forfeit
+      if (!isDummyAI(defenderPlayer.id)) {
+        if (defenderSocket && defenderSocket.connected) {
+          defenderSocket.emit('space:attacked', {
+            hit: true,
+            damage: attackResult.damage,
+            hull: defenderPlayer.hull,
+            maxHull: defenderPlayer.maxHull
           });
+        } else {
+          // Real player disconnected - forfeit combat
+          socketLog.error(` Defender socket disconnected during combat! Combat: ${combat.id}, Defender: ${defenderPlayer.id}`);
+          combatLog.info(`[SPACE:FORFEIT] ${defenderPlayer.id} disconnected, awarding victory to ${attackerPlayer.id}`);
+
+          // Award victory to attacker
+          activeCombats.delete(combat.id);
+
+          if (attackerSocket && attackerSocket.connected) {
+            attackerSocket.emit('space:combatEnd', {
+              winner: attackerPlayer.id === combat.player1.id ? 'player1' : 'player2',
+              loser: defenderPlayer.id === combat.player1.id ? 'player1' : 'player2',
+              reason: 'opponent_disconnected',
+              finalHull: {
+                player1: combat.player1.hull,
+                player2: combat.player2.hull
+              },
+              rounds: combat.round
+            });
+          }
+          return;
         }
-        return;
       }
 
       // Check for critical hits
@@ -1128,30 +1366,34 @@ io.on('connection', (socket) => {
         socketLog.error(` Cannot emit miss result to attacker (disconnected): ${attackerPlayer.id}`);
       }
 
-      if (defenderSocket && defenderSocket.connected) {
-        defenderSocket.emit('space:attacked', {
-          hit: false
-        });
-      } else {
-        socketLog.error(` Cannot emit miss to defender (disconnected): ${defenderPlayer.id}`);
-        combatLog.info(`[SPACE:FORFEIT] ${defenderPlayer.id} disconnected during miss, awarding victory to ${attackerPlayer.id}`);
-
-        // Award victory to attacker
-        activeCombats.delete(combat.id);
-
-        if (attackerSocket && attackerSocket.connected) {
-          attackerSocket.emit('space:combatEnd', {
-            winner: attackerPlayer.id === combat.player1.id ? 'player1' : 'player2',
-            loser: defenderPlayer.id === combat.player1.id ? 'player1' : 'player2',
-            reason: 'opponent_disconnected',
-            finalHull: {
-              player1: combat.player1.hull,
-              player2: combat.player2.hull
-            },
-            rounds: combat.round
+      // Skip emit if defender is AI, but don't forfeit
+      if (!isDummyAI(defenderPlayer.id)) {
+        if (defenderSocket && defenderSocket.connected) {
+          defenderSocket.emit('space:attacked', {
+            hit: false
           });
+        } else {
+          // Real player disconnected - forfeit
+          socketLog.error(` Cannot emit miss to defender (disconnected): ${defenderPlayer.id}`);
+          combatLog.info(`[SPACE:FORFEIT] ${defenderPlayer.id} disconnected during miss, awarding victory to ${attackerPlayer.id}`);
+
+          // Award victory to attacker
+          activeCombats.delete(combat.id);
+
+          if (attackerSocket && attackerSocket.connected) {
+            attackerSocket.emit('space:combatEnd', {
+              winner: attackerPlayer.id === combat.player1.id ? 'player1' : 'player2',
+              loser: defenderPlayer.id === combat.player1.id ? 'player1' : 'player2',
+              reason: 'opponent_disconnected',
+              finalHull: {
+                player1: combat.player1.hull,
+                player2: combat.player2.hull
+              },
+              rounds: combat.round
+            });
+          }
+          return;
         }
-        return;
       }
     }
 
@@ -1178,26 +1420,29 @@ io.on('connection', (socket) => {
         activePlayer: combat.activePlayer  // Include active player in round data
       };
 
-      // Emit to both players with safety checks
-      const p1Socket = io.sockets.sockets.get(combat.player1.id);
-      const p2Socket = io.sockets.sockets.get(combat.player2.id);
-
+      // Emit to both players with safety checks (skips dummy AI)
       let roundNotified = 0;
-      if (p1Socket && p1Socket.connected) {
-        p1Socket.emit('space:newRound', newRoundData);
+      if (emitToPlayer(io, combat.player1.id, 'space:newRound', newRoundData)) {
         roundNotified++;
-      } else {
+      } else if (!isDummyAI(combat.player1.id)) {
         socketLog.error(` Cannot notify player1 of new round (disconnected): ${combat.player1.id}`);
       }
 
-      if (p2Socket && p2Socket.connected) {
-        p2Socket.emit('space:newRound', newRoundData);
+      if (emitToPlayer(io, combat.player2.id, 'space:newRound', newRoundData)) {
         roundNotified++;
-      } else {
+      } else if (!isDummyAI(combat.player2.id)) {
         socketLog.error(` Cannot notify player2 of new round (disconnected): ${combat.player2.id}`);
       }
 
-      combatLog.info(`[SPACE:ROUND] Round ${combat.round} notifications sent to ${roundNotified}/2 players`);
+      combatLog.info(`[SPACE:ROUND] Round ${combat.round} notifications sent to ${roundNotified} player(s)`);
+
+      // SOLO MODE: If new round starts with AI turn, execute it
+      if (isDummyAI(combat.activePlayer)) {
+        combatLog.info(`[SOLO MODE] New round starts with AI turn, executing...`);
+        setTimeout(() => {
+          executeAITurn(combat, io);
+        }, 1500);  // 1.5 second delay for new round
+      }
     } else {
       // Switch active player
       combat.activePlayer = combat.activePlayer === combat.player1.id ? combat.player2.id : combat.player1.id;
@@ -1207,26 +1452,30 @@ io.on('connection', (socket) => {
         round: combat.round
       };
 
-      // Emit to both players with safety checks
-      const p1Socket = io.sockets.sockets.get(combat.player1.id);
-      const p2Socket = io.sockets.sockets.get(combat.player2.id);
-
+      // Emit to both players with safety checks (skips dummy AI)
       let turnNotified = 0;
-      if (p1Socket && p1Socket.connected) {
-        p1Socket.emit('space:turnChange', turnChangeData);
+      if (emitToPlayer(io, combat.player1.id, 'space:turnChange', turnChangeData)) {
         turnNotified++;
-      } else {
+      } else if (!isDummyAI(combat.player1.id)) {
         socketLog.error(` Cannot notify player1 of turn change (disconnected): ${combat.player1.id}`);
       }
 
-      if (p2Socket && p2Socket.connected) {
-        p2Socket.emit('space:turnChange', turnChangeData);
+      if (emitToPlayer(io, combat.player2.id, 'space:turnChange', turnChangeData)) {
         turnNotified++;
-      } else {
+      } else if (!isDummyAI(combat.player2.id)) {
         socketLog.error(` Cannot notify player2 of turn change (disconnected): ${combat.player2.id}`);
       }
 
-      combatLog.info(`[SPACE:TURN_CHANGE] Active player: ${combat.activePlayer}, notifications sent to ${turnNotified}/2 players`);
+      combatLog.info(`[SPACE:TURN_CHANGE] Active player: ${combat.activePlayer}, notifications sent to ${turnNotified} player(s)`);
+
+      // SOLO MODE: If it's dummy AI's turn, execute AI action automatically
+      if (isDummyAI(combat.activePlayer)) {
+        combatLog.info(`[SOLO MODE] AI turn detected, executing AI action...`);
+        // Give a brief delay so the UI can update
+        setTimeout(() => {
+          executeAITurn(combat, io);
+        }, 1000);  // 1 second delay
+      }
     }
   });
 
@@ -1627,26 +1876,29 @@ io.on('connection', (socket) => {
         activePlayer: combat.activePlayer  // Include active player in round data
       };
 
-      // Emit to both players with safety checks
-      const p1Socket = io.sockets.sockets.get(combat.player1.id);
-      const p2Socket = io.sockets.sockets.get(combat.player2.id);
-
+      // Emit to both players with safety checks (skips dummy AI)
       let roundNotified = 0;
-      if (p1Socket && p1Socket.connected) {
-        p1Socket.emit('space:newRound', newRoundData);
+      if (emitToPlayer(io, combat.player1.id, 'space:newRound', newRoundData)) {
         roundNotified++;
-      } else {
+      } else if (!isDummyAI(combat.player1.id)) {
         socketLog.error(` Cannot notify player1 of new round (disconnected): ${combat.player1.id}`);
       }
 
-      if (p2Socket && p2Socket.connected) {
-        p2Socket.emit('space:newRound', newRoundData);
+      if (emitToPlayer(io, combat.player2.id, 'space:newRound', newRoundData)) {
         roundNotified++;
-      } else {
+      } else if (!isDummyAI(combat.player2.id)) {
         socketLog.error(` Cannot notify player2 of new round (disconnected): ${combat.player2.id}`);
       }
 
-      combatLog.info(`[SPACE:ROUND] Round ${combat.round} notifications sent to ${roundNotified}/2 players`);
+      combatLog.info(`[SPACE:ROUND] Round ${combat.round} notifications sent to ${roundNotified} player(s)`);
+
+      // SOLO MODE: If new round starts with AI turn, execute it
+      if (isDummyAI(combat.activePlayer)) {
+        combatLog.info(`[SOLO MODE] New round starts with AI turn, executing...`);
+        setTimeout(() => {
+          executeAITurn(combat, io);
+        }, 1500);  // 1.5 second delay for new round
+      }
     } else {
       // Switch active player
       combat.activePlayer = combat.activePlayer === combat.player1.id ? combat.player2.id : combat.player1.id;
@@ -1656,26 +1908,30 @@ io.on('connection', (socket) => {
         round: combat.round
       };
 
-      // Emit to both players with safety checks
-      const p1Socket = io.sockets.sockets.get(combat.player1.id);
-      const p2Socket = io.sockets.sockets.get(combat.player2.id);
-
+      // Emit to both players with safety checks (skips dummy AI)
       let turnNotified = 0;
-      if (p1Socket && p1Socket.connected) {
-        p1Socket.emit('space:turnChange', turnChangeData);
+      if (emitToPlayer(io, combat.player1.id, 'space:turnChange', turnChangeData)) {
         turnNotified++;
-      } else {
+      } else if (!isDummyAI(combat.player1.id)) {
         socketLog.error(` Cannot notify player1 of turn change (disconnected): ${combat.player1.id}`);
       }
 
-      if (p2Socket && p2Socket.connected) {
-        p2Socket.emit('space:turnChange', turnChangeData);
+      if (emitToPlayer(io, combat.player2.id, 'space:turnChange', turnChangeData)) {
         turnNotified++;
-      } else {
+      } else if (!isDummyAI(combat.player2.id)) {
         socketLog.error(` Cannot notify player2 of turn change (disconnected): ${combat.player2.id}`);
       }
 
-      combatLog.info(`[SPACE:TURN_CHANGE] Active player: ${combat.activePlayer}, notifications sent to ${turnNotified}/2 players`);
+      combatLog.info(`[SPACE:TURN_CHANGE] Active player: ${combat.activePlayer}, notifications sent to ${turnNotified} player(s)`);
+
+      // SOLO MODE: If it's dummy AI's turn, execute AI action automatically
+      if (isDummyAI(combat.activePlayer)) {
+        combatLog.info(`[SOLO MODE] AI turn detected, executing AI action...`);
+        // Give a brief delay so the UI can update
+        setTimeout(() => {
+          executeAITurn(combat, io);
+        }, 1000);  // 1 second delay
+      }
     }
   });
 

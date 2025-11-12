@@ -36,12 +36,19 @@
 
 ### ⏳ IN PROGRESS
 
-**12.4 Part 2: Component Panels & UI Wiring** (50% complete)
+**12.8: Solo Mode with AI Opponent** (90% complete)
+- ✅ Main menu "Solo Battle (vs AI)" button
+- ✅ URL routing for `?mode=solo`
+- ✅ Dummy AI player creation on server
+- ✅ AI decision-making framework (dodge, sandcaster, fire)
+- ✅ AI turn automation with round transitions
+- ✅ Socket emission safety for AI without connections
+- ⚠️ AI weapon detection needs fix (see Known Issues)
+- ✅ Combat progresses through multiple rounds
+
+**12.4 Part 2: Component Panels & UI Wiring** (DEFERRED)
 - ✅ Foundations: Cost & validation modules ready
-- ⏳ TODO: Implement actual customization panels
-- ⏳ TODO: Wire up state management
-- ⏳ TODO: Real-time cost updates
-- ⏳ TODO: Validation feedback in UI
+- ⏳ DEFERRED: Will resume after Stage 13 automated testing
 
 ### 📋 REMAINING Sub-stages
 
@@ -646,12 +653,22 @@ If Sub-stage 12.4 finishes early, start Sub-stage 12.5 (Ship Library):
 
 ## Known Issues & Gotchas
 
-1. **SVG Labels:** When modifications change, re-render SVG to update component labels
-2. **Cargo/Fuel Sliders:** Must be linked - adjust one, other updates to maintain total
-3. **Turret Capacity:** Weapon dropdowns must show/hide based on turret type
-4. **Cost Display:** Always use ShipCosts.formatMCr() for display, never raw credits
-5. **Validation Timing:** Validate after every modification, before save
-6. **Integer Math:** All costs stored as integer credits to avoid 0.1 + 0.2 = 0.30000004
+### Solo Mode (Sub-stage 12.8)
+
+1. **AI Weapon Detection:** AI frequently says "No valid actions available" because weapon finding logic in `makeAIDecision()` (server.js:129-145) doesn't match the actual structure of `aiData.weapons`. The loop expects a nested array structure but the actual data structure is different.
+
+2. **AI Actions:** AI makes decisions (dodge, sandcaster, fire) but only logs them - doesn't execute actual combat actions yet. The `executeAITurn()` function has TODO placeholders in the switch statement.
+
+3. **Turn Tracker UI:** Solo mode turn tracker may not update properly - needs testing to verify it shows "Your Turn" vs "AI Turn" correctly.
+
+### Ship Customization (Deferred)
+
+4. **SVG Labels:** When modifications change, re-render SVG to update component labels
+5. **Cargo/Fuel Sliders:** Must be linked - adjust one, other updates to maintain total
+6. **Turret Capacity:** Weapon dropdowns must show/hide based on turret type
+7. **Cost Display:** Always use ShipCosts.formatMCr() for display, never raw credits
+8. **Validation Timing:** Validate after every modification, before save
+9. **Integer Math:** All costs stored as integer credits to avoid 0.1 + 0.2 = 0.30000004
 
 ---
 
