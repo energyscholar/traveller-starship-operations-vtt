@@ -1,6 +1,6 @@
-// Traveller Combat VTT - Stage 9 Complete
-// Purpose: Hex-based movement system with initiative-based turns
-// Status: Stage 9 Complete - Movement & Advanced Initiative
+// Traveller Combat VTT - Stage 11 Complete
+// Purpose: Missiles, Sandcasters & UI Improvements
+// Status: Stage 11 Complete - Missiles, Sandcasters, Turn Tracker, Feedback
 
 const express = require('express');
 const config = require('./config');
@@ -1775,7 +1775,7 @@ app.get('/status', (req, res) => {
 // Start server
 server.listen(config.server.port, () => {
   log.info('========================================');
-  log.info('TRAVELLER COMBAT VTT - STAGE 9 COMPLETE');
+  log.info('TRAVELLER COMBAT VTT - STAGE 11 COMPLETE');
   log.info('========================================');
   log.info(`Server running on http://localhost:${config.server.port}`);
   log.info(`Environment: ${config.env}`);
@@ -1783,22 +1783,28 @@ server.listen(config.server.port, () => {
   log.info(`Client Logging: ${config.logging.clientLogging ? 'ENABLED' : 'DISABLED'}`);
   log.info('');
   log.info('Current Features:');
+  log.info('- Missiles (4D6 damage, 1 band movement per round)');
+  log.info('- Point defense (shoot down missiles, 2D6+Gunner ≥ 8)');
+  log.info('- Sandcasters (1D + Effect armor bonus)');
+  log.info('- Ammo tracking (12 missiles, 20 sand canisters per turret)');
+  log.info('- Turn/phase tracker UI with visual indicators');
+  log.info('- Player feedback system with secure logging');
+  log.info('- Version display (Version 0.11)');
+  log.info('- Multiple weapon types (Pulse Laser, Beam Laser, Missile)');
   log.info('- Hex-based movement system');
   log.info('- Initiative-based turn order (2d6 + pilot skill)');
-  log.info('- Multiple weapon types (Pulse Laser, Beam Laser, Missile)');
   log.info('- Crew management (Pilot, Gunner, Engineer)');
-  log.info('- Engineer repair actions');
   log.info('- Server-side combat resolution (TDD)');
-  log.info('- Winston logging system with client-to-server forwarding');
   log.info('');
-  log.info('Status: Stage 9 Complete - Movement & Advanced Initiative');
+  log.info('Status: Stage 11 Complete - Missiles, Sandcasters & UI');
+  log.info('Version: 0.11 - Released 2025-11-11');
   log.info('');
   log.info('Instructions:');
   log.info('1. Open browser to http://localhost:' + config.server.port);
   log.info('2. Two players connect to select ships');
-  log.info('3. Players move ships on hex grid');
+  log.info('3. Players move ships, launch missiles, use sandcasters');
   log.info('4. Initiative determines turn order each round');
-  log.info('5. Combat with weapons, movement, and repairs');
+  log.info('5. Combat with full tactical options');
   log.info('========================================');
 });
 

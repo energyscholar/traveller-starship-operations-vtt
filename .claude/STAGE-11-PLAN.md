@@ -62,6 +62,21 @@
 
 ---
 
+## UI/UX Review (Incremental)
+
+**Cross-reference UI against use cases:**
+- Review current UI against primary use cases (Tuesday game, solo testing)
+- Identify pain points and usability issues
+- Make incremental improvements during Stage 11
+- Document findings for Stage 21 (comprehensive UI/UX polish)
+
+**Key Questions:**
+- Does the turn indicator clearly show whose turn it is?
+- Can players easily identify their ships and actions?
+- Is the combat log readable and useful?
+- Are missile/sandcaster actions intuitive?
+- Does the UI support the primary use cases effectively?
+
 ## Acceptance Criteria
 - [ ] Missiles launch and track targets
 - [ ] Missiles move 1 band per round
@@ -70,3 +85,6 @@
 - [ ] Called shots target specific systems
 - [ ] Weapon linking increases damage
 - [ ] Ammo tracked and reloads work
+- [ ] UI reviewed against use cases
+- [ ] Initiative/phase tracker implemented
+- [ ] Version display added to client

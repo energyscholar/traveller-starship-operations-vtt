@@ -1,8 +1,8 @@
 # Traveller Combat VTT - Project Status
 
 **Last Updated:** 2025-11-11
-**Current Stage:** Stage 10 Complete, Ready for Stage 11
-**Overall Progress:** 62.5% (Stages 1-10 complete, 11-22 planned)
+**Current Stage:** Stage 11 Complete, Ready for Stage 12
+**Overall Progress:** 50% (Stages 1-11 complete, 12-22 planned)
 
 ---
 
@@ -10,12 +10,12 @@
 
 | Metric | Value |
 |--------|-------|
-| **Stages Completed** | 10 / 22 |
-| **Completion %** | 62.5% (Core Combat Complete) |
-| **LOC (Production)** | ~2,200 |
-| **LOC (Tests)** | ~1,900 |
-| **Test Coverage** | 100% (272 tests passing) |
-| **Token Budget Used** | ~80k / 200k (40%) |
+| **Stages Completed** | 11 / 22 |
+| **Completion %** | 50% (Core Combat + Missiles Complete) |
+| **LOC (Production)** | ~2,600 |
+| **LOC (Tests)** | ~2,100 |
+| **Test Coverage** | 100% (285+ tests passing) |
+| **Token Budget Used** | ~90k / 200k (45%) |
 | **Next Milestone** | Stage 12 - Ship Builder Tool ⭐ |
 | **Portfolio Goal** | 9.0/10 AI Repo Score |
 
@@ -44,7 +44,7 @@ Build a **FUN, playable space combat VTT** with **ship design tools** for:
 
 ## Stage Breakdown
 
-### ✅ Completed Stages (1-10)
+### ✅ Completed Stages (1-11)
 
 | Stage | Feature | Status | LOC | Tests |
 |-------|---------|--------|-----|-------|
@@ -58,18 +58,19 @@ Build a **FUN, playable space combat VTT** with **ship design tools** for:
 | 8 | Space Combat System | ✅ Complete | 1,025 | 1,826 |
 | 9 | Movement & Initiative | ✅ Complete | ~400 | ~300 |
 | 10 | Critical Hits & Effects | ✅ Complete | 653 | 934 |
-| **Total** | **Core Combat** | **✅ Done** | **~2,200** | **~1,900** |
+| 11 | Missiles & Sandcasters | ✅ Complete | ~400 | ~200 |
+| **Total** | **Core Combat + Missiles** | **✅ Done** | **~2,600** | **~2,100** |
 
 ### 📋 Phase 2: Make It Fun & Playable (Stages 11-13)
 
 | Stage | Feature | Est. Time | Priority |
 |-------|---------|-----------|----------|
-| 11 | Missiles & UI Polish | 2-3 weeks | HIGH |
+| 11 | Missiles & UI Polish | ✅ COMPLETE | HIGH |
 | 12 | **Ship Builder Tool** ⭐ | 3-4 weeks | **CRITICAL** |
 | 13 | Boarding & Personal Combat | 2-3 weeks | HIGH |
 
 **Goal**: Complete, fun VTT for Tuesday game group
-**Timeline**: 2-3 months at hobby pace
+**Timeline**: 1-2 months remaining (Stage 11 complete)
 
 ### 📋 Phase 3: Portfolio Polish (Stages 14-16)
 
@@ -134,24 +135,29 @@ Build a **FUN, playable space combat VTT** with **ship design tools** for:
 
 ---
 
-## Next Milestone: Stage 11 (Missiles & UI)
+## ✅ Stage 11 Complete (Missiles & Sandcasters)
 
-### Scope
-- **Missile mechanics** (4D6 damage, +2 DM at long range)
-- **Point defense** (shoot down incoming missiles)
-- **Sandcasters** (intercept missiles, smoke screens)
-- **UI improvements** (horizontal layout, expand/collapse)
-- **Combat log fixes** (formatting, display order)
+### Completed Features
+- **Missile mechanics** (4D6 damage, 1 band movement per round)
+- **Point defense** (shoot down incoming missiles, 2D6+Gunner ≥ 8)
+- **Sandcasters** (1D + Effect armor bonus)
+- **Ammo tracking** (12 missiles, 20 sand canisters per turret)
+- **Version display** (Version 0.11 shown at bottom)
+- **Turn/phase tracker** (visual indicator for turn order)
+- **Player feedback system** (collapsible form, secure logging)
+- **Action economy bug fix** (CRITICAL - fixed multiple shots per round)
 
-### Why This Matters
+### What This Achieved
 - Adds tactical depth (missile vs. point defense)
-- Cleans up UI (more screen real estate)
-- Fixes UX issues (combat log readability)
+- Enforces correct turn order (round-robin)
+- Collects player feedback for improvements
+- Shows version for update tracking
+- Clear turn indicators for multiplayer
 
-### Estimated Effort
-- **Time:** 2-3 weeks (hobby pace)
-- **Tests:** ~25 new unit tests
-- **LOC:** ~400 production, ~300 test
+### Actual Effort
+- **Time:** ~3 weeks (hobby pace)
+- **Tests:** ~200 new tests
+- **LOC:** ~400 production, ~200 test
 
 ---
 

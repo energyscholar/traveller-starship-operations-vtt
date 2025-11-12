@@ -338,6 +338,15 @@
       50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); }
     }
 
+    .turn-tracker {
+      width: 100%;
+    }
+
+    .turn-status {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
     .round-display {
       font-size: 16px;
       margin-top: 8px;
