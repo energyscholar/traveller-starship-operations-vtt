@@ -1,0 +1,210 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "far_trader",
+  "name": "Far Trader",
+  "designation": "Type-A2",
+  "className": "Empress Marava",
+  "techLevel": 12,
+  "role": "merchant",
+
+  "hull": {
+    "tonnage": 200,
+    "configuration": "streamlined",
+    "hullPoints": 80,
+    "cost": 12000000
+  },
+
+  "armour": {
+    "type": "crystaliron",
+    "rating": 2,
+    "tonnage": 6,
+    "cost": 1200000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 1,
+      "tonnage": 2,
+      "cost": 4000000
+    },
+    "jump": {
+      "rating": 2,
+      "tonnage": 15,
+      "cost": 22500000
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl12",
+    "output": 90,
+    "tonnage": 6,
+    "cost": 6000000
+  },
+
+  "fuel": {
+    "total": 41,
+    "jump": 40,
+    "powerPlant": 1,
+    "weeks": 4
+  },
+
+  "bridge": {
+    "type": "standard",
+    "tonnage": 10,
+    "cost": 1000000
+  },
+
+  "computer": {
+    "model": "Computer/5bis",
+    "processing": 10,
+    "cost": 45000
+  },
+
+  "sensors": {
+    "grade": "civilian",
+    "tonnage": 1,
+    "cost": 3000000,
+    "power": 1,
+    "dm": -2
+  },
+
+  "weapons": [
+    {
+      "mount": "double_turret",
+      "weapons": ["beam_laser", "beam_laser"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 9
+    },
+    {
+      "mount": "double_turret",
+      "weapons": ["beam_laser", "beam_laser"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 9
+    }
+  ],
+
+  "craft": [
+    {
+      "type": "docking_space",
+      "capacity": 4,
+      "tonnage": 5,
+      "cost": 1250000,
+      "craft": {
+        "type": "air_raft",
+        "name": "Air/Raft",
+        "cost": 250000
+      }
+    }
+  ],
+
+  "systems": [
+    {
+      "type": "fuel_processor",
+      "tonnage": 2,
+      "cost": 100000,
+      "power": 2,
+      "capacity": 40
+    },
+    {
+      "type": "fuel_scoops",
+      "tonnage": 0,
+      "cost": 0,
+      "power": 0
+    },
+    {
+      "type": "loading_belt",
+      "tonnage": 1,
+      "cost": 3000,
+      "power": 1
+    },
+    {
+      "type": "cargo_airlock",
+      "tonnage": 3,
+      "cost": 300000,
+      "power": 0
+    },
+    {
+      "type": "cargo_airlock",
+      "tonnage": 3,
+      "cost": 300000,
+      "power": 0
+    }
+  ],
+
+  "staterooms": {
+    "standard": {
+      "count": 10,
+      "tonnage": 40,
+      "cost": 5000000
+    },
+    "lowBerths": {
+      "count": 4,
+      "tonnage": 2,
+      "cost": 200000
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "jump_control",
+      "rating": 2,
+      "cost": 200000
+    },
+    {
+      "name": "library",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "intellect",
+      "rating": 0,
+      "cost": 0
+    }
+  ],
+
+  "commonAreas": {
+    "tonnage": 10,
+    "cost": 1000000
+  },
+
+  "cargo": {
+    "tonnage": 57
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 1,
+      "engineer": 1,
+      "gunner": 2,
+      "steward": 1,
+      "medic": 0,
+      "marines": 0
+    },
+    "description": "Pilot/Astrogator, Engineer, Steward, Gunners x2"
+  },
+
+  "costs": {
+    "base": 54158200,
+    "maintenance": 4513
+  },
+
+  "powerRequirements": {
+    "basic": 40,
+    "manoeuvre": 20,
+    "jump": 40,
+    "sensors": 1,
+    "weapons": 18,
+    "other": 3,
+    "total": 122
+  },
+
+  "notes": "The Empress Marava Far Trader can be encountered anywhere in the Imperium. It ranges far and wide, dealing with every world it finds. Even amber zones and red zones are not considered off limits by its captains, provided there is profit to be made. The double turrets and air/raft give this ship versatility compared to the Type-A2. NOTE: Ship must 'jump dim' (power down M-drive) to have enough power for jump operations."
+}

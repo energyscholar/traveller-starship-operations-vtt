@@ -1,0 +1,188 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "scout",
+  "name": "Scout",
+  "designation": "Type-S",
+  "className": "Scout/Courier",
+  "techLevel": 12,
+  "role": "exploration",
+
+  "hull": {
+    "tonnage": 100,
+    "configuration": "streamlined",
+    "hullPoints": 40,
+    "cost": 6000000
+  },
+
+  "armour": {
+    "type": "crystaliron",
+    "rating": 4,
+    "tonnage": 6,
+    "cost": 1200000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 2,
+      "tonnage": 2,
+      "cost": 4000000
+    },
+    "jump": {
+      "rating": 2,
+      "tonnage": 10,
+      "cost": 15000000
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl12",
+    "output": 60,
+    "tonnage": 4,
+    "cost": 4000000
+  },
+
+  "fuel": {
+    "total": 23,
+    "jump": 20,
+    "powerPlant": 3,
+    "weeks": 12
+  },
+
+  "bridge": {
+    "type": "standard",
+    "tonnage": 10,
+    "cost": 500000
+  },
+
+  "computer": {
+    "model": "Computer/5bis",
+    "processing": 10,
+    "cost": 45000
+  },
+
+  "sensors": {
+    "grade": "military",
+    "tonnage": 2,
+    "cost": 4100000,
+    "power": 2,
+    "dm": 0
+  },
+
+  "weapons": [
+    {
+      "mount": "double_turret",
+      "weapons": [],
+      "tonnage": 1,
+      "cost": 500000,
+      "power": 0
+    }
+  ],
+
+  "craft": [
+    {
+      "type": "docking_space",
+      "capacity": 4,
+      "tonnage": 5,
+      "cost": 1250000,
+      "craft": {
+        "type": "air_raft",
+        "name": "Air/Raft",
+        "cost": 250000
+      }
+    }
+  ],
+
+  "systems": [
+    {
+      "type": "fuel_processor",
+      "tonnage": 2,
+      "cost": 100000,
+      "power": 2,
+      "capacity": 40
+    },
+    {
+      "type": "fuel_scoops",
+      "tonnage": 0,
+      "cost": 0,
+      "power": 0
+    },
+    {
+      "type": "probe_drones",
+      "tonnage": 2,
+      "cost": 1000000,
+      "power": 0,
+      "capacity": 10
+    },
+    {
+      "type": "workshop",
+      "tonnage": 6,
+      "cost": 900000,
+      "power": 0
+    }
+  ],
+
+  "staterooms": {
+    "standard": {
+      "count": 4,
+      "tonnage": 16,
+      "cost": 2000000
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "jump_control",
+      "rating": 2,
+      "cost": 200000
+    },
+    {
+      "name": "library",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "intellect",
+      "rating": 0,
+      "cost": 0
+    }
+  ],
+
+  "cargo": {
+    "tonnage": 0
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 1,
+      "engineer": 1,
+      "gunner": 0,
+      "steward": 0,
+      "medic": 0,
+      "marines": 0
+    },
+    "description": "Pilot, Astrogator, Engineer"
+  },
+
+  "costs": {
+    "base": 36940500,
+    "maintenance": 3079
+  },
+
+  "powerRequirements": {
+    "basic": 20,
+    "manoeuvre": 20,
+    "jump": 20,
+    "sensors": 2,
+    "weapons": 0,
+    "other": 2,
+    "total": 64
+  },
+
+  "notes": "The Type-S Scout/Courier is a versatile exploration vessel. Common modifications include installing beam lasers in the turret, adding laundry and galley (4t common areas) in cargo hold. The military-grade sensors and workshop make it ideal for survey missions. Fuel processor and scoops allow extended operations without refueling at starports."
+}

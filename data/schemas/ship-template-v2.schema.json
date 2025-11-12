@@ -1,0 +1,572 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ship-template-v2.schema.json",
+  "title": "Traveller Ship Template (Comprehensive)",
+  "description": "Complete ship specification based on Mongoose Traveller 2E High Guard 2022",
+  "type": "object",
+  "required": ["id", "name", "techLevel", "hull", "drives", "power", "fuel", "bridge", "computer", "sensors"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique ship template identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Ship class name"
+    },
+    "designation": {
+      "type": "string",
+      "description": "Official type designation (e.g., 'Type-S', 'Type-A')"
+    },
+    "className": {
+      "type": "string",
+      "description": "Class name (e.g., 'Beowulf Class', 'Empress Marava')"
+    },
+    "techLevel": {
+      "type": "integer",
+      "minimum": 7,
+      "maximum": 20,
+      "description": "Ship technology level"
+    },
+    "role": {
+      "type": "string",
+      "enum": ["exploration", "merchant", "military", "passenger", "research", "patrol", "mercenary", "custom"],
+      "description": "Primary ship role"
+    },
+    "hull": {
+      "type": "object",
+      "required": ["tonnage", "configuration", "cost"],
+      "properties": {
+        "tonnage": {
+          "type": "integer",
+          "description": "Hull size in displacement tons"
+        },
+        "configuration": {
+          "type": "string",
+          "enum": ["standard", "streamlined", "sphere", "close_structure", "dispersed", "planetoid", "buffered_planetoid"],
+          "description": "Hull configuration type"
+        },
+        "hullPoints": {
+          "type": "integer",
+          "description": "Structural hit points"
+        },
+        "cost": {
+          "type": "number",
+          "description": "Base hull cost in credits"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["radiation_shielding", "heat_shielding", "solar_panels", "aerofins", "reflec"]
+              },
+              "cost": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "armour": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["titanium_steel", "crystaliron", "bonded_superdense", "molecular_bonded"]
+        },
+        "rating": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "tonnage": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "number"
+        }
+      }
+    },
+    "drives": {
+      "type": "object",
+      "properties": {
+        "manoeuvre": {
+          "type": "object",
+          "properties": {
+            "thrust": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16
+            },
+            "tonnage": {
+              "type": "number"
+            },
+            "cost": {
+              "type": "number"
+            },
+            "modifiers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["energy_efficient", "high_efficiency"]
+              }
+            }
+          }
+        },
+        "jump": {
+          "type": "object",
+          "properties": {
+            "rating": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9
+            },
+            "tonnage": {
+              "type": "number"
+            },
+            "cost": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "power": {
+      "type": "object",
+      "required": ["type", "output", "tonnage", "cost"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["fusion_tl8", "fusion_tl12", "fusion_tl15", "antimatter", "chemical", "fission"]
+        },
+        "output": {
+          "type": "integer",
+          "description": "Power output"
+        },
+        "tonnage": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "number"
+        }
+      }
+    },
+    "fuel": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "number",
+          "description": "Total fuel tankage"
+        },
+        "jump": {
+          "type": "number",
+          "description": "Fuel reserved for jump (calculated)"
+        },
+        "powerPlant": {
+          "type": "number",
+          "description": "Fuel for power plant operation"
+        },
+        "weeks": {
+          "type": "integer",
+          "description": "Weeks of operation fuel supports"
+        }
+      }
+    },
+    "bridge": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["standard", "cockpit", "dual_cockpit", "command_bridge"]
+        },
+        "tonnage": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "number"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["holographic_controls", "hardened"]
+          }
+        }
+      }
+    },
+    "computer": {
+      "type": "object",
+      "required": ["model", "cost"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "pattern": "^(Computer|Core)/(\\d+)(bis|fib)?$",
+          "description": "Computer model (e.g., 'Computer/5bis', 'Core/40')"
+        },
+        "processing": {
+          "type": "integer",
+          "description": "Processing rating"
+        },
+        "cost": {
+          "type": "number"
+        }
+      }
+    },
+    "sensors": {
+      "type": "object",
+      "properties": {
+        "grade": {
+          "type": "string",
+          "enum": ["basic", "civilian", "military", "improved", "advanced"]
+        },
+        "tonnage": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "number"
+        },
+        "power": {
+          "type": "integer"
+        },
+        "dm": {
+          "type": "integer",
+          "description": "Electronics check modifier"
+        },
+        "extras": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["life_scanner", "mineral_detection_suite", "neural_activity_sensor"]
+              },
+              "tonnage": {
+                "type": "number"
+              },
+              "cost": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "weapons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mount": {
+            "type": "string",
+            "enum": ["fixed", "single_turret", "double_turret", "triple_turret", "pop_up_turret", "barbette", "bay", "spinal"]
+          },
+          "weapons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tonnage": {
+            "type": "number"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "power": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "craft": {
+      "type": "array",
+      "description": "Small craft, vehicles, and docking spaces",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["docking_space", "launch_tube", "full_hangar"]
+          },
+          "capacity": {
+            "type": "number",
+            "description": "Craft tonnage capacity"
+          },
+          "tonnage": {
+            "type": "number",
+            "description": "Docking space tonnage (2.2× for docking, 3× for hangar)"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "craft": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["air_raft", "atv", "ship_boat", "g_carrier", "modular_cutter", "fighter", "custom"]
+              },
+              "name": {
+                "type": "string"
+              },
+              "cost": {
+                "type": "number"
+              }
+            }
+          },
+          "modules": {
+            "type": "array",
+            "description": "Extra modules for modular craft",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "cost": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "systems": {
+      "type": "array",
+      "description": "Ship systems and equipment",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "fuel_processor",
+              "fuel_scoops",
+              "cargo_crane",
+              "loading_belt",
+              "cargo_airlock",
+              "armoury",
+              "briefing_room",
+              "medical_bay",
+              "training_facility",
+              "workshop",
+              "laboratory",
+              "probe_drones",
+              "repair_drones",
+              "stealth",
+              "screens"
+            ]
+          },
+          "tonnage": {
+            "type": "number"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "power": {
+            "type": "integer"
+          },
+          "capacity": {
+            "description": "For fuel processor (tons/day), probe drones (count), etc.",
+            "oneOf": [
+              {"type": "integer"},
+              {"type": "number"}
+            ]
+          }
+        }
+      }
+    },
+    "staterooms": {
+      "type": "object",
+      "properties": {
+        "standard": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer"
+            },
+            "tonnage": {
+              "type": "number"
+            },
+            "cost": {
+              "type": "number"
+            }
+          }
+        },
+        "luxury": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer"
+            },
+            "tonnage": {
+              "type": "number"
+            },
+            "cost": {
+              "type": "number"
+            }
+          }
+        },
+        "barracks": {
+          "type": "object",
+          "properties": {
+            "capacity": {
+              "type": "integer",
+              "description": "Number of personnel"
+            },
+            "tonnage": {
+              "type": "number"
+            },
+            "cost": {
+              "type": "number"
+            }
+          }
+        },
+        "lowBerths": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer"
+            },
+            "tonnage": {
+              "type": "number"
+            },
+            "cost": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "software": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "manoeuvre",
+              "jump_control",
+              "library",
+              "intellect",
+              "evade",
+              "fire_control",
+              "auto_repair",
+              "launch_solution",
+              "point_defense"
+            ]
+          },
+          "rating": {
+            "type": "integer",
+            "description": "Software rating/version"
+          },
+          "cost": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "commonAreas": {
+      "type": "object",
+      "properties": {
+        "tonnage": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "number"
+        }
+      }
+    },
+    "cargo": {
+      "type": "object",
+      "properties": {
+        "tonnage": {
+          "type": "number",
+          "description": "Cargo hold capacity"
+        }
+      }
+    },
+    "crew": {
+      "type": "object",
+      "properties": {
+        "minimum": {
+          "type": "object",
+          "properties": {
+            "pilot": {
+              "type": "integer"
+            },
+            "astrogator": {
+              "type": "integer"
+            },
+            "engineer": {
+              "type": "integer"
+            },
+            "gunner": {
+              "type": "integer"
+            },
+            "steward": {
+              "type": "integer"
+            },
+            "medic": {
+              "type": "integer"
+            },
+            "marines": {
+              "type": "integer"
+            }
+          }
+        },
+        "description": {
+          "type": "string",
+          "description": "Crew requirements summary"
+        }
+      }
+    },
+    "costs": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "number",
+          "description": "Base ship cost in credits"
+        },
+        "maintenance": {
+          "type": "number",
+          "description": "Monthly maintenance cost in credits"
+        }
+      }
+    },
+    "powerRequirements": {
+      "type": "object",
+      "description": "Power consumption breakdown",
+      "properties": {
+        "basic": {
+          "type": "integer"
+        },
+        "manoeuvre": {
+          "type": "integer"
+        },
+        "jump": {
+          "type": "integer"
+        },
+        "sensors": {
+          "type": "integer"
+        },
+        "weapons": {
+          "type": "integer"
+        },
+        "other": {
+          "type": "integer"
+        },
+        "total": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

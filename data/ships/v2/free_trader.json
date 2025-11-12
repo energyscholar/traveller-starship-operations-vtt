@@ -1,0 +1,171 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "free_trader",
+  "name": "Free Trader",
+  "designation": "Type-A",
+  "className": "Beowulf Class",
+  "techLevel": 12,
+  "role": "merchant",
+
+  "hull": {
+    "tonnage": 200,
+    "configuration": "streamlined",
+    "hullPoints": 80,
+    "cost": 12000000
+  },
+
+  "armour": {
+    "type": "crystaliron",
+    "rating": 2,
+    "tonnage": 6,
+    "cost": 1200000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 1,
+      "tonnage": 2,
+      "cost": 4000000
+    },
+    "jump": {
+      "rating": 1,
+      "tonnage": 10,
+      "cost": 15000000
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl12",
+    "output": 75,
+    "tonnage": 5,
+    "cost": 5000000
+  },
+
+  "fuel": {
+    "total": 21,
+    "jump": 20,
+    "powerPlant": 1,
+    "weeks": 4
+  },
+
+  "bridge": {
+    "type": "standard",
+    "tonnage": 10,
+    "cost": 1000000
+  },
+
+  "computer": {
+    "model": "Computer/5",
+    "processing": 5,
+    "cost": 30000
+  },
+
+  "sensors": {
+    "grade": "civilian",
+    "tonnage": 1,
+    "cost": 3000000,
+    "power": 1,
+    "dm": -2
+  },
+
+  "weapons": [],
+
+  "craft": [],
+
+  "systems": [
+    {
+      "type": "fuel_processor",
+      "tonnage": 1,
+      "cost": 50000,
+      "power": 1,
+      "capacity": 20
+    },
+    {
+      "type": "fuel_scoops",
+      "tonnage": 0,
+      "cost": 0,
+      "power": 0
+    },
+    {
+      "type": "cargo_crane",
+      "tonnage": 3,
+      "cost": 3000000,
+      "power": 0
+    }
+  ],
+
+  "staterooms": {
+    "standard": {
+      "count": 10,
+      "tonnage": 40,
+      "cost": 5000000
+    },
+    "lowBerths": {
+      "count": 20,
+      "tonnage": 10,
+      "cost": 1000000
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "jump_control",
+      "rating": 1,
+      "cost": 100000
+    },
+    {
+      "name": "library",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "intellect",
+      "rating": 0,
+      "cost": 0
+    }
+  ],
+
+  "commonAreas": {
+    "tonnage": 10,
+    "cost": 1000000
+  },
+
+  "cargo": {
+    "tonnage": 80
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 1,
+      "engineer": 1,
+      "gunner": 0,
+      "steward": 1,
+      "medic": 0,
+      "marines": 0
+    },
+    "description": "Pilot, Astrogator, Engineer, Steward (recommended: +1 Medic for low berths)"
+  },
+
+  "costs": {
+    "base": 46242000,
+    "maintenance": 3854
+  },
+
+  "powerRequirements": {
+    "basic": 40,
+    "manoeuvre": 20,
+    "jump": 20,
+    "sensors": 1,
+    "weapons": 0,
+    "other": 3,
+    "total": 84
+  },
+
+  "notes": "The Type-A Free Trader (Beowulf Class) is the archetypal tramp freighter, common among adventuring groups and mercenary bands. Often retrofitted with turrets, weapons, and other 'special' modifications. Actual specifications can vary wildly based on age and modifications. A medic is recommended for low berth operations. The large cargo hold (80t) makes it ideal for speculative trading."
+}
