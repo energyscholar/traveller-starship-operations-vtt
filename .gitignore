@@ -35,6 +35,11 @@ screenshot-*.png
 reference/
 *.pdf
 
+# CRITICAL: Official Mongoose Traveller Books (COPYRIGHTED - NEVER COMMIT)
+Official Mongoose 2E Traveller Books/
+**/Official*Mongoose*/
+**/*Traveller*Books*/
+
 # Screenshots and excluded content
 exclude_from_git/
 
