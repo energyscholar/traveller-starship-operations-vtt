@@ -64,9 +64,33 @@
 - [ ] Manual testing with Tuesday group
 - [ ] No regressions in existing combat system
 
+### UI/UX Review (Incremental)
+- [ ] Cross-reference UI against Use Case 2 (Ship Design Session)
+- [ ] Test workflow: Can player design custom ship in <10 minutes?
+- [ ] Validate error messages are helpful and actionable
+- [ ] Check visual feedback for valid/invalid configurations
+- [ ] Verify ship builder supports primary use case (Tuesday group ship customization)
+- [ ] Document UX friction points for Stage 21 polish
+
 ---
 
 ## Implementation Plan
+
+### Sub-stage 12.0: Pre-Implementation Setup (30 min)
+
+**Scope:**
+- Update .gitignore with patterns for backup files, session files, player data
+- Remove tracked files that should be ignored (backups, dated handoffs, timesheets)
+- Ensure clean git state before starting development
+
+**Files Modified:**
+- `.gitignore` - Add backup files, Claude session files, player feedback extracts, temp files
+- Git: Remove `.claude/HANDOFF-*.md`, `.claude/*TIMESHEET*.md`, `*.backup` from tracking
+
+**Rationale:**
+- Prevents accidentally committing session-specific files (dated handoffs, timesheets)
+- Keeps repo clean for future stages
+- Lesson from Stage 11: HANDOFF-2025-11-11.md was accidentally tracked
 
 ### Sub-stage 12.1: Ship Builder Data Model (2-3 days)
 

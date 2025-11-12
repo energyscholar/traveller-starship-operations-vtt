@@ -76,12 +76,13 @@ Build a **FUN, playable space combat VTT** with **ship design tools** for:
 
 | Stage | Feature | Est. Time | Priority |
 |-------|---------|-----------|----------|
-| 14 | Architecture Documentation | 2-3 weeks | HIGH |
-| 15 | Security Documentation | 2-3 weeks | HIGH |
+| 14 | Portfolio Documentation (Architecture + Security) | 3-4 weeks | HIGH |
+| 15 | Refactoring & Modularization | 3-4 weeks | HIGH |
 | 16 | Deployment & Operations | 1-2 weeks | HIGH |
 
 **Goal**: 9.0/10 AI repo score, interview-ready portfolio
 **Timeline**: 2-3 months at hobby pace
+**Optimization**: Combined Architecture + Security docs into Stage 14 (saves 1-2 weeks)
 
 ### 📋 Phase 4: Advanced Features (Stages 17-22+)
 
@@ -90,12 +91,16 @@ Build a **FUN, playable space combat VTT** with **ship design tools** for:
 | 17 | Fleet Battles | 3-4 weeks | MEDIUM |
 | 18 | Campaign Persistence | 2-3 weeks | MEDIUM |
 | 19 | GM Tools | 2-3 weeks | MEDIUM |
-| 20 | High Guard Integration | 4-6 weeks | LOW (PDF needed) |
-| 21 | UI/UX Polish | 2-3 weeks | MEDIUM |
-| 22 | Advanced Maneuvers | 2-3 weeks | LOW |
+| 20 | DEFERRED - High Guard Integration | 4-6 weeks | LOW (PDF needed) |
+| 21 | UI/UX Final Polish + Advanced Maneuvers | 2-3 weeks | MEDIUM |
+| 22 | ELIMINATED (merged into Stage 21) | - | - |
 
 **Goal**: Feature-complete, community-loved tool
 **Timeline**: 6-12 months at hobby pace
+**Optimizations**:
+- High Guard deferred to Stage TBD (when user provides PDF)
+- Stage 22 merged into Stage 21 (saves 2-3 weeks)
+- Incremental UI/UX review in each stage reduces Stage 21 scope
 
 ---
 

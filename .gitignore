@@ -5,6 +5,7 @@ package-lock.json
 # Environment
 .env
 .env.local
+.env*.local
 
 # OS Files
 .DS_Store
@@ -13,16 +14,22 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+*.code-workspace
 
 # Logs
 *.log
 npm-debug.log*
 logs/
+combined.log
+error.log
+access.log
 
 # Testing
 coverage/
 .nyc_output/
 test-screenshot-*.png
+screenshot-*.png
+*-screenshot.png
 
 # Reference Materials
 reference/
@@ -30,3 +37,55 @@ reference/
 
 # Screenshots and excluded content
 exclude_from_git/
+
+# Backup files
+*.backup
+*.bak
+*.orig
+*.rej
+
+# Editor temporary files
+*~
+.*.swp
+.*.swo
+\#*\#
+
+# Claude Code session-specific files (keep general .claude/*.md docs)
+.claude/settings.local.json
+.claude/HANDOFF-*.md
+.claude/*TIMESHEET*.md
+.claude/*.local.*
+
+# Player feedback extracts
+feedback-extract-*.txt
+feedback-extract-*.md
+*-feedback-extract.*
+
+# Player session data
+sessions/
+player-data/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache directories and files
+.cache/
+*.cache
+
+# Process IDs
+*.pid
+*.seed
+*.pid.lock
+
+# Runtime data
+pids
+
+# Debug dumps
+debug-*.json
+*.debug
+
+# Temporary files
+*.tmp
+*.temp
