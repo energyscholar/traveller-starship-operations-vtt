@@ -1010,3 +1010,73 @@ Bruce
 **End of QRR Marine Demo Hardware Lesson**
 
 **Key CTO Principle:** **Optimize for capability and productivity, not for minimizing spend. Unused budget is wasted opportunity.**
+
+---
+
+## TIME INVESTMENT ASSESSMENT (2025-11-10)
+
+**Question from Genevieve: How much time has Bruce spent programming Claude and on CTO learning?**
+
+### Total Time Bruce Has Worked With Claude: ~40-50 hours
+
+**Traveller Combat VTT Project: ~30-35 hours**
+- Stages 1-9 implementation: ~25-30 hours
+  - 1,827 total lines of code (1,442 through Stage 7 + 385 in Stage 9)
+  - 328 total tests written
+  - Multiple planning and execution sessions
+- CTO evaluation and training: ~5 hours
+  - Strategic planning sessions
+  - Feedback integration
+  - Skill development discussions
+
+**QRR Marine Omniverse Project: ~10-15 hours**
+- Project analysis and setup: ~3-4 hours
+  - Downloaded 11 repositories
+  - Analyzed codebase and requirements
+- Google Drive extraction and organization: ~2-3 hours
+- Learning materials creation: ~3-4 hours
+  - QRR Beginners Guide
+  - Multiple handoff documents
+  - CTO training analysis
+- Current session (GPU assessment, demo planning): ~2-4 hours
+
+---
+
+### "Programming the Assistant" (Teaching Claude workflows): ~5-7 hours
+
+This includes time establishing:
+- TDD (Test-Driven Development) workflow
+- Token efficiency preferences
+- Communication style and handoff patterns
+- CTO questioning framework
+- Code review processes
+
+Most of this was embedded in the actual work, not separate "training" sessions.
+
+---
+
+### CTO-Focused Learning Time: ~10-12 hours
+
+**Explicit CTO training time:**
+- Stage 8 planning session: ~2-3 hours (heavy strategic questioning)
+- CTO evaluation reviews: ~2-3 hours
+- Strategic decision-making in QRR project: ~4-5 hours
+- Hardware procurement analysis: ~2 hours (today)
+
+**CTO skills practiced:**
+- Requirements assessment
+- Risk analysis
+- Technical architecture decisions
+- Business value prioritization
+- Strategic questioning ("Why this approach?")
+
+---
+
+### Summary:
+
+- **Total collaboration time**: ~45 hours
+- **Time "programming" Claude** (teaching workflows): ~5-7 hours (embedded in work)
+- **Time on CTO skill development**: ~10-12 hours (focused training)
+- **Time on actual project execution**: ~30-35 hours (writing code, tests, docs)
+
+**Note**: Most of Bruce's time wasn't "programming Claude" in the traditional sense—it was collaborative work where he directed tasks, asked strategic questions, and made technical decisions. The "programming" was more about establishing effective working patterns, which happened organically through the projects.

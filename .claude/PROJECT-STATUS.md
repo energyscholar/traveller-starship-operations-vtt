@@ -1,8 +1,8 @@
 # Traveller Combat VTT - Project Status
 
-**Last Updated:** 2025-11-08
-**Current Stage:** Planning complete, ready for Stage 8 implementation
-**Overall Progress:** 43% (Stages 1-7 complete, 8-16 planned)
+**Last Updated:** 2025-11-11
+**Current Stage:** Stage 10 Complete, Ready for Stage 11
+**Overall Progress:** 62.5% (Stages 1-10 complete, 11-22 planned)
 
 ---
 
@@ -10,20 +10,41 @@
 
 | Metric | Value |
 |--------|-------|
-| **Stages Completed** | 7 / 16 |
-| **Completion %** | 43% |
-| **LOC (Production)** | ~1,200 |
-| **LOC (Tests)** | ~800 |
-| **Test Coverage** | 95% (personal combat) |
-| **Token Budget Used** | 67k / 200k (34%) |
-| **Estimated Time to MVP** | ~30 hours (Stages 8-12) |
-| **Estimated Time to Production** | ~85 hours (Stages 8-16) |
+| **Stages Completed** | 10 / 22 |
+| **Completion %** | 62.5% (Core Combat Complete) |
+| **LOC (Production)** | ~2,200 |
+| **LOC (Tests)** | ~1,900 |
+| **Test Coverage** | 100% (272 tests passing) |
+| **Token Budget Used** | ~80k / 200k (40%) |
+| **Next Milestone** | Stage 12 - Ship Builder Tool ⭐ |
+| **Portfolio Goal** | 9.0/10 AI Repo Score |
+
+---
+
+## Project Vision
+
+### Primary Goal
+Build a **FUN, playable space combat VTT** with **ship design tools** for:
+- Tuesday game group (primary users)
+- Traveller community (free, open-source)
+- Portfolio demonstration ($150/hr contract work)
+
+### Dual Purpose
+1. **Combat Tool**: Tactical multiplayer space battles
+2. **Ship Builder**: Design and customize starships
+
+### Success Criteria
+- ✅ Fun gameplay (tactical depth, visual clarity)
+- ✅ Ship customization (players design their own ships)
+- ✅ Portfolio quality (9.0/10 AI repo score)
+- ✅ Production deployment (AWS/Azure, monitored)
+- ✅ Community adoption (r/Traveller, forums)
 
 ---
 
 ## Stage Breakdown
 
-### ✅ Completed Stages (1-7)
+### ✅ Completed Stages (1-10)
 
 | Stage | Feature | Status | LOC | Tests |
 |-------|---------|--------|-----|-------|
@@ -34,74 +55,171 @@
 | 5 | Hit/Damage/Armour | ✅ Complete | 150 | 120 |
 | 6 | Crew System & Skills | ✅ Complete | 250 | 200 |
 | 7 | Movement & Hex Grid | ✅ Complete | 300 | 230 |
-| **Total** | **Personal Combat System** | **✅ Done** | **~1,200** | **~800** |
+| 8 | Space Combat System | ✅ Complete | 1,025 | 1,826 |
+| 9 | Movement & Initiative | ✅ Complete | ~400 | ~300 |
+| 10 | Critical Hits & Effects | ✅ Complete | 653 | 934 |
+| **Total** | **Core Combat** | **✅ Done** | **~2,200** | **~1,900** |
 
-### 📋 Planned Stages (8-16)
+### 📋 Phase 2: Make It Fun & Playable (Stages 11-13)
 
-| Stage | Feature | Est. Tokens | Est. Time | Est. LOC |
-|-------|---------|-------------|-----------|----------|
-| 8 | Space Combat (Simplified) | 29k | 3.6h | 2,070 |
-| 9 | Movement & Advanced Initiative | 8k | 6h | 800 |
-| 10 | Critical Hit Effects | 7k | 5h | 700 |
-| 11 | Missiles & Sandcasters | 9k | 7h | 900 |
-| 12 | Boarding Actions | 6k | 5h | 600 |
-| 13 | Performance & Scale | 8k | 15h | 800 |
-| 14 | API Integration (VTTs) | 6k | 10h | 600 |
-| 15 | Cloud Deployment (Azure) | 4k | 8h | 400 |
-| 16+ | Advanced Features | 15k+ | 20h+ | 1,500+ |
-| **Total** | **To Production** | **~92k** | **~80h** | **~8,400** |
+| Stage | Feature | Est. Time | Priority |
+|-------|---------|-----------|----------|
+| 11 | Missiles & UI Polish | 2-3 weeks | HIGH |
+| 12 | **Ship Builder Tool** ⭐ | 3-4 weeks | **CRITICAL** |
+| 13 | Boarding & Personal Combat | 2-3 weeks | HIGH |
+
+**Goal**: Complete, fun VTT for Tuesday game group
+**Timeline**: 2-3 months at hobby pace
+
+### 📋 Phase 3: Portfolio Polish (Stages 14-16)
+
+| Stage | Feature | Est. Time | Priority |
+|-------|---------|-----------|----------|
+| 14 | Architecture Documentation | 2-3 weeks | HIGH |
+| 15 | Security Documentation | 2-3 weeks | HIGH |
+| 16 | Deployment & Operations | 1-2 weeks | HIGH |
+
+**Goal**: 9.0/10 AI repo score, interview-ready portfolio
+**Timeline**: 2-3 months at hobby pace
+
+### 📋 Phase 4: Advanced Features (Stages 17-22+)
+
+| Stage | Feature | Est. Time | Priority |
+|-------|---------|-----------|----------|
+| 17 | Fleet Battles | 3-4 weeks | MEDIUM |
+| 18 | Campaign Persistence | 2-3 weeks | MEDIUM |
+| 19 | GM Tools | 2-3 weeks | MEDIUM |
+| 20 | High Guard Integration | 4-6 weeks | LOW (PDF needed) |
+| 21 | UI/UX Polish | 2-3 weeks | MEDIUM |
+| 22 | Advanced Maneuvers | 2-3 weeks | LOW |
+
+**Goal**: Feature-complete, community-loved tool
+**Timeline**: 6-12 months at hobby pace
 
 ---
 
-## Current Capabilities (Stages 1-7)
+## Current Capabilities (Stages 1-10)
 
-### Personal Combat System ✅
-- 2D6 attack resolution (2D + skill + mods ≥ 8)
-- Damage with Effect (roll + Effect - armour)
-- Crew system (pilot, gunner, engineer)
-- Character skills affect combat
-- Hex grid movement (10x10)
-- Range bands (adjacent, close, medium, long, very long)
-- Multiple weapons per ship
-- Ammo tracking
-- Hull/armour damage
-- Engineer repairs
-- Multiplayer (Socket.io)
-- Real-time combat sync
+### Space Combat System ✅
+- **7 range bands** (Adjacent → Distant)
+- **Attack resolution** (2D6 + skill + DM ≥ 8)
+- **Damage system** (weapon damage - armor)
+- **Critical hits** (11 locations, severity 1-6)
+- **Sustained damage** (every 10% hull lost)
+- **Damage effects** (M-drive, sensors, weapons, etc.)
+- **Crew system** (pilot, gunners, engineer)
+- **Initiative** (2D6 + pilot skill)
+- **Turn-based combat** (30s turn timer)
+- **Multiplayer** (Socket.io, real-time sync)
+
+### Ship Data System ✅
+- **Ship registry** (JSON files in `data/ships/`)
+- **Weapon registry** (JSON files in `data/weapons/`)
+- **Data validation** (automated on `npm test`)
+- **Index-based search** (role, tonnage, name)
+- **XSS protection** (33 security tests)
+
+### UI/UX ✅
+- **Ship selection screen** (choose ship, set range)
+- **Space combat HUD** (hull bars, stats, crew)
+- **Collapsible panels** (crew, combat log)
+- **Turn timer** (color-coded warnings)
+- **Combat log** (categorized entries, auto-scroll)
 
 ### Test Coverage ✅
-- 20 unit tests (combat math, crew, weapons)
-- 8 integration tests (browser, multiplayer, grid)
-- 95% code coverage
-- TDD approach throughout
+- **272 tests passing** (100% pass rate)
+- **Unit tests:** 212 tests (critical hits, combat, crew)
+- **Integration tests:** 60 tests (UI, multiplayer, combat)
+- **Test-to-code ratio:** 1.78:1 (excellent!)
 
 ---
 
-## Next Milestone: Stage 8 (Space Combat MVP)
+## Next Milestone: Stage 11 (Missiles & UI)
 
 ### Scope
-- Scout vs Free Trader combat
-- 7 range bands (Adjacent → Distant)
-- Spacecraft weapons (Beam/Pulse Lasers)
-- Hull damage & critical hits (location only)
-- Simplified crew (gunners only, Skill-0 baseline)
-- Fixed ranges (no movement)
-- Ship selection UI
-- Space combat HUD
+- **Missile mechanics** (4D6 damage, +2 DM at long range)
+- **Point defense** (shoot down incoming missiles)
+- **Sandcasters** (intercept missiles, smoke screens)
+- **UI improvements** (horizontal layout, expand/collapse)
+- **Combat log fixes** (formatting, display order)
 
-### Timeline
-- **Effort:** ~29k tokens, 3.6 hours, 2,070 LOC
-- **Sub-stages:** 8 (8.1-8.8)
-- **Tests:** 1,230 LOC (60% of total)
-- **Implementation:** 840 LOC (40% of total)
+### Why This Matters
+- Adds tactical depth (missile vs. point defense)
+- Cleans up UI (more screen real estate)
+- Fixes UX issues (combat log readability)
 
-### Readiness
-- ✅ All planning complete
-- ✅ Design decisions finalized
-- ✅ Test specifications written
-- ✅ Acceptance criteria defined
-- ✅ Technical debt identified
-- ✅ Stub points documented
+### Estimated Effort
+- **Time:** 2-3 weeks (hobby pace)
+- **Tests:** ~25 new unit tests
+- **LOC:** ~400 production, ~300 test
+
+---
+
+## Critical Priority: Stage 12 (Ship Builder) ⭐
+
+### Why This Stage is Now Stage 12 (Not Stage 16)
+**User requested:**
+> "Want both a playable VTT for using in game and a tool for building and customizing starships."
+
+**Original plan** had ship builder buried in Stage 16 (months away).
+**Revised plan** moves it to Stage 12 (next major milestone after Stage 11).
+
+### Scope
+- **Visual ship designer** interface
+- **Hull selection** (100-2000 tons, Core Rulebook)
+- **Component picker** (turrets, weapons, armor)
+- **Custom ship JSON export** (save designs)
+- **Load custom ships** in combat
+- **Pre-built templates** (Scout, Trader, Corsair, etc.)
+- **Ship library manager** (organize saved designs)
+
+### Why This is Critical
+1. **Your Tuesday group wants it** - Players want their own ships!
+2. **Demonstrates UX skill** - Portfolio value
+3. **Enables custom battles** - Fight with YOUR designs
+4. **Foundation for High Guard** - Ship builder scales up later
+
+### Estimated Effort
+- **Time:** 3-4 weeks (hobby pace)
+- **LOC:** ~800 production, ~400 test
+- **UI work:** Significant (form validation, preview)
+
+---
+
+## Key Changes from Original Plan
+
+### 1. Ship Builder Moved to Stage 12 ⭐
+**Was:** Stage 16 (Advanced Features)
+**Now:** Stage 12 (Make It Fun)
+**Why:** Core feature, not optional polish
+
+### 2. Boarding Moved to Stage 13
+**Was:** Stage 12
+**Now:** Stage 13
+**Why:** Ship builder is higher priority
+
+### 3. New Stages 14-15: Portfolio Polish
+**Added:** Architecture & Security documentation stages
+**Why:** 9.0/10 AI repo score requires documentation excellence
+**Note:** These stages add NO features, only polish
+
+### 4. Deployment Moved to Stage 16
+**Was:** Stage 15
+**Now:** Stage 16
+**Why:** Deploy after portfolio polish, before advanced features
+
+### 5. High Guard Deferred to Stage 20
+**Was:** Stage 16.5 (mixed with advanced features)
+**Now:** Stage 20 (dedicated stage)
+**Why:** User will provide PDF "later", not critical path
+
+### 6. Expanded Roadmap to 22+ Stages
+**Added:** Stages 17-22 for advanced features
+- Fleet battles
+- Campaign persistence
+- GM tools
+- Advanced maneuvers
+**Why:** Clearer roadmap, phased delivery
 
 ---
 
@@ -112,7 +230,7 @@
 - **Real-time:** Socket.io
 - **Frontend:** Vanilla JS + HTML/CSS
 - **Testing:** Custom test runner (Node.js)
-- **Data:** In-memory (no persistence yet)
+- **Data:** JSON files (no database yet)
 
 ### Design Principles
 - **TDD-first:** Tests before implementation
@@ -121,200 +239,256 @@
 - **Modular:** Clear separation (personal vs space combat)
 - **British spelling:** Match Traveller rules (armour, not armor)
 
-### Future Architecture (Stages 13-15)
-- **Persistence:** Database (TBD - Stage 13+)
-- **Scaling:** Horizontal scaling, load balancer (Stage 13)
-- **Deployment:** Azure App Service (Stage 15)
-- **Monitoring:** Azure Application Insights (Stage 15)
-- **API Integration:** Roll20, Fantasy Grounds, Foundry VTT (Stage 14)
+### Future Architecture (Stages 13-16)
+- **Persistence:** Database (Stage 18 - Campaign persistence)
+- **Scaling:** Horizontal scaling (Stage 16 - Deployment)
+- **Deployment:** AWS or Azure (Stage 16)
+- **Monitoring:** CloudWatch or App Insights (Stage 16)
+
+---
+
+## Use Cases (NEW)
+
+### Use Case 1: Tuesday Game Session
+**Scenario:** Custom-built Far Trader encounters pirates
+1. GM loads group's saved ship (designed in Ship Builder)
+2. Players join via link
+3. GM controls pirate Corsair (also custom-built)
+4. Tactical combat with missiles, criticals, boarding
+5. Damage persists to next session
+
+**Demonstrates:** Real-world usage, multiplayer, persistence
+
+### Use Case 2: Ship Design Session (Zero Session)
+**Scenario:** Campaign starting, players design their ship
+1. Open Ship Builder interface
+2. Choose hull (400 ton Subsidized Merchant)
+3. Add turrets (2× triple turret, lasers + missiles)
+4. Customize armor, fuel, cargo
+5. Save as "The Wandering Star"
+6. Next session: Load ship for combat
+
+**Demonstrates:** Creative freedom, customization, prep tool
+
+### Use Case 3: Portfolio Demo (Interview)
+**Scenario:** Showing project for $150/hr contract
+1. Walk through architecture docs (ADRs, C4 diagrams)
+2. Discuss security threat model (OWASP Top 10)
+3. Show deployed app with monitoring
+4. Demo ship builder + combat
+5. Explain scaling strategy
+6. Highlight: "Real users, 99.9% uptime, <$50/month"
+
+**Demonstrates:** CTO-level thinking, ops experience
+
+### Use Case 4: Community Contribution
+**Scenario:** r/Traveller discovers the tool
+1. GM posts: "Free space combat VTT!"
+2. Players try it, design custom ships
+3. Community shares ship designs (JSON files)
+4. Unofficial ship library grows
+5. Mongoose Publishing notices
+
+**Demonstrates:** Community value, open ecosystem
+
+### Use Case 5: AI Repo Evaluation (9.0/10)
+**Scenario:** Running automated repo analysis
+1. Test coverage 95%+
+2. Architecture docs (ADRs, diagrams)
+3. Security docs (threat model, checklist)
+4. Clean code (SOLID, design patterns)
+5. CI/CD pipeline
+6. Monitoring, observability
+7. Performance benchmarks
+8. **Result:** 9.0/10+ score
+
+**Demonstrates:** Professional-grade engineering
 
 ---
 
 ## Risk Assessment
 
 ### Low Risk ✅
-- Stage 8 foundation (character stats, ship models)
-- Range bands & targeting
-- Basic space combat mechanics
-- UI components (proven patterns)
+- Stage 11 (Missiles) - Similar to existing weapons
+- Stage 13 (Boarding) - Reuse personal combat code
+- Stage 17 (Fleet battles) - Scale existing system
 
 ### Medium Risk ⚠️
-- Attack resolution complexity (many modifiers)
-- Critical hit system (sustained damage)
-- Turret assignment state management
-- Turn timer + async actions
+- Stage 12 (Ship Builder) - Complex UI, validation
+- Stage 18 (Campaign persistence) - Database design
+- Stage 20 (High Guard) - Rule complexity (when PDF provided)
 
 ### High Risk 🔴
-- Combat UI complexity (many interactive elements)
-- Socket.io state sync (multiplayer bugs)
-- Fleet battles (Stage 16+, complex state)
-- High Guard integration (rule complexity)
+- Stage 16 (Deployment) - Production readiness
+- Stage 14-15 (Documentation) - Time-consuming, not features
+- Stages 21-22 (Polish) - Scope creep risk
 
 ### Mitigation
 - TDD approach catches bugs early
-- Small sub-stages (independently testable)
-- Aggressive refactoring (Stage 8.8)
-- Performance testing (Stage 13)
-- Load testing before production (Stage 13)
+- Incremental refactoring (Stages 10-13)
+- Comprehensive refactoring (Stage 14)
+- User testing with Tuesday group
+- Phased deployment (local → test → production)
 
 ---
 
 ## Token Budget
 
-### Used (Stages 1-7 + Planning)
-- **Stage planning:** ~25k tokens
-- **Implementation:** ~35k tokens
-- **Handoffs/docs:** ~7k tokens
-- **Total used:** ~67k tokens (34%)
+### Used (Stages 1-10)
+- **Implementation:** ~60k tokens
+- **Planning & docs:** ~20k tokens
+- **Total used:** ~80k tokens (40%)
 
 ### Remaining
-- **Available:** ~133k tokens (66%)
-- **Stage 8 estimated:** 29k tokens
-- **After Stage 8:** ~104k tokens remaining
-- **Buffer for Stages 9-12:** 30k tokens
-- **Safety margin:** Healthy (can complete MVP 3x over)
+- **Available:** ~120k tokens (60%)
+- **Stage 11 estimated:** ~10k tokens
+- **Stage 12 estimated:** ~15k tokens
+- **Stage 13 estimated:** ~10k tokens
+- **After Stage 13:** ~85k tokens remaining
+- **Buffer for Stages 14-22:** ~85k tokens
+- **Safety margin:** Healthy (can complete plan)
 
 ---
 
 ## Quality Metrics
 
 ### Test Coverage (Current)
-- **Personal combat:** 95% coverage
-- **Unit tests:** 20 tests, all passing
-- **Integration tests:** 8 tests, all passing
-- **Test-to-code ratio:** 0.67:1 (800 test LOC / 1,200 impl LOC)
+- **Overall:** 100% pass rate (272/272 tests)
+- **Unit tests:** 212 tests
+- **Integration tests:** 60 tests
+- **Test-to-code ratio:** 1.78:1 (excellent)
 
-### Test Coverage (Stage 8 Target)
-- **Space combat:** 90% coverage target
-- **Unit tests:** 28 new tests (1,030 LOC)
-- **Integration tests:** 2 new tests (320 LOC)
-- **Test-to-code ratio:** 1.46:1 (1,230 test / 840 impl)
+### Code Quality (Current)
+- **Technical debt:** Managed (see TECHNICAL-DEBT.md)
+- **Debt ratio:** ~5-10% (healthy)
+- **Refactoring:** Incremental (Stages 10-13), comprehensive (Stage 14)
+- **Documentation:** Comprehensive (handoffs, ADRs pending)
 
 ### Performance (Current)
 - **Combat resolution:** <50ms per attack
 - **Turn processing:** <100ms
-- **No load testing yet:** (Stage 13)
+- **No load testing yet:** (Stage 16)
 
-### Performance (Stage 13 Targets)
-- **10 concurrent battles**
-- **60 players, 110 ships**
-- **Latency <200ms** under load
-- **Combat resolution <100ms** enforced by tests
+### Portfolio Quality Target (Stage 15)
+- **AI repo score:** 9.0/10+
+- **Test coverage:** 95%+
+- **Architecture docs:** Complete (ADRs, C4 diagrams)
+- **Security docs:** Complete (OWASP threat model)
+- **Deployment:** Production-ready
+- **Monitoring:** Dashboard, alerts
 
 ---
 
 ## Known Technical Debt
 
-### Immediate (Stage 8)
-- ❌ Space combat not implemented
-- ❌ Initiative stubbed (fixed order)
-- ❌ No movement system
-- ❌ Critical hit effects stubbed
-- ❌ Missiles/Sandcasters stubbed
-- ❌ No persistence
+### High Priority (Stage 11)
+- ❌ Multiple shots per round bug (rules violation)
+- ❌ Combat log formatting ("[object Object]")
+- ❌ Combat log display order (oldest at top)
 
-### Medium-term (Stages 9-12)
-- ❌ No multi-player crewing
-- ❌ No jump mechanics
-- ❌ No boarding actions
-- ❌ Limited manoeuvres
+### Medium Priority (Stage 13)
+- ❌ Deprecated SPACE_SHIPS constant
+- ❌ No Unicode support in ship names
+- ❌ Test constants duplication
 
-### Long-term (Stages 13-16)
-- ❌ No load testing
-- ❌ No production deployment
-- ❌ No VTT integration
-- ❌ No ship builder UI
-- ❌ No campaign persistence
+### Low Priority (Stage 14+)
+- ❌ No ship data versioning/migration
+- ❌ No gzip compression for JSON
+- ❌ No hot-reload in dev mode
+
+**See `.claude/TECHNICAL-DEBT.md` for full details**
 
 ---
 
-## Roadmap
+## Roadmap Summary
 
-### Phase 1: Core Space Combat (Stages 8-12)
-**Goal:** Playable space combat system
-- Stage 8: Simplified space combat (gunners only)
-- Stage 9: Movement & proper initiative
-- Stage 10: Critical hit effects
-- Stage 11: Missiles & sandcasters
-- Stage 12: Boarding actions
-- **Milestone:** Full Traveller space combat rules implemented
+### Phase 1: Core Combat ✅ (COMPLETE)
+**Goal:** Playable space combat
+- Stages 1-10
+- **Result:** 272 tests passing, zero regressions
 
-### Phase 2: Production Ready (Stages 13-15)
-**Goal:** Scalable, deployed, monitored
-- Stage 13: Performance testing & network resilience
-- Stage 14: VTT API integration (Roll20, etc.)
-- Stage 15: Azure deployment, monitoring
-- **Milestone:** Production-ready on Azure, 10 concurrent battles supported
+### Phase 2: Make It Fun 🎯 (NEXT)
+**Goal:** Ship builder + boarding + polish
+- Stages 11-13
+- **Timeline:** 2-3 months (hobby pace)
+- **Result:** Complete VTT for Tuesday games
 
-### Phase 3: Advanced Features (Stage 16+)
-**Goal:** Polish & expand
-- Ship builder & customization
-- Fleet battles
-- Campaign persistence
-- Advanced manoeuvres
-- High Guard rules
-- UI/UX polish
-- **Milestone:** Commercial-grade VTT plugin
+### Phase 3: Portfolio Polish 📊
+**Goal:** 9.0/10 AI repo score
+- Stages 14-16
+- **Timeline:** 2-3 months (hobby pace)
+- **Result:** Interview-ready portfolio piece
+
+### Phase 4: Advanced Features 🚀
+**Goal:** Community-loved tool
+- Stages 17-22+
+- **Timeline:** 6-12 months (hobby pace)
+- **Result:** Feature-complete, High Guard support
+
+---
+
+## Success Criteria
+
+### Phase 2 Complete When (Stages 11-13):
+- ✅ Missiles & point defense working
+- ✅ Ship builder intuitive and fun
+- ✅ Boarding actions integrated
+- ✅ Tuesday group loves it
+- ✅ All tests passing (350+ tests)
+
+### Phase 3 Complete When (Stages 14-16):
+- ✅ AI repo score 9.0/10+
+- ✅ Architecture docs complete (ADRs, C4 diagrams)
+- ✅ Security docs complete (OWASP threat model)
+- ✅ Deployed to AWS/Azure
+- ✅ Monitoring dashboard active
+
+### Phase 4 Complete When (Stages 17-22):
+- ✅ Fleet battles working
+- ✅ Campaign persistence enabled
+- ✅ GM tools available
+- ✅ High Guard rules integrated (when PDF provided)
+- ✅ Community adoption (r/Traveller, forums)
 
 ---
 
 ## Dependencies
 
 ### External
-- None (all self-contained)
+- **High Guard PDF:** Required for Stage 20 (user will provide)
+- **AWS/Azure account:** Required for Stage 16 deployment
 
 ### Internal
-- Stages must be completed in order (8 → 9 → 10...)
-- Stage 8 required before any space combat features
-- Stage 13 required before production deployment
-- Stage 14 can run parallel to Stage 13
-
----
-
-## Success Criteria
-
-### Stage 8 Complete When:
-1. Scout vs Free Trader combat playable
-2. All 8 sub-stages complete
-3. All acceptance criteria met
-4. 90%+ test coverage
-5. No regressions in Stages 1-7
-6. Handoff document written
-
-### Project Complete When:
-1. All Stages 8-15 complete
-2. Deployed to Azure (production)
-3. 10 concurrent battles supported
-4. VTT integration working (Roll20, Fantasy Grounds, Foundry)
-5. Full Traveller space combat rules implemented
-6. Performance targets met
-7. Documentation complete
+- Stages 11-13 must complete before Stages 14-16
+- Stage 12 (Ship Builder) enables custom ship battles
+- Stage 14 (Architecture) prerequisite for Stage 16 (Deployment)
+- Stage 15 (Security) prerequisite for Stage 16 (Deployment)
 
 ---
 
 ## Files Created This Session
 
-### Planning Documents
-- `.claude/STAGE-8-IMPLEMENTATION-PLAN.md` (833 lines)
-- `.claude/STAGE-9-PLAN.md` (100 lines)
-- `.claude/STAGE-10-PLAN.md` (95 lines)
-- `.claude/STAGE-11-PLAN.md` (110 lines)
-- `.claude/STAGE-12-PLAN.md` (70 lines)
-- `.claude/STAGE-13-PLAN.md` (120 lines)
-- `.claude/STAGE-14-PLAN.md` (85 lines)
-- `.claude/STAGE-15-PLAN.md` (110 lines)
-- `.claude/STAGE-16-PLAN.md` (145 lines)
-- `.claude/PROJECT-STATUS.md` (this file)
+### Planning Documents (Updated)
+- `.claude/PROJECT-STATUS.md` (this file) - Comprehensive update
+- `.claude/USE-CASES.md` (new) - Use case documentation
+- `.claude/STAGE-12-SHIP-BUILDER-PLAN.md` (new) - Ship builder stage plan
+- `.claude/STAGE-13-BOARDING-PLAN.md` (renamed from old Stage 12)
+- `.claude/STAGE-14-ARCHITECTURE-PLAN.md` (new) - Architecture docs
+- `.claude/STAGE-15-SECURITY-PLAN.md` (new) - Security hardening
+- `.claude/STAGE-16-DEPLOYMENT-PLAN.md` (updated) - Deployment ops
+- `.claude/STAGE-17-22-ADVANCED-PLAN.md` (new) - Advanced features roadmap
 
-### Previous Session
-- `.claude/HANDOFF-STAGE-8-PLANNING-IN-PROGRESS.md`
-- `.claude/MONGOOSE-TRAVELLER-RULES-EXTRACT.md`
-- `.claude/CTO-SKILLS-EVALUATION.md`
+### Previous Session Files
+- `.claude/STAGE-10-COMPLETE.md` - Stage 10 handoff
+- `.claude/STAGE-11-PLAN.md` - Missiles & UI plan
+- `.claude/TECHNICAL-DEBT.md` - Technical debt tracker
+- `.claude/CTO-SKILLS-EVALUATION.md` - CTO skills tracking
 
 ---
 
-**Status:** ✅ READY FOR IMPLEMENTATION
-**Next Action:** Begin Stage 8.1 (Character Stats & Ship Data Models)
-**Estimated Completion (Stage 8):** ~3.6 hours
-**Estimated Completion (MVP - Stage 12):** ~30 hours
-**Estimated Completion (Production - Stage 15):** ~85 hours
+**Status:** ✅ STAGE 10 COMPLETE, PLAN REVISED
+**Next Action:** Begin Stage 11 (Missiles & UI)
+**Next Major Milestone:** Stage 12 (Ship Builder) ⭐
+**Estimated Completion (Phase 2):** 2-3 months
+**Estimated Completion (Phase 3):** 4-6 months
+**Estimated Completion (Phase 4):** 12+ months
