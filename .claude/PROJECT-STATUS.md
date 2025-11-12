@@ -33,12 +33,27 @@ Build a **FUN, playable space combat VTT** with **ship design tools** for:
 1. **Combat Tool**: Tactical multiplayer space battles
 2. **Ship Builder**: Design and customize starships
 
+### UI/UX Theme: Spaceship Control Panel 🚀
+**Design Philosophy:** Inspired by Star Trek, Firefly, and classic sci-fi spacecraft interfaces
+- **Visual Style:** Industrial sci-fi, functional panels, tactical displays
+- **Layout:** Control panel metaphor - buttons, sliders, status readouts
+- **Color Palette:** Dark backgrounds with bright accent colors (blue, cyan, amber, green)
+- **Typography:** Monospace fonts for data, sans-serif for labels
+- **Components:** Emulate real spaceship controls (range indicators, threat displays, system status)
+- **Immersion:** UI should feel like you're sitting at a helm console
+
+**Examples:**
+- Ship customizer = Engineering panel with component controls
+- Combat HUD = Tactical station with range finder, weapons status
+- Main menu = Ship's computer interface
+
 ### Success Criteria
 - ✅ Fun gameplay (tactical depth, visual clarity)
 - ✅ Ship customization (players design their own ships)
 - ✅ Portfolio quality (9.0/10 AI repo score)
 - ✅ Production deployment (AWS/Azure, monitored)
 - ✅ Community adoption (r/Traveller, forums)
+- ✅ Immersive UI (spaceship control panel theme)
 
 ---
 
