@@ -1,11 +1,26 @@
 {
   "$schema": "../schemas/ship-template-v2.schema.json",
   "id": "far_trader",
+  "type": "Type-A2",
   "name": "Far Trader",
   "designation": "Type-A2",
   "className": "Empress Marava",
+  "tonnage": 200,
   "techLevel": 12,
-  "role": "merchant",
+  "role": "trading",
+  "thrust": 1,
+  "turrets": [
+    {
+      "id": "turret_1",
+      "type": "double",
+      "weapons": ["beam_laser", "beam_laser"]
+    },
+    {
+      "id": "turret_2",
+      "type": "double",
+      "weapons": ["beam_laser", "beam_laser"]
+    }
+  ],
 
   "hull": {
     "tonnage": 200,

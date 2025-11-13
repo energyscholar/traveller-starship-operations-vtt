@@ -1,11 +1,15 @@
 {
   "$schema": "../schemas/ship-template-v2.schema.json",
   "id": "free_trader",
+  "type": "Type-A",
   "name": "Free Trader",
   "designation": "Type-A",
   "className": "Beowulf Class",
+  "tonnage": 200,
   "techLevel": 12,
-  "role": "merchant",
+  "role": "trading",
+  "thrust": 1,
+  "turrets": [],
 
   "hull": {
     "tonnage": 200,

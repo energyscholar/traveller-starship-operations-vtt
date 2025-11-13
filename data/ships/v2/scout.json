@@ -1,11 +1,21 @@
 {
   "$schema": "../schemas/ship-template-v2.schema.json",
   "id": "scout",
+  "type": "Type-S",
   "name": "Scout",
   "designation": "Type-S",
   "className": "Scout/Courier",
+  "tonnage": 100,
   "techLevel": 12,
   "role": "exploration",
+  "thrust": 2,
+  "turrets": [
+    {
+      "id": "turret_1",
+      "type": "double",
+      "weapons": []
+    }
+  ],
 
   "hull": {
     "tonnage": 100,
