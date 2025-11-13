@@ -1,0 +1,256 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "safari_ship",
+  "type": "Safari Ship",
+  "name": "Safari Ship",
+  "designation": "Type-SS",
+  "className": "Safari Ship",
+  "tonnage": 200,
+  "techLevel": 12,
+  "role": "exploration",
+  "thrust": 2,
+  "turrets": [
+    {
+      "id": "turret_1",
+      "type": "double",
+      "weapons": ["beam_laser", "sandcaster"]
+    },
+    {
+      "id": "turret_2",
+      "type": "single",
+      "weapons": ["pulse_laser"]
+    }
+  ],
+
+  "hull": {
+    "tonnage": 200,
+    "configuration": "streamlined",
+    "hullPoints": 80,
+    "cost": 12000000
+  },
+
+  "armour": {
+    "type": "crystaliron",
+    "rating": 4,
+    "tonnage": 10,
+    "cost": 2000000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 2,
+      "tonnage": 4,
+      "cost": 8000000
+    },
+    "jump": {
+      "rating": 2,
+      "tonnage": 20,
+      "cost": 30000000
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl12",
+    "output": 90,
+    "tonnage": 6,
+    "cost": 6000000
+  },
+
+  "fuel": {
+    "total": 48,
+    "jump": 40,
+    "powerPlant": 8,
+    "weeks": 4
+  },
+
+  "bridge": {
+    "type": "standard",
+    "tonnage": 10,
+    "cost": 1000000
+  },
+
+  "computer": {
+    "model": "Computer/10",
+    "processing": 10,
+    "cost": 160000
+  },
+
+  "sensors": {
+    "grade": "improved",
+    "tonnage": 3,
+    "cost": 4300000,
+    "power": 4,
+    "dm": 1
+  },
+
+  "weapons": [
+    {
+      "mount": "double_turret",
+      "weapons": ["beam_laser", "sandcaster"],
+      "tonnage": 1,
+      "cost": 1000000,
+      "power": 4
+    },
+    {
+      "mount": "single_turret",
+      "weapons": ["pulse_laser"],
+      "tonnage": 1,
+      "cost": 1200000,
+      "power": 4
+    }
+  ],
+
+  "craft": [
+    {
+      "type": "docking_space",
+      "capacity": 4,
+      "tonnage": 5,
+      "cost": 1250000,
+      "craft": {
+        "type": "air_raft",
+        "name": "Air/Raft",
+        "cost": 250000
+      }
+    },
+    {
+      "type": "docking_space",
+      "capacity": 12,
+      "tonnage": 13,
+      "cost": 3250000,
+      "craft": {
+        "type": "atv",
+        "name": "All-Terrain Vehicle",
+        "tonnage": 12,
+        "cost": 3000000
+      }
+    }
+  ],
+
+  "systems": [
+    {
+      "type": "fuel_scoops",
+      "tonnage": 0,
+      "cost": 0,
+      "power": 0
+    },
+    {
+      "type": "fuel_processor",
+      "tonnage": 4,
+      "cost": 200000,
+      "power": 4,
+      "capacity": 80
+    },
+    {
+      "type": "medical_bay",
+      "tonnage": 4,
+      "cost": 2000000,
+      "power": 1
+    },
+    {
+      "type": "laboratory",
+      "tonnage": 8,
+      "cost": 2000000,
+      "power": 2
+    },
+    {
+      "type": "workshop",
+      "tonnage": 6,
+      "cost": 900000,
+      "power": 0
+    },
+    {
+      "type": "galley",
+      "tonnage": 4,
+      "cost": 100000,
+      "power": 1
+    },
+    {
+      "type": "lounge",
+      "tonnage": 8,
+      "cost": 400000,
+      "power": 1
+    },
+    {
+      "type": "probe_drones",
+      "tonnage": 1,
+      "cost": 500000,
+      "power": 0,
+      "capacity": 5
+    }
+  ],
+
+  "staterooms": {
+    "standard": {
+      "count": 5,
+      "tonnage": 20,
+      "cost": 2500000
+    },
+    "luxury": {
+      "count": 6,
+      "tonnage": 48,
+      "cost": 6000000
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "jump_control",
+      "rating": 2,
+      "cost": 200000
+    },
+    {
+      "name": "library",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "intellect",
+      "rating": 1,
+      "cost": 1000000
+    },
+    {
+      "name": "survey",
+      "rating": 2,
+      "cost": 1000000
+    }
+  ],
+
+  "cargo": {
+    "tonnage": 4
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 1,
+      "engineer": 1,
+      "gunner": 0,
+      "steward": 2,
+      "medic": 1,
+      "marines": 0
+    },
+    "description": "Captain/Pilot, Astrogator, Engineer, 2 Stewards, Medic"
+  },
+
+  "costs": {
+    "base": 87120000,
+    "maintenance": 7260
+  },
+
+  "powerRequirements": {
+    "basic": 40,
+    "manoeuvre": 40,
+    "jump": 40,
+    "sensors": 4,
+    "weapons": 8,
+    "other": 9,
+    "total": 141
+  },
+
+  "notes": "The Safari Ship is a luxury exploration vessel designed for wealthy adventurers and scientific expeditions to exotic and dangerous worlds. With 6 luxury staterooms for passengers and 5 standard staterooms for crew, it provides comfortable accommodation for extended expeditions. The ship features a full laboratory for scientific research, medical bay for expedition health, workshop for equipment maintenance, and comfortable lounge and galley for passenger entertainment. Two vehicles (air/raft and ATV) provide ground exploration capability. Improved sensors and survey software enable detailed planetary scanning. Light armament (beam laser, pulse laser, sandcaster) provides defense without being overtly military. Jump-2 range allows access to frontier worlds, while Thrust-2 provides good in-system performance. Fuel scoops and processor enable extended operations in unexplored systems. Probe drones provide remote sensing capability. The perfect vessel for big game hunting, archaeological expeditions, or luxury adventure tourism."
+}

@@ -1,0 +1,227 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "subsidised_liner",
+  "type": "Subsidised Liner",
+  "name": "Subsidised Liner",
+  "designation": "Type-SL",
+  "className": "Subsidised Liner",
+  "tonnage": 600,
+  "techLevel": 10,
+  "role": "transport",
+  "thrust": 1,
+  "turrets": [
+    {
+      "id": "turret_1",
+      "type": "double",
+      "weapons": ["beam_laser", "sandcaster"]
+    },
+    {
+      "id": "turret_2",
+      "type": "double",
+      "weapons": ["beam_laser", "sandcaster"]
+    }
+  ],
+
+  "hull": {
+    "tonnage": 600,
+    "configuration": "streamlined",
+    "hullPoints": 240,
+    "cost": 36000000
+  },
+
+  "armour": {
+    "type": "titanium_steel",
+    "rating": 2,
+    "tonnage": 30,
+    "cost": 1500000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 1,
+      "tonnage": 6,
+      "cost": 12000000
+    },
+    "jump": {
+      "rating": 1,
+      "tonnage": 65,
+      "cost": 97500000
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl12",
+    "output": 135,
+    "tonnage": 9,
+    "cost": 9000000
+  },
+
+  "fuel": {
+    "total": 72,
+    "jump": 60,
+    "powerPlant": 12,
+    "weeks": 4
+  },
+
+  "bridge": {
+    "type": "standard",
+    "tonnage": 20,
+    "cost": 3000000
+  },
+
+  "computer": {
+    "model": "Computer/10",
+    "processing": 10,
+    "cost": 160000
+  },
+
+  "sensors": {
+    "grade": "civilian",
+    "tonnage": 1,
+    "cost": 3000000,
+    "power": 1,
+    "dm": -2
+  },
+
+  "weapons": [
+    {
+      "mount": "double_turret",
+      "weapons": ["beam_laser", "sandcaster"],
+      "tonnage": 1,
+      "cost": 1000000,
+      "power": 4
+    },
+    {
+      "mount": "double_turret",
+      "weapons": ["beam_laser", "sandcaster"],
+      "tonnage": 1,
+      "cost": 1000000,
+      "power": 4
+    }
+  ],
+
+  "craft": [
+    {
+      "type": "docking_space",
+      "capacity": 20,
+      "tonnage": 22,
+      "cost": 5500000,
+      "craft": {
+        "type": "launch",
+        "name": "Launch",
+        "tonnage": 20,
+        "cost": 5000000
+      }
+    }
+  ],
+
+  "systems": [
+    {
+      "type": "fuel_scoops",
+      "tonnage": 0,
+      "cost": 0,
+      "power": 0
+    },
+    {
+      "type": "fuel_processor",
+      "tonnage": 6,
+      "cost": 300000,
+      "power": 6,
+      "capacity": 120
+    },
+    {
+      "type": "medical_bay",
+      "tonnage": 4,
+      "cost": 2000000,
+      "power": 1
+    },
+    {
+      "type": "galley",
+      "tonnage": 6,
+      "cost": 150000,
+      "power": 2
+    },
+    {
+      "type": "common_area",
+      "tonnage": 20,
+      "cost": 200000,
+      "power": 2
+    },
+    {
+      "type": "lounge",
+      "tonnage": 10,
+      "cost": 500000,
+      "power": 1
+    }
+  ],
+
+  "staterooms": {
+    "standard": {
+      "count": 10,
+      "tonnage": 40,
+      "cost": 5000000
+    },
+    "luxury": {
+      "count": 40,
+      "tonnage": 320,
+      "cost": 40000000
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "jump_control",
+      "rating": 1,
+      "cost": 100000
+    },
+    {
+      "name": "library",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "intellect",
+      "rating": 1,
+      "cost": 1000000
+    }
+  ],
+
+  "cargo": {
+    "tonnage": 5
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 1,
+      "engineer": 2,
+      "gunner": 0,
+      "steward": 10,
+      "medic": 1,
+      "marines": 0
+    },
+    "description": "Captain, Pilot, Astrogator, 2 Engineers, 10 Stewards, Medic"
+  },
+
+  "costs": {
+    "base": 216910000,
+    "maintenance": 18076
+  },
+
+  "powerRequirements": {
+    "basic": 120,
+    "manoeuvre": 60,
+    "jump": 60,
+    "sensors": 1,
+    "weapons": 8,
+    "other": 12,
+    "total": 261
+  },
+
+  "notes": "The Subsidised Liner is a commercial passenger vessel operating under government subsidy, providing affordable interstellar travel. With 40 luxury staterooms and 10 standard crew staterooms, it can transport up to 40 high-paying passengers in comfort. The ship features extensive common areas including a large lounge, galley, and recreation spaces. Light armament (two beam laser/sandcaster turrets) provides basic defense against pirates. Jump-1 and Thrust-1 performance are adequate for routine commercial routes. The subsidy model requires the ship to accept government charter when needed, but otherwise operates as a commercial passenger liner. High steward complement (1 per 4 passengers) ensures quality service. Medical bay, fuel processor, and launch provide passenger comfort and safety. Low running costs make this an economical passenger transport option."
+}

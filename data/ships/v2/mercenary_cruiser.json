@@ -1,0 +1,325 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "mercenary_cruiser",
+  "type": "Mercenary Cruiser",
+  "name": "Mercenary Cruiser",
+  "designation": "Type-MC",
+  "className": "Mercenary Cruiser",
+  "tonnage": 800,
+  "techLevel": 12,
+  "role": "military",
+  "thrust": 4,
+  "turrets": [
+    {
+      "id": "turret_1",
+      "type": "triple",
+      "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"]
+    },
+    {
+      "id": "turret_2",
+      "type": "triple",
+      "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"]
+    },
+    {
+      "id": "turret_3",
+      "type": "double",
+      "weapons": ["missile_rack", "sandcaster"]
+    },
+    {
+      "id": "turret_4",
+      "type": "double",
+      "weapons": ["missile_rack", "sandcaster"]
+    },
+    {
+      "id": "turret_5",
+      "type": "double",
+      "weapons": ["beam_laser", "beam_laser"]
+    },
+    {
+      "id": "turret_6",
+      "type": "double",
+      "weapons": ["beam_laser", "beam_laser"]
+    },
+    {
+      "id": "turret_7",
+      "type": "single",
+      "weapons": ["particle_beam"]
+    },
+    {
+      "id": "turret_8",
+      "type": "single",
+      "weapons": ["particle_beam"]
+    }
+  ],
+
+  "hull": {
+    "tonnage": 800,
+    "configuration": "sphere",
+    "hullPoints": 320,
+    "cost": 48000000
+  },
+
+  "armour": {
+    "type": "crystaliron",
+    "rating": 8,
+    "tonnage": 80,
+    "cost": 16000000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 4,
+      "tonnage": 32,
+      "cost": 64000000
+    },
+    "jump": {
+      "rating": 2,
+      "tonnage": 85,
+      "cost": 127500000
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl12",
+    "output": 510,
+    "tonnage": 34,
+    "cost": 34000000
+  },
+
+  "fuel": {
+    "total": 184,
+    "jump": 160,
+    "powerPlant": 24,
+    "weeks": 4
+  },
+
+  "bridge": {
+    "type": "standard",
+    "tonnage": 40,
+    "cost": 4000000
+  },
+
+  "computer": {
+    "model": "Computer/20",
+    "processing": 20,
+    "cost": 5000000
+  },
+
+  "sensors": {
+    "grade": "military",
+    "tonnage": 2,
+    "cost": 4100000,
+    "power": 2,
+    "dm": 0
+  },
+
+  "weapons": [
+    {
+      "mount": "triple_turret",
+      "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"],
+      "tonnage": 1,
+      "cost": 4000000,
+      "power": 12
+    },
+    {
+      "mount": "triple_turret",
+      "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"],
+      "tonnage": 1,
+      "cost": 4000000,
+      "power": 12
+    },
+    {
+      "mount": "double_turret",
+      "weapons": ["missile_rack", "sandcaster"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 0
+    },
+    {
+      "mount": "double_turret",
+      "weapons": ["missile_rack", "sandcaster"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 0
+    },
+    {
+      "mount": "double_turret",
+      "weapons": ["beam_laser", "beam_laser"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 8
+    },
+    {
+      "mount": "double_turret",
+      "weapons": ["beam_laser", "beam_laser"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 8
+    },
+    {
+      "mount": "single_turret",
+      "weapons": ["particle_beam"],
+      "tonnage": 1,
+      "cost": 4200000,
+      "power": 8
+    },
+    {
+      "mount": "single_turret",
+      "weapons": ["particle_beam"],
+      "tonnage": 1,
+      "cost": 4200000,
+      "power": 8
+    }
+  ],
+
+  "craft": [
+    {
+      "type": "docking_space",
+      "capacity": 50,
+      "tonnage": 55,
+      "cost": 13750000,
+      "craft": {
+        "type": "modular_cutter",
+        "name": "Modular Cutter",
+        "tonnage": 50,
+        "cost": 12500000
+      }
+    },
+    {
+      "type": "docking_space",
+      "capacity": 50,
+      "tonnage": 55,
+      "cost": 13750000,
+      "craft": {
+        "type": "modular_cutter",
+        "name": "Modular Cutter",
+        "tonnage": 50,
+        "cost": 12500000
+      }
+    }
+  ],
+
+  "systems": [
+    {
+      "type": "fuel_scoops",
+      "tonnage": 0,
+      "cost": 0,
+      "power": 0
+    },
+    {
+      "type": "fuel_processor",
+      "tonnage": 8,
+      "cost": 400000,
+      "power": 8,
+      "capacity": 160
+    },
+    {
+      "type": "armory",
+      "tonnage": 6,
+      "cost": 600000,
+      "power": 0,
+      "capacity": 36
+    },
+    {
+      "type": "brig",
+      "tonnage": 8,
+      "cost": 400000,
+      "power": 0,
+      "capacity": 8
+    },
+    {
+      "type": "medical_bay",
+      "tonnage": 8,
+      "cost": 4000000,
+      "power": 2
+    },
+    {
+      "type": "workshop",
+      "tonnage": 6,
+      "cost": 900000,
+      "power": 0
+    },
+    {
+      "type": "barracks",
+      "tonnage": 60,
+      "cost": 3000000,
+      "power": 0,
+      "capacity": 30
+    }
+  ],
+
+  "staterooms": {
+    "standard": {
+      "count": 16,
+      "tonnage": 64,
+      "cost": 8000000
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "jump_control",
+      "rating": 2,
+      "cost": 200000
+    },
+    {
+      "name": "library",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "fire_control",
+      "rating": 3,
+      "cost": 3000000
+    },
+    {
+      "name": "evade",
+      "rating": 2,
+      "cost": 2000000
+    },
+    {
+      "name": "auto_repair",
+      "rating": 2,
+      "cost": 2000000
+    }
+  ],
+
+  "cargo": {
+    "tonnage": 44
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 1,
+      "engineer": 3,
+      "gunner": 8,
+      "steward": 2,
+      "medic": 2,
+      "marines": 30
+    },
+    "description": "Captain, Pilot, Astrogator, 3 Engineers, 8 Gunners, 2 Stewards, 2 Medics, 30 Marines"
+  },
+
+  "costs": {
+    "base": 346700000,
+    "maintenance": 28892
+  },
+
+  "powerRequirements": {
+    "basic": 160,
+    "manoeuvre": 320,
+    "jump": 160,
+    "sensors": 2,
+    "weapons": 56,
+    "other": 10,
+    "total": 708
+  },
+
+  "notes": "The Mercenary Cruiser is a heavily-armed troop transport designed for mercenary companies and special operations forces. The sphere hull configuration maximizes interior volume while minimizing surface area for armour efficiency. Two modular cutters provide flexible deployment options - they can be configured with drop tanks for extended range, troop pods for assault operations, or cargo modules for resupply. Barracks accommodate 30 marines in military quarters (2 tons per marine). Heavy armament includes 8 turrets with mixed loadout: dual triple pulse laser turrets for point defense, dual missile/sandcaster turrets for strike and defense, dual beam laser turrets for versatility, and dual particle beam turrets for heavy firepower. Large medical bay, armory, brig, and workshop support extended mercenary operations. Jump-2 range and Thrust-4 provide good strategic and tactical mobility."
+}

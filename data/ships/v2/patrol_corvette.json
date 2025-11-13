@@ -1,0 +1,252 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "patrol_corvette",
+  "type": "Patrol Corvette",
+  "name": "Patrol Corvette",
+  "designation": "Type-PC",
+  "className": "Patrol Corvette",
+  "tonnage": 400,
+  "techLevel": 14,
+  "role": "military",
+  "thrust": 5,
+  "turrets": [
+    {
+      "id": "turret_1",
+      "type": "triple",
+      "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"]
+    },
+    {
+      "id": "turret_2",
+      "type": "double",
+      "weapons": ["missile_rack", "sandcaster"]
+    },
+    {
+      "id": "turret_3",
+      "type": "single",
+      "weapons": ["particle_beam"]
+    },
+    {
+      "id": "turret_4",
+      "type": "double",
+      "weapons": ["beam_laser", "beam_laser"]
+    }
+  ],
+
+  "hull": {
+    "tonnage": 400,
+    "configuration": "streamlined",
+    "hullPoints": 160,
+    "cost": 24000000
+  },
+
+  "armour": {
+    "type": "bonded_superdense",
+    "rating": 8,
+    "tonnage": 26,
+    "cost": 13000000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 5,
+      "tonnage": 20,
+      "cost": 40000000
+    },
+    "jump": {
+      "rating": 3,
+      "tonnage": 35,
+      "cost": 52500000
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl15",
+    "output": 420,
+    "tonnage": 21,
+    "cost": 42000000
+  },
+
+  "fuel": {
+    "total": 134,
+    "jump": 120,
+    "powerPlant": 14,
+    "weeks": 4
+  },
+
+  "bridge": {
+    "type": "standard",
+    "tonnage": 20,
+    "cost": 2000000
+  },
+
+  "computer": {
+    "model": "Computer/15",
+    "processing": 15,
+    "cost": 2000000
+  },
+
+  "sensors": {
+    "grade": "improved",
+    "tonnage": 3,
+    "cost": 4300000,
+    "power": 4,
+    "dm": 1
+  },
+
+  "weapons": [
+    {
+      "mount": "triple_turret",
+      "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"],
+      "tonnage": 1,
+      "cost": 4000000,
+      "power": 12
+    },
+    {
+      "mount": "double_turret",
+      "weapons": ["missile_rack", "sandcaster"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 0
+    },
+    {
+      "mount": "single_turret",
+      "weapons": ["particle_beam"],
+      "tonnage": 1,
+      "cost": 4200000,
+      "power": 8
+    },
+    {
+      "mount": "double_turret",
+      "weapons": ["beam_laser", "beam_laser"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 8
+    }
+  ],
+
+  "craft": [
+    {
+      "type": "docking_space",
+      "capacity": 30,
+      "tonnage": 33,
+      "cost": 8250000,
+      "craft": {
+        "type": "ship_boat",
+        "name": "Ship's Boat",
+        "tonnage": 30,
+        "cost": 7500000
+      }
+    }
+  ],
+
+  "systems": [
+    {
+      "type": "fuel_scoops",
+      "tonnage": 0,
+      "cost": 0,
+      "power": 0
+    },
+    {
+      "type": "fuel_processor",
+      "tonnage": 4,
+      "cost": 200000,
+      "power": 4,
+      "capacity": 80
+    },
+    {
+      "type": "armory",
+      "tonnage": 2,
+      "cost": 200000,
+      "power": 0,
+      "capacity": 12
+    },
+    {
+      "type": "brig",
+      "tonnage": 4,
+      "cost": 200000,
+      "power": 0,
+      "capacity": 4
+    },
+    {
+      "type": "medical_bay",
+      "tonnage": 4,
+      "cost": 2000000,
+      "power": 1
+    }
+  ],
+
+  "staterooms": {
+    "standard": {
+      "count": 12,
+      "tonnage": 48,
+      "cost": 6000000
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "jump_control",
+      "rating": 3,
+      "cost": 300000
+    },
+    {
+      "name": "library",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "fire_control",
+      "rating": 2,
+      "cost": 2000000
+    },
+    {
+      "name": "evade",
+      "rating": 2,
+      "cost": 2000000
+    },
+    {
+      "name": "auto_repair",
+      "rating": 1,
+      "cost": 500000
+    }
+  ],
+
+  "cargo": {
+    "tonnage": 17
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 1,
+      "engineer": 2,
+      "gunner": 4,
+      "steward": 0,
+      "medic": 1,
+      "marines": 3
+    },
+    "description": "Captain, Pilot, Astrogator, 2 Engineers, 4 Gunners, Medic, 3 Marines"
+  },
+
+  "costs": {
+    "base": 214950000,
+    "maintenance": 17913
+  },
+
+  "powerRequirements": {
+    "basic": 80,
+    "manoeuvre": 200,
+    "jump": 120,
+    "sensors": 4,
+    "weapons": 28,
+    "other": 5,
+    "total": 437
+  },
+
+  "notes": "The Patrol Corvette is a fast military vessel designed for system defense and patrol duties. With Jump-3 capability and Thrust-5 manoeuvre drive, it can quickly respond to threats. Heavy armour (rating 8) and multiple weapon turrets provide excellent combat capability. The ship's boat allows for boarding operations. Typical loadout includes: triple pulse laser turret for point defense, missile rack for strike capability, particle beam for heavy firepower, and beam laser turret for versatility. Fuel processor and scoops enable extended patrol operations. Medical bay and brig support law enforcement operations."
+}
