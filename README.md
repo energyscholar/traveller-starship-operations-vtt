@@ -2,7 +2,7 @@
 
 A web-based Virtual Tabletop (VTT) for **Mongoose Traveller 2nd Edition** space combat, built with TDD principles.
 
-**Status:** ✅ **Stage 9 Complete - Movement & Advanced Initiative!**
+**Status:** ✅ **Stage 12.5 Complete - Ship Templates & Validation Infrastructure**
 
 ---
 
@@ -12,10 +12,14 @@ A web-based Virtual Tabletop (VTT) for **Mongoose Traveller 2nd Edition** space 
 # Install dependencies
 npm install
 
-# Run all tests (328 tests, 100% passing)
+# Run all tests (161 tests, 100% passing across 16 suites)
 npm test
 
-# Start server for multiplayer mode
+# View ship templates (static viewer)
+open public/ship-templates.html
+# Or: python3 -m http.server 8000, then http://localhost:8000/public/ship-templates.html
+
+# Start server for multiplayer mode (Stages 8-9 combat)
 npm start
 # Then open http://localhost:3000 in TWO browser tabs
 ```
@@ -63,25 +67,58 @@ The easiest way to test the game is to:
 
 ## 📊 Project Status
 
-**Current Stage:** 9/16 Complete (56%) ✅
-**Space Combat:** ✅ **FULLY PLAYABLE**
+**Current Stage:** 12.5/16 Complete (78%) ✅
+**Ship Templates:** ✅ **7 ships with full validation**
 **Test Coverage:** 100% (all critical paths)
-**Tests Passing:** 328/328 across 19 suites ✅
+**Tests Passing:** 161/161 across 16 suites ✅
 
-| Component | Status | LOC | Tests |
-|-----------|--------|-----|-------|
-| Personal Combat (Stages 1-7) | ✅ Complete | 1,200 | 99 (100%) |
-| Space Combat (Stage 8) | ✅ **COMPLETE** | 1,025 | 159 (100%) |
-| Movement & Advanced Initiative (Stage 9) | ✅ **COMPLETE** | 385 | 53 (100%) |
-| Enhanced Combat (Stages 10-12) | 📋 Planned | ~3,300 | ~1,760 |
-| Production (Stages 13-15) | 📋 Planned | ~1,800 | ~800 |
-| Advanced (Stage 16+) | 📋 Planned | ~1,500+ | ~600+ |
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Combat Engine (Stages 1-9) | ✅ Complete | Core 2D6 mechanics, space combat, movement, initiative |
+| Ship Templates V2 (Stage 12.5) | ✅ **COMPLETE** | 7 ship templates, validation modules, viewer |
+| Enhanced Combat (Stages 10-12) | 🔨 **IN PROGRESS** | Critical effects, missiles, boarding actions |
+| Production (Stages 13-15) | 📋 Planned | Performance testing, VTT integration, deployment |
+| Advanced (Stage 16+) | 📋 Planned | Ship builder, fleet battles, campaign mode |
 
-**Total:** 2,610 LOC implementation, 2,215 LOC tests (1.18:1 ratio)
+**Recent Work (Autonomous Session 3A):**
+- ✅ Complete High Guard 2022 reference tables extracted
+- ✅ Ship/battle/character export JSON schemas created
+- ✅ Data source quality guidelines documented
+- ✅ Comprehensive autonomous development playbook updated
+- 🔨 IN PROGRESS: Test expansion, CTO mentoring analysis
 
 ---
 
 ## ✨ Features
+
+### ✅ Ship Templates & Validation (Stage 12.5)
+
+**Ship Template System:**
+- 7 complete ship designs (Scout, Free Trader, Far Trader, Patrol Corvette, Mercenary Cruiser, Subsidised Liner, Safari Ship)
+- Full V2 JSON schema with all components (hull, drives, power, weapons, armor, sensors, etc.)
+- Interactive HTML viewer with tactical color coding
+- Power validation (requirement vs. availability)
+- Component breakdown with tonnage and cost tracking
+
+**Validation Modules:**
+- `lib/ship-manoeuvre-drive.js` - Thrust performance (TL requirements, power, tonnage)
+- `lib/ship-jump-drive.js` - Jump capability validation
+- `lib/ship-power-plant.js` - Power plant types and output
+- `lib/ship-weapons.js` - Turret types, weapon specs, hardpoints
+- `lib/ship-armour.js` - Armor types with hull size multipliers
+- `lib/ship-sensors.js` - Sensor grades and ranges
+- `lib/ship-bridge.js` - Bridge types by tonnage
+- `lib/ship-staterooms.js` - Crew requirements
+
+**Export Schemas:**
+- Ship instance export (battle damage, crew status, ammunition)
+- Battle state export (multi-ship scenarios, environment, turn sequence)
+- Character export (full Traveller 2E characters with skills, careers, equipment)
+
+**Reference Documentation:**
+- Complete High Guard 2022 tables (drives, weapons, armor, computers 1-50, sensors)
+- Data source quality guidelines (official vs. online sources)
+- Ship design formulas and calculations
 
 ### ✅ Implemented Space Combat (Stage 8)
 
@@ -432,6 +469,6 @@ This software is **NOT** endorsed by or affiliated with Mongoose Publishing or F
 
 ---
 
-**Last Updated:** 2025-11-08
-**Version:** 0.8.0 (Stage 8 complete)
-**Next Milestone:** Stage 9 - Movement & Advanced Initiative (~6 hours)
+**Last Updated:** 2025-11-13
+**Version:** 0.12.5 (Stage 12.5 complete - Ship Templates & Validation)
+**Next Milestone:** Autonomous Session 3A completion → Stage 13 (Performance & Scale)
