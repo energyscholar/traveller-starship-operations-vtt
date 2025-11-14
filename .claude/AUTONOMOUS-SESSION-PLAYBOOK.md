@@ -601,6 +601,204 @@ TOTAL: 136/140 = 97% → SAFE ✅
 - ✅ Flag for user decision
 - ✅ Move to next safe item
 
+---
+
+### 🚨 RECOGNIZING BUDDING PROBLEMS (META-PATTERN TRAINING)
+
+**Purpose:** Train AI to recognize early warning signs BEFORE they become major issues.
+
+**Key Insight:** The small craft rabbithole showed a perfect pattern - validation failures were an early warning sign of systemic source quality issues. Deferring at 1.5h prevented 6h+ waste.
+
+**Early Warning Signs → Defer Immediately:**
+
+#### 1. Validation Failures (Multiple)
+```
+Pattern: 2+ validation errors on first attempt
+Warning: Likely systemic issue with approach/data
+Action: DEFER - investigate requirements, don't guess fixes
+Example: Small craft had 3 ships × 5 errors each = systemic
+```
+
+#### 2. Uncertainty About Source Material
+```
+Pattern: "I think this is correct" or "Based on online source..."
+Warning: Lacking authoritative reference
+Action: DEFER - identify official source needed
+Example: Traveller Wiki vs. Official Mongoose PDF
+```
+
+#### 3. Making Assumptions to Proceed
+```
+Pattern: "I'll assume X" or "Probably Y is correct"
+Warning: Building on uncertain foundation
+Action: DEFER - document assumption, flag for user
+Example: Assuming thrust TL requirements without verification
+```
+
+#### 4. Integration Points Unclear
+```
+Pattern: "Not sure how this connects to..." or "Will figure out later..."
+Warning: Architectural ambiguity
+Action: DEFER - clarify integration before building
+Example: New component doesn't fit existing validation pattern
+```
+
+#### 5. Expanding Scope Mid-Work
+```
+Pattern: "Also need to add..." or "Should probably include..."
+Warning: Scope creep in progress
+Action: DEFER expansion - complete original scope first
+Example: Ship templates → also need weapons → also need armor types...
+```
+
+#### 6. Repeated Small Fixes Not Working
+```
+Pattern: Fix attempt 1 → new error → Fix attempt 2 → new error...
+Warning: Wrong approach, not just wrong implementation
+Action: DEFER - step back, reassess approach
+Example: Fixing validation errors one-by-one vs. checking source quality
+```
+
+#### 7. Test Failures Cascading
+```
+Pattern: Fix one test → breaks two others → fix those → breaks three more...
+Warning: Architectural issue, not implementation bug
+Action: DEFER - likely need design change
+Example: Changing data structure breaks downstream code
+```
+
+#### 8. Documentation Ambiguous
+```
+Pattern: "Could mean either X or Y" or "Not clear from docs..."
+Warning: Requirements not well-defined
+Action: DEFER - get clarification before implementing
+Example: Rule interpretation with multiple valid readings
+```
+
+#### 9. Time Estimate 2× Over
+```
+Pattern: Estimated 1h, already at 2h, not halfway done
+Warning: Hidden complexity or wrong approach
+Action: DEFER - reassess complexity, may need different strategy
+Example: "Quick schema" becomes complex nested structure
+```
+
+#### 10. "This Should Be Easy But..."
+```
+Pattern: Expected trivial, encountering resistance
+Warning: Missing context or prerequisites
+Action: DEFER - investigate why it's not easy
+Example: "Just add a field" but data model doesn't support it
+```
+
+---
+
+### 🎯 DEFERRAL DECISION TREE
+
+```
+ENCOUNTERING ISSUE
+    ↓
+Is this a QUICK fix (< 15 min)?
+    ↓ YES                    ↓ NO
+Fix immediately          Is root cause clear?
+    ↓                        ↓ YES              ↓ NO
+Continue               Fix systematically    DEFER IMMEDIATELY
+                              ↓
+                       Will fix take > 1h?
+                            ↓ YES      ↓ NO
+                       DEFER          Fix + test
+                                          ↓
+                                    More issues?
+                                     ↓ YES  ↓ NO
+                              DEFER (pattern)  Continue
+```
+
+**Golden Rule:** **At first sign of "this is harder than expected" → DEFER**
+
+---
+
+### 📋 DEFERRAL TEMPLATE (STANDARD FORMAT)
+
+```markdown
+## DEFERRED: [Feature/Task Name]
+
+**Time Invested:** [X hours before deferral]
+
+**Warning Signs Detected:**
+- [Early warning sign 1]
+- [Early warning sign 2]
+- [Trigger that caused deferral]
+
+**Root Cause Analysis:**
+[Why this is harder than expected]
+
+**Risk if Continued:**
+[What would have happened if pushed through]
+
+**De-Risk Requirements:**
+- [Requirement 1 - be specific]
+- [Requirement 2]
+- [Alternative approaches if requirements can't be met]
+
+**Estimated Time if De-Risked:** [X hours]
+
+**Priority:** [High/Medium/Low]
+
+**User Decision Needed:** [Yes/No - what specifically?]
+
+**Saved Time by Deferring:** [Estimated hours saved]
+```
+
+---
+
+### 🧠 META-PATTERN RECOGNITION TRAINING
+
+**After EVERY deferral, document:**
+
+1. **What was the earliest warning sign?**
+   - When did I first feel uncertainty?
+   - What should have triggered deferral sooner?
+
+2. **What pattern does this match?**
+   - Is this validation failures (pattern #1)?
+   - Is this assumptions (pattern #3)?
+   - New pattern to add to list?
+
+3. **How much time saved by deferring?**
+   - Time invested before deferral: X
+   - Estimated time if continued: Y
+   - Savings: Y - X
+
+4. **Lesson learned:**
+   - Will recognize this pattern faster next time
+   - Add to early warning checklist
+
+**Goal:** Build pattern library so deferral happens at 15min, not 1.5h
+
+---
+
+### 📊 DEFERRAL METRICS (Track These)
+
+**Per Session:**
+- Number of deferrals: [count]
+- Average time before deferral: [X min]
+- Total time saved by deferring: [Y hours]
+- Pattern distribution: [which patterns triggered?]
+
+**Target Metrics:**
+- Deferral decision time: < 30 minutes (getting faster)
+- Time saved per deferral: > 2 hours (high value)
+- False deferrals (should have continued): < 10%
+
+**Success Indicator:** Deferring earlier and more confidently over time
+
+---
+
+**Added:** 2025-11-13 (Session 3A - Hour 6)
+**Authority:** User directive - "train YOU to defer as soon as you recognize the meta pattern"
+**Purpose:** Prevent rabbithole diving, save time, maintain focus on safe work
+**Review:** After every session - did we defer fast enough?
+
 **Example Deferral Note:**
 ```markdown
 ## DEFERRED: Small Craft Template Creation
