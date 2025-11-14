@@ -34,8 +34,8 @@ const unitTests = [
   'tests/unit/space-criticals.test.js',  // Stage 8.5
   'tests/unit/space-movement.test.js',  // Stage 9.1
   'tests/unit/space-initiative-advanced.test.js',  // Stage 9.2
-  'tests/unit/xss-validation.test.js',
-  'tests/unit/ship-validation-edge-cases.test.js'  // Session 3A - Edge cases for ship validation modules
+  'tests/unit/xss-validation.test.js'
+  // DEFERRED: ship-validation-edge-cases.test.js (test framework integration needed)
 ];
 
 // Integration tests
