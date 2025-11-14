@@ -322,24 +322,66 @@ Strategic research and business development planning for Mongoose Publishing lic
 
 ---
 
+### 8. TIMESHEET-BRUCE Maintenance
+**Priority:** LOW
+**Estimate:** 0.5-1h per session (max 2% of AB budget ongoing)
+**Deferred From:** Session 6
+**Status:** 🟡 Deferred
+
+**Description:**
+Maintain ongoing timesheet tracking for Bruce's professional work hours:
+- Update timesheet with session hours
+- Track billable vs non-billable time
+- Document project progress for timesheet entries
+- Maintain accurate time records for portfolio and client work
+- Include session summaries in timesheet notes
+
+**Deliverables:**
+- Regular timesheet updates (after each session)
+- Accurate hour tracking
+- Session summaries for time entries
+- Professional time records for portfolio
+
+**ROI Estimate:**
+- Time saved: 0h (administrative task)
+- Professional value: Medium (accurate time tracking)
+- Client value: High (transparent billing records)
+- Portfolio value: Medium (demonstrates project management)
+
+**Next Steps:**
+- Create timesheet update protocol
+- Define session-to-timesheet mapping
+- Document time entry format
+- Automate where possible
+
+**Pull Condition:** After each session completion OR overhead < 20%
+
+**Budget Discipline:**
+- Maximum: 2% of AB budget per session
+- Target: 0.5-1h per 8-10h session
+- Frequency: After each session
+- Document type: Living (ongoing maintenance)
+
+---
+
 ## 📊 POOL STATISTICS
 
 ### By Priority
 - **CRITICAL:** 0 tasks
 - **HIGH:** 2 tasks (Stage Optimization, Small Craft)
 - **MEDIUM:** 3 tasks (Financialization, CTO Article, Mongoose Licensing)
-- **LOW:** 2 tasks (Initiative Research, Best Practices)
+- **LOW:** 3 tasks (Initiative Research, Best Practices, TIMESHEET-BRUCE)
 
 ### By Status
 - 🔴 **BLOCKED:** 1 task (Small Craft Templates)
-- 🟡 **DEFERRED:** 6 tasks
+- 🟡 **DEFERRED:** 7 tasks
 - 🟢 **READY:** 0 tasks (none pulled yet)
 
 ### Estimated Total Work
-- **Total Hours:** 19-27h (including Mongoose licensing)
+- **Total Hours:** 19-27h (one-time) + 0.5-1h per session (ongoing TIMESHEET-BRUCE)
 - **Per Session (10% max):** 0.8-1h per 8h session
 - **Sessions Required:** ~20-27 sessions to complete pool (at 10% per session)
-- **Mongoose Licensing:** Max 1% ongoing (0.08h per 8h session)
+- **Ongoing Maintenance:** Max 3% per session (1% Mongoose + 2% TIMESHEET-BRUCE)
 
 ---
 
