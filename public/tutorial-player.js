@@ -92,30 +92,10 @@ class TutorialPlayer {
       }
     }
 
-    // Execute action if specified (automated step)
-    if (step.action) {
-      const delay = step.action.delay || 2000;
+    // NOTE: Actions removed - tutorial now requires manual interaction
+    // User must click buttons themselves and then click "Continue"
 
-      setTimeout(async () => {
-        if (this.isPaused) return;
-
-        await this.executeAction(step.action);
-
-        // Wait for specified condition
-        if (step.wait) {
-          await this.waitFor(step.wait);
-        }
-
-        // Hide tooltip
-        this.tooltip.hide();
-
-        // Auto-advance to next step
-        await new Promise(resolve => setTimeout(resolve, 800));
-        if (!this.isPaused) {
-          await this.playStep(this.currentStep + 1);
-        }
-      }, delay);
-    }
+    // No auto-advance - wait for user to click Continue button
   }
 
   /**

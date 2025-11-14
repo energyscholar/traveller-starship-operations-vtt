@@ -26,29 +26,24 @@ const TUTORIAL_SCENARIOS = {
 
 Your crew is green, but they're ready for their first fight.
 
-Let's select your ship and prepare for combat...`,
+Let's select your ship and prepare for combat...
+
+👉 When ready, click "Continue" below to proceed.`,
         pointer: {
           target: '[data-test-id="btn-space-battle"]',
           duration: 800
         },
         tooltip: {
           element: '[data-test-id="btn-space-battle"]',
-          text: `Click here to enter Space Battle mode`
+          text: `Click this button to enter Space Battle mode when you're ready`
         },
-        action: {
-          type: 'click',
-          target: '[data-test-id="btn-space-battle"]',
-          delay: 3000
-        },
+        action: null,
         chatMessage: {
           sender: '🎓 Instructor',
           text: 'Welcome to your first space combat tutorial!',
           delay: 500
         },
-        wait: {
-          selector: '[data-test-id="ship-option-scout"]',
-          timeout: 2000
-        }
+        manualAction: 'Click the "Space Battle (Multiplayer)" button to continue'
       },
 
       {
@@ -61,7 +56,9 @@ The Type-S Scout has:
 • Hull: 40 points
 • Armor: 4 points
 • Thrust: 2G acceleration
-• Weapons: Pulse Laser, Sandcaster, Missiles`,
+• Weapons: Pulse Laser, Sandcaster, Missiles
+
+👉 Click the Scout ship card, then click "Continue" below.`,
         pointer: {
           target: '[data-test-id="ship-option-scout"]',
           duration: 600
@@ -71,16 +68,13 @@ The Type-S Scout has:
           text: `<strong>Type-S Scout/Courier</strong><br>
 Fast and deadly. Perfect for learning!`
         },
-        action: {
-          type: 'click',
-          target: '[data-test-id="ship-option-scout"]',
-          delay: 4000
-        },
+        action: null,
         chatMessage: {
           sender: '🎓 Instructor',
           text: 'The Scout is the perfect ship for learning the ropes.',
           delay: 1000
-        }
+        },
+        manualAction: 'Select the Scout ship'
       },
 
       {
@@ -91,7 +85,9 @@ Fast and deadly. Perfect for learning!`
 
 Let's go with SHORT range - close enough to use our pulse laser effectively, but not too close for the enemy's beam weapons.
 
-At Short range, our pulse laser gets +0 DM. Perfect for beginners!`,
+At Short range, our pulse laser gets +0 DM. Perfect for beginners!
+
+👉 Select "Short" from the dropdown, then click "Continue".`,
         pointer: {
           target: '[data-test-id="range-select"]',
           duration: 600
@@ -101,17 +97,13 @@ At Short range, our pulse laser gets +0 DM. Perfect for beginners!`,
           text: `Range affects weapon accuracy and damage.<br>
 Short range: Good for lasers`
         },
-        action: {
-          type: 'select',
-          target: '[data-test-id="range-select"]',
-          value: 'Short',
-          delay: 4000
-        },
+        action: null,
         chatMessage: {
           sender: '🎓 Instructor',
           text: 'Range choice is a key tactical decision in every battle.',
           delay: 1500
-        }
+        },
+        manualAction: 'Select "Short" range from the dropdown'
       },
 
       {
@@ -124,7 +116,9 @@ You've selected the Scout and set your starting range to Short.
 
 Now click READY to enter combat. Your opponent (the AI) will automatically select a ship and join you in battle.
 
-This is where the real fight begins!`,
+This is where the real fight begins!
+
+👉 Click the "Ready" button, then click "Continue".`,
         pointer: {
           target: '[data-test-id="ready-button"]',
           duration: 600
@@ -133,20 +127,13 @@ This is where the real fight begins!`,
           element: '[data-test-id="ready-button"]',
           text: `Confirms your ship selection and enters combat`
         },
-        action: {
-          type: 'click',
-          target: '[data-test-id="ready-button"]',
-          delay: 5000
-        },
+        action: null,
         chatMessage: {
           sender: '🎓 Instructor',
           text: 'Time to put your training to the test!',
           delay: 2000
         },
-        wait: {
-          selector: '[data-test-id="fire-button"]',
-          timeout: 3000
-        }
+        manualAction: 'Click the "Ready" button to enter combat'
       },
 
       {
@@ -164,7 +151,9 @@ Here you can see:
 
 The FIRE button fires your currently selected weapon. The END TURN button passes control to your opponent.
 
-Note: In solo mode against AI, the fire button may be disabled. This tutorial demonstrates the UI and controls.`,
+Note: In solo mode against AI, the fire button may be disabled. This tutorial demonstrates the UI and controls.
+
+👉 Take your time to review the interface. Click "Continue" when ready.`,
         pointer: {
           target: '[data-test-id="fire-button"]',
           duration: 800
@@ -175,12 +164,13 @@ Note: In solo mode against AI, the fire button may be disabled. This tutorial de
 Fires your selected weapon at the enemy.
 Each weapon can only fire once per turn.`
         },
-        action: null, // No automatic action - just show UI
+        action: null,
         chatMessage: {
           sender: '🎓 Instructor',
           text: 'This is your command center. Study it carefully!',
           delay: 1000
-        }
+        },
+        manualAction: 'Review the Combat HUD interface'
       },
 
       {
@@ -198,7 +188,9 @@ You've completed the "First Blood" tutorial. You've learned:
 
 The actual combat mechanics (firing, damage, turns) work best in multiplayer mode with two human players or in automated test scenarios.
 
-Ready for more? Try exploring the ship templates or start a real battle!`,
+Ready for more? Try exploring the ship templates or start a real battle!
+
+👉 Click "Done" to exit the tutorial.`,
         pointer: null,
         tooltip: null,
         action: null,
@@ -206,7 +198,8 @@ Ready for more? Try exploring the ship templates or start a real battle!`,
           sender: '🎉 Crew',
           text: 'Well done, Captain! Ready for your first real battle!',
           delay: 500
-        }
+        },
+        manualAction: 'Tutorial complete!'
       }
     ]
   },
