@@ -50,8 +50,37 @@ class AnimatedPointer {
     this.pointer.style.left = `${x}px`;
     this.pointer.style.top = `${y}px`;
 
+    // Trigger native mouseover event on the target element
+    this.triggerMouseover(element);
+
     // Wait for animation
     return new Promise(resolve => setTimeout(resolve, duration));
+  }
+
+  /**
+   * Trigger native mouseover event on an element
+   * @param {HTMLElement} element - Element to trigger mouseover on
+   */
+  triggerMouseover(element) {
+    if (!element) return;
+
+    // Create and dispatch mouseover event
+    const mouseoverEvent = new MouseEvent('mouseover', {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    });
+
+    element.dispatchEvent(mouseoverEvent);
+
+    // Also trigger mouseenter for good measure
+    const mouseenterEvent = new MouseEvent('mouseenter', {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    });
+
+    element.dispatchEvent(mouseenterEvent);
   }
 
   /**

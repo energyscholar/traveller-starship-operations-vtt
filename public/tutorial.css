@@ -8,39 +8,41 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 9998;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   pointer-events: none;
+  display: none;
 }
 
 .tutorial-modal-backdrop.visible {
   opacity: 1;
-  pointer-events: all;
+  pointer-events: none; /* Changed: backdrop should NOT block interactions */
+  display: block;
 }
 
 .tutorial-modal {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  width: 90%;
-  max-width: 600px;
+  top: 20px;
+  right: 20px;
+  width: 400px;
+  max-width: calc(100vw - 40px);
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border: 2px solid #667eea;
   border-radius: 12px;
-  padding: 30px;
+  padding: 20px;
   z-index: 9999;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
   opacity: 0;
+  transform: translateX(20px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 
 .tutorial-modal.visible {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  opacity: 0.95;
+  transform: translateX(0);
   pointer-events: all;
 }
 
