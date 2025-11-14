@@ -1,0 +1,280 @@
+/* Ship Templates Page - Tactical Color Scheme */
+
+/* Tactical color scheme */
+.ship-templates-page {
+  --color-valid: #4ade80;    /* Green */
+  --color-warning: #fbbf24;  /* Amber */
+  --color-error: #f87171;    /* Red */
+  --color-info: #60a5fa;     /* Blue */
+  --color-bg-dark: #1a1a2e;
+  --color-bg-card: #2a2a3e;
+  --color-border: #4a4a5e;
+  --color-text: #e5e7eb;
+  --color-text-dim: #9ca3af;
+}
+
+/* Loading State */
+.loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text);
+}
+
+.loading-spinner {
+  border: 4px solid var(--color-border);
+  border-top: 4px solid var(--color-info);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-state p {
+  font-size: 1.1em;
+  color: var(--color-text-dim);
+}
+
+/* Error State */
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text);
+}
+
+.error-state.hidden {
+  display: none;
+}
+
+.error-icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+
+.error-state h3 {
+  color: var(--color-error);
+  margin-bottom: 10px;
+}
+
+.error-state p {
+  color: var(--color-text-dim);
+  margin-bottom: 20px;
+}
+
+/* Main Container */
+#templates-container {
+  margin-top: 20px;
+}
+
+#templates-container.hidden {
+  display: none;
+}
+
+/* Table Section */
+#template-table {
+  margin-bottom: 30px;
+}
+
+#template-table h2 {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+  color: var(--color-info);
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 10px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Table Styling */
+#ships-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95em;
+}
+
+#ships-table th {
+  background-color: var(--color-bg-card);
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 2px solid var(--color-border);
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  font-size: 0.85em;
+  letter-spacing: 0.5px;
+}
+
+#ships-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+#ships-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: transparent;
+}
+
+#ships-table tbody tr:hover {
+  background-color: var(--color-bg-card);
+}
+
+#ships-table tbody tr.selected {
+  background-color: #3a3a5e;
+  border-left: 4px solid var(--color-info);
+}
+
+/* Status badges */
+.status-valid {
+  color: var(--color-valid);
+  font-weight: 600;
+}
+
+.status-warning {
+  color: var(--color-warning);
+  font-weight: 600;
+}
+
+.status-error {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+/* Detail View */
+#ship-details {
+  margin: 30px 0;
+  padding: 30px;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#ship-details.hidden {
+  display: none;
+}
+
+#ship-details h2 {
+  color: var(--color-info);
+  margin-bottom: 15px;
+  font-size: 1.4em;
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 10px;
+}
+
+#ship-details h3 {
+  color: var(--color-text);
+  margin-top: 25px;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#ship-details p {
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+/* Component Line Grid */
+.component-line {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1.2fr 1fr;
+  padding: 6px 0;
+  font-size: 0.95em;
+  color: var(--color-text);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.component-line:last-child {
+  border-bottom: none;
+}
+
+.component-line span:first-child {
+  font-weight: 500;
+}
+
+.component-line span:not(:first-child) {
+  color: var(--color-text-dim);
+  text-align: right;
+}
+
+/* Validation Summary */
+.validation-summary {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-left: 4px solid var(--color-warning);
+  border-radius: 4px;
+}
+
+.validation-summary.valid {
+  border-left-color: var(--color-valid);
+}
+
+.validation-summary.error {
+  border-left-color: var(--color-error);
+}
+
+.validation-summary h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1em;
+  border-bottom: none;
+  color: var(--color-text);
+}
+
+.validation-summary p {
+  margin: 8px 0;
+  font-size: 0.95em;
+}
+
+.validation-summary strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  #ships-table {
+    font-size: 0.85em;
+  }
+
+  #ships-table th,
+  #ships-table td {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-wrapper {
+    overflow-x: scroll;
+  }
+
+  .component-line {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    font-size: 0.85em;
+  }
+
+  #ship-details {
+    padding: 20px;
+  }
+}
+
+/* Utility */
+.hidden {
+  display: none !important;
+}

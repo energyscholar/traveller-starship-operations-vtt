@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ship Templates - Traveller Combat VTT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ship-templates.css">
+</head>
+<body class="ship-templates-page">
+  <div class="container">
+    <div class="header">
+      <h1>📋 Ship Templates</h1>
+      <div class="stage">OFFICIAL HIGH GUARD TEMPLATES</div>
+      <button id="back-to-menu" class="action-button" style="margin-top: 10px;" onclick="window.location.href='index.html'">← Back to Main Menu</button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-indicator" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading ship templates...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-display" class="error-state hidden">
+      <div class="error-icon">⚠️</div>
+      <h3>Failed to Load Templates</h3>
+      <p id="error-message"></p>
+      <button class="action-button" onclick="location.reload()">Retry</button>
+    </div>
+
+    <!-- Main Content -->
+    <main id="templates-container" class="hidden">
+      <section id="template-table">
+        <h2>Official Templates (Mongoose Traveller 2E High Guard 2022)</h2>
+        <div class="table-wrapper">
+          <table id="ships-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Tonnage</th>
+                <th>Jump</th>
+                <th>Manoeuvre</th>
+                <th>TL</th>
+                <th>Cost</th>
+                <th>Role</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="ships-tbody">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="ship-details" class="hidden">
+        <!-- Populated when user clicks row -->
+      </section>
+    </main>
+
+    <!-- Version Display -->
+    <div style="text-align: center; margin-top: 20px; padding: 15px; font-size: 0.85em; color: #888; border-top: 1px solid #333;">
+      <div style="margin-bottom: 5px;">Traveller Combat VTT</div>
+      <div><strong>Stage 12.1</strong> - Ship Template Viewer (Minimal Spike)</div>
+    </div>
+  </div>
+
+  <script src="ship-templates.js"></script>
+</body>
+</html>
