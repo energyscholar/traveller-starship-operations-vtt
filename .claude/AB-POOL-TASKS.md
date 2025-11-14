@@ -1,7 +1,7 @@
 # Autonomous Build Pool - Deferred Tasks
 **Purpose:** Track low-priority overhead tasks deferred from autonomous sessions
-**Last Updated:** 2025-11-13
-**Total Tasks:** 6 (3 from Session 4, 3 historical)
+**Last Updated:** 2025-11-14
+**Total Tasks:** 7 (3 from Session 4, 3 historical, 1 from Session 5)
 
 ---
 
@@ -246,23 +246,100 @@ Scan all code for best practices and improvement opportunities:
 
 ---
 
+### 7. Mongoose Publishing Licensing Strategy Research
+**Priority:** MEDIUM
+**Estimate:** 4-6h (living document, max 1% of AB budget ongoing)
+**Deferred From:** Session 5
+**Status:** 🟡 Deferred
+
+**Description:**
+Strategic research and business development planning for Mongoose Publishing licensing partnership:
+- Corporate structure analysis (ownership, org chart, key executives)
+- Behavioural patterns (licensing deals, fan community engagement, past collaborations)
+- Financial assessment (estimated balance sheet, business plan compatibility)
+- Strategic approach recommendations (when to approach, how to pitch, what to offer)
+- Low-key introductory pitch (for copyright notice, passive discovery)
+- Ongoing monitoring (quarterly updates, 1% budget maintenance)
+
+**Deliverables:**
+- `.claude/MONGOOSE-LICENSING-STRATEGY.md` (living document)
+- Corporate structure diagram (ownership, decision-makers)
+- Executive team profiles (backgrounds, interests, communication style)
+- Licensing precedents analysis (previous deals, royalty rates)
+- Business plan compatibility assessment
+- Strategic pitch document (phased approach)
+- Low-key introductory pitch (for project README/LICENSE)
+- Quarterly update protocol (1% budget ongoing)
+
+**ROI Estimate:**
+- Time saved: 0h (business development)
+- Revenue potential: Very High (enables monetization via Mongoose partnership)
+- Risk reduction: High (proper licensing approach, legal clarity)
+- Strategic value: Very High (differentiates from unlicensed fan projects)
+
+**Research Areas:**
+1. **Corporate Intelligence:**
+   - Mongoose Publishing ownership structure
+   - Key decision-makers (names, roles, backgrounds)
+   - Organisational chart (licensing, marketing, IP management teams)
+   - Company culture and values
+2. **Financial Analysis:**
+   - Estimated revenue (Traveller sales, licensing income)
+   - Business model (book sales, digital, licensing)
+   - Compatibility with this project (VTT market opportunity)
+3. **Licensing Behaviour:**
+   - Past licensing deals (Roll20, Fantasy Grounds, other VTTs)
+   - Royalty rate patterns
+   - Deal structure preferences (upfront vs royalty vs hybrid)
+   - Fan project treatment (C&D history, approved fan content)
+4. **Strategic Approach:**
+   - Best time to approach (project maturity, market timing)
+   - Ideal pitch format (working product vs proposal)
+   - Value proposition (what Mongoose gains)
+   - Risk mitigation (no C&D, professional relationship)
+
+**Strategic Pitch Concepts (Low-Key):**
+- Position as "Traveller community tool" (fan project done professionally)
+- Demonstrate technical competence (portfolio-quality code)
+- Show respect for IP (proper attribution, fair use)
+- Offer partnership opportunity (not asking for permission, offering value)
+- Emphasise win-win (grows Traveller community, drives book sales)
+
+**Next Steps:**
+1. Web research: Mongoose Publishing corporate structure
+2. LinkedIn: Identify key executives and licensing contacts
+3. Review: Existing Mongoose VTT partnerships (Roll20, Foundry terms if public)
+4. Draft: Low-key pitch for project README/LICENSE
+5. Monitor: Quarterly updates on Mongoose activities (new products, partnerships)
+
+**Pull Condition:** Stage 16 approached (monetization phase) OR overhead < 10% for 3+ sessions
+
+**Budget Discipline:**
+- Initial research: 4-6h (one-time)
+- Quarterly updates: 0.5h per quarter (ongoing)
+- Maximum: 1% of AB budget per session
+- Document type: Living (update as new information available)
+
+---
+
 ## 📊 POOL STATISTICS
 
 ### By Priority
 - **CRITICAL:** 0 tasks
 - **HIGH:** 2 tasks (Stage Optimization, Small Craft)
-- **MEDIUM:** 2 tasks (Financialization, CTO Article)
+- **MEDIUM:** 3 tasks (Financialization, CTO Article, Mongoose Licensing)
 - **LOW:** 2 tasks (Initiative Research, Best Practices)
 
 ### By Status
 - 🔴 **BLOCKED:** 1 task (Small Craft Templates)
-- 🟡 **DEFERRED:** 5 tasks
+- 🟡 **DEFERRED:** 6 tasks
 - 🟢 **READY:** 0 tasks (none pulled yet)
 
 ### Estimated Total Work
-- **Total Hours:** 15-21h
+- **Total Hours:** 19-27h (including Mongoose licensing)
 - **Per Session (10% max):** 0.8-1h per 8h session
-- **Sessions Required:** ~15-20 sessions to complete pool (at 10% per session)
+- **Sessions Required:** ~20-27 sessions to complete pool (at 10% per session)
+- **Mongoose Licensing:** Max 1% ongoing (0.08h per 8h session)
 
 ---
 
