@@ -2026,7 +2026,35 @@ app.post('/api/combat', (req, res) => {
   });
 });
 
-// Health check endpoint
+// Health check endpoint (for Docker/k8s liveness probes)
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    version: require('./package.json').version,
+    environment: config.env || process.env.NODE_ENV || 'development'
+  });
+});
+
+// Readiness check endpoint (for Docker/k8s readiness probes)
+app.get('/ready', (req, res) => {
+  // Application is ready if server is listening and key systems initialized
+  const ready = server.listening && typeof gameState !== 'undefined';
+
+  const status = ready ? 200 : 503;
+  res.status(status).json({
+    status: ready ? 'ready' : 'not ready',
+    timestamp: new Date().toISOString(),
+    checks: {
+      serverListening: server.listening,
+      gameStateInitialized: typeof gameState !== 'undefined',
+      socketIOReady: typeof io !== 'undefined'
+    }
+  });
+});
+
+// Status endpoint (legacy - detailed game state for debugging)
 app.get('/status', (req, res) => {
   res.json({
     status: 'online',
