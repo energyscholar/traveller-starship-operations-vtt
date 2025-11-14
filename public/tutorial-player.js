@@ -2,15 +2,16 @@
 // Purpose: Main controller that runs tutorial scenarios
 
 class TutorialPlayer {
-  constructor(scenario) {
+  constructor(scenario, debug = false) {
     this.scenario = scenario;
     this.currentStep = 0;
     this.isPlaying = false;
     this.isPaused = false;
+    this.debug = debug;
 
     // Components
     this.modal = new TutorialModal();
-    this.pointer = new AnimatedPointer();
+    this.pointer = new AnimatedPointer(debug); // Enable debug mode for pointer
     this.tooltip = new TutorialTooltip();
     this.chat = new TutorialChat();
   }
@@ -367,8 +368,9 @@ function closeTutorialMenu() {
 /**
  * Start a tutorial by ID
  * @param {string} tutorialId - Tutorial scenario ID
+ * @param {boolean} debug - Enable debug logging (default: false)
  */
-function startTutorial(tutorialId) {
+function startTutorial(tutorialId, debug = false) {
   const scenario = TUTORIAL_SCENARIOS[tutorialId];
 
   if (!scenario) {
@@ -376,7 +378,16 @@ function startTutorial(tutorialId) {
     return;
   }
 
+  // Check URL parameters for debug mode
+  const urlParams = new URLSearchParams(window.location.search);
+  const debugMode = debug || urlParams.has('tutorial_debug');
+
   // Create and start tutorial player
-  window.activeTutorial = new TutorialPlayer(scenario);
+  window.activeTutorial = new TutorialPlayer(scenario, debugMode);
+
+  if (debugMode) {
+    console.log('[Tutorial] Debug mode enabled. Add ?tutorial_debug to URL to enable.');
+  }
+
   window.activeTutorial.start();
 }

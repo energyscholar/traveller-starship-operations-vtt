@@ -28,7 +28,8 @@ Your crew is green, but they're ready for their first fight.
 
 Let's select your ship and prepare for combat...
 
-👉 When ready, click "Continue" below to proceed.`,
+👉 STEP 1: Click "Space Battle (Multiplayer)" button below
+👉 STEP 2: Then click "Continue" in this tutorial panel`,
         pointer: {
           target: '[data-test-id="btn-space-battle"]',
           duration: 800

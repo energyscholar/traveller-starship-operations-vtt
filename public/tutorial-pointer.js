@@ -2,9 +2,19 @@
 // Purpose: Visual cursor that shows where tutorial is "clicking"
 
 class AnimatedPointer {
-  constructor() {
+  constructor(debug = false) {
     this.pointer = null;
     this.currentTarget = null;
+    this.debug = debug;
+  }
+
+  /**
+   * Log debug information
+   */
+  log(...args) {
+    if (this.debug) {
+      console.log('[TutorialPointer]', ...args);
+    }
   }
 
   /**
@@ -33,6 +43,9 @@ class AnimatedPointer {
 
     if (!element) {
       console.warn('Tutorial pointer target not found:', target);
+      this.log('Target not found:', target);
+      // Hide pointer if target doesn't exist
+      this.hide();
       return;
     }
 
@@ -42,6 +55,24 @@ class AnimatedPointer {
     const rect = element.getBoundingClientRect();
     const x = rect.left + rect.width / 2;
     const y = rect.top + rect.height / 2;
+
+    this.log('Moving to:', {
+      target: typeof target === 'string' ? target : element.tagName,
+      element: element,
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height
+      },
+      pointerPosition: { x, y },
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        scrollX: window.scrollX,
+        scrollY: window.scrollY
+      }
+    });
 
     // Show pointer
     this.pointer.classList.add('visible');
