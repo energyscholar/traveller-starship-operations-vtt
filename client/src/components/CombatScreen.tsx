@@ -1,8 +1,56 @@
+import { useGame } from '../context/GameContext';
+import { useSocket } from '../hooks/useSocket';
+
 export default function CombatScreen() {
+  const { gameState } = useGame();
+  const socket = useSocket();
+
+  const handleFire = () => {
+    if (socket) {
+      socket.emit('space:fire', { turret: 0, weapon: 0 });
+    }
+  };
+
+  const handleEndTurn = () => {
+    if (socket) {
+      socket.emit('space:endTurn');
+    }
+  };
+
   return (
     <div className="combat-screen">
-      <h1>Combat Screen - Coming in Steps 5-6</h1>
-      <p>Placeholder component</p>
+      <h1>⚔️ Space Combat</h1>
+
+      {/* Player Info */}
+      <div style={{marginBottom: '20px'}}>
+        <p>Player: {gameState.playerNumber}</p>
+        <p>Ship: {gameState.playerShip}</p>
+        <p>Mode: {gameState.mode}</p>
+        <p>Turn: {gameState.currentTurn}</p>
+      </div>
+
+      {/* Combat Actions */}
+      <div style={{marginBottom: '20px'}}>
+        <button onClick={handleFire} style={{padding: '10px 20px', marginRight: '10px'}}>
+          🔥 Fire Weapon
+        </button>
+        <button onClick={handleEndTurn} style={{padding: '10px 20px'}}>
+          ⏭️ End Turn
+        </button>
+      </div>
+
+      {/* Combat Log */}
+      <div style={{border: '1px solid #444', padding: '15px', maxHeight: '300px', overflowY: 'auto'}}>
+        <h3>Combat Log</h3>
+        {gameState.combatLog.map((entry, idx) => (
+          <div key={idx} style={{
+            padding: '5px',
+            color: entry.type === 'success' ? '#4ade80' : entry.type === 'error' ? '#ef4444' : '#fff'
+          }}>
+            {entry.message}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
