@@ -1,5 +1,5 @@
-import { createContext, useState, useContext, ReactNode } from 'react';
-import { GameState, LogEntry } from '../types/game-state';
+import { createContext, useState, useContext, type ReactNode } from 'react';
+import type { GameState, LogEntry } from '../types/game-state';
 
 interface GameContextType {
   gameState: GameState;

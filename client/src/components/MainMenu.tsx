@@ -4,7 +4,7 @@ import { useGame } from '../context/GameContext';
 
 export default function MainMenu() {
   const navigate = useNavigate();
-  const socket = useSocket();
+  useSocket(); // Initialize socket connection
   const { gameState } = useGame();
 
   const handleSpaceBattle = () => {

@@ -9,7 +9,7 @@ const AVAILABLE_SHIPS = ['Scout Ship', 'Free Trader', 'Patrol Corvette'];
 export default function ShipSelection() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { gameState, updateGameState } = useGame();
+  const { updateGameState } = useGame();
   const socket = useSocket();
 
   const mode = searchParams.get('mode') || 'multiplayer';
