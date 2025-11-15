@@ -1,0 +1,7 @@
+/* Import existing vanilla styles */
+@import './styles.css';
+
+/* React-specific overrides */
+.app-container {
+  min-height: 100vh;
+}

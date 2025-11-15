@@ -1,0 +1,56 @@
+client:log
+combat
+combatError
+combatResult
+connect
+disconnect
+endTurn
+engineerRepair
+gameError
+gameReset
+gameState
+moveError
+moveResult
+moveShip
+player:feedback
+playerJoined
+playerLeft
+public/app.js:1027:        socket.once('combatResult', (data) => {
+public/app.js:871:        socket.once('combatResult', (data) => {
+public/app.js:912:        socket.once('combatResult', (data) => {
+public/app.js:955:        socket.once('combatResult', (data) => {
+public/app.js:993:        socket.once('combatResult', (data) => {
+repairError
+repairResult
+resetGame
+roundStart
+shipStateUpdate
+space:alreadyFired
+space:attacked
+space:attackResult
+space:autoAssigned
+space:combatEnd
+space:combatStart
+space:critical
+space:endTurn
+space:error
+space:fire
+space:launchMissile
+space:missileImpact
+space:missileLaunched
+space:missileMoved
+space:newRound
+space:noAmmo
+space:notYourTurn
+space:opponentReady
+space:playerReady
+space:pointDefense
+space:pointDefenseResult
+space:rangeSelected
+space:sandcasterResult
+space:shipSelected
+space:turnChange
+space:useSandcaster
+startGame
+turnChange
+welcome

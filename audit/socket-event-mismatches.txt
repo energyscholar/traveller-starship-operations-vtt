@@ -1,0 +1,32 @@
+	combatResult
+	connect
+error
+	gameReset
+hello
+	moveResult
+ping
+	playerJoined
+	playerLeft
+pong
+	public/app.js:1027:        socket.once('combatResult', (data) => {
+	public/app.js:871:        socket.once('combatResult', (data) => {
+	public/app.js:912:        socket.once('combatResult', (data) => {
+	public/app.js:955:        socket.once('combatResult', (data) => {
+	public/app.js:993:        socket.once('combatResult', (data) => {
+	repairResult
+	roundStart
+server.js:214:    socket.emit(eventName, data);
+	shipStateUpdate
+	space:attacked
+	space:attackResult
+	space:combatEnd
+	space:combatStart
+	space:critical
+	space:missileImpact
+	space:missileLaunched
+	space:missileMoved
+	space:newRound
+	space:opponentReady
+	space:pointDefenseResult
+	space:turnChange
+	turnChange
