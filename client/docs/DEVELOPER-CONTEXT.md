@@ -11,6 +11,12 @@
 - Learned programming through play (tic-tac-toe games)
 - Solo access when students weren't using terminals
 
+**Early Internet Access (1975):**
+- Keene State College was part of the early ARPAnet/Internet backbone
+- Member of multi-college network system (5-12 colleges)
+- Had internet access from age 6-7 (1975)
+- This predates widespread internet by ~20 years
+
 **CLI Proficiency:**
 - Reads HTML/code fluently and very fast
 - Prefers command-line diagnostics over GUI
