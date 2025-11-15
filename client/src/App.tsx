@@ -1,5 +1,9 @@
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { GameProvider } from './context/GameContext';
+import MainMenu from './components/MainMenu';
+import ShipSelection from './components/ShipSelection';
+import CombatScreen from './components/CombatScreen';
+import Customizer from './components/Customizer';
 import './App.css';
 
 function App() {
@@ -7,9 +11,19 @@ function App() {
     <GameProvider>
       <BrowserRouter>
         <div className="app-container">
-          <h1>🚀 React Migration - Step 2 Complete</h1>
-          <p>Infrastructure ready: GameContext + Socket.IO hook created.</p>
-          <p>Next: Main Menu component (Step 3)</p>
+          <Routes>
+            <Route path="/" element={<MainMenu />} />
+            <Route path="/ship-selection" element={<ShipSelection />} />
+            <Route path="/combat" element={<CombatScreen />} />
+            <Route path="/customizer" element={<Customizer />} />
+            <Route path="*" element={
+              <div style={{ padding: '40px', textAlign: 'center' }}>
+                <h1>Page Not Found</h1>
+                <p>Migration in progress...</p>
+                <a href="/" style={{ color: '#667eea' }}>← Back to Main Menu</a>
+              </div>
+            } />
+          </Routes>
         </div>
       </BrowserRouter>
     </GameProvider>
