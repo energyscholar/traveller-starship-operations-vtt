@@ -1,5 +1,6 @@
 import { useGame } from '../context/GameContext';
 import { useSocket } from '../hooks/useSocket';
+import CombatLog from './CombatLog';
 
 export default function CombatScreen() {
   const { gameState } = useGame();
@@ -39,18 +40,8 @@ export default function CombatScreen() {
         </button>
       </div>
 
-      {/* Combat Log */}
-      <div style={{border: '1px solid #444', padding: '15px', maxHeight: '300px', overflowY: 'auto'}}>
-        <h3>Combat Log</h3>
-        {gameState.combatLog.map((entry, idx) => (
-          <div key={idx} style={{
-            padding: '5px',
-            color: entry.type === 'success' ? '#4ade80' : entry.type === 'error' ? '#ef4444' : '#fff'
-          }}>
-            {entry.message}
-          </div>
-        ))}
-      </div>
+      {/* Combat Log - Enhanced Component */}
+      <CombatLog entries={gameState.combatLog} />
     </div>
   );
 }

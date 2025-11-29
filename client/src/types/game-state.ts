@@ -2,8 +2,10 @@
 
 export interface LogEntry {
   timestamp: number;
-  message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
+  message: string; // Legacy field, maps to 'header' in new component
+  header?: string; // Optional: explicit header (use this or message)
+  details?: string; // Optional: additional details (collapsible)
+  type: 'hit' | 'miss' | 'critical' | 'damage' | 'missile' | 'info' | 'warning' | 'error' | 'success' | 'system';
 }
 
 export interface GameState {
