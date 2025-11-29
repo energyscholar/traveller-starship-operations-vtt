@@ -9,10 +9,10 @@ export default function CombatLog({ entries }: CombatLogProps) {
   const logRef = useRef<HTMLDivElement>(null);
   const [expandedIndexes, setExpandedIndexes] = useState<Set<number>>(new Set());
 
-  // Auto-scroll to bottom when new entries are added
+  // Auto-scroll to top when new entries are added (newest entries are at top)
   useEffect(() => {
     if (logRef.current) {
-      logRef.current.scrollTop = logRef.current.scrollHeight;
+      logRef.current.scrollTop = 0;
     }
   }, [entries]);
 
@@ -80,7 +80,7 @@ export default function CombatLog({ entries }: CombatLogProps) {
         </div>
       )}
 
-      {entries.map((entry, index) => {
+      {[...entries].reverse().map((entry, index) => {
         const isExpanded = expandedIndexes.has(index);
         const hasDetails = entry.details && entry.details.length > 0;
         const headerText = entry.header || entry.message; // Backward compatibility: use header if exists, otherwise message
