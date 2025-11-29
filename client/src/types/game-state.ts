@@ -26,8 +26,14 @@ export interface GameState {
 
   // Combat
   combat: any | null; // Will be typed more specifically later
-  currentTurn: 'player1' | 'player2' | null;
+  currentTurn: 'player1' | 'player2' | 'scout' | 'corsair' | null;
+  currentRound: number | null;
   combatLog: LogEntry[];
+
+  // Players
+  assignments?: any; // Ship assignments
+  totalPlayers?: number; // Total connected players
+  initiative?: any; // Initiative data
 
   // Range
   selectedRange: string | null;

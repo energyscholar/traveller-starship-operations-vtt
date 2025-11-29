@@ -39,6 +39,7 @@ const initialGameState: GameState = {
   // Combat
   combat: null,
   currentTurn: null,
+  currentRound: null,
   combatLog: [],
 
   // Range
