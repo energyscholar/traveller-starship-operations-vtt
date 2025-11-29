@@ -44,6 +44,12 @@ const initialGameState: GameState = {
 
   // Range
   selectedRange: null,
+
+  // Hex Grid (default positions from vanilla app)
+  shipPositions: {
+    scout: { q: 2, r: 2 },
+    corsair: { q: 7, r: 7 },
+  },
 };
 
 // Provider component

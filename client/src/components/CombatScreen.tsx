@@ -1,6 +1,8 @@
 import { useGame } from '../context/GameContext';
 import { useSocket } from '../hooks/useSocket';
 import CombatLog from './CombatLog';
+import HexGrid, { type Ship } from './HexGrid';
+import { hexDistance, rangeFromDistance, type HexPosition } from '../utils/hexGrid';
 
 export default function CombatScreen() {
   const { gameState } = useGame();
@@ -18,6 +20,36 @@ export default function CombatScreen() {
     }
   };
 
+  const handleHexClick = (position: HexPosition) => {
+    if (socket && gameState.playerShip) {
+      console.log(`[GRID] Clicked hex (${position.q}, ${position.r})`);
+      socket.emit('moveShip', {
+        ship: gameState.playerShip,
+        to: position,
+      });
+    }
+  };
+
+  // Calculate range between ships
+  const distance = hexDistance(
+    gameState.shipPositions.scout,
+    gameState.shipPositions.corsair
+  );
+  const range = rangeFromDistance(distance);
+
+  // Prepare ship data for HexGrid component
+  const scoutShip: Ship = {
+    name: 'scout',
+    position: gameState.shipPositions.scout,
+    emoji: '🚀',
+  };
+
+  const corsairShip: Ship = {
+    name: 'corsair',
+    position: gameState.shipPositions.corsair,
+    emoji: '🏴\u200d☠️',
+  };
+
   return (
     <div className="combat-screen">
       <h1>⚔️ Space Combat</h1>
@@ -28,6 +60,16 @@ export default function CombatScreen() {
         <p>Ship: {gameState.playerShip}</p>
         <p>Mode: {gameState.mode}</p>
         <p>Turn: {gameState.currentTurn}</p>
+        <p>Range: {range} ({Math.floor(distance)} hexes)</p>
+      </div>
+
+      {/* Hex Grid */}
+      <div style={{marginBottom: '20px'}}>
+        <HexGrid
+          scout={scoutShip}
+          corsair={corsairShip}
+          onHexClick={handleHexClick}
+        />
       </div>
 
       {/* Combat Actions */}

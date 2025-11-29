@@ -1,5 +1,17 @@
 // Game State Types for React Migration
 
+/** Hex position in offset coordinates */
+export interface HexPosition {
+  q: number;  // Column
+  r: number;  // Row
+}
+
+/** Ship positions on the hex grid */
+export interface ShipPositions {
+  scout: HexPosition;
+  corsair: HexPosition;
+}
+
 export interface LogEntry {
   timestamp: number;
   message: string; // Legacy field, maps to 'header' in new component
@@ -37,4 +49,7 @@ export interface GameState {
 
   // Range
   selectedRange: string | null;
+
+  // Hex Grid
+  shipPositions: ShipPositions;
 }
