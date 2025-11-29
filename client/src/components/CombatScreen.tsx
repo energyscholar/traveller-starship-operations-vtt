@@ -11,14 +11,23 @@ export default function CombatScreen() {
   const { gameState } = useGame();
   const socket = useSocket();
 
+  // Determine turn state for button enabling/disabling
+  const isMyTurn = gameState.currentTurn === gameState.playerShip;
+  const gameStarted = (gameState.currentRound ?? 0) > 0;
+  const hasShip = gameState.playerShip !== null;
+
+  // Button disabled states
+  const fireDisabled = !gameStarted || !isMyTurn || !hasShip;
+  const endTurnDisabled = !gameStarted || !isMyTurn;
+
   const handleFire = () => {
-    if (socket) {
+    if (socket && !fireDisabled) {
       socket.emit('space:fire', { turret: 0, weapon: 0 });
     }
   };
 
   const handleEndTurn = () => {
-    if (socket) {
+    if (socket && !endTurnDisabled) {
       socket.emit('space:endTurn');
     }
   };
@@ -84,10 +93,27 @@ export default function CombatScreen() {
 
       {/* Combat Actions */}
       <div style={{marginBottom: '20px'}}>
-        <button onClick={handleFire} style={{padding: '10px 20px', marginRight: '10px'}}>
+        <button
+          onClick={handleFire}
+          disabled={fireDisabled}
+          style={{
+            padding: '10px 20px',
+            marginRight: '10px',
+            opacity: fireDisabled ? 0.5 : 1,
+            cursor: fireDisabled ? 'not-allowed' : 'pointer',
+          }}
+        >
           🔥 Fire Weapon
         </button>
-        <button onClick={handleEndTurn} style={{padding: '10px 20px'}}>
+        <button
+          onClick={handleEndTurn}
+          disabled={endTurnDisabled}
+          style={{
+            padding: '10px 20px',
+            opacity: endTurnDisabled ? 0.5 : 1,
+            cursor: endTurnDisabled ? 'not-allowed' : 'pointer',
+          }}
+        >
           ⏭️ End Turn
         </button>
       </div>
