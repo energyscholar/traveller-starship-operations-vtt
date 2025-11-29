@@ -35,7 +35,8 @@ const unitTests = [
   'tests/unit/space-movement.test.js',  // Stage 9.1
   'tests/unit/space-initiative-advanced.test.js',  // Stage 9.2
   'tests/unit/xss-validation.test.js',
-  'tests/unit/export-import.test.js'  // Session 4 - Export/import system
+  'tests/unit/export-import.test.js',  // Session 4 - Export/import system
+  'tests/unit/docking.test.js'  // Stage 12.1 - Docking stub
   // DEFERRED: ship-validation-edge-cases.test.js (test framework integration needed)
 ];
 
