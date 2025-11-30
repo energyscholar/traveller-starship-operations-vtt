@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traveller Starship Operations</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Login Screen (GM or Player) -->
+    <div id="login-screen" class="screen active">
+      <div class="login-container">
+        <h1 class="title">Traveller Starship Operations</h1>
+        <p class="subtitle">Virtual Tabletop for Mongoose Traveller 2E</p>
+
+        <div class="login-options">
+          <button id="btn-gm-login" class="btn btn-primary btn-large">
+            GM Login
+          </button>
+          <button id="btn-player-login" class="btn btn-secondary btn-large">
+            Player Login
+          </button>
+        </div>
+
+        <div id="campaign-select" class="hidden">
+          <h2>Select Campaign</h2>
+          <div id="campaign-list" class="campaign-list">
+            <!-- Populated dynamically -->
+          </div>
+          <button id="btn-create-campaign" class="btn btn-success">
+            + Create New Campaign
+          </button>
+          <button id="btn-back-login" class="btn btn-link">Back</button>
+        </div>
+
+        <div id="player-select" class="hidden">
+          <h2>Join Campaign</h2>
+          <div class="form-group">
+            <label for="campaign-code">Campaign Code:</label>
+            <input type="text" id="campaign-code" placeholder="Enter campaign code">
+          </div>
+          <div class="join-options">
+            <button id="btn-join-campaign" class="btn btn-primary">Join as Player</button>
+            <button id="btn-join-guest" class="btn btn-secondary">Join as Guest</button>
+          </div>
+          <p class="guest-info">Guests can take any role with skill 0. GM can override skill level.</p>
+          <button id="btn-back-player" class="btn btn-link">Back</button>
+        </div>
+
+        <div id="guest-name-select" class="hidden">
+          <h2>Guest Login</h2>
+          <div class="form-group">
+            <label for="guest-name">Your Name:</label>
+            <input type="text" id="guest-name" placeholder="Enter your name">
+          </div>
+          <button id="btn-confirm-guest" class="btn btn-primary">Join as Guest</button>
+          <button id="btn-back-guest" class="btn btn-link">Back</button>
+        </div>
+
+        <div id="player-slot-select" class="hidden">
+          <h2>Select Your Slot</h2>
+          <div id="player-slot-list" class="slot-list">
+            <!-- Populated dynamically -->
+          </div>
+          <button id="btn-back-player-slot" class="btn btn-link">Back</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GM Setup Screen -->
+    <div id="gm-setup-screen" class="screen">
+      <header class="header">
+        <h1 id="gm-campaign-name">Campaign Setup</h1>
+        <div class="header-actions">
+          <button id="btn-gm-settings" class="btn btn-icon" title="Settings">⚙</button>
+          <button id="btn-gm-logout" class="btn btn-link">Logout</button>
+        </div>
+      </header>
+
+      <div class="gm-setup-container">
+        <section class="setup-section">
+          <h2>Player Slots</h2>
+          <div id="gm-player-slots" class="player-slots">
+            <!-- Populated dynamically -->
+          </div>
+          <div class="add-slot-form">
+            <input type="text" id="new-slot-name" placeholder="Player name">
+            <button id="btn-add-player-slot" class="btn btn-success">+ Add Slot</button>
+          </div>
+        </section>
+
+        <section class="setup-section">
+          <h2>Ships</h2>
+          <div id="gm-ships-list" class="ships-list">
+            <!-- Populated dynamically -->
+          </div>
+          <button id="btn-add-ship" class="btn btn-success">+ Add Ship</button>
+        </section>
+
+        <section class="setup-section">
+          <h2>Campaign Settings</h2>
+          <div class="form-group">
+            <label>Current Date:</label>
+            <input type="text" id="campaign-date" placeholder="1105-001">
+          </div>
+          <div class="form-group">
+            <label>Current System:</label>
+            <input type="text" id="campaign-system" placeholder="Regina">
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="god-mode-toggle">
+              God Mode (Full Control)
+            </label>
+          </div>
+        </section>
+
+        <div class="setup-actions">
+          <button id="btn-start-session" class="btn btn-primary btn-large">
+            Start Session
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Setup Screen (Character/Role Selection) -->
+    <div id="player-setup-screen" class="screen">
+      <header class="header">
+        <h1 id="player-slot-name">Player Setup</h1>
+        <button id="btn-player-logout" class="btn btn-link">Logout</button>
+      </header>
+
+      <div class="player-setup-container">
+        <section class="setup-section">
+          <h2>Your Character</h2>
+          <div id="character-display" class="character-card">
+            <p class="placeholder">No character imported</p>
+          </div>
+          <div class="character-actions">
+            <button id="btn-import-character" class="btn btn-secondary">Import Character</button>
+            <button id="btn-quick-character" class="btn btn-link">Quick Create</button>
+          </div>
+        </section>
+
+        <section class="setup-section">
+          <h2>Select Ship</h2>
+          <div id="ship-select-list" class="ship-select-list">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+
+        <section class="setup-section">
+          <h2>Select Crew Role</h2>
+          <div id="role-select-list" class="role-select-list">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+
+        <div class="setup-actions">
+          <button id="btn-join-bridge" class="btn btn-primary btn-large" disabled>
+            Join Bridge
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bridge View (Main Operations Screen) -->
+    <div id="bridge-screen" class="screen">
+      <header class="bridge-header">
+        <div class="ship-info">
+          <h1 id="bridge-ship-name">Ship Name</h1>
+          <span id="bridge-date" class="date-display">1105-001 12:00</span>
+        </div>
+        <div id="alert-status" class="alert-status normal">
+          <span class="alert-indicator"></span>
+          <span class="alert-text">NORMAL</span>
+        </div>
+        <div class="header-actions">
+          <button id="btn-bridge-menu" class="btn btn-icon" title="Menu">☰</button>
+        </div>
+      </header>
+
+      <main class="bridge-main">
+        <!-- Sensor Display (Top) -->
+        <section id="sensor-display" class="sensor-panel">
+          <div class="panel-header">
+            <h2>Sensor Display</h2>
+            <span id="sensor-status" class="status-indicator">PASSIVE</span>
+          </div>
+          <div id="sensor-contacts" class="contacts-list">
+            <p class="placeholder">No contacts detected</p>
+          </div>
+        </section>
+
+        <!-- Role Panel (Bottom Left) - Changes based on role -->
+        <section id="role-panel" class="role-panel">
+          <div class="panel-header">
+            <h2 id="role-panel-title">Your Role</h2>
+            <span id="role-name" class="role-indicator">Pilot</span>
+          </div>
+          <div id="role-actions" class="role-actions">
+            <!-- Populated based on role -->
+          </div>
+          <!-- Role-specific detail view (expandable) -->
+          <div id="role-detail-view" class="role-detail hidden">
+            <!-- Populated based on role -->
+          </div>
+          <button id="btn-toggle-detail" class="btn btn-link">Show Details ▼</button>
+        </section>
+
+        <!-- Crew Status (Bottom Center) -->
+        <section id="crew-panel" class="crew-panel">
+          <div class="panel-header">
+            <h2>Crew Status</h2>
+          </div>
+          <div id="crew-list" class="crew-list">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+
+        <!-- Ship Log (Bottom Right) -->
+        <section id="log-panel" class="log-panel">
+          <div class="panel-header">
+            <h2>Ship Log</h2>
+            <button id="btn-add-log" class="btn btn-small">+ Add Note</button>
+          </div>
+          <div id="ship-log" class="ship-log">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+      </main>
+
+      <!-- GM Overlay (shown when GM is viewing) -->
+      <div id="gm-overlay" class="gm-overlay hidden">
+        <div class="gm-controls">
+          <button id="btn-gm-advance-time" class="btn">Advance Time</button>
+          <button id="btn-gm-add-contact" class="btn">Add Contact</button>
+          <button id="btn-gm-initiative" class="btn btn-warning">Call Initiative</button>
+          <button id="btn-gm-combat" class="btn btn-danger">Start Combat</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Combat Screen (Placeholder - to be integrated with existing) -->
+    <div id="combat-screen" class="screen">
+      <header class="combat-header">
+        <h1>COMBAT MODE</h1>
+        <button id="btn-exit-combat" class="btn btn-secondary">Exit Combat</button>
+      </header>
+      <main id="combat-main">
+        <!-- Combat UI will be loaded here -->
+        <p class="placeholder">Combat system integration pending...</p>
+      </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+      <div id="modal-content" class="modal-content">
+        <!-- Modal content populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Character Import Modal Template -->
+  <template id="template-character-import">
+    <div class="modal-header">
+      <h2>Import Character</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="char-name">Character Name:</label>
+        <input type="text" id="char-name" required>
+      </div>
+      <div class="form-group">
+        <label>Skills (relevant to ship operations):</label>
+        <div class="skill-inputs">
+          <div class="skill-row">
+            <label>Pilot:</label>
+            <input type="number" id="skill-pilot" min="0" max="6" value="0">
+          </div>
+          <div class="skill-row">
+            <label>Astrogation:</label>
+            <input type="number" id="skill-astrogation" min="0" max="6" value="0">
+          </div>
+          <div class="skill-row">
+            <label>Engineer:</label>
+            <input type="number" id="skill-engineer" min="0" max="6" value="0">
+          </div>
+          <div class="skill-row">
+            <label>Gunnery:</label>
+            <input type="number" id="skill-gunnery" min="0" max="6" value="0">
+          </div>
+          <div class="skill-row">
+            <label>Sensors:</label>
+            <input type="number" id="skill-sensors" min="0" max="6" value="0">
+          </div>
+          <div class="skill-row">
+            <label>Leadership:</label>
+            <input type="number" id="skill-leadership" min="0" max="6" value="0">
+          </div>
+          <div class="skill-row">
+            <label>Tactics:</label>
+            <input type="number" id="skill-tactics" min="0" max="6" value="0">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Stats:</label>
+        <div class="stat-inputs">
+          <div class="stat-row">
+            <label>DEX:</label>
+            <input type="number" id="stat-dex" min="1" max="15" value="7">
+          </div>
+          <div class="stat-row">
+            <label>INT:</label>
+            <input type="number" id="stat-int" min="1" max="15" value="7">
+          </div>
+          <div class="stat-row">
+            <label>EDU:</label>
+            <input type="number" id="stat-edu" min="1" max="15" value="7">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" id="btn-save-character">Save Character</button>
+    </div>
+  </template>
+
+  <!-- Create Campaign Modal Template -->
+  <template id="template-create-campaign">
+    <div class="modal-header">
+      <h2>Create New Campaign</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="new-campaign-name">Campaign Name:</label>
+        <input type="text" id="new-campaign-name" placeholder="Spinward Marches Campaign" required>
+      </div>
+      <div class="form-group">
+        <label for="gm-name">Your Name (GM):</label>
+        <input type="text" id="gm-name" placeholder="Bruce" required>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" id="btn-confirm-create-campaign">Create Campaign</button>
+    </div>
+  </template>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js" type="module"></script>
+</body>
+</html>
