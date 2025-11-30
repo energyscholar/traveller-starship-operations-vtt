@@ -1985,6 +1985,15 @@ io.on('connection', (socket) => {
       }
 
       combatLog.info(`[SPACE:TURN_CHANGE] Active player: ${combat.activePlayer}`);
+
+      // SOLO MODE: If it's dummy AI's turn, execute AI action automatically
+      if (isDummyAI(combat.activePlayer)) {
+        combatLog.info(`[SOLO MODE] AI turn detected after missile launch, executing AI action...`);
+        // Give a brief delay so the UI can update
+        setTimeout(() => {
+          executeAITurn(combat, io);
+        }, 1000);  // 1 second delay
+      }
     }
   });
 
