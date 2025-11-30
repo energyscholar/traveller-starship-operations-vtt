@@ -39,8 +39,9 @@ const unitTests = [
   'tests/unit/docking.test.js',  // Stage 12.1 - Docking stub
   'tests/unit/space-phase-system.test.js',  // Phase system - Initiative, ordering, phases, thrust (50 tests)
   'tests/unit/space-weapons-phase.test.js',  // Phase system - Weapons, point defense (30 tests)
-  'tests/unit/space-role-gating.test.js'  // Phase system - Role gating, edge cases (35 tests)
+  'tests/unit/space-role-gating.test.js',  // Phase system - Role gating, edge cases (35 tests)
   // DEFERRED: ship-validation-edge-cases.test.js (test framework integration needed)
+  'tests/operations-handlers.test.js'  // Operations handler smoke tests (27 tests)
 ];
 
 // Integration tests
