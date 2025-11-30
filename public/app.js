@@ -1284,6 +1284,14 @@
       initializeSpaceCombatHUD(data);
 
       readyStatusText.innerHTML = 'Combat started!';
+
+      // SOLO MODE: Show abandon battle button
+      if (appMode === 'solo') {
+        const abandonBtn = document.getElementById('abandon-battle-btn');
+        if (abandonBtn) {
+          abandonBtn.style.display = 'block';
+        }
+      }
     });
 
     // Initialize range selection
@@ -1331,6 +1339,55 @@
     let activeMissiles = [];
     let missilesRemaining = 12;
     let sandcasterRemaining = 20;
+
+    // SOLO MODE: Abandon Battle functionality
+    if (appMode === 'solo') {
+      const abandonBtn = document.getElementById('abandon-battle-btn');
+      const abandonDialog = document.getElementById('abandon-confirm-dialog');
+      const confirmAbandonBtn = document.getElementById('confirm-abandon-btn');
+      const cancelAbandonBtn = document.getElementById('cancel-abandon-btn');
+
+      // Show confirmation dialog when abandon button clicked
+      if (abandonBtn) {
+        abandonBtn.addEventListener('click', () => {
+          console.log('[SOLO] Abandon battle button clicked');
+          if (abandonDialog) {
+            abandonDialog.style.display = 'flex';
+          }
+        });
+      }
+
+      // Handle confirmation - emit socket event and navigate home
+      if (confirmAbandonBtn) {
+        confirmAbandonBtn.addEventListener('click', () => {
+          console.log('[SOLO] Confirming battle abandon');
+          if (socket) {
+            socket.emit('space:abandonBattle');
+          }
+          // Navigate to home page
+          window.location.href = '/';
+        });
+      }
+
+      // Handle cancel - just close dialog
+      if (cancelAbandonBtn) {
+        cancelAbandonBtn.addEventListener('click', () => {
+          console.log('[SOLO] Cancelled battle abandon');
+          if (abandonDialog) {
+            abandonDialog.style.display = 'none';
+          }
+        });
+      }
+
+      // Close dialog if clicking outside modal content
+      if (abandonDialog) {
+        abandonDialog.addEventListener('click', (e) => {
+          if (e.target === abandonDialog) {
+            abandonDialog.style.display = 'none';
+          }
+        });
+      }
+    }
 
     // Initialize Space Combat HUD with ship data
     function initializeSpaceCombatHUD(data) {

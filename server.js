@@ -2251,6 +2251,31 @@ io.on('connection', (socket) => {
     }
   });
 
+  // SOLO MODE: Handle battle abandon
+  socket.on('space:abandonBattle', () => {
+    combatLog.info(`[SOLO MODE] Player ${connectionId} abandoned battle`);
+
+    // Find and cleanup combat state
+    let combatId = null;
+    for (const [id, combat] of activeCombats.entries()) {
+      if (combat.player1.id === socket.id || combat.player2.id === socket.id) {
+        combatId = id;
+        break;
+      }
+    }
+
+    if (combatId) {
+      activeCombats.delete(combatId);
+      combatLog.info(`[SOLO MODE] Combat ${combatId} cleaned up after abandon`);
+    }
+
+    // Reset player state
+    socket.spaceSelection = null;
+
+    // Send confirmation
+    socket.emit('space:battleAbandoned');
+  });
+
   socket.on('disconnect', () => {
     const conn = connections.get(socket.id);
     const duration = Date.now() - conn.connected;
