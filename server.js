@@ -362,24 +362,129 @@ function executeAITurn(combat, io) {
 
   // Execute the chosen action
   switch (decision.action) {
-    case 'fire':
-      // TODO: Call fire logic directly
-      combatLog.info(`[AI] Would fire weapon (turret ${decision.params.turret}, weapon ${decision.params.weapon})`);
+    case 'fire': {
+      combatLog.info(`[AI] Executing weapon fire (turret ${decision.params.turret}, weapon ${decision.params.weapon})`);
+
+      // Get weapon data
+      const shipData = SHIPS[aiPlayer.ship];
+      const weaponIndex = decision.params.weapon;
+      const weaponObj = shipData && shipData.weapons ? shipData.weapons[weaponIndex] : null;
+
+      if (!weaponObj) {
+        combatLog.error(`[AI] Invalid weapon index: ${weaponIndex}`);
+        break;
+      }
+
+      // Resolve attack using same logic as player
+      const attackResult = resolveAttack(
+        aiPlayer,
+        humanPlayer,
+        {
+          range: combat.range.toLowerCase(),
+          weapon: weaponObj
+        }
+      );
+
+      combatLog.info(`[AI] Attack result:`, attackResult);
+
+      if (attackResult.hit) {
+        // Apply damage
+        humanPlayer.hull -= attackResult.damage;
+        if (humanPlayer.hull < 0) humanPlayer.hull = 0;
+
+        combatLog.info(`[AI] HIT! ${attackResult.damage} damage. Target hull: ${humanPlayer.hull}/${humanPlayer.maxHull}`);
+
+        // Emit to human player (if not AI)
+        if (!isDummyAI(humanPlayer.id)) {
+          const humanSocket = io.sockets.sockets.get(humanPlayer.id);
+          if (humanSocket && humanSocket.connected) {
+            humanSocket.emit('space:attacked', {
+              hit: true,
+              damage: attackResult.damage,
+              hull: humanPlayer.hull,
+              maxHull: humanPlayer.maxHull
+            });
+          }
+        }
+
+        // Check for critical hits
+        const hullPercent = (humanPlayer.hull / humanPlayer.maxHull) * 100;
+        if (hullPercent <= 50 && attackResult.damage > 0 && Math.random() < 0.3) {
+          const criticalSystems = ['Turret', 'Sensors', 'Maneuver Drive', 'Jump Drive', 'Power Plant'];
+          const criticalSystem = criticalSystems[Math.floor(Math.random() * criticalSystems.length)];
+
+          humanPlayer.criticals.push(criticalSystem);
+          combatLog.info(`[AI] Critical hit on ${criticalSystem}!`);
+
+          if (!isDummyAI(humanPlayer.id)) {
+            const humanSocket = io.sockets.sockets.get(humanPlayer.id);
+            if (humanSocket && humanSocket.connected) {
+              humanSocket.emit('space:critical', {
+                target: humanPlayer.id === combat.player1.id ? 'player1' : 'player2',
+                system: criticalSystem,
+                damage: attackResult.damage
+              });
+            }
+          }
+        }
+
+        // Check for combat end
+        if (humanPlayer.hull <= 0) {
+          combatLog.info(`[AI] Target destroyed! AI wins combat.`);
+
+          const combatId = [...activeCombats.entries()].find(([_, c]) => c === combat)?.[0];
+          if (combatId) {
+            activeCombats.delete(combatId);
+          }
+
+          if (!isDummyAI(humanPlayer.id)) {
+            const humanSocket = io.sockets.sockets.get(humanPlayer.id);
+            if (humanSocket && humanSocket.connected) {
+              humanSocket.emit('space:combatEnd', {
+                winner: aiPlayer.id === combat.player1.id ? 'player1' : 'player2',
+                loser: humanPlayer.id === combat.player1.id ? 'player1' : 'player2',
+                reason: 'ship_destroyed',
+                finalHull: {
+                  player1: combat.player1.hull,
+                  player2: combat.player2.hull
+                },
+                rounds: combat.round
+              });
+            }
+          }
+          return; // Combat ended, don't continue turn processing
+        }
+      } else {
+        combatLog.info(`[AI] MISS! Attack roll: ${attackResult.attackRoll}, Total: ${attackResult.total}`);
+
+        if (!isDummyAI(humanPlayer.id)) {
+          const humanSocket = io.sockets.sockets.get(humanPlayer.id);
+          if (humanSocket && humanSocket.connected) {
+            humanSocket.emit('space:attacked', {
+              hit: false,
+              damage: 0,
+              hull: humanPlayer.hull,
+              maxHull: humanPlayer.maxHull
+            });
+          }
+        }
+      }
       break;
+    }
 
     case 'pointDefense':
-      // TODO: Call point defense logic
-      combatLog.info(`[AI] Would use point defense on missile ${decision.params.targetMissileId}`);
+      // Point defense not yet implemented
+      combatLog.info(`[AI] Point defense not yet implemented (missile ${decision.params.targetMissileId})`);
       break;
 
     case 'sandcaster':
-      // TODO: Call sandcaster logic
-      combatLog.info(`[AI] Would use sandcaster`);
+      // Sandcaster not yet implemented
+      combatLog.info(`[AI] Sandcaster not yet implemented`);
       break;
 
     case 'dodge':
-      // TODO: Call dodge logic
-      combatLog.info(`[AI] Would perform dodge maneuver`);
+      // Dodge not yet implemented
+      combatLog.info(`[AI] Dodge maneuver not yet implemented`);
       break;
 
     case 'endTurn':
