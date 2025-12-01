@@ -37,7 +37,8 @@
 4. **BUG: Crew Status Not Updating** - Crew status display doesn't update when new players join/take roles. Probably doesn't remove either. Need state machine or design pattern to track crew presence changes. Not trivial.
 5. **Character Sheet Mouseover** - Mouseover of character name brings up character sheet and art showing PC.
 6. **OBSERVER Role** - Add crew role OBSERVER with unlimited count. Sees standard bridge view with no role panel. Show fun ASCII art instead of role panel.
-7. **Chip jack +1 skill boost** - Future feature for skill bonuses
+7. **Ship Detail ASCII Art** - Put ASCII art on starship detail popup card. Use tiny font and different colors to produce nice image of ship.
+8. **Chip jack +1 skill boost** - Future feature for skill bonuses
 3. **Time-for-skill optional rule** - Consider implementing
 4. **Populate Ator/Flammarion** - Add encyclopedia data like Dorannia
 5. **Spinward Marches UWP database** - Bulk import canonical data
