@@ -319,6 +319,74 @@ The pursuit doesn't need to APPEAR in session - the tension of "are they out the
 | Marina (Gunner) | Ready weapons | Stay alert | "Turret tracking unknown contact" |
 | Asao (Marine) | Security prep | Ready for boarding | "Airlock secured, sir" |
 
+### Interstellar Mail System
+
+When PCs check in at a starport, they receive queued messages:
+- **Periodicals:** News from across known space (worldbuilding/hooks)
+- **Personal mail:** Messages from NPCs delivered via X-boat network
+
+#### X-Boat Latency
+- Messages travel ~4 parsecs/week via X-boat routes
+- Dorannia is off the main routes - mail may be delayed
+- Messages queued at starports until recipient arrives
+
+#### Potential Correspondents (from Campaign Data)
+
+| Sender | Relationship | Possible Content |
+|--------|--------------|------------------|
+| **Marta** | Ally, Raschev official | Encrypted update, uses one-time pad |
+| **Vince** | Ally, Raschev leader | Political situation, resources offered |
+| **Kira Denholm** | Von Sydo's girlfriend | "When are you coming home?" - dramatic |
+| **Eric & Signe** | Aslan allies | Compound status, security updates |
+| **Thomas** | SIC resistance | Intel on Thale's movements |
+| **Dr. Heiyoao** | Knows genocide secret | Cryptic warning? Moral crisis? |
+| **Horaz Sutyn** | New Garoo dictator | Unexpected olive branch |
+
+#### Sample Mail Queue (Dorannia Arrival)
+
+```javascript
+// Mail waiting at Dorannia starport
+[
+  {
+    to: "Von Sydo",
+    from: "Kira Denholm",
+    subject: "Missing you",
+    date: "295-1115", // Sent 15 days ago
+    encrypted: false,
+    preview: "I know you're busy with work, but...",
+    tone: "worried",
+    gmNote: "She doesn't know he's a fugitive"
+  },
+  {
+    to: "James",
+    from: "Marta",
+    subject: "[ENCRYPTED]",
+    date: "302-1115",
+    encrypted: true, // Requires one-time pad
+    content: "Thale left Raschev 3 days after you. Fast courier.",
+    gmNote: "Warning about pursuit"
+  },
+  {
+    to: "ALL CREW",
+    from: "Spinward News Service",
+    subject: "Weekly Digest 309-1115",
+    date: "309-1115",
+    type: "periodical",
+    headlines: [
+      "Sword Worlds Tensions Rise",
+      "Darrian Confederation Trade Summit",
+      "Garoo: New Government Eases Travel Restrictions"
+    ]
+  }
+]
+```
+
+#### Implementation Approach
+
+**Phase 1 (MVP):** GM prepares mail in advance, reads it aloud when PCs check in
+**Phase 2:** VTT displays mail queue, players can "open" messages
+**Phase 3:** In-game encryption system (JavaScrypt one-time pads already exist!)
+
 ### Recommendations
 
 1. **Keep it simple** - The VTT should SUPPORT the game, not dominate it

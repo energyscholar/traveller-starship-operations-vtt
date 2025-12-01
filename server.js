@@ -55,7 +55,14 @@ function executeAITurn(combat, io) {
   return executeAITurnBase(combat, io, activeCombats);
 }
 
-// Serve static files from public directory
+// Serve static files - Operations VTT is the main interface
+// Redirect root to operations
+app.get('/', (req, res) => {
+  res.redirect('/operations/');
+});
+// Serve combat UI at /combat (legacy space combat interface)
+app.use('/combat', express.static('public/combat'));
+// Serve operations and other static files
 app.use(express.static('public'));
 // Serve lib directory for client-side modules (Stage 12.4)
 app.use('/lib', express.static('lib'));
@@ -186,8 +193,7 @@ io.on('connection', (socket) => {
   log.debug(' Socket ID:', socket.id);
   log.debug(' ========================================');
 
-  connectionCount++;
-  const connectionId = connectionCount;
+  const connectionId = state.incrementConnectionCount();
   const assignedShip = getAvailableShip();
 
   log.debug(' Connection ID:', connectionId);

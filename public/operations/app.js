@@ -6,6 +6,7 @@
 // ==================== State ====================
 const state = {
   socket: null,
+  heartbeatInterval: null,  // Keep-alive interval
   isGM: false,
   isGuest: false,
   guestName: null,
@@ -24,13 +25,15 @@ const state = {
   ship: null,
   ships: [],
   selectedShipId: null,
+  gmSelectedShipId: null,  // GM's selected ship for bridge view
   selectedRole: null,
   selectedRoleInstance: 1,
 
   // Bridge state
   contacts: [],
   crewOnline: [],
-  logEntries: []
+  logEntries: [],
+  pinnedContactId: null  // TIP-1: Currently pinned contact for tooltip
 };
 
 // ==================== Socket Setup ====================
@@ -42,11 +45,22 @@ function initSocket() {
     console.log('Connected to server');
     // Try to reconnect to previous session (Stage 3.5.5)
     tryReconnect();
+
+    // Start heartbeat to keep connection alive (every 60 seconds)
+    if (state.heartbeatInterval) clearInterval(state.heartbeatInterval);
+    state.heartbeatInterval = setInterval(() => {
+      state.socket.emit('ops:ping');
+    }, 60000);
   });
 
   state.socket.on('disconnect', () => {
     console.log('Disconnected from server');
     showNotification('Disconnected from server', 'error');
+    // Stop heartbeat on disconnect
+    if (state.heartbeatInterval) {
+      clearInterval(state.heartbeatInterval);
+      state.heartbeatInterval = null;
+    }
   });
 
   // Reconnect events (Stage 3.5.5)
@@ -153,6 +167,13 @@ function initSocket() {
     state.player = data.account;
     state.ships = data.ships;
     state.isGuest = false;
+    // Auto-select default ship and role from account preferences
+    if (data.account.ship_id) {
+      state.selectedShipId = data.account.ship_id;
+    }
+    if (data.account.role) {
+      state.selectedRole = data.account.role;
+    }
     showScreen('player-setup');
     renderPlayerSetup();
   });
@@ -195,6 +216,7 @@ function initSocket() {
   // Ship & role events
   state.socket.on('ops:shipSelected', (data) => {
     state.ship = data.ship;
+    state.ship.npcCrew = data.npcCrew || [];  // Store NPC crew on ship object
     // Update taken roles display
     renderRoleSelection();
   });
@@ -212,9 +234,10 @@ function initSocket() {
   // Bridge events
   state.socket.on('ops:bridgeJoined', (data) => {
     state.ship = data.ship;
+    state.ship.npcCrew = data.npcCrew || [];  // Store NPC crew on ship object
     state.selectedShipId = data.ship?.id;
     state.crewOnline = data.crew;
-    state.contacts = [];
+    state.contacts = data.contacts || [];  // Use contacts from server
     state.logEntries = data.logs || [];
     state.campaign = data.campaign;
     state.selectedRole = data.role;
@@ -234,8 +257,14 @@ function initSocket() {
 
   state.socket.on('ops:sessionStarted', (data) => {
     showNotification('Session started', 'success');
-    if (document.getElementById('bridge-date')) {
-      document.getElementById('bridge-date').textContent = data.gameDate;
+
+    // GM auto-joins bridge after starting session using selected ship
+    if (state.isGM && state.gmSelectedShipId) {
+      state.socket.emit('ops:joinBridge', {
+        shipId: state.gmSelectedShipId,
+        role: 'gm',
+        isGM: true
+      });
     }
   });
 
@@ -465,6 +494,12 @@ function showScreen(screenId) {
 
 // ==================== Login Screen ====================
 function initLoginScreen() {
+  // Restore saved campaign code from localStorage
+  const savedCode = localStorage.getItem('ops_campaign_code');
+  if (savedCode) {
+    document.getElementById('campaign-code').value = savedCode;
+  }
+
   // GM Login
   document.getElementById('btn-gm-login').addEventListener('click', () => {
     state.isGM = true;
@@ -505,6 +540,8 @@ function initLoginScreen() {
   document.getElementById('btn-join-campaign').addEventListener('click', () => {
     const code = document.getElementById('campaign-code').value.trim();
     if (code) {
+      // Save campaign code to localStorage for convenience
+      localStorage.setItem('ops_campaign_code', code);
       state.socket.emit('ops:joinCampaignAsPlayer', { campaignId: code });
       document.getElementById('player-select').classList.add('hidden');
       document.getElementById('player-slot-select').classList.remove('hidden');
@@ -599,8 +636,8 @@ function renderPlayerSlots() {
   // Add click handlers
   container.querySelectorAll('.slot-item').forEach(item => {
     item.addEventListener('click', () => {
-      const playerId = item.dataset.playerId;
-      state.socket.emit('ops:selectPlayerSlot', { playerId });
+      const accountId = item.dataset.playerId;  // Server expects accountId
+      state.socket.emit('ops:selectPlayerSlot', { accountId });
     });
   });
 }
@@ -716,15 +753,30 @@ function renderGMSetup() {
     });
   });
 
-  // Ships list
+  // Ships list - GM can select which ship to view on bridge
   const shipsContainer = document.getElementById('gm-ships-list');
+
+  // Auto-select party ship if none selected
+  if (!state.gmSelectedShipId && state.ships.length > 0) {
+    const partyShip = state.ships.find(s => s.is_party_ship);
+    state.gmSelectedShipId = partyShip?.id || state.ships[0].id;
+  }
+
   shipsContainer.innerHTML = state.ships.map(s => `
-    <div class="ship-item">
+    <div class="ship-item selectable ${state.gmSelectedShipId === s.id ? 'selected' : ''}" data-ship-id="${s.id}">
       <span class="name">${escapeHtml(s.name)}</span>
       <span class="type">${s.ship_data?.type || 'Unknown'}</span>
       ${s.is_party_ship ? '<span class="badge">Party Ship</span>' : ''}
     </div>
   `).join('') || '<p class="placeholder">No ships yet</p>';
+
+  // Add click handlers for ship selection
+  shipsContainer.querySelectorAll('.ship-item.selectable').forEach(item => {
+    item.addEventListener('click', () => {
+      state.gmSelectedShipId = item.dataset.shipId;
+      renderGMSetup(); // Re-render to show selection
+    });
+  });
 }
 
 // ==================== Player Setup Screen ====================
@@ -789,7 +841,9 @@ function renderPlayerSetup() {
 
   // Ship selection
   const shipContainer = document.getElementById('ship-select-list');
-  const partyShips = state.ships.filter(s => s.is_party_ship && s.visible_to_players);
+  const partyShips = state.ships
+    .filter(s => s.is_party_ship && s.visible_to_players)
+    .sort((a, b) => a.name.localeCompare(b.name));  // Alphabetize ships
 
   shipContainer.innerHTML = partyShips.map(s => `
     <div class="ship-option ${state.selectedShipId === s.id ? 'selected' : ''}" data-ship-id="${s.id}">
@@ -832,7 +886,7 @@ function renderRoleSelection() {
     { id: 'medic', name: 'Medic', desc: 'Medical care' },
     { id: 'steward', name: 'Steward', desc: 'Passengers, supplies' },
     { id: 'cargo_master', name: 'Cargo', desc: 'Cargo operations' }
-  ];
+  ].sort((a, b) => a.name.localeCompare(b.name));  // Alphabetize roles
 
   // Get crew requirements from ship template (if available)
   const crewReqs = state.ship?.template_data?.crew?.minimum || {};
@@ -926,10 +980,51 @@ function initBridgeScreen() {
     }
   });
 
-  // Menu button
+  // TIP-2: Click ship name to show status modal
+  document.getElementById('bridge-ship-name').addEventListener('click', showShipStatusModal);
+  document.getElementById('bridge-ship-name').style.cursor = 'pointer';
+
+  // Menu button - show GM menu modal (GM-1)
   document.getElementById('btn-bridge-menu').addEventListener('click', () => {
-    // TODO: Bridge menu modal
-    showNotification('Menu coming soon', 'info');
+    if (state.isGM) {
+      showModal('template-gm-bridge-menu');
+      // Populate campaign code
+      const codeEl = document.getElementById('gm-menu-campaign-code');
+      if (codeEl && state.campaign?.id) {
+        codeEl.textContent = state.campaign.id.substring(0, 8).toUpperCase();
+      }
+    } else {
+      showNotification('Player menu coming soon', 'info');
+    }
+  });
+
+  // Change role button (NAV-1)
+  document.getElementById('btn-change-role').addEventListener('click', () => {
+    if (state.isGM) {
+      showNotification('GMs cannot change roles', 'info');
+      return;
+    }
+    // Return to player setup screen for role selection
+    state.selectedRole = null;
+    document.getElementById('gm-overlay')?.classList.add('hidden');
+    showScreen('player-setup');
+    renderPlayerSetup();
+  });
+
+  // Bridge logout
+  document.getElementById('btn-bridge-logout').addEventListener('click', () => {
+    // Reset all state
+    state.ship = null;
+    state.selectedShipId = null;
+    state.selectedRole = null;
+    state.player = null;
+    state.campaign = null;
+    state.isGM = false;
+    state.isGuest = false;
+    clearStoredSession();
+    // Hide GM overlay if visible
+    document.getElementById('gm-overlay')?.classList.add('hidden');
+    showScreen('login');
   });
 
   // GM controls
@@ -937,10 +1032,28 @@ function initBridgeScreen() {
 }
 
 function initGMControls() {
+  // Alert status buttons
+  document.getElementById('btn-alert-normal').addEventListener('click', () => {
+    state.socket.emit('ops:setAlertStatus', { status: 'NORMAL' });
+  });
+  document.getElementById('btn-alert-yellow').addEventListener('click', () => {
+    state.socket.emit('ops:setAlertStatus', { status: 'YELLOW' });
+  });
+  document.getElementById('btn-alert-red').addEventListener('click', () => {
+    state.socket.emit('ops:setAlertStatus', { status: 'RED' });
+  });
+
+  // Time advance
   document.getElementById('btn-gm-advance-time').addEventListener('click', () => {
     showModal('template-time-advance');
   });
 
+  // Add log entry
+  document.getElementById('btn-gm-add-log').addEventListener('click', () => {
+    showModal('template-add-log');
+  });
+
+  // Add contact
   document.getElementById('btn-gm-add-contact').addEventListener('click', () => {
     showModal('template-add-contact');
   });
@@ -972,8 +1085,20 @@ function renderBridge() {
   // Ship name
   document.getElementById('bridge-ship-name').textContent = state.ship?.name || 'Unknown Ship';
 
+  // Campaign name (Phase 1 requirement)
+  const campaignNameEl = document.getElementById('bridge-campaign-name');
+  if (campaignNameEl) {
+    campaignNameEl.textContent = state.campaign?.name || '';
+  }
+
   // Date/time
   document.getElementById('bridge-date').textContent = state.campaign?.current_date || '???';
+
+  // Current system/location (Phase 1 requirement)
+  const locationEl = document.getElementById('bridge-location');
+  if (locationEl) {
+    locationEl.textContent = state.campaign?.current_system || 'Unknown';
+  }
 
   // Guest indicator
   const guestIndicator = document.getElementById('guest-indicator');
@@ -981,6 +1106,25 @@ function renderBridge() {
     guestIndicator.classList.remove('hidden');
   } else {
     guestIndicator.classList.add('hidden');
+  }
+
+  // User identity display (Name, Role, Ship)
+  const userNameEl = document.getElementById('bridge-user-name');
+  const userRoleEl = document.getElementById('bridge-user-role');
+  const userShipEl = document.getElementById('bridge-user-ship');
+  if (userNameEl && userRoleEl) {
+    if (state.isGM) {
+      userNameEl.textContent = 'GM';
+      userRoleEl.textContent = 'Game Master';
+      userRoleEl.className = 'user-role-badge role-gm';
+    } else {
+      userNameEl.textContent = state.player?.character_data?.name || state.player?.slot_name || 'Player';
+      userRoleEl.textContent = formatRoleName(state.selectedRole);
+      userRoleEl.className = `user-role-badge role-${state.selectedRole || 'unknown'}`;
+    }
+  }
+  if (userShipEl) {
+    userShipEl.textContent = state.ship?.name || 'No Ship';
   }
 
   // Ship status bar
@@ -1032,9 +1176,23 @@ function renderShipStatus() {
   document.getElementById('power-bar').style.width = `${powerPercent}%`;
   document.getElementById('power-value').textContent = `${powerPercent}%`;
 
-  // Location
-  const location = state.campaign?.current_system || 'Unknown';
-  document.getElementById('location-value').textContent = location;
+  // Location (UI-5: Better location display)
+  // Use ship's detailed location if available, fall back to campaign system
+  const shipLocation = shipState.location;
+  const systemName = state.campaign?.current_system || 'Unknown';
+  let locationDisplay;
+
+  if (shipLocation && !shipLocation.includes(systemName)) {
+    // Ship has specific location not including system name - combine both
+    locationDisplay = `${systemName} · ${shipLocation}`;
+  } else if (shipLocation) {
+    // Ship location already includes system info
+    locationDisplay = shipLocation;
+  } else {
+    // Just system name
+    locationDisplay = systemName;
+  }
+  document.getElementById('location-value').textContent = locationDisplay;
 }
 
 function renderRoleActions(roleConfig) {
@@ -1401,20 +1559,92 @@ function getRoleDetailContent(role, shipState, template) {
 }
 
 function handleRoleAction(action) {
-  // Emit action to server
+  // ROLE-1: Each role has functional actions
+  const playerName = state.player?.character_data?.name || state.player?.slot_name || 'Player';
+  const roleName = formatRoleName(state.selectedRole);
+
+  // Generate action-specific log message
+  const actionMessages = {
+    // Pilot
+    setCourse: `${playerName} plotting new course`,
+    evasiveAction: `${playerName} initiating evasive maneuvers`,
+    dock: `${playerName} beginning docking sequence`,
+    undock: `${playerName} releasing docking clamps`,
+    // Captain
+    setAlertStatus: `${playerName} adjusting alert status`,
+    issueOrders: `Captain ${playerName} issuing bridge orders`,
+    authorizeWeapons: `${playerName} authorizing weapons release`,
+    hail: `${playerName} opening communications channel`,
+    // Astrogator
+    plotJump: `${playerName} calculating jump coordinates`,
+    calculateIntercept: `${playerName} plotting intercept course`,
+    verifyPosition: `${playerName} confirming current position`,
+    // Engineer
+    allocatePower: `${playerName} reallocating power grid`,
+    fieldRepair: `${playerName} performing field repairs`,
+    overloadSystem: `${playerName} overloading system capacitors`,
+    // Sensors
+    activeScan: `${playerName} initiating active sensor sweep`,
+    deepScan: `${playerName} performing deep scan analysis`,
+    jam: `${playerName} activating electronic countermeasures`,
+    // Gunner
+    fireWeapon: `${playerName} firing weapons`,
+    pointDefense: `${playerName} activating point defense`,
+    sandcaster: `${playerName} deploying sandcaster screen`,
+    // Damage Control
+    directRepair: `${playerName} directing repair teams`,
+    prioritizeSystem: `${playerName} prioritizing system repairs`,
+    emergencyProcedure: `${playerName} executing emergency procedure`,
+    // Marines
+    securityPatrol: `${playerName} initiating security patrol`,
+    prepareBoarding: `${playerName} preparing boarding party`,
+    repelBoarders: `${playerName} coordinating defense against boarders`,
+    // Medic
+    treatInjury: `${playerName} treating injured crew member`,
+    triage: `${playerName} performing triage assessment`,
+    checkSupplies: `${playerName} checking medical supplies`,
+    // Steward
+    attendPassenger: `${playerName} attending to passengers`,
+    boostMorale: `${playerName} boosting crew morale`,
+    // Cargo
+    checkManifest: `${playerName} reviewing cargo manifest`,
+    loadCargo: `${playerName} supervising cargo loading`,
+    unloadCargo: `${playerName} coordinating cargo unloading`
+  };
+
+  const logMessage = actionMessages[action] || `${playerName} (${roleName}): ${formatActionName(action)}`;
+
+  // Emit action to server with log entry
   state.socket.emit('ops:roleAction', {
     shipId: state.ship.id,
     playerId: state.player.id,
     role: state.selectedRole,
-    action: action
+    action: action,
+    logMessage: logMessage
   });
 
-  showNotification(`Action: ${formatActionName(action)}`, 'info');
+  showNotification(`${formatActionName(action)} executed`, 'success');
 }
 
 function renderCrewList() {
   const container = document.getElementById('crew-list');
   const allCrew = [];
+
+  // NAV-3: Role priority for sorting crew list
+  const ROLE_PRIORITY = {
+    'captain': 1,
+    'pilot': 2,
+    'engineer': 3,
+    'astrogator': 4,
+    'sensor_operator': 5,
+    'gunner': 6,
+    'damage_control': 7,
+    'marines': 8,
+    'medic': 9,
+    'steward': 10,
+    'cargo_master': 11,
+    'gm': 0  // GM always first
+  };
 
   // Add online players
   state.crewOnline.forEach(c => {
@@ -1442,6 +1672,13 @@ function renderCrewList() {
     });
   }
 
+  // Sort by role priority (NAV-3)
+  allCrew.sort((a, b) => {
+    const priorityA = ROLE_PRIORITY[a.role] ?? 99;
+    const priorityB = ROLE_PRIORITY[b.role] ?? 99;
+    return priorityA - priorityB;
+  });
+
   container.innerHTML = allCrew.map(c => `
     <div class="crew-member ${c.isNPC ? 'npc' : ''} ${c.isYou ? 'is-you' : ''}">
       <span class="online-indicator ${c.isOnline ? 'online' : ''}"></span>
@@ -1466,6 +1703,10 @@ function renderContacts() {
         <button class="btn btn-icon btn-delete-contact" data-id="${c.id}" title="Delete">✕</button>
       </div>
     ` : '';
+    // GM notes only visible to GM
+    const gmNotes = state.isGM && c.gm_notes ? `
+      <div class="contact-gm-notes">${escapeHtml(c.gm_notes)}</div>
+    ` : '';
 
     return `
       <div class="contact-item ${rangeClass}" data-contact-id="${c.id}">
@@ -1473,6 +1714,7 @@ function renderContacts() {
         <div class="contact-info">
           <div class="contact-name">${escapeHtml(c.name || c.type)}</div>
           <div class="contact-details">Bearing: ${c.bearing}° · ${c.transponder || 'No transponder'}</div>
+          ${gmNotes}
         </div>
         <div class="contact-range">
           <div>${formatRange(c.range_km)}</div>
@@ -1483,12 +1725,14 @@ function renderContacts() {
     `;
   }).join('');
 
-  // Add click handlers for contact selection
+  // Add click handlers for contact selection (TIP-1: Click-to-pin)
   container.querySelectorAll('.contact-item').forEach(item => {
     item.addEventListener('click', (e) => {
       // Don't select if clicking delete button
       if (e.target.classList.contains('btn-delete-contact')) return;
-      // TODO: Show contact details
+      e.stopPropagation();
+      const contactId = item.dataset.contactId;
+      showContactTooltip(contactId, item);
     });
   });
 
@@ -1851,6 +2095,21 @@ function showModal(templateId) {
     });
   }
 
+  if (templateId === 'template-add-log') {
+    document.getElementById('btn-save-log-entry').addEventListener('click', () => {
+      const entryType = document.getElementById('log-entry-type').value;
+      const message = document.getElementById('log-entry-message').value.trim();
+      if (message) {
+        state.socket.emit('ops:addLogEntry', {
+          shipId: state.ship.id,
+          entryType,
+          message
+        });
+        closeModal();
+      }
+    });
+  }
+
   if (templateId === 'template-add-contact') {
     // Quick add buttons set type and submit
     modal.querySelectorAll('.contact-quick').forEach(btn => {
@@ -1933,6 +2192,85 @@ function showModal(templateId) {
         name,
         isPartyShip
       });
+    });
+  }
+
+  // GM Bridge Menu (GM-1)
+  if (templateId === 'template-gm-bridge-menu') {
+    document.getElementById('btn-gm-copy-code').addEventListener('click', () => {
+      const codeEl = document.getElementById('gm-menu-campaign-code');
+      const code = codeEl?.textContent;
+      if (code && code !== '--------') {
+        navigator.clipboard.writeText(code).then(() => {
+          const btn = document.getElementById('btn-gm-copy-code');
+          const originalText = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.classList.add('btn-copy-success');
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('btn-copy-success');
+          }, 2000);
+        }).catch(() => {
+          showNotification('Failed to copy code', 'error');
+        });
+      }
+    });
+
+    // GM-3: God Mode Handlers
+    // Populate current ship values
+    if (state.ship?.current_state) {
+      const cs = state.ship.current_state;
+      document.getElementById('god-ship-hull').value = cs.hullPoints || 0;
+      document.getElementById('god-ship-fuel').value = cs.fuel || 0;
+      document.getElementById('god-ship-power').value = cs.power || 100;
+      document.getElementById('god-ship-alert').value = cs.alertStatus || 'NORMAL';
+    }
+
+    // Apply Ship Changes
+    document.getElementById('btn-god-apply-ship').addEventListener('click', () => {
+      const updates = {
+        hullPoints: parseInt(document.getElementById('god-ship-hull').value) || 0,
+        fuel: parseInt(document.getElementById('god-ship-fuel').value) || 0,
+        power: parseInt(document.getElementById('god-ship-power').value) || 100,
+        alertStatus: document.getElementById('god-ship-alert').value
+      };
+      state.socket.emit('ops:godModeUpdateShip', {
+        shipId: state.ship?.id,
+        updates
+      });
+      showNotification('Ship state updated', 'success');
+    });
+
+    // Add Contact
+    document.getElementById('btn-god-add-contact').addEventListener('click', () => {
+      const name = document.getElementById('god-contact-name').value || 'Unknown Contact';
+      const type = document.getElementById('god-contact-type').value;
+      const range = parseInt(document.getElementById('god-contact-range').value) || 50000;
+      const bearing = parseInt(document.getElementById('god-contact-bearing').value) || 0;
+      state.socket.emit('ops:godModeAddContact', {
+        campaignId: state.campaign?.id,
+        contact: { name, type, range_km: range, bearing, visible_to: 'all', signature: 'normal' }
+      });
+      document.getElementById('god-contact-name').value = '';
+      showNotification('Contact added', 'success');
+    });
+
+    // Quick Commands
+    document.getElementById('btn-god-repair-all').addEventListener('click', () => {
+      state.socket.emit('ops:godModeRepairAll', { shipId: state.ship?.id });
+      showNotification('All systems repaired', 'success');
+    });
+
+    document.getElementById('btn-god-refuel').addEventListener('click', () => {
+      state.socket.emit('ops:godModeRefuel', { shipId: state.ship?.id });
+      showNotification('Ship fully refueled', 'success');
+    });
+
+    document.getElementById('btn-god-clear-contacts').addEventListener('click', () => {
+      if (confirm('Clear all contacts?')) {
+        state.socket.emit('ops:godModeClearContacts', { campaignId: state.campaign?.id });
+        showNotification('All contacts cleared', 'success');
+      }
     });
   }
 
@@ -2104,6 +2442,169 @@ function getRoleConfig(role) {
   return configs[role] || { name: 'Unknown Role', actions: [] };
 }
 
+// ==================== Ship Status Modal (TIP-2) ====================
+function showShipStatusModal() {
+  if (!state.ship) return;
+
+  showModal('template-ship-status');
+
+  const ship = state.ship;
+  const template = ship.template_data || {};
+  const shipData = ship.ship_data || {};
+  const shipState = ship.current_state || {};
+
+  // Set name
+  document.getElementById('ship-status-name').textContent = ship.name;
+
+  // Build content
+  const maxHull = template.hull || 100;
+  const currentHull = shipState.hull ?? maxHull;
+  const hullPercent = Math.round((currentHull / maxHull) * 100);
+
+  const maxFuel = template.fuel || 40;
+  const currentFuel = shipState.fuel ?? maxFuel;
+  const fuelPercent = Math.round((currentFuel / maxFuel) * 100);
+
+  let content = `
+    <div class="ship-info-grid">
+      <div class="info-section">
+        <h4>Ship Details</h4>
+        <div class="info-row"><span class="label">Type:</span><span class="value">${shipData.type || 'Unknown'}</span></div>
+        <div class="info-row"><span class="label">Tech Level:</span><span class="value">TL${shipData.techLevel || '?'}</span></div>
+        <div class="info-row"><span class="label">Tonnage:</span><span class="value">${shipData.tonnage || '?'} tons</span></div>
+        <div class="info-row"><span class="label">Thrust:</span><span class="value">${shipData.thrust || '?'}-G</span></div>
+        <div class="info-row"><span class="label">Jump:</span><span class="value">J-${shipData.jump || '?'}</span></div>
+        <div class="info-row"><span class="label">Sensors:</span><span class="value">${shipData.sensors || 'Standard'}</span></div>
+        <div class="info-row"><span class="label">Computer:</span><span class="value">${shipData.computer || 'Model/1'}</span></div>
+      </div>
+      <div class="info-section">
+        <h4>Current Status</h4>
+        <div class="info-row"><span class="label">Hull:</span><span class="value ${getStatusColor(hullPercent)}">${hullPercent}%</span></div>
+        <div class="info-row"><span class="label">Fuel:</span><span class="value ${getStatusColor(fuelPercent)}">${currentFuel}/${maxFuel} tons</span></div>
+        <div class="info-row"><span class="label">Power:</span><span class="value">${shipState.powerPercent ?? 100}%</span></div>
+        <div class="info-row"><span class="label">Alert:</span><span class="value alert-${(shipState.alertStatus || 'normal').toLowerCase()}">${shipState.alertStatus || 'Normal'}</span></div>
+        <div class="info-row"><span class="label">Location:</span><span class="value">${shipState.location || 'Unknown'}</span></div>
+      </div>
+    </div>
+  `;
+
+  // Ship systems if available
+  if (shipState.systems) {
+    content += `<div class="info-section"><h4>Ship Systems</h4>`;
+    for (const [name, sys] of Object.entries(shipState.systems)) {
+      const statusClass = sys.status === 'operational' ? 'status-green' :
+                         sys.status === 'degraded' ? 'status-yellow' : 'status-red';
+      content += `<div class="info-row">
+        <span class="label">${name}:</span>
+        <span class="value ${statusClass}">${sys.health || 100}% - ${sys.status || 'Unknown'}</span>
+      </div>`;
+    }
+    content += `</div>`;
+  }
+
+  document.getElementById('ship-status-content').innerHTML = content;
+}
+
+// UI-7: Get status color class based on percentage
+function getStatusColor(percent) {
+  if (percent >= 75) return 'status-green';
+  if (percent >= 25) return 'status-yellow';
+  return 'status-red';
+}
+
+// ==================== Contact Tooltip (TIP-1) ====================
+function showContactTooltip(contactId, targetElement) {
+  const contact = state.contacts.find(c => c.id === contactId);
+  if (!contact) return;
+
+  const tooltip = document.getElementById('contact-tooltip');
+  const nameEl = document.getElementById('tooltip-contact-name');
+  const contentEl = document.getElementById('tooltip-content');
+
+  // Set name
+  nameEl.textContent = contact.name || contact.type || 'Unknown Contact';
+
+  // Build tooltip content
+  let content = `
+    <div class="tooltip-row">
+      <span class="label">Type:</span>
+      <span class="value">${contact.type || 'Unknown'}</span>
+    </div>
+    <div class="tooltip-row">
+      <span class="label">Bearing:</span>
+      <span class="value">${contact.bearing}°</span>
+    </div>
+    <div class="tooltip-row">
+      <span class="label">Range:</span>
+      <span class="value">${formatRange(contact.range_km)} (${formatRangeBand(contact.range_band)})</span>
+    </div>
+    <div class="tooltip-row">
+      <span class="label">Transponder:</span>
+      <span class="value">${contact.transponder || 'None'}</span>
+    </div>
+    <div class="tooltip-row">
+      <span class="label">Signature:</span>
+      <span class="value">${contact.signature || 'Normal'}</span>
+    </div>
+  `;
+
+  // GM-only info
+  if (state.isGM && contact.gm_notes) {
+    content += `
+      <div class="tooltip-row gm-only">
+        <span class="label">GM Notes:</span>
+        <span class="value">${escapeHtml(contact.gm_notes)}</span>
+      </div>
+    `;
+  }
+
+  // Targetable info
+  if (contact.is_targetable) {
+    content += `
+      <div class="tooltip-row">
+        <span class="label">Health:</span>
+        <span class="value">${contact.health}/${contact.max_health}</span>
+      </div>
+      <div class="tooltip-row">
+        <span class="label">Weapons Free:</span>
+        <span class="value">${contact.weapons_free ? 'Yes' : 'No'}</span>
+      </div>
+    `;
+  }
+
+  contentEl.innerHTML = content;
+
+  // Position tooltip near target element
+  const rect = targetElement.getBoundingClientRect();
+  const tooltipWidth = 280;
+  let left = rect.right + 10;
+  let top = rect.top;
+
+  // Keep tooltip on screen
+  if (left + tooltipWidth > window.innerWidth) {
+    left = rect.left - tooltipWidth - 10;
+  }
+  if (top + 200 > window.innerHeight) {
+    top = window.innerHeight - 220;
+  }
+
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
+  tooltip.classList.remove('hidden');
+
+  // Mark contact as selected
+  document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('selected'));
+  targetElement.classList.add('selected');
+  state.pinnedContactId = contactId;
+}
+
+function hideContactTooltip() {
+  const tooltip = document.getElementById('contact-tooltip');
+  tooltip.classList.add('hidden');
+  document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('selected'));
+  state.pinnedContactId = null;
+}
+
 function showNotification(message, type = 'info') {
   // Simple notification - could be enhanced with toast UI
   console.log(`[${type.toUpperCase()}] ${message}`);
@@ -2167,10 +2668,34 @@ document.addEventListener('DOMContentLoaded', () => {
   initPlayerSetupScreen();
   initBridgeScreen();
 
+  // GM-2: Check for campaign code in URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const campaignCode = urlParams.get('code') || urlParams.get('campaign');
+  if (campaignCode) {
+    // Auto-fill campaign code and show player login
+    document.getElementById('campaign-code').value = campaignCode.toUpperCase();
+    document.getElementById('login-screen').querySelector('.login-options').classList.add('hidden');
+    document.getElementById('campaign-select').classList.add('hidden');
+    document.getElementById('player-select').classList.remove('hidden');
+    // Focus the join button
+    setTimeout(() => document.getElementById('btn-join-campaign').focus(), 100);
+  }
+
   // Close modal on overlay click
   document.getElementById('modal-overlay').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
+    }
+  });
+
+  // TIP-1: Contact tooltip close button and click-outside-to-close
+  document.getElementById('btn-close-tooltip').addEventListener('click', hideContactTooltip);
+  document.addEventListener('click', (e) => {
+    const tooltip = document.getElementById('contact-tooltip');
+    if (!tooltip.classList.contains('hidden') &&
+        !tooltip.contains(e.target) &&
+        !e.target.closest('.contact-item')) {
+      hideContactTooltip();
     }
   });
 });

@@ -282,6 +282,24 @@ input[type="checkbox"] {
   box-shadow: 0 0 10px rgba(58, 138, 255, 0.3);
 }
 
+/* Legacy link - subtle link to old combat interface */
+.legacy-link {
+  margin-top: var(--space-xl);
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.legacy-link a {
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.legacy-link a:hover {
+  color: var(--text-secondary);
+  text-decoration: underline;
+}
+
 /* ==================== Header ==================== */
 .header {
   display: flex;
@@ -416,6 +434,22 @@ input[type="checkbox"] {
   border-radius: var(--radius-sm);
 }
 
+.ship-item.selectable {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ship-item.selectable:hover {
+  background: var(--bg-card);
+  border-color: var(--primary);
+}
+
+.ship-item.selectable.selected {
+  background: var(--bg-card);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 150, 255, 0.3);
+}
+
 .player-slot .status {
   font-size: 12px;
   color: var(--text-muted);
@@ -444,9 +478,41 @@ input[type="checkbox"] {
 .player-setup-container {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-lg);
-  max-width: 800px;
+  padding: var(--space-lg) var(--space-xl);
+  width: 100%;
+  max-width: 1800px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr) minmax(400px, 3fr);
+  grid-template-rows: 1fr auto;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+/* Character section - left */
+.player-setup-container .setup-section:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* Ship section - middle */
+.player-setup-container .setup-section:nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Role section - right, taller */
+.player-setup-container .setup-section:nth-child(3) {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+/* Join button - full width bottom */
+.player-setup-container .setup-actions {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  text-align: center;
+  padding-top: var(--space-md);
 }
 
 .character-card {
@@ -481,11 +547,17 @@ input[type="checkbox"] {
   gap: var(--space-sm);
 }
 
-.ship-select-list,
+.ship-select-list {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: 1fr;
+  margin-bottom: var(--space-md);
+}
+
 .role-select-list {
   display: grid;
   gap: var(--space-sm);
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   margin-bottom: var(--space-md);
 }
 
@@ -555,9 +627,153 @@ input[type="checkbox"] {
   letter-spacing: 1px;
 }
 
-.date-display {
+.date-display,
+.campaign-display,
+.location-display {
   font-family: var(--font-mono);
   color: var(--text-secondary);
+}
+
+.header-separator {
+  color: var(--text-muted);
+  margin: 0 var(--space-xs);
+}
+
+/* Bridge User Identity */
+.bridge-user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--bg-dark);
+  border-radius: var(--radius-md);
+  margin-left: auto;
+  margin-right: var(--space-md);
+}
+
+.bridge-user-info .user-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.user-role-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  color: var(--text-secondary);
+}
+
+.user-role-badge.role-gm {
+  background: var(--accent-purple);
+  color: white;
+}
+
+.user-role-badge.role-captain {
+  background: var(--accent-gold);
+  color: var(--bg-dark);
+}
+
+.user-role-badge.role-pilot {
+  background: var(--accent-blue);
+  color: white;
+}
+
+.user-role-badge.role-engineer {
+  background: var(--accent-orange);
+  color: var(--bg-dark);
+}
+
+.user-role-badge.role-damage_control {
+  background: var(--alert-red);
+  color: white;
+}
+
+.user-role-badge.role-sensors {
+  background: var(--accent-cyan);
+  color: var(--bg-dark);
+}
+
+.user-role-badge.role-gunner {
+  background: var(--alert-red);
+  color: white;
+}
+
+/* Change Role Button (UI-6) */
+.btn-change-role {
+  font-size: 10px;
+  padding: 2px 6px;
+  margin-left: -4px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.btn-change-role:hover {
+  opacity: 1;
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+.user-ship-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: var(--bg-dark);
+  color: var(--text-dim);
+  border: 1px solid var(--border-color);
+}
+
+/* GM Control Group */
+.gm-control-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-md);
+}
+
+.gm-control-group .control-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* Alert buttons */
+.btn-alert {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.btn-alert-normal {
+  background: rgba(42, 170, 74, 0.2);
+  border-color: var(--alert-normal);
+  color: var(--alert-normal);
+}
+
+.btn-alert-yellow {
+  background: rgba(234, 179, 8, 0.2);
+  border-color: var(--alert-yellow);
+  color: var(--alert-yellow);
+}
+
+.btn-alert-red {
+  background: rgba(220, 38, 38, 0.2);
+  border-color: var(--alert-red);
+  color: var(--alert-red);
+}
+
+.btn-alert:hover {
+  filter: brightness(1.2);
 }
 
 .guest-indicator {
@@ -647,7 +863,7 @@ input[type="checkbox"] {
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  min-width: 45px;
+  min-width: 35px;
 }
 
 .status-bar-container {
@@ -822,6 +1038,28 @@ input[type="checkbox"] {
   overflow-y: auto;
   padding: var(--space-md);
   border-top: 1px solid var(--border-color);
+}
+
+/* Role Panel Footer */
+.role-panel-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.feedback-link {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.feedback-link:hover {
+  opacity: 1;
+  color: var(--accent-blue);
 }
 
 /* Role Detail Panel Content */
@@ -1314,6 +1552,16 @@ input[type="checkbox"] {
   font-size: 10px;
 }
 
+/* GM notes styling - only visible to GM */
+.contact-gm-notes {
+  font-size: 11px;
+  color: var(--accent-orange);
+  font-style: italic;
+  margin-top: var(--space-xs);
+  padding-left: var(--space-sm);
+  border-left: 2px solid var(--accent-orange);
+}
+
 /* Damage Modal */
 .damage-effects-preview {
   margin-top: var(--space-md);
@@ -1429,6 +1677,39 @@ input[type="checkbox"] {
 }
 
 /* ==================== Responsive ==================== */
+
+/* Tablet landscape / small desktop */
+@media (max-width: 1200px) {
+  .player-setup-container {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    padding: var(--space-md);
+  }
+
+  .player-setup-container .setup-section:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .player-setup-container .setup-section:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .player-setup-container .setup-section:nth-child(3) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .player-setup-container .setup-actions {
+    grid-row: 3;
+  }
+
+  .role-select-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1024px) {
   .bridge-main {
     grid-template-columns: 1fr 1fr;
@@ -1443,8 +1724,13 @@ input[type="checkbox"] {
   .log-panel {
     grid-column: 1 / -1;
   }
+
+  .role-select-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
+/* Tablet portrait */
 @media (max-width: 768px) {
   .bridge-main {
     grid-template-columns: 1fr;
@@ -1461,6 +1747,52 @@ input[type="checkbox"] {
 
   .login-options {
     flex-direction: column;
+  }
+
+  .player-setup-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    gap: var(--space-md);
+  }
+
+  .player-setup-container .setup-section:nth-child(1),
+  .player-setup-container .setup-section:nth-child(2),
+  .player-setup-container .setup-section:nth-child(3) {
+    grid-column: 1;
+  }
+
+  .player-setup-container .setup-section:nth-child(1) { grid-row: 1; }
+  .player-setup-container .setup-section:nth-child(2) { grid-row: 2; }
+  .player-setup-container .setup-section:nth-child(3) { grid-row: 3; }
+  .player-setup-container .setup-actions { grid-row: 4; }
+
+  .role-select-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Phone */
+@media (max-width: 480px) {
+  .player-setup-container {
+    padding: var(--space-sm);
+  }
+
+  .role-select-list {
+    grid-template-columns: 1fr;
+  }
+
+  .role-option,
+  .ship-option {
+    padding: var(--space-sm);
+  }
+
+  .bridge-header {
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .bridge-header h1 {
+    font-size: 1.2rem;
   }
 }
 
@@ -1660,4 +1992,246 @@ input[type="checkbox"] {
 .process-info p:last-child {
   margin-bottom: 0;
   color: var(--accent-orange);
+}
+
+/* ==================== Contact Tooltip (TIP-1) ==================== */
+.contact-tooltip {
+  position: fixed;
+  z-index: 1000;
+  width: 280px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.contact-tooltip.hidden {
+  display: none;
+}
+
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-dark);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.tooltip-name {
+  font-weight: 600;
+  color: var(--accent-blue);
+}
+
+.tooltip-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+  line-height: 1;
+}
+
+.tooltip-close:hover {
+  color: var(--text-primary);
+}
+
+.tooltip-body {
+  padding: var(--space-md);
+}
+
+.tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+  font-size: 0.9rem;
+}
+
+.tooltip-row:last-child {
+  margin-bottom: 0;
+}
+
+.tooltip-row .label {
+  color: var(--text-muted);
+}
+
+.tooltip-row .value {
+  color: var(--text-primary);
+  font-weight: 500;
+  text-align: right;
+  max-width: 60%;
+}
+
+.tooltip-row.gm-only {
+  border-top: 1px dashed var(--border-color);
+  padding-top: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.tooltip-row.gm-only .label {
+  color: var(--accent-purple);
+}
+
+.contact-item.selected {
+  border-color: var(--accent-blue);
+  background: var(--bg-panel-light);
+}
+
+/* ==================== Ship Status Modal (TIP-2) ==================== */
+.ship-status-content {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.ship-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.info-section {
+  margin-bottom: var(--space-md);
+}
+
+.info-section h4 {
+  color: var(--accent-blue);
+  margin-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-xs);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  font-size: 0.9rem;
+}
+
+.info-row .label {
+  color: var(--text-muted);
+}
+
+.info-row .value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ==================== UI-7: Status Colors ==================== */
+.status-green {
+  color: var(--accent-green) !important;
+}
+
+.status-yellow {
+  color: var(--accent-yellow) !important;
+}
+
+.status-red {
+  color: var(--accent-red) !important;
+}
+
+.alert-normal {
+  color: var(--accent-green);
+}
+
+.alert-yellow {
+  color: var(--accent-yellow);
+}
+
+.alert-red {
+  color: var(--accent-red);
+}
+
+/* Clickable ship name */
+#bridge-ship-name {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+#bridge-ship-name:hover {
+  color: var(--accent-blue);
+}
+
+/* ==================== GM-3: God Mode Styles ==================== */
+.god-mode-section {
+  border-top: 2px solid var(--accent-yellow);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+}
+
+.god-mode-section h3 {
+  color: var(--accent-yellow);
+  margin-bottom: var(--space-sm);
+}
+
+.god-mode-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.god-mode-group {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+}
+
+.god-mode-group > label {
+  display: block;
+  color: var(--accent-yellow);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  font-size: 0.85rem;
+}
+
+.god-mode-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.god-mode-row label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  min-width: 50px;
+}
+
+.input-small {
+  width: 70px;
+  padding: var(--space-xs);
+  font-size: 0.85rem;
+}
+
+.input-medium {
+  width: 140px;
+  padding: var(--space-xs);
+  font-size: 0.85rem;
+}
+
+.god-mode-buttons {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.btn-warning {
+  background: var(--accent-yellow);
+  color: var(--bg-dark);
+}
+
+.btn-warning:hover {
+  background: #d4a106;
+}
+
+.btn-success {
+  background: var(--accent-green);
+  color: var(--bg-dark);
+}
+
+.btn-success:hover {
+  background: #22894a;
 }

@@ -15,13 +15,15 @@
         <p class="subtitle">Virtual Tabletop for Mongoose Traveller 2E</p>
 
         <div class="login-options">
-          <button id="btn-gm-login" class="btn btn-primary btn-large">
+          <button id="btn-gm-login" class="btn btn-primary btn-large" title="Game Master login - Full campaign control and access to all ship data">
             GM Login
           </button>
-          <button id="btn-player-login" class="btn btn-secondary btn-large">
+          <button id="btn-player-login" class="btn btn-secondary btn-large" title="Player login - Join a campaign as crew member. Requires campaign code from GM.">
             Player Login
           </button>
         </div>
+
+        <p class="legacy-link"><a href="/combat/">Space Combat Simulator</a></p>
 
         <div id="campaign-select" class="hidden">
           <h2>Select Campaign</h2>
@@ -41,8 +43,8 @@
             <input type="text" id="campaign-code" placeholder="Enter campaign code">
           </div>
           <div class="join-options">
-            <button id="btn-join-campaign" class="btn btn-primary">Join as Player</button>
-            <button id="btn-join-guest" class="btn btn-secondary">Join as Guest</button>
+            <button id="btn-join-campaign" class="btn btn-primary" title="Join with a reserved player slot - Your character data is saved">Join as Player</button>
+            <button id="btn-join-guest" class="btn btn-secondary" title="Quick join - No permanent character, skill 0 in all roles">Join as Guest</button>
           </div>
           <p class="guest-info">Guests can take any role with skill 0. GM can override skill level.</p>
           <button id="btn-back-player" class="btn btn-link">Back</button>
@@ -110,15 +112,15 @@
 
         <section class="setup-section">
           <h2>Campaign Settings</h2>
-          <div class="form-group">
+          <div class="form-group" title="Imperial calendar date - Format: DDD-YYYY (day 001-365, year 1105+)">
             <label>Current Date:</label>
             <input type="text" id="campaign-date" placeholder="1105-001">
           </div>
-          <div class="form-group">
+          <div class="form-group" title="Current star system - Location for sensor contacts and navigation">
             <label>Current System:</label>
             <input type="text" id="campaign-system" placeholder="Regina">
           </div>
-          <div class="form-group">
+          <div class="form-group" title="God Mode - Direct editing of ship stats, contacts, and systems. Bypass normal game rules.">
             <label>
               <input type="checkbox" id="god-mode-toggle">
               God Mode (Full Control)
@@ -180,7 +182,11 @@
       <header class="bridge-header">
         <div class="ship-info">
           <h1 id="bridge-ship-name">Ship Name</h1>
+          <span id="bridge-campaign-name" class="campaign-display"></span>
+          <span class="header-separator">·</span>
           <span id="bridge-date" class="date-display">1105-001 12:00</span>
+          <span class="header-separator">·</span>
+          <span id="bridge-location" class="location-display">System</span>
         </div>
         <div id="guest-indicator" class="guest-indicator hidden">
           <span class="guest-badge">GUEST</span>
@@ -189,35 +195,42 @@
           <span class="alert-indicator"></span>
           <span class="alert-text">NORMAL</span>
         </div>
+        <div class="bridge-user-info">
+          <span id="bridge-user-name" class="user-name">User</span>
+          <span class="user-role-badge" id="bridge-user-role">Role</span>
+          <button id="btn-change-role" class="btn btn-small btn-change-role" title="Change Role">Change</button>
+          <span class="user-ship-badge" id="bridge-user-ship">Ship</span>
+        </div>
         <div class="header-actions">
           <button id="btn-bridge-menu" class="btn btn-icon" title="Menu">☰</button>
+          <button id="btn-bridge-logout" class="btn btn-link">Logout</button>
         </div>
       </header>
 
       <!-- Ship Status Bar -->
       <section id="ship-status-bar" class="ship-status-bar">
-        <div class="status-item">
+        <div class="status-item" title="Hull Points - Ship structural integrity. At 0 HP the ship is disabled.">
           <span class="status-label">Hull</span>
           <div class="status-bar-container">
             <div id="hull-bar" class="status-bar hull-bar" style="width: 100%"></div>
           </div>
           <span id="hull-value" class="status-value">100%</span>
         </div>
-        <div class="status-item">
+        <div class="status-item" title="Fuel (tons) - Jump fuel + maneuver fuel. Jump-2 requires 20 tons per jump.">
           <span class="status-label">Fuel</span>
           <div class="status-bar-container">
             <div id="fuel-bar" class="status-bar fuel-bar" style="width: 100%"></div>
           </div>
           <span id="fuel-value" class="status-value">40/40</span>
         </div>
-        <div class="status-item">
+        <div class="status-item" title="Power Plant Output - Available power for ship systems. Below 50% some systems may fail.">
           <span class="status-label">Power</span>
           <div class="status-bar-container">
             <div id="power-bar" class="status-bar power-bar" style="width: 100%"></div>
           </div>
           <span id="power-value" class="status-value">100%</span>
         </div>
-        <div class="status-item location-item">
+        <div class="status-item location-item" title="Current position - Star system, in-system location, and ship status">
           <span class="status-label">Location</span>
           <span id="location-value" class="status-value location-value">Regina System</span>
         </div>
@@ -225,10 +238,10 @@
 
       <main class="bridge-main">
         <!-- Sensor Display (Top) -->
-        <section id="sensor-display" class="sensor-panel">
+        <section id="sensor-display" class="sensor-panel" title="Sensor contacts - Click on a contact for details">
           <div class="panel-header">
             <h2>Sensor Display</h2>
-            <span id="sensor-status" class="status-indicator">PASSIVE</span>
+            <span id="sensor-status" class="status-indicator" title="PASSIVE: Detecting emissions. ACTIVE: Emitting pulses (detectable). DEEP SCAN: Detailed analysis.">PASSIVE</span>
           </div>
           <div id="sensor-contacts" class="contacts-list">
             <p class="placeholder">No contacts detected</p>
@@ -236,10 +249,10 @@
         </section>
 
         <!-- Role Panel (Bottom Left) - Changes based on role -->
-        <section id="role-panel" class="role-panel">
+        <section id="role-panel" class="role-panel" title="Your bridge station - Actions available depend on your role">
           <div class="panel-header">
             <h2 id="role-panel-title">Your Role</h2>
-            <span id="role-name" class="role-indicator">Pilot</span>
+            <span id="role-name" class="role-indicator" title="Current duty station. Click Change Role button to switch roles.">Pilot</span>
           </div>
           <div id="role-actions" class="role-actions">
             <!-- Populated based on role -->
@@ -248,11 +261,14 @@
           <div id="role-detail-view" class="role-detail hidden">
             <!-- Populated based on role -->
           </div>
-          <button id="btn-toggle-detail" class="btn btn-link">Show Details ▼</button>
+          <div class="role-panel-footer">
+            <button id="btn-toggle-detail" class="btn btn-link">Show Details ▼</button>
+            <a href="https://github.com/anthropics/claude-code/issues" target="_blank" class="feedback-link" title="Report bugs or request features - Fast turnaround!">Feedback</a>
+          </div>
         </section>
 
         <!-- Crew Status (Bottom Center) -->
-        <section id="crew-panel" class="crew-panel">
+        <section id="crew-panel" class="crew-panel" title="Crew roster - Players and NPCs currently on duty">
           <div class="panel-header">
             <h2>Crew Status</h2>
           </div>
@@ -262,10 +278,10 @@
         </section>
 
         <!-- Ship Log (Bottom Right) -->
-        <section id="log-panel" class="log-panel">
+        <section id="log-panel" class="log-panel" title="Ship's log - All events and notes are recorded here">
           <div class="panel-header">
             <h2>Ship Log</h2>
-            <button id="btn-add-log" class="btn btn-small">+ Add Note</button>
+            <button id="btn-add-log" class="btn btn-small" title="Add a personal note to the ship's log">+ Add Note</button>
           </div>
           <div id="ship-log" class="ship-log">
             <!-- Populated dynamically -->
@@ -276,11 +292,20 @@
       <!-- GM Overlay (shown when GM is viewing) -->
       <div id="gm-overlay" class="gm-overlay hidden">
         <div class="gm-controls">
-          <button id="btn-gm-advance-time" class="btn">Advance Time</button>
-          <button id="btn-gm-add-contact" class="btn">Add Contact</button>
-          <button id="btn-gm-damage" class="btn btn-warning">System Damage</button>
-          <button id="btn-gm-initiative" class="btn btn-warning">Call Initiative</button>
-          <button id="btn-gm-combat" class="btn btn-danger">Start Combat</button>
+          <!-- Alert Status Controls -->
+          <div class="gm-control-group">
+            <span class="control-label">Alert:</span>
+            <button id="btn-alert-normal" class="btn btn-alert btn-alert-normal" title="Normal operations - Standard watch, crew may be off-duty">NORMAL</button>
+            <button id="btn-alert-yellow" class="btn btn-alert btn-alert-yellow" title="Yellow Alert - Potential danger, all crew to stations">YELLOW</button>
+            <button id="btn-alert-red" class="btn btn-alert btn-alert-red" title="Red Alert - Combat imminent, battle stations!">RED</button>
+          </div>
+          <!-- GM Actions -->
+          <button id="btn-gm-advance-time" class="btn" title="Advance game time - Minutes, hours, days, or weeks">Advance Time</button>
+          <button id="btn-gm-add-log" class="btn" title="Add entry to ship's log - Narrative events, system notes">Add Log</button>
+          <button id="btn-gm-add-contact" class="btn" title="Create new sensor contact - Ships, asteroids, stations">Add Contact</button>
+          <button id="btn-gm-damage" class="btn btn-warning" title="Apply damage to ship systems - Selective or random">System Damage</button>
+          <button id="btn-gm-initiative" class="btn btn-warning" title="Roll initiative for all crew - Sets action order">Call Initiative</button>
+          <button id="btn-gm-combat" class="btn btn-danger" title="Enter tactical combat mode - Full space combat system">Start Combat</button>
         </div>
       </div>
     </div>
@@ -295,6 +320,17 @@
         <!-- Combat UI will be loaded here -->
         <p class="placeholder">Combat system integration pending...</p>
       </main>
+    </div>
+
+    <!-- Contact Tooltip (TIP-1) -->
+    <div id="contact-tooltip" class="contact-tooltip hidden">
+      <div class="tooltip-header">
+        <span id="tooltip-contact-name" class="tooltip-name">Contact</span>
+        <button class="btn-close tooltip-close" id="btn-close-tooltip">×</button>
+      </div>
+      <div id="tooltip-content" class="tooltip-body">
+        <!-- Populated dynamically -->
+      </div>
     </div>
 
     <!-- Modals -->
@@ -319,31 +355,31 @@
       <div class="form-group">
         <label>Skills (relevant to ship operations):</label>
         <div class="skill-inputs">
-          <div class="skill-row">
+          <div class="skill-row" title="Pilot - Spacecraft maneuvering, evasion, docking. Used for Pilot role.">
             <label>Pilot:</label>
             <input type="number" id="skill-pilot" min="0" max="6" value="0">
           </div>
-          <div class="skill-row">
+          <div class="skill-row" title="Astrogation - Jump route calculation, navigation. Used for Astrogator role.">
             <label>Astrogation:</label>
             <input type="number" id="skill-astrogation" min="0" max="6" value="0">
           </div>
-          <div class="skill-row">
+          <div class="skill-row" title="Engineer - Power plant, drives, repairs. Used for Engineer and Damage Control roles.">
             <label>Engineer:</label>
             <input type="number" id="skill-engineer" min="0" max="6" value="0">
           </div>
-          <div class="skill-row">
+          <div class="skill-row" title="Gunner - Turrets, batteries, missile systems. Used for Gunner role.">
             <label>Gunnery:</label>
             <input type="number" id="skill-gunnery" min="0" max="6" value="0">
           </div>
-          <div class="skill-row">
+          <div class="skill-row" title="Electronics (Sensors) - Scanning, detection, jamming. Used for Sensors role.">
             <label>Sensors:</label>
             <input type="number" id="skill-sensors" min="0" max="6" value="0">
           </div>
-          <div class="skill-row">
+          <div class="skill-row" title="Leadership - Command, crew management, morale. Used for Captain role.">
             <label>Leadership:</label>
             <input type="number" id="skill-leadership" min="0" max="6" value="0">
           </div>
-          <div class="skill-row">
+          <div class="skill-row" title="Tactics (Naval) - Space combat strategy. Adds to Captain's Initiative roll.">
             <label>Tactics:</label>
             <input type="number" id="skill-tactics" min="0" max="6" value="0">
           </div>
@@ -352,15 +388,15 @@
       <div class="form-group">
         <label>Stats:</label>
         <div class="stat-inputs">
-          <div class="stat-row">
+          <div class="stat-row" title="Dexterity - Physical coordination. DM for Pilot/Gunner checks. 7 = human average.">
             <label>DEX:</label>
             <input type="number" id="stat-dex" min="1" max="15" value="7">
           </div>
-          <div class="stat-row">
+          <div class="stat-row" title="Intelligence - Mental quickness. DM for Sensors/Tactics checks. 7 = human average.">
             <label>INT:</label>
             <input type="number" id="stat-int" min="1" max="15" value="7">
           </div>
-          <div class="stat-row">
+          <div class="stat-row" title="Education - Technical knowledge. DM for Astrogation/Engineering. 7 = human average.">
             <label>EDU:</label>
             <input type="number" id="stat-edu" min="1" max="15" value="7">
           </div>
@@ -424,6 +460,36 @@
         </div>
         <button class="btn btn-primary" id="btn-custom-time">Advance</button>
       </div>
+    </div>
+  </template>
+
+  <!-- Add Log Entry Modal Template -->
+  <template id="template-add-log">
+    <div class="modal-header">
+      <h2>Add Ship Log Entry</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="log-entry-type">Entry Type</label>
+        <select id="log-entry-type">
+          <option value="status">Status Update</option>
+          <option value="captain">Captain's Log</option>
+          <option value="engineering">Engineering</option>
+          <option value="combat">Combat Report</option>
+          <option value="arrival">Arrival/Departure</option>
+          <option value="jump">Jump Event</option>
+          <option value="note">GM Note</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="log-entry-message">Message</label>
+        <textarea id="log-entry-message" rows="3" placeholder="Log entry message..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" id="btn-save-log-entry">Add Entry</button>
     </div>
   </template>
 
@@ -628,6 +694,107 @@
     <div class="modal-footer">
       <button class="btn btn-secondary" data-close-modal>Cancel</button>
       <button class="btn btn-primary" id="btn-create-ship">Add Ship</button>
+    </div>
+  </template>
+
+  <!-- Ship Status Modal Template (TIP-2) -->
+  <template id="template-ship-status">
+    <div class="modal-header">
+      <h2 id="ship-status-name">Ship Name</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div id="ship-status-content" class="ship-status-content">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Close</button>
+    </div>
+  </template>
+
+  <!-- GM Bridge Menu Modal Template -->
+  <template id="template-gm-bridge-menu">
+    <div class="modal-header">
+      <h2>GM Menu</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="gm-menu-section">
+        <h3>Campaign Code</h3>
+        <div class="campaign-code-display large">
+          <code id="gm-menu-campaign-code">--------</code>
+          <button id="btn-gm-copy-code" class="btn btn-primary">Copy Code</button>
+        </div>
+        <p class="code-hint">Share this code with players to join</p>
+      </div>
+
+      <!-- GOD MODE Section -->
+      <div class="gm-menu-section god-mode-section">
+        <h3>⚡ God Mode</h3>
+        <div class="god-mode-controls">
+          <div class="god-mode-group">
+            <label>Ship State</label>
+            <div class="god-mode-row">
+              <label>Hull:</label>
+              <input type="number" id="god-ship-hull" min="0" max="999" class="input-small">
+              <label>Fuel:</label>
+              <input type="number" id="god-ship-fuel" min="0" max="999" class="input-small">
+            </div>
+            <div class="god-mode-row">
+              <label>Power:</label>
+              <input type="number" id="god-ship-power" min="0" max="100" class="input-small">
+              <label>Alert:</label>
+              <select id="god-ship-alert" class="input-small">
+                <option value="NORMAL">NORMAL</option>
+                <option value="YELLOW">YELLOW</option>
+                <option value="RED">RED</option>
+                <option value="BATTLE">BATTLE</option>
+              </select>
+            </div>
+            <button id="btn-god-apply-ship" class="btn btn-warning btn-small">Apply Ship Changes</button>
+          </div>
+
+          <div class="god-mode-group">
+            <label>Add Contact</label>
+            <div class="god-mode-row">
+              <input type="text" id="god-contact-name" placeholder="Contact name" class="input-medium">
+              <select id="god-contact-type" class="input-small">
+                <option value="Unknown">Unknown</option>
+                <option value="Free Trader">Free Trader</option>
+                <option value="Far Trader">Far Trader</option>
+                <option value="Scout">Scout</option>
+                <option value="Patrol">Patrol</option>
+                <option value="SDB">SDB</option>
+                <option value="Cruiser">Cruiser</option>
+                <option value="Asteroid">Asteroid</option>
+                <option value="Station">Station</option>
+              </select>
+            </div>
+            <div class="god-mode-row">
+              <label>Range:</label>
+              <input type="number" id="god-contact-range" value="50000" class="input-small">
+              <label>km</label>
+              <label>Bearing:</label>
+              <input type="number" id="god-contact-bearing" value="0" min="0" max="359" class="input-small">
+              <label>°</label>
+            </div>
+            <button id="btn-god-add-contact" class="btn btn-warning btn-small">Add Contact</button>
+          </div>
+
+          <div class="god-mode-group">
+            <label>Quick Commands</label>
+            <div class="god-mode-buttons">
+              <button id="btn-god-repair-all" class="btn btn-success btn-small">Repair All</button>
+              <button id="btn-god-refuel" class="btn btn-success btn-small">Full Refuel</button>
+              <button id="btn-god-clear-contacts" class="btn btn-danger btn-small">Clear Contacts</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Close</button>
     </div>
   </template>
 
