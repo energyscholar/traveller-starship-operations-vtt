@@ -3,6 +3,13 @@
  * Handles UI state, socket communication, and user interactions
  */
 
+// ==================== Module Imports ====================
+import { SHIP_ASCII_ART, getShipAsciiArt } from './modules/ascii-art.js';
+import { escapeHtml, formatRoleName, formatActionName, formatRange, getRangeClass, formatRangeBand, formatSystemName, getStatusColor, getContactIcon } from './modules/utils.js';
+import { UWP_DATA, decodeUWP, formatUWPTooltip, getUWPSummary, createUWPSpan, initUWPTooltips } from './modules/uwp-decoder.js';
+import { formatSkillName, formatCharacterTooltip, initCharacterTooltips } from './modules/tooltips.js';
+import { getRoleDetailContent, getActionMessage, renderSystemStatusItem } from './modules/role-panels.js';
+
 // ==================== State ====================
 const state = {
   socket: null,
@@ -224,6 +231,17 @@ function initSocket() {
     showNotification('Character saved', 'success');
   });
 
+  // Stage 2: Role personality updated
+  state.socket.on('ops:rolePersonalityUpdated', (data) => {
+    if (state.player && state.player.id === data.playerId) {
+      state.player.role_title = data.roleTitle;
+      state.player.quirk_text = data.quirkText;
+      state.player.quirk_icon = data.quirkIcon;
+      updateRoleQuirkDisplay();
+    }
+    showNotification('Station personality saved', 'success');
+  });
+
   // Ship & role events
   state.socket.on('ops:shipSelected', (data) => {
     state.ship = data.ship;
@@ -239,7 +257,47 @@ function initSocket() {
 
   state.socket.on('ops:crewUpdate', (data) => {
     // Another player changed their role
-    renderRoleSelection();
+    console.log('[OPS] Crew update received:', data);
+
+    // Update role selection if on player-setup screen
+    if (state.currentScreen === 'player-setup') {
+      renderRoleSelection();
+    }
+
+    // Update bridge crew display if on bridge screen
+    if (state.currentScreen === 'bridge') {
+      // Update crewOnline array with the change
+      if (data.crew) {
+        // Full crew list provided
+        state.crewOnline = data.crew;
+      } else if (data.action === 'joined' || data.role) {
+        // Someone joined or took a role - add/update them
+        const existingIdx = state.crewOnline.findIndex(c => c.accountId === data.accountId);
+        if (existingIdx >= 0) {
+          state.crewOnline[existingIdx].role = data.role;
+          state.crewOnline[existingIdx].roleInstance = data.roleInstance;
+        } else if (data.slotName || data.accountId) {
+          state.crewOnline.push({
+            accountId: data.accountId,
+            name: data.slotName || data.playerName || 'Unknown',
+            role: data.role,
+            roleInstance: data.roleInstance,
+            isNPC: false
+          });
+        }
+      } else if (data.action === 'left' || data.action === 'disconnected') {
+        // Someone left - remove them or clear their role
+        const existingIdx = state.crewOnline.findIndex(c => c.accountId === data.accountId);
+        if (existingIdx >= 0) {
+          if (data.action === 'disconnected') {
+            state.crewOnline.splice(existingIdx, 1);
+          } else {
+            state.crewOnline[existingIdx].role = null;
+          }
+        }
+      }
+      renderCrewStatus();
+    }
   });
 
   // Bridge events
@@ -292,6 +350,26 @@ function initSocket() {
   state.socket.on('ops:alertStatusChanged', (data) => {
     updateAlertStatus(data.status);
     showNotification(`Alert status: ${data.status}`, data.status === 'RED' ? 'error' : 'info');
+  });
+
+  // Stage 5: Current system updated (TravellerMap)
+  state.socket.on('ops:currentSystemUpdated', (data) => {
+    const locationEl = document.getElementById('bridge-location');
+    if (locationEl) {
+      locationEl.textContent = data.locationDisplay;
+    }
+    // Update campaign state with sector/hex for jump map
+    if (state.campaign) {
+      state.campaign.current_system = data.locationDisplay;
+      state.campaign.current_sector = data.sector || null;
+      state.campaign.current_hex = data.hex || null;
+    }
+    // Refresh jump map if astrogator
+    if (state.selectedRole === 'astrogator') {
+      renderRoleDetailPanel(state.selectedRole);
+      initJumpMapIfNeeded();
+    }
+    showNotification(`Location set to ${data.locationDisplay}`, 'success');
   });
 
   // Ship management events
@@ -415,6 +493,10 @@ function initSocket() {
   state.socket.on('ops:jumpCompleted', (data) => {
     state.jumpStatus = { inJump: false };
     state.campaign.current_system = data.arrivedAt;
+    // Stage 7: Update date after jump
+    if (data.newDate) {
+      state.campaign.current_date = data.newDate;
+    }
     showNotification(`Arrived at ${data.arrivedAt}`, 'success');
     renderRoleDetailPanel(state.role);
     renderBridge();
@@ -422,7 +504,25 @@ function initSocket() {
 
   state.socket.on('ops:locationChanged', (data) => {
     state.campaign.current_system = data.newLocation;
+    if (data.newDate) {
+      state.campaign.current_date = data.newDate;
+    }
     renderBridge();
+  });
+
+  // Stage 7: Handle time updates (from jumps or GM actions)
+  state.socket.on('ops:timeUpdated', (data) => {
+    if (data.currentDate && state.campaign) {
+      state.campaign.current_date = data.currentDate;
+      // Update date display
+      const dateEl = document.getElementById('bridge-date');
+      if (dateEl) dateEl.textContent = data.currentDate;
+      const gmDateEl = document.getElementById('campaign-date');
+      if (gmDateEl) gmDateEl.value = data.currentDate;
+    }
+    if (data.reason) {
+      showNotification(`Time advanced: ${data.reason}`, 'info');
+    }
   });
 
   // Refueling events
@@ -896,7 +996,8 @@ function renderRoleSelection() {
     { id: 'marines', name: 'Marines', desc: 'Security, boarding' },
     { id: 'medic', name: 'Medic', desc: 'Medical care' },
     { id: 'steward', name: 'Steward', desc: 'Passengers, supplies' },
-    { id: 'cargo_master', name: 'Cargo', desc: 'Cargo operations' }
+    { id: 'cargo_master', name: 'Cargo', desc: 'Cargo operations' },
+    { id: 'observer', name: 'Observer', desc: 'Watch bridge operations', unlimited: true }
   ].sort((a, b) => a.name.localeCompare(b.name));  // Alphabetize roles
 
   // Get crew requirements from ship template (if available)
@@ -905,6 +1006,18 @@ function renderRoleSelection() {
   // Expand roles based on crew requirements
   const roles = [];
   for (const r of baseRoles) {
+    // Unlimited roles (observer) always show as single option, never expand
+    if (r.unlimited) {
+      roles.push({
+        id: r.id,
+        instance: 1,
+        fullId: r.id,
+        name: r.name,
+        desc: r.desc,
+        unlimited: true
+      });
+      continue;
+    }
     const count = crewReqs[r.id] || 1;
     if (count > 1) {
       // Multiple instances of this role
@@ -943,14 +1056,15 @@ function renderRoleSelection() {
     const takenBy = takenRoles.find(t => t.fullId === r.fullId);
     const isSelected = state.selectedRole === r.id &&
                        (state.selectedRoleInstance || 1) === r.instance;
-    const isTaken = takenBy && !isSelected;
+    // Unlimited roles are never marked as taken
+    const isTaken = !r.unlimited && takenBy && !isSelected;
 
     return `
-      <div class="role-option ${isSelected ? 'selected' : ''} ${isTaken ? 'taken' : ''}"
+      <div class="role-option ${isSelected ? 'selected' : ''} ${isTaken ? 'taken' : ''} ${r.unlimited ? 'unlimited' : ''}"
            data-role-id="${r.id}" data-role-instance="${r.instance}" ${isTaken ? 'disabled' : ''}>
         <div class="role-name">${r.name}</div>
         <div class="role-desc">${r.desc}</div>
-        ${takenBy ? `<div class="role-taken-by">Taken by ${escapeHtml(takenBy.name)}</div>` : ''}
+        ${isTaken ? `<div class="role-taken-by">Taken by ${escapeHtml(takenBy.name)}</div>` : ''}
       </div>
     `;
   }).join('');
@@ -1038,6 +1152,15 @@ function initBridgeScreen() {
     }
   });
 
+  // Stage 2: Edit role personality (quirk/title)
+  document.getElementById('btn-edit-role-personality').addEventListener('click', () => {
+    if (!state.selectedRole || state.selectedRole === 'observer') {
+      showNotification('No role to customize', 'info');
+      return;
+    }
+    showModal('template-edit-role-personality');
+  });
+
   // Bridge logout
   document.getElementById('btn-bridge-logout').addEventListener('click', () => {
     // Reset all state
@@ -1085,6 +1208,11 @@ function initGMControls() {
     showModal('template-add-contact');
   });
 
+  // Stage 5: Lookup System (TravellerMap)
+  document.getElementById('btn-gm-lookup-system').addEventListener('click', () => {
+    showModal('template-system-lookup');
+  });
+
   document.getElementById('btn-gm-initiative').addEventListener('click', () => {
     state.socket.emit('ops:callInitiative', {
       campaignId: state.campaign.id
@@ -1105,6 +1233,26 @@ function initGMControls() {
     damageBtn.addEventListener('click', () => {
       showModal('template-apply-damage');
     });
+  }
+}
+
+// Stage 2: Update quirk display in role panel header
+function updateRoleQuirkDisplay() {
+  const quirkDisplay = document.getElementById('role-quirk-display');
+  if (!quirkDisplay) return;
+
+  const icon = state.player?.quirk_icon || '';
+  const text = state.player?.quirk_text || '';
+
+  if (icon || text) {
+    let display = '';
+    if (icon) display += icon;
+    if (icon && text) display += ' ';
+    if (text) display += `"${text}"`;
+    quirkDisplay.textContent = display;
+    quirkDisplay.title = text || 'Station quirk';
+  } else {
+    quirkDisplay.textContent = '';
   }
 }
 
@@ -1157,13 +1305,28 @@ function renderBridge() {
   // Ship status bar
   renderShipStatus();
 
-  // Role panel
+  // Role panel - observers get ASCII art instead
   const roleConfig = getRoleConfig(state.selectedRole);
-  document.getElementById('role-panel-title').textContent = roleConfig.name;
-  document.getElementById('role-name').textContent = formatRoleName(state.selectedRole);
+  const isObserver = state.selectedRole === 'observer';
 
-  // Render role actions
-  renderRoleActions(roleConfig);
+  if (isObserver) {
+    // Show observer view with ship ASCII art
+    document.getElementById('role-panel-title').textContent = 'Observer';
+    document.getElementById('role-name').textContent = 'Spectator View';
+    document.getElementById('btn-edit-role-personality').style.display = 'none';
+    renderObserverPanel();
+  } else {
+    document.getElementById('role-panel-title').textContent = roleConfig.name;
+    // Use custom title if set, otherwise use formatted role name
+    const displayName = state.player?.role_title || formatRoleName(state.selectedRole);
+    document.getElementById('role-name').textContent = displayName;
+    document.getElementById('btn-edit-role-personality').style.display = '';
+    // Render role actions
+    renderRoleActions(roleConfig);
+  }
+
+  // Stage 2: Update quirk display
+  updateRoleQuirkDisplay();
 
   // Render crew list
   renderCrewList();
@@ -1237,352 +1400,60 @@ function renderRoleActions(roleConfig) {
 
   // Render role-specific detail panel
   renderRoleDetailPanel(state.selectedRole);
+
+  // Stage 6: Initialize jump map if astrogator
+  initJumpMapIfNeeded();
+}
+
+function renderObserverPanel() {
+  // Clear role actions for observers
+  const actionsContainer = document.getElementById('role-actions');
+  actionsContainer.innerHTML = '';
+
+  // Get ship type for ASCII art
+  const shipType = state.ship?.template_data?.type || state.ship?.type || 'unknown';
+  const shipName = state.ship?.name || 'Unknown Ship';
+  const asciiArt = getShipAsciiArt(shipType);
+
+  // Show ASCII art and observer message in the detail panel
+  const detailContainer = document.getElementById('role-detail-view');
+  detailContainer.innerHTML = `
+    <div class="observer-panel">
+      <div class="observer-ascii-art">
+        <pre class="ship-ascii-art">${asciiArt}</pre>
+      </div>
+      <div class="observer-info">
+        <h4>${escapeHtml(shipName)}</h4>
+        <p class="observer-message">You are observing bridge operations.</p>
+        <p class="observer-hint">Watch the crew manage their stations. You have no controls.</p>
+      </div>
+    </div>
+  `;
+
+  // Make sure detail view is visible for observers
+  detailContainer.classList.remove('hidden');
 }
 
 function renderRoleDetailPanel(role) {
   const container = document.getElementById('role-detail-view');
-  const shipState = state.ship?.current_state || {};
-  const template = state.ship?.template_data || {};
 
-  // Role-specific content
-  const detailContent = getRoleDetailContent(role, shipState, template);
+  // Build context object for role panel
+  const context = {
+    shipState: state.ship?.current_state || {},
+    template: state.ship?.template_data || {},
+    systemStatus: state.systemStatus || {},
+    damagedSystems: state.damagedSystems || [],
+    fuelStatus: state.fuelStatus,
+    jumpStatus: state.jumpStatus || {},
+    campaign: state.campaign,
+    contacts: state.contacts,
+    crewOnline: state.crewOnline,
+    ship: state.ship
+  };
+
+  // Role-specific content from module
+  const detailContent = getRoleDetailContent(role, context);
   container.innerHTML = detailContent;
-}
-
-function getRoleDetailContent(role, shipState, template) {
-  switch (role) {
-    case 'pilot':
-      return `
-        <div class="detail-section">
-          <h4>Thrust Status</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Thrust Rating:</span>
-              <span class="stat-value">${template.thrust || 2}G</span>
-            </div>
-            <div class="stat-row">
-              <span>Current Vector:</span>
-              <span class="stat-value">${shipState.vector || 'Stationary'}</span>
-            </div>
-            <div class="stat-row">
-              <span>Maneuver Drive:</span>
-              <span class="stat-value ${shipState.mDriveStatus === 'damaged' ? 'text-warning' : ''}">${shipState.mDriveStatus || 'Operational'}</span>
-            </div>
-          </div>
-        </div>
-        <div class="detail-section">
-          <h4>Docking Status</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Status:</span>
-              <span class="stat-value">${shipState.docked ? 'Docked' : 'Free Flight'}</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-    case 'engineer':
-      const maxPower = template.powerPlant || 100;
-      const currentPower = shipState.power ?? maxPower;
-      const powerPercent = Math.round((currentPower / maxPower) * 100);
-      const systemStatus = state.systemStatus || {};
-      const damagedSystems = state.damagedSystems || [];
-      const fuelStatus = state.fuelStatus || {
-        total: shipState.fuel ?? template.fuel ?? 40,
-        max: template.fuel || 40,
-        breakdown: { refined: shipState.fuel ?? template.fuel ?? 40, unrefined: 0, processed: 0 },
-        percentFull: 100,
-        processing: null,
-        fuelProcessor: template.fuelProcessor || false
-      };
-      const fuelBreakdown = fuelStatus.breakdown || { refined: fuelStatus.total, unrefined: 0, processed: 0 };
-      return `
-        <div class="detail-section">
-          <h4>System Status</h4>
-          <div class="system-status-grid">
-            ${renderSystemStatusItem('M-Drive', systemStatus.mDrive)}
-            ${renderSystemStatusItem('Power Plant', systemStatus.powerPlant)}
-            ${renderSystemStatusItem('J-Drive', systemStatus.jDrive)}
-            ${renderSystemStatusItem('Sensors', systemStatus.sensors)}
-            ${renderSystemStatusItem('Computer', systemStatus.computer)}
-            ${renderSystemStatusItem('Armour', systemStatus.armour)}
-          </div>
-        </div>
-        ${damagedSystems.length > 0 ? `
-        <div class="detail-section">
-          <h4>Repair Actions</h4>
-          <div class="repair-controls">
-            <select id="repair-target" class="repair-select">
-              ${damagedSystems.map(s => `<option value="${s}">${formatSystemName(s)}</option>`).join('')}
-            </select>
-            <button onclick="attemptRepair()" class="btn btn-small">Attempt Repair</button>
-          </div>
-          <div class="repair-info">
-            <small>Engineer check (8+) with DM = -Severity</small>
-          </div>
-        </div>
-        ` : ''}
-        <div class="detail-section">
-          <h4>Fuel Status</h4>
-          <div class="fuel-display">
-            <div class="fuel-total">
-              <span class="fuel-amount">${fuelStatus.total}/${fuelStatus.max}</span>
-              <span class="fuel-unit">tons</span>
-              <span class="fuel-percent">(${fuelStatus.percentFull}%)</span>
-            </div>
-            <div class="fuel-bar-container">
-              <div class="fuel-bar-segment refined" style="width: ${(fuelBreakdown.refined / fuelStatus.max) * 100}%" title="Refined: ${fuelBreakdown.refined}t"></div>
-              <div class="fuel-bar-segment processed" style="width: ${(fuelBreakdown.processed / fuelStatus.max) * 100}%" title="Processed: ${fuelBreakdown.processed}t"></div>
-              <div class="fuel-bar-segment unrefined" style="width: ${(fuelBreakdown.unrefined / fuelStatus.max) * 100}%" title="Unrefined: ${fuelBreakdown.unrefined}t"></div>
-            </div>
-            <div class="fuel-breakdown">
-              <div class="fuel-type refined"><span class="fuel-dot"></span>Refined: ${fuelBreakdown.refined}t</div>
-              <div class="fuel-type processed"><span class="fuel-dot"></span>Processed: ${fuelBreakdown.processed}t</div>
-              <div class="fuel-type unrefined"><span class="fuel-dot"></span>Unrefined: ${fuelBreakdown.unrefined}t</div>
-            </div>
-          </div>
-          ${fuelBreakdown.unrefined > 0 ? `
-          <div class="fuel-warning">
-            <span class="warning-icon">⚠</span>
-            Unrefined fuel: -2 DM to jump checks, 5% misjump risk
-          </div>
-          ` : ''}
-          <div class="fuel-actions">
-            <button onclick="openRefuelModal()" class="btn btn-small">Refuel</button>
-            ${fuelStatus.fuelProcessor && fuelBreakdown.unrefined > 0 ? `
-            <button onclick="openProcessFuelModal()" class="btn btn-small">Process Fuel</button>
-            ` : ''}
-          </div>
-          ${fuelStatus.processing ? `
-          <div class="fuel-processing-status">
-            <span class="processing-icon">⚙</span>
-            Processing ${fuelStatus.processing.tons}t: ${fuelStatus.processing.hoursRemaining}h remaining
-          </div>
-          ` : ''}
-        </div>
-        <div class="detail-section">
-          <h4>Jump Capability</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Jump Rating:</span>
-              <span class="stat-value">J-${template.jumpRating || 2}</span>
-            </div>
-            <div class="stat-row">
-              <span>Fuel per Jump:</span>
-              <span class="stat-value">${Math.round((template.tonnage || 100) * 0.1)}t/parsec</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-    case 'gunner':
-      const weapons = template.weapons || [];
-      const ammo = shipState.ammo || {};
-      return `
-        <div class="detail-section">
-          <h4>Weapons Status</h4>
-          <div class="weapons-list">
-            ${weapons.length > 0 ? weapons.map((w, i) => `
-              <div class="weapon-item">
-                <span class="weapon-name">${w.name || w.id || 'Weapon ' + (i + 1)}</span>
-                <span class="weapon-status">${shipState.weaponStatus?.[i] || 'Ready'}</span>
-              </div>
-            `).join('') : '<div class="placeholder">No weapons configured</div>'}
-          </div>
-        </div>
-        <div class="detail-section">
-          <h4>Ammunition</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Missiles:</span>
-              <span class="stat-value">${ammo.missiles ?? 12}</span>
-            </div>
-            <div class="stat-row">
-              <span>Sandcaster:</span>
-              <span class="stat-value">${ammo.sandcaster ?? 20}</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-    case 'captain':
-      return `
-        <div class="detail-section">
-          <h4>Ship Overview</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Ship Class:</span>
-              <span class="stat-value">${template.class || state.ship?.name || 'Unknown'}</span>
-            </div>
-            <div class="stat-row">
-              <span>Tonnage:</span>
-              <span class="stat-value">${template.tonnage || '?'} dT</span>
-            </div>
-            <div class="stat-row">
-              <span>Alert Status:</span>
-              <span class="stat-value">${shipState.alertStatus || 'NORMAL'}</span>
-            </div>
-          </div>
-        </div>
-        <div class="detail-section">
-          <h4>Crew Status</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Online:</span>
-              <span class="stat-value">${state.crewOnline?.length || 0}</span>
-            </div>
-            <div class="stat-row">
-              <span>NPC Crew:</span>
-              <span class="stat-value">${state.ship?.npcCrew?.length || 0}</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-    case 'sensor_operator':
-      return `
-        <div class="detail-section">
-          <h4>Sensor Status</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Mode:</span>
-              <span class="stat-value">${shipState.sensorMode || 'Passive'}</span>
-            </div>
-            <div class="stat-row">
-              <span>Range:</span>
-              <span class="stat-value">${shipState.sensorRange || 'Standard'}</span>
-            </div>
-            <div class="stat-row">
-              <span>Contacts:</span>
-              <span class="stat-value">${state.contacts?.length || 0}</span>
-            </div>
-          </div>
-        </div>
-        <div class="detail-section">
-          <h4>EW Status</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Jamming:</span>
-              <span class="stat-value">${shipState.jamming ? 'Active' : 'Inactive'}</span>
-            </div>
-          </div>
-        </div>
-      `;
-
-    case 'astrogator':
-      const jumpStatus = state.jumpStatus || {};
-      const jumpRating = template.jumpRating || 2;
-      const fuelAvailable = shipState.fuel ?? template.fuel ?? 40;
-
-      if (jumpStatus.inJump) {
-        return `
-          <div class="detail-section jump-in-progress">
-            <h4>IN JUMP SPACE</h4>
-            <div class="jump-status-display">
-              <div class="stat-row">
-                <span>Destination:</span>
-                <span class="stat-value">${jumpStatus.destination}</span>
-              </div>
-              <div class="stat-row">
-                <span>Jump Distance:</span>
-                <span class="stat-value">J-${jumpStatus.jumpDistance}</span>
-              </div>
-              <div class="stat-row">
-                <span>ETA:</span>
-                <span class="stat-value">${jumpStatus.jumpEndDate}</span>
-              </div>
-              <div class="stat-row">
-                <span>Time Remaining:</span>
-                <span class="stat-value">${jumpStatus.hoursRemaining} hours</span>
-              </div>
-            </div>
-            ${jumpStatus.canExit ? `
-              <button onclick="completeJump()" class="btn btn-primary">Exit Jump Space</button>
-            ` : ''}
-          </div>
-        `;
-      }
-
-      return `
-        <div class="detail-section">
-          <h4>Navigation</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Current System:</span>
-              <span class="stat-value">${state.campaign?.current_system || 'Unknown'}</span>
-            </div>
-            <div class="stat-row">
-              <span>Jump Drive:</span>
-              <span class="stat-value">${state.systemStatus?.jDrive?.disabled ? 'DAMAGED' : 'Operational'}</span>
-            </div>
-            <div class="stat-row">
-              <span>Jump Rating:</span>
-              <span class="stat-value">J-${jumpRating}</span>
-            </div>
-            <div class="stat-row">
-              <span>Fuel Available:</span>
-              <span class="stat-value">${fuelAvailable} tons</span>
-            </div>
-          </div>
-        </div>
-        <div class="detail-section">
-          <h4>Plot Jump</h4>
-          <div class="jump-controls">
-            <div class="form-group">
-              <label for="jump-destination">Destination:</label>
-              <input type="text" id="jump-destination" placeholder="System name" class="jump-input">
-            </div>
-            <div class="form-group">
-              <label for="jump-distance">Distance:</label>
-              <select id="jump-distance" class="jump-select" onchange="updateFuelEstimate()">
-                ${[...Array(jumpRating)].map((_, i) => `
-                  <option value="${i+1}">Jump-${i+1} (${i+1} parsec${i > 0 ? 's' : ''})</option>
-                `).join('')}
-              </select>
-            </div>
-            <div class="fuel-estimate">
-              Fuel required: <span id="fuel-estimate">--</span> tons
-            </div>
-            <button onclick="initiateJump()" class="btn btn-primary">Initiate Jump</button>
-          </div>
-        </div>
-      `;
-
-    case 'damage_control':
-      return `
-        <div class="detail-section">
-          <h4>Hull Integrity</h4>
-          <div class="detail-stats">
-            <div class="stat-row">
-              <span>Hull:</span>
-              <span class="stat-value">${shipState.hull ?? template.hull ?? 100}/${template.hull || 100}</span>
-            </div>
-            <div class="stat-row">
-              <span>Armor:</span>
-              <span class="stat-value">${template.armor || 0}</span>
-            </div>
-          </div>
-        </div>
-        <div class="detail-section">
-          <h4>Damage Report</h4>
-          <div class="damage-list">
-            ${(shipState.criticals || []).length > 0 ?
-              shipState.criticals.map(c => `<div class="damage-item text-warning">${c}</div>`).join('') :
-              '<div class="placeholder">No damage reported</div>'
-            }
-          </div>
-        </div>
-      `;
-
-    default:
-      // Generic detail view for other roles
-      return `
-        <div class="detail-section">
-          <h4>${formatRoleName(role)} Station</h4>
-          <div class="placeholder">Station details available during operations.</div>
-        </div>
-      `;
-  }
 }
 
 function handleRoleAction(action) {
@@ -1590,56 +1461,8 @@ function handleRoleAction(action) {
   const playerName = state.player?.character_data?.name || state.player?.slot_name || 'Player';
   const roleName = formatRoleName(state.selectedRole);
 
-  // Generate action-specific log message
-  const actionMessages = {
-    // Pilot
-    setCourse: `${playerName} plotting new course`,
-    evasiveAction: `${playerName} initiating evasive maneuvers`,
-    dock: `${playerName} beginning docking sequence`,
-    undock: `${playerName} releasing docking clamps`,
-    // Captain
-    setAlertStatus: `${playerName} adjusting alert status`,
-    issueOrders: `Captain ${playerName} issuing bridge orders`,
-    authorizeWeapons: `${playerName} authorizing weapons release`,
-    hail: `${playerName} opening communications channel`,
-    // Astrogator
-    plotJump: `${playerName} calculating jump coordinates`,
-    calculateIntercept: `${playerName} plotting intercept course`,
-    verifyPosition: `${playerName} confirming current position`,
-    // Engineer
-    allocatePower: `${playerName} reallocating power grid`,
-    fieldRepair: `${playerName} performing field repairs`,
-    overloadSystem: `${playerName} overloading system capacitors`,
-    // Sensors
-    activeScan: `${playerName} initiating active sensor sweep`,
-    deepScan: `${playerName} performing deep scan analysis`,
-    jam: `${playerName} activating electronic countermeasures`,
-    // Gunner
-    fireWeapon: `${playerName} firing weapons`,
-    pointDefense: `${playerName} activating point defense`,
-    sandcaster: `${playerName} deploying sandcaster screen`,
-    // Damage Control
-    directRepair: `${playerName} directing repair teams`,
-    prioritizeSystem: `${playerName} prioritizing system repairs`,
-    emergencyProcedure: `${playerName} executing emergency procedure`,
-    // Marines
-    securityPatrol: `${playerName} initiating security patrol`,
-    prepareBoarding: `${playerName} preparing boarding party`,
-    repelBoarders: `${playerName} coordinating defense against boarders`,
-    // Medic
-    treatInjury: `${playerName} treating injured crew member`,
-    triage: `${playerName} performing triage assessment`,
-    checkSupplies: `${playerName} checking medical supplies`,
-    // Steward
-    attendPassenger: `${playerName} attending to passengers`,
-    boostMorale: `${playerName} boosting crew morale`,
-    // Cargo
-    checkManifest: `${playerName} reviewing cargo manifest`,
-    loadCargo: `${playerName} supervising cargo loading`,
-    unloadCargo: `${playerName} coordinating cargo unloading`
-  };
-
-  const logMessage = actionMessages[action] || `${playerName} (${roleName}): ${formatActionName(action)}`;
+  // Get action message from role-panels module
+  const logMessage = getActionMessage(action, playerName, roleName);
 
   // Emit action to server with log entry
   state.socket.emit('ops:roleAction', {
@@ -1676,11 +1499,12 @@ function renderCrewList() {
   // Add online players
   state.crewOnline.forEach(c => {
     allCrew.push({
-      name: c.name,
+      name: c.character_name || c.slot_name || c.name,
       role: c.role,
       isNPC: false,
       isOnline: true,
-      isYou: c.id === state.player?.id
+      isYou: c.id === state.player?.id,
+      characterData: c.character_data
     });
   });
 
@@ -1706,13 +1530,16 @@ function renderCrewList() {
     return priorityA - priorityB;
   });
 
-  container.innerHTML = allCrew.map(c => `
+  container.innerHTML = allCrew.map(c => {
+    const charDataAttr = c.characterData ? `data-character='${JSON.stringify(c.characterData).replace(/'/g, '&#39;')}'` : '';
+    const hasCharClass = c.characterData ? 'has-character' : '';
+    return `
     <div class="crew-member ${c.isNPC ? 'npc' : ''} ${c.isYou ? 'is-you' : ''}">
       <span class="online-indicator ${c.isOnline ? 'online' : ''}"></span>
-      <span class="crew-name">${escapeHtml(c.name)}${c.isYou ? ' (You)' : ''}</span>
+      <span class="crew-name ${hasCharClass}" ${charDataAttr}>${escapeHtml(c.name)}${c.isYou ? ' (You)' : ''}</span>
       <span class="crew-role">${formatRoleName(c.role)}</span>
-    </div>
-  `).join('') || '<p class="placeholder">No crew</p>';
+    </div>`;
+  }).join('') || '<p class="placeholder">No crew</p>';
 }
 
 function renderContacts() {
@@ -1803,48 +1630,6 @@ function formatRangeBand(band) {
 
 // ==================== Ship Systems ====================
 
-function formatSystemName(system) {
-  const names = {
-    mDrive: 'M-Drive',
-    jDrive: 'J-Drive',
-    powerPlant: 'Power Plant',
-    sensors: 'Sensors',
-    computer: 'Computer',
-    armour: 'Armour',
-    weapon: 'Weapons',
-    fuel: 'Fuel',
-    cargo: 'Cargo',
-    crew: 'Crew',
-    hull: 'Hull'
-  };
-  return names[system] || system;
-}
-
-function renderSystemStatusItem(name, status) {
-  if (!status) {
-    return `
-      <div class="system-status-item operational">
-        <span class="system-name">${name}</span>
-        <span class="system-state">Operational</span>
-      </div>
-    `;
-  }
-
-  const severity = status.totalSeverity || 0;
-  const statusClass = severity === 0 ? 'operational' : severity <= 2 ? 'damaged' : 'critical';
-  const statusText = severity === 0 ? 'Operational' :
-                     status.disabled ? 'DISABLED' :
-                     status.message || `Damaged (Sev ${severity})`;
-
-  return `
-    <div class="system-status-item ${statusClass}">
-      <span class="system-name">${name}</span>
-      <span class="system-state">${statusText}</span>
-      ${severity > 0 ? `<span class="system-severity">Sev ${severity}</span>` : ''}
-    </div>
-  `;
-}
-
 function attemptRepair() {
   const target = document.getElementById('repair-target')?.value;
   if (!target) {
@@ -1902,6 +1687,96 @@ function initiateJump() {
 
 function completeJump() {
   state.socket.emit('ops:completeJump');
+}
+
+// ==================== Jump Map (Stage 6) ====================
+
+async function updateJumpMap() {
+  const sector = state.campaign?.current_sector;
+  const hex = state.campaign?.current_hex;
+
+  if (!sector || !hex) return;
+
+  const range = parseInt(document.getElementById('jump-map-range')?.value) || 2;
+  const style = document.getElementById('jump-map-style')?.value || 'terminal';
+
+  const mapImg = document.getElementById('jump-map-image');
+  const loadingEl = document.querySelector('.jump-map-loading');
+
+  if (mapImg) {
+    mapImg.style.display = 'none';
+    if (loadingEl) loadingEl.style.display = 'block';
+
+    // Use the proxy API
+    const mapUrl = `/api/travellermap/jumpmap?sector=${encodeURIComponent(sector)}&hex=${hex}&jump=${range}&style=${style}`;
+    mapImg.onload = () => {
+      mapImg.style.display = 'block';
+      if (loadingEl) loadingEl.style.display = 'none';
+    };
+    mapImg.onerror = () => {
+      if (loadingEl) loadingEl.textContent = 'Failed to load map';
+    };
+    mapImg.src = mapUrl;
+  }
+
+  // Also fetch destinations
+  fetchJumpDestinations(sector, hex, range);
+}
+
+async function fetchJumpDestinations(sector, hex, range) {
+  const container = document.getElementById('jump-destinations');
+  if (!container) return;
+
+  try {
+    const response = await fetch(`/api/travellermap/jumpworlds?sector=${encodeURIComponent(sector)}&hex=${hex}&jump=${range}`);
+    const data = await response.json();
+
+    if (data.Worlds && data.Worlds.length > 0) {
+      container.innerHTML = `
+        <div class="destinations-header">
+          <span>System</span>
+          <span>UWP</span>
+          <span>Distance</span>
+        </div>
+        ${data.Worlds.map(world => `
+          <div class="destination-item" data-name="${escapeHtml(world.Name)}" data-sector="${escapeHtml(world.Sector || sector)}" data-hex="${world.HexX}${String(world.HexY).padStart(2, '0')}" onclick="selectJumpDestination(this)">
+            <span class="dest-name">${escapeHtml(world.Name)}</span>
+            <span class="dest-uwp">${world.Uwp || '???????-?'}</span>
+            <span class="dest-distance">J-${world.Distance || '?'}</span>
+          </div>
+        `).join('')}
+      `;
+    } else {
+      container.innerHTML = '<p class="placeholder">No nearby systems found</p>';
+    }
+  } catch (error) {
+    container.innerHTML = `<p class="placeholder">Failed to fetch destinations</p>`;
+  }
+}
+
+function selectJumpDestination(element) {
+  const name = element.dataset.name;
+  const sector = element.dataset.sector;
+  const hex = element.dataset.hex;
+
+  // Fill in the destination input
+  const destInput = document.getElementById('jump-destination');
+  if (destInput) {
+    destInput.value = `${name} (${sector} ${hex})`;
+  }
+
+  // Highlight selected
+  document.querySelectorAll('.destination-item').forEach(el => el.classList.remove('selected'));
+  element.classList.add('selected');
+
+  showNotification(`Selected ${name} as destination`, 'info');
+}
+
+// Initialize jump map when astrogator panel is rendered
+function initJumpMapIfNeeded() {
+  if (state.selectedRole === 'astrogator' && state.campaign?.current_sector) {
+    setTimeout(() => updateJumpMap(), 100);
+  }
 }
 
 // ==================== Refueling ====================
@@ -2134,6 +2009,116 @@ function showModal(templateId) {
         });
         closeModal();
       }
+    });
+  }
+
+  // Stage 2: Edit Role Personality Modal
+  if (templateId === 'template-edit-role-personality') {
+    let selectedIcon = state.player?.quirk_icon || '';
+
+    // Pre-fill current values
+    document.getElementById('edit-role-title').value = state.player?.role_title || '';
+    document.getElementById('edit-quirk-text').value = state.player?.quirk_text || '';
+
+    // Icon picker selection
+    modal.querySelectorAll('.icon-btn').forEach(btn => {
+      const icon = btn.dataset.icon;
+      if (icon === selectedIcon) btn.classList.add('selected');
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedIcon = icon;
+      });
+    });
+
+    // Save button
+    document.getElementById('btn-save-role-personality').addEventListener('click', () => {
+      const roleTitle = document.getElementById('edit-role-title').value.trim();
+      const quirkText = document.getElementById('edit-quirk-text').value.trim();
+
+      state.socket.emit('ops:updateRolePersonality', {
+        playerId: state.player?.id,
+        roleTitle: roleTitle || null,
+        quirkText: quirkText || null,
+        quirkIcon: selectedIcon || null
+      });
+      closeModal();
+    });
+  }
+
+  // Stage 5: System Lookup Modal (TravellerMap)
+  if (templateId === 'template-system-lookup') {
+    let selectedSystem = null;
+
+    async function performSearch() {
+      const query = document.getElementById('system-search-input').value.trim();
+      if (!query) return;
+
+      const resultsContainer = document.getElementById('system-search-results');
+      resultsContainer.innerHTML = '<p class="search-loading">Searching TravellerMap...</p>';
+      document.getElementById('btn-set-system').disabled = true;
+      selectedSystem = null;
+
+      try {
+        const response = await fetch(`/api/travellermap/search?q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        if (data.Results?.Count > 0) {
+          // Filter to only World results
+          const worlds = data.Results.Items.filter(item => item.World);
+          if (worlds.length === 0) {
+            resultsContainer.innerHTML = '<p class="search-placeholder">No worlds found. Try a different search.</p>';
+            return;
+          }
+
+          resultsContainer.innerHTML = worlds.map((item, index) => {
+            const world = item.World;
+            return `<div class="system-result-item" data-index="${index}">
+              <div class="system-result-name">${escapeHtml(world.Name)}<span class="system-result-uwp">${world.Uwp}</span></div>
+              <div class="system-result-details">${escapeHtml(world.Sector)} ${world.HexX}${String(world.HexY).padStart(2, '0')}</div>
+            </div>`;
+          }).join('');
+
+          // Store worlds data for selection
+          resultsContainer.dataset.worlds = JSON.stringify(worlds);
+
+          // Click handler for results
+          resultsContainer.querySelectorAll('.system-result-item').forEach(item => {
+            item.addEventListener('click', () => {
+              resultsContainer.querySelectorAll('.system-result-item').forEach(i => i.classList.remove('selected'));
+              item.classList.add('selected');
+              const worlds = JSON.parse(resultsContainer.dataset.worlds);
+              selectedSystem = worlds[parseInt(item.dataset.index)].World;
+              document.getElementById('btn-set-system').disabled = false;
+            });
+          });
+        } else {
+          resultsContainer.innerHTML = '<p class="search-placeholder">No results found. Try a different search.</p>';
+        }
+      } catch (error) {
+        resultsContainer.innerHTML = `<p class="search-placeholder">Search failed: ${error.message}</p>`;
+      }
+    }
+
+    // Search button
+    document.getElementById('btn-system-search').addEventListener('click', performSearch);
+
+    // Enter key in search input
+    document.getElementById('system-search-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') performSearch();
+    });
+
+    // Set system button
+    document.getElementById('btn-set-system').addEventListener('click', () => {
+      if (!selectedSystem) return;
+      const systemName = `${selectedSystem.Name} (${selectedSystem.Sector} ${selectedSystem.HexX}${String(selectedSystem.HexY).padStart(2, '0')})`;
+      state.socket.emit('ops:setCurrentSystem', {
+        system: systemName,
+        uwp: selectedSystem.Uwp,
+        sector: selectedSystem.Sector,
+        hex: `${selectedSystem.HexX}${String(selectedSystem.HexY).padStart(2, '0')}`
+      });
+      closeModal();
     });
   }
 
@@ -2384,417 +2369,13 @@ function closeModal() {
   document.getElementById('modal-overlay').classList.add('hidden');
 }
 
-// ==================== Utilities ====================
-function escapeHtml(str) {
-  if (!str) return '';
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
+// ==================== Utilities (imported from modules/utils.js) ====================
 
-function formatRoleName(role) {
-  if (!role) return 'None';
-  return role.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-}
+// ==================== SHIP-6: ASCII Art (imported from modules/ascii-art.js) ====================
 
-// ==================== SHIP-6: ASCII Art for Ships ====================
-// ASCII art representations for ship types displayed in tooltips/modals
+// ==================== TIP-3: UWP Decoder (imported from modules/uwp-decoder.js) ====================
 
-const SHIP_ASCII_ART = {
-  // Small craft (10-20 tons)
-  'light_fighter': `
-    /\\
-   /  \\
-  |====|
-   \\||/
-    \\/`,
-  'launch': `
-   ____
-  /    \\
- |====  |
- |______|
-   \\  /`,
-  // Free Traders / Merchants (100-400 tons)
-  'free_trader': `
-     ___
-   _/   \\_
-  |==|  |==|
-  |__|==|__|
-    \\____/`,
-  'far_trader': `
-     ___
-   _/   \\_
-  |==|  |==|
-  |__|==|__|
-   _\\____/_`,
-  'subsidized_merchant': `
-      ____
-    _/    \\_
-   |==|  |==|
-   |__|==|__|
-   |________|
-     \\    /`,
-  // Military / Combat
-  'patrol_corvette': `
-     /\\
-    /==\\
-   |====|
-   |====|
-    \\==/`,
-  'x_carrier': `
-       ____
-     _/    \\_
-    |==|  |==|
-   [|__|==|__|]
-   [|________|]
-     \\      /`,
-  // Generic types for unknown/unidentified
-  'small_craft': `
-    /\\
-   /  \\
-  |    |
-   \\  /`,
-  'freighter': `
-    ____
-   /    \\
-  |======|
-  |______|
-    \\  /`,
-  'warship': `
-     /\\
-    /==\\
-   /====\\
-  |======|
-   \\====/`,
-  'unknown': `
-    ????
-   ?    ?
-   ?    ?
-    ????`,
-  // Celestial objects
-  'star': `
-    \\|/
-   --*--
-    /|\\`,
-  'planet': `
-    .--.
-   (    )
-    '--'`,
-  'belt': `
-  * . * .
- . * . *
-  * . * .`,
-  'starport': `
-    _||_
-   |====|
-  /|    |\\
-  \\|____|/`
-};
-
-/**
- * Get ASCII art for a ship type
- * @param {string} shipType - Ship type identifier
- * @returns {string} ASCII art or empty string if not found
- */
-function getShipAsciiArt(shipType) {
-  if (!shipType) return '';
-  const normalizedType = shipType.toLowerCase().replace(/[- ]/g, '_');
-  return SHIP_ASCII_ART[normalizedType] || SHIP_ASCII_ART['unknown'] || '';
-}
-
-// ==================== TIP-3: UWP Decoder ====================
-// Universal World Profile decoder for mouseover tooltips
-// Format: Starport Size Atmosphere Hydrographics Population Government Law-TechLevel
-// Example: A867943-D = Class A starport, Size 8, Atmosphere 6, Hydro 7, Pop 9, Gov 4, Law 3, Tech D
-
-const UWP_DATA = {
-  starport: {
-    'A': { name: 'Excellent', desc: 'Excellent quality installation. Refined fuel, annual overhaul, shipyard (all sizes)' },
-    'B': { name: 'Good', desc: 'Good quality installation. Refined fuel, annual overhaul, shipyard (spacecraft)' },
-    'C': { name: 'Routine', desc: 'Routine quality installation. Unrefined fuel, reasonable repair facilities' },
-    'D': { name: 'Poor', desc: 'Poor quality installation. Unrefined fuel, no repair facilities' },
-    'E': { name: 'Frontier', desc: 'Frontier installation. No fuel, no facilities, just a marked spot' },
-    'X': { name: 'None', desc: 'No starport. No provision for spacecraft' }
-  },
-  size: {
-    '0': { name: 'Asteroid', desc: '< 1,000 km diameter, negligible gravity' },
-    '1': { name: '1,600 km', desc: '~1,600 km (like Triton), 0.05g' },
-    '2': { name: '3,200 km', desc: '~3,200 km (like Luna), 0.15g' },
-    '3': { name: '4,800 km', desc: '~4,800 km (like Mercury), 0.25g' },
-    '4': { name: '6,400 km', desc: '~6,400 km (like Mars), 0.35g' },
-    '5': { name: '8,000 km', desc: '~8,000 km, 0.45g' },
-    '6': { name: '9,600 km', desc: '~9,600 km, 0.7g' },
-    '7': { name: '11,200 km', desc: '~11,200 km, 0.9g' },
-    '8': { name: '12,800 km', desc: '~12,800 km (Earth-like), 1.0g' },
-    '9': { name: '14,400 km', desc: '~14,400 km, 1.25g' },
-    'A': { name: '16,000 km', desc: '~16,000 km, 1.4g' }
-  },
-  atmosphere: {
-    '0': { name: 'None', desc: 'No atmosphere. Vacc suit required' },
-    '1': { name: 'Trace', desc: 'Trace atmosphere. Vacc suit required' },
-    '2': { name: 'Very Thin, Tainted', desc: 'Very thin, tainted. Respirator + filter required' },
-    '3': { name: 'Very Thin', desc: 'Very thin atmosphere. Respirator required' },
-    '4': { name: 'Thin, Tainted', desc: 'Thin, tainted. Filter required' },
-    '5': { name: 'Thin', desc: 'Thin but breathable. No equipment needed at low altitudes' },
-    '6': { name: 'Standard', desc: 'Standard breathable atmosphere' },
-    '7': { name: 'Standard, Tainted', desc: 'Standard, tainted. Filter required' },
-    '8': { name: 'Dense', desc: 'Dense but breathable atmosphere' },
-    '9': { name: 'Dense, Tainted', desc: 'Dense, tainted. Filter required' },
-    'A': { name: 'Exotic', desc: 'Exotic atmosphere. Air supply required' },
-    'B': { name: 'Corrosive', desc: 'Corrosive atmosphere. Vacc suit required' },
-    'C': { name: 'Insidious', desc: 'Insidious atmosphere. Hostile environment suit required' },
-    'D': { name: 'Dense, High', desc: 'Dense, high pressure. Requires special equipment' },
-    'E': { name: 'Thin, Low', desc: 'Thin, low pressure. Found at higher elevations' },
-    'F': { name: 'Unusual', desc: 'Unusual atmospheric mix. Special conditions' }
-  },
-  hydrographics: {
-    '0': { name: '0-5%', desc: 'Desert world. Less than 5% surface water' },
-    '1': { name: '6-15%', desc: 'Dry world. 6-15% surface water' },
-    '2': { name: '16-25%', desc: 'Few small seas. 16-25% surface water' },
-    '3': { name: '26-35%', desc: 'Small seas and oceans. 26-35% surface water' },
-    '4': { name: '36-45%', desc: 'Wet world. 36-45% surface water' },
-    '5': { name: '46-55%', desc: 'Large oceans. 46-55% surface water' },
-    '6': { name: '56-65%', desc: 'Large oceans. 56-65% surface water' },
-    '7': { name: '66-75%', desc: 'Earth-like. 66-75% surface water' },
-    '8': { name: '76-85%', desc: 'Water world. 76-85% surface water' },
-    '9': { name: '86-95%', desc: 'Only small islands. 86-95% surface water' },
-    'A': { name: '96-100%', desc: 'Almost entirely water. 96-100% surface' }
-  },
-  population: {
-    '0': { name: 'None', desc: 'Unpopulated' },
-    '1': { name: 'Few', desc: 'A handful (1-99 people)' },
-    '2': { name: 'Hundreds', desc: 'Village (100-999)' },
-    '3': { name: 'Thousands', desc: 'Small town (1,000-9,999)' },
-    '4': { name: 'Tens of thousands', desc: 'Town (10,000-99,999)' },
-    '5': { name: 'Hundreds of thousands', desc: 'City (100,000-999,999)' },
-    '6': { name: 'Millions', desc: 'Large city (1-9 million)' },
-    '7': { name: 'Tens of millions', desc: 'Megacity (10-99 million)' },
-    '8': { name: 'Hundreds of millions', desc: 'Nation (100-999 million)' },
-    '9': { name: 'Billions', desc: 'Major world (1-9 billion)' },
-    'A': { name: 'Tens of billions', desc: 'Crowded (10-99 billion)' },
-    'B': { name: 'Hundreds of billions', desc: 'Incredibly crowded (100B+)' },
-    'C': { name: 'Trillions', desc: 'World-city (1T+)' }
-  },
-  government: {
-    '0': { name: 'None', desc: 'No government structure. Family bonds or anarchy' },
-    '1': { name: 'Company/Corporation', desc: 'Government by corporation or business entity' },
-    '2': { name: 'Participating Democracy', desc: 'Direct democracy, citizens vote on issues' },
-    '3': { name: 'Self-Perpetuating Oligarchy', desc: 'Small ruling class perpetuates itself' },
-    '4': { name: 'Representative Democracy', desc: 'Elected representatives make decisions' },
-    '5': { name: 'Feudal Technocracy', desc: 'Technical experts rule, loyalty-based hierarchy' },
-    '6': { name: 'Captive Government', desc: 'Controlled by outside force or government' },
-    '7': { name: 'Balkanization', desc: 'Multiple competing governments' },
-    '8': { name: 'Civil Service Bureaucracy', desc: 'Government by professional civil servants' },
-    '9': { name: 'Impersonal Bureaucracy', desc: 'Rigid, faceless bureaucratic structure' },
-    'A': { name: 'Charismatic Dictator', desc: 'Rule by single popular leader' },
-    'B': { name: 'Non-Charismatic Leader', desc: 'Rule by single unpopular/military leader' },
-    'C': { name: 'Charismatic Oligarchy', desc: 'Rule by popular small group' },
-    'D': { name: 'Religious Dictatorship', desc: 'Rule by religious organization' },
-    'E': { name: 'Religious Autocracy', desc: 'Rule by single religious leader' },
-    'F': { name: 'Totalitarian Oligarchy', desc: 'All-powerful small ruling group' }
-  },
-  law: {
-    '0': { name: 'No restrictions', desc: 'No prohibitions. WMD legal' },
-    '1': { name: 'Body pistols, explosives banned', desc: 'WMD, poison gas banned' },
-    '2': { name: 'Portable energy weapons banned', desc: 'Machine guns, grenades restricted' },
-    '3': { name: 'Military weapons banned', desc: 'SMGs, automatic weapons banned' },
-    '4': { name: 'Light assault weapons banned', desc: 'Submachine guns banned' },
-    '5': { name: 'Personal concealable weapons banned', desc: 'Handguns banned' },
-    '6': { name: 'All firearms banned', desc: 'All firearms except shotguns' },
-    '7': { name: 'Shotguns banned', desc: 'All guns banned' },
-    '8': { name: 'Blade weapons banned', desc: 'All visible weapons banned' },
-    '9': { name: 'All weapons banned', desc: 'Any weapon outside home banned' },
-    'A': { name: 'All weapons banned', desc: 'All personal weapons banned' },
-    'B': { name: 'Rigid control', desc: 'Continental passports, rigid movement control' },
-    'C': { name: 'Unrestricted invasion of privacy', desc: 'Constant surveillance, no privacy' },
-    'D': { name: 'Paramilitary law enforcement', desc: 'Military police everywhere' },
-    'E': { name: 'Full-fledged police state', desc: 'Total control, routine executions' },
-    'F': { name: 'Routine oppression', desc: 'Daily oppression, arbitrary punishment' },
-    'G': { name: 'Legalized oppression', desc: 'Severe, codified oppression' },
-    'H': { name: 'Severe oppression', desc: 'Most activities restricted' },
-    'J': { name: 'Total control', desc: 'Only state activities permitted' }
-  },
-  tech: {
-    '0': { name: 'Primitive', desc: 'Stone Age. No technology' },
-    '1': { name: 'Bronze/Iron Age', desc: 'Basic metalworking' },
-    '2': { name: 'Renaissance', desc: 'Printing press, sail ships' },
-    '3': { name: 'Industrial Age', desc: 'Steam power, basic machinery' },
-    '4': { name: 'Mechanized Age', desc: 'Internal combustion, electricity' },
-    '5': { name: 'Broadcast Age', desc: 'Radio, television, early computers' },
-    '6': { name: 'Atomic Age', desc: 'Fission power, early space' },
-    '7': { name: 'Space Age', desc: 'Orbital satellites, basic computing' },
-    '8': { name: 'Information Age', desc: 'Advanced computing, microsatellites' },
-    '9': { name: 'Gravity Control', desc: 'Anti-gravity, fusion power' },
-    'A': { name: 'Jump-capable', desc: 'Jump-1 drives, basic gravitic tech' },
-    'B': { name: 'Early Stellar', desc: 'Jump-2, advanced gravitic tech' },
-    'C': { name: 'Average Stellar', desc: 'Jump-3, plasma weapons' },
-    'D': { name: 'High Stellar', desc: 'Jump-4, battle dress, fusion weapons' },
-    'E': { name: 'Advanced Stellar', desc: 'Jump-5, black globes' },
-    'F': { name: 'Maximum Stellar', desc: 'Jump-6, ultimate tech for Imperium' },
-    'G': { name: 'Superscience', desc: 'Beyond standard Imperial tech' }
-  }
-};
-
-/**
- * Decode a UWP string into component parts
- * @param {string} uwp - Universal World Profile (e.g., "A867943-D")
- * @returns {Object|null} Decoded UWP or null if invalid
- */
-function decodeUWP(uwp) {
-  if (!uwp || typeof uwp !== 'string') return null;
-
-  // UWP format: XNNNNNN-N (starport + 6 digits + hyphen + tech)
-  const match = uwp.toUpperCase().match(/^([A-EX])([0-9A])([0-9A-F])([0-9A])([0-9A-C])([0-9A-F])([0-9A-J])-([0-9A-G])$/);
-  if (!match) return null;
-
-  const [, starport, size, atmo, hydro, pop, gov, law, tech] = match;
-
-  return {
-    raw: uwp.toUpperCase(),
-    starport: { code: starport, ...UWP_DATA.starport[starport] },
-    size: { code: size, ...UWP_DATA.size[size] },
-    atmosphere: { code: atmo, ...UWP_DATA.atmosphere[atmo] },
-    hydrographics: { code: hydro, ...UWP_DATA.hydrographics[hydro] },
-    population: { code: pop, ...UWP_DATA.population[pop] },
-    government: { code: gov, ...UWP_DATA.government[gov] },
-    law: { code: law, ...UWP_DATA.law[law] },
-    tech: { code: tech, ...UWP_DATA.tech[tech] }
-  };
-}
-
-/**
- * Format decoded UWP as HTML tooltip content
- * @param {Object} decoded - Decoded UWP object from decodeUWP()
- * @returns {string} HTML string for tooltip
- */
-function formatUWPTooltip(decoded) {
-  if (!decoded) return 'Invalid UWP';
-
-  return `<div class="uwp-tooltip">
-    <div class="uwp-header">${decoded.raw}</div>
-    <table class="uwp-table">
-      <tr><td class="uwp-label">Starport</td><td class="uwp-code">${decoded.starport.code}</td><td>${decoded.starport.name}</td></tr>
-      <tr><td class="uwp-label">Size</td><td class="uwp-code">${decoded.size.code}</td><td>${decoded.size.name}</td></tr>
-      <tr><td class="uwp-label">Atmosphere</td><td class="uwp-code">${decoded.atmosphere.code}</td><td>${decoded.atmosphere.name}</td></tr>
-      <tr><td class="uwp-label">Hydrographics</td><td class="uwp-code">${decoded.hydrographics.code}</td><td>${decoded.hydrographics.name}</td></tr>
-      <tr><td class="uwp-label">Population</td><td class="uwp-code">${decoded.population.code}</td><td>${decoded.population.name}</td></tr>
-      <tr><td class="uwp-label">Government</td><td class="uwp-code">${decoded.government.code}</td><td>${decoded.government.name}</td></tr>
-      <tr><td class="uwp-label">Law Level</td><td class="uwp-code">${decoded.law.code}</td><td>${decoded.law.name}</td></tr>
-      <tr><td class="uwp-label">Tech Level</td><td class="uwp-code">${decoded.tech.code}</td><td>${decoded.tech.name}</td></tr>
-    </table>
-    <div class="uwp-detail">${decoded.starport.desc}</div>
-  </div>`;
-}
-
-/**
- * Get short UWP summary for inline display
- * @param {string} uwp - UWP string
- * @returns {string} Short summary
- */
-function getUWPSummary(uwp) {
-  const decoded = decodeUWP(uwp);
-  if (!decoded) return uwp;
-  return `${decoded.starport.name} Starport, TL${decoded.tech.code}, Pop: ${decoded.population.name}`;
-}
-
-/**
- * Initialize UWP tooltip system with event delegation
- * Uses mouseover/mouseout on document for elements with data-uwp attribute
- */
-function initUWPTooltips() {
-  const container = document.getElementById('uwp-tooltip-container');
-  if (!container) return;
-
-  let hideTimeout = null;
-
-  // Show tooltip
-  function showUWPTooltip(element, uwp) {
-    const decoded = decodeUWP(uwp);
-    if (!decoded) return;
-
-    container.innerHTML = formatUWPTooltip(decoded);
-    container.classList.add('visible');
-
-    // Position tooltip near cursor/element
-    const rect = element.getBoundingClientRect();
-    const tooltipWidth = 350; // Approximate width
-    const tooltipHeight = 280; // Approximate height
-
-    let left = rect.left;
-    let top = rect.bottom + 8;
-
-    // Keep tooltip on screen
-    if (left + tooltipWidth > window.innerWidth) {
-      left = window.innerWidth - tooltipWidth - 16;
-    }
-    if (top + tooltipHeight > window.innerHeight) {
-      top = rect.top - tooltipHeight - 8;
-    }
-
-    container.style.left = `${Math.max(8, left)}px`;
-    container.style.top = `${Math.max(8, top)}px`;
-  }
-
-  // Hide tooltip
-  function hideUWPTooltip() {
-    container.classList.remove('visible');
-  }
-
-  // Event delegation for mouseover
-  document.addEventListener('mouseover', (e) => {
-    const uwpElement = e.target.closest('[data-uwp]');
-    if (uwpElement) {
-      if (hideTimeout) {
-        clearTimeout(hideTimeout);
-        hideTimeout = null;
-      }
-      showUWPTooltip(uwpElement, uwpElement.dataset.uwp);
-    }
-  });
-
-  // Event delegation for mouseout
-  document.addEventListener('mouseout', (e) => {
-    const uwpElement = e.target.closest('[data-uwp]');
-    if (uwpElement) {
-      // Small delay before hiding to allow moving to nearby elements
-      hideTimeout = setTimeout(hideUWPTooltip, 150);
-    }
-  });
-}
-
-/**
- * Create a UWP span with tooltip data attribute
- * @param {string} uwp - UWP string
- * @returns {string} HTML span element
- */
-function createUWPSpan(uwp) {
-  if (!uwp) return '';
-  const decoded = decodeUWP(uwp);
-  if (!decoded) return escapeHtml(uwp);
-  return `<span class="uwp-code" data-uwp="${escapeHtml(uwp)}">${escapeHtml(uwp)}</span>`;
-}
-
-function formatActionName(action) {
-  return action.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
-}
-
-function formatRange(range) {
-  if (range >= 1000) {
-    return `${(range / 1000).toFixed(1)}k km`;
-  }
-  return `${range} km`;
-}
-
-function getContactIcon(type) {
-  const icons = {
-    ship: '◇',
-    station: '★',
-    planet: '●',
-    unknown: '?',
-    hostile: '◆'
-  };
-  return icons[type] || icons.unknown;
-}
+// ==================== Stage 7: Character Tooltip (imported from modules/tooltips.js) ====================
 
 function getRoleConfig(role) {
   const configs = {
@@ -2906,6 +2487,12 @@ function showShipStatusModal() {
     content += `</div>`;
   }
 
+  // Weapons - get from template_data turrets
+  const weaponsHtml = formatShipWeapons(template);
+  if (weaponsHtml) {
+    content += `<div class="info-section weapons-section"><h4>Armament</h4>${weaponsHtml}</div>`;
+  }
+
   document.getElementById('ship-status-content').innerHTML = content;
 }
 
@@ -2914,6 +2501,52 @@ function getStatusColor(percent) {
   if (percent >= 75) return 'status-green';
   if (percent >= 25) return 'status-yellow';
   return 'status-red';
+}
+
+// Format weapon ID to readable name
+function formatWeaponName(weaponId) {
+  const names = {
+    'beam_laser': 'Beam Laser',
+    'pulse_laser': 'Pulse Laser',
+    'missile_rack': 'Missile Rack',
+    'sandcaster': 'Sandcaster',
+    'particle_beam': 'Particle Beam',
+    'fusion_gun': 'Fusion Gun',
+    'plasma_gun': 'Plasma Gun',
+    'meson_gun': 'Meson Gun'
+  };
+  return names[weaponId] || weaponId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+// Format turret type
+function formatTurretType(type) {
+  const types = {
+    'single': 'Single Turret',
+    'double': 'Double Turret',
+    'triple': 'Triple Turret',
+    'pop_up_single': 'Pop-up Single',
+    'pop_up_double': 'Pop-up Double',
+    'barbette': 'Barbette',
+    'bay': 'Bay Weapon',
+    'spinal': 'Spinal Mount'
+  };
+  return types[type] || type;
+}
+
+// Get formatted weapons list from ship template
+function formatShipWeapons(template) {
+  const turrets = template?.turrets || [];
+  if (turrets.length === 0) return null;
+
+  return turrets.map(turret => {
+    const type = formatTurretType(turret.type);
+    const weapons = (turret.weapons || []).map(formatWeaponName);
+    const concealed = turret.concealed ? ' (Concealed)' : '';
+    return `<div class="weapon-row">
+      <span class="turret-type">${type}${concealed}:</span>
+      <span class="weapon-list">${weapons.join(', ')}</span>
+    </div>`;
+  }).join('');
 }
 
 // ==================== Contact Tooltip (TIP-1) ====================
@@ -3025,6 +2658,15 @@ function showContactTooltip(contactId, targetElement) {
         <span class="value"><a href="${escapeHtml(contact.wiki_url)}" target="_blank" rel="noopener" class="wiki-link">Traveller Wiki</a></span>
       </div>
     `;
+  }
+
+  // Ship weapons (from ship_data or template)
+  const shipData = contact.ship_data ? (typeof contact.ship_data === 'string' ? JSON.parse(contact.ship_data) : contact.ship_data) : null;
+  if (shipData?.turrets && shipData.turrets.length > 0) {
+    const weaponsHtml = formatShipWeapons(shipData);
+    if (weaponsHtml) {
+      content += `<div class="tooltip-weapons"><strong>Armament:</strong>${weaponsHtml}</div>`;
+    }
   }
 
   contentEl.innerHTML = content;
@@ -3156,4 +2798,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // TIP-3: Initialize UWP tooltip system
   initUWPTooltips();
+
+  // Stage 7: Initialize character tooltip system
+  initCharacterTooltips();
 });
+
+// ==================== Global Exports for onclick handlers ====================
+// ES6 modules scope functions, but onclick handlers need global access
+window.attemptRepair = attemptRepair;
+window.openRefuelModal = openRefuelModal;
+window.openProcessFuelModal = openProcessFuelModal;
+window.completeJump = completeJump;
+window.initiateJump = initiateJump;
+window.updateFuelEstimate = updateFuelEstimate;
+window.setRefuelMax = setRefuelMax;
+window.setProcessMax = setProcessMax;
+window.executeRefuel = executeRefuel;
+window.executeProcessFuel = executeProcessFuel;
+// Stage 6: Jump map functions
+window.updateJumpMap = updateJumpMap;
+window.selectJumpDestination = selectJumpDestination;

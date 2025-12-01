@@ -253,6 +253,8 @@
           <div class="panel-header">
             <h2 id="role-panel-title">Your Role</h2>
             <span id="role-name" class="role-indicator" title="Current duty station. Click Change Role button to switch roles.">Pilot</span>
+            <span id="role-quirk-display" class="role-quirk-display" title="Your station quirk"></span>
+            <button id="btn-edit-role-personality" class="btn btn-small btn-secondary" title="Customize your title and quirk">Edit</button>
             <button id="btn-leave-role" class="btn btn-small btn-warning" title="Go off-duty - NPC will take over your station">Leave</button>
           </div>
           <div id="role-actions" class="role-actions">
@@ -304,6 +306,7 @@
           <button id="btn-gm-advance-time" class="btn" title="Advance game time - Minutes, hours, days, or weeks">Advance Time</button>
           <button id="btn-gm-add-log" class="btn" title="Add entry to ship's log - Narrative events, system notes">Add Log</button>
           <button id="btn-gm-add-contact" class="btn" title="Create new sensor contact - Ships, asteroids, stations">Add Contact</button>
+          <button id="btn-gm-lookup-system" class="btn" title="Search TravellerMap for system data - Set current location">Lookup System</button>
           <button id="btn-gm-damage" class="btn btn-warning" title="Apply damage to ship systems - Selective or random">System Damage</button>
           <button id="btn-gm-initiative" class="btn btn-warning" title="Roll initiative for all crew - Sets action order">Call Initiative</button>
           <button id="btn-gm-combat" class="btn btn-danger" title="Enter tactical combat mode - Full space combat system">Start Combat</button>
@@ -799,8 +802,76 @@
     </div>
   </template>
 
+  <!-- Edit Role Personality Modal Template (Stage 2 Autorun 3) -->
+  <template id="template-edit-role-personality">
+    <div class="modal-header">
+      <h2>Personalize Your Station</h2>
+      <button class="btn-close" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="edit-role-title">Custom Title</label>
+        <input type="text" id="edit-role-title" placeholder="e.g., Chief Navigator, Helmsman First Class" maxlength="50">
+        <p class="field-hint">Leave blank to use default role name</p>
+      </div>
+      <div class="form-group">
+        <label>Quirk Icon</label>
+        <div id="quirk-icon-picker" class="icon-picker">
+          <button type="button" class="icon-btn" data-icon="">None</button>
+          <button type="button" class="icon-btn" data-icon="*">*</button>
+          <button type="button" class="icon-btn" data-icon="+">+</button>
+          <button type="button" class="icon-btn" data-icon="#">#</button>
+          <button type="button" class="icon-btn" data-icon="@">@</button>
+          <button type="button" class="icon-btn" data-icon="!">!</button>
+          <button type="button" class="icon-btn" data-icon="~">~</button>
+          <button type="button" class="icon-btn" data-icon="^">^</button>
+          <button type="button" class="icon-btn" data-icon="&amp;">&amp;</button>
+          <button type="button" class="icon-btn" data-icon="%">%</button>
+          <button type="button" class="icon-btn" data-icon="$">$</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="edit-quirk-text">Quirk / Catchphrase</label>
+        <input type="text" id="edit-quirk-text" placeholder="e.g., Always has a mug of coffee" maxlength="100">
+        <p class="field-hint">A personality trait or catchphrase for your character at this station</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button id="btn-save-role-personality" class="btn btn-primary">Save</button>
+    </div>
+  </template>
+
+  <!-- System Lookup Modal Template (Stage 5 Autorun 3) -->
+  <template id="template-system-lookup">
+    <div class="modal-header">
+      <h2>Lookup System (TravellerMap)</h2>
+      <button class="btn-close" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="system-search-input">Search for system:</label>
+        <div class="search-input-group">
+          <input type="text" id="system-search-input" placeholder="e.g., Regina, Mora, Efate..." maxlength="50">
+          <button id="btn-system-search" class="btn btn-primary">Search</button>
+        </div>
+        <p class="field-hint">Search TravellerMap for world data. Use * for wildcards.</p>
+      </div>
+      <div id="system-search-results" class="system-search-results">
+        <p class="search-placeholder">Enter a system name and click Search</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button id="btn-set-system" class="btn btn-primary" disabled>Set as Current Location</button>
+    </div>
+  </template>
+
   <!-- TIP-3: UWP Tooltip Container -->
   <div id="uwp-tooltip-container"></div>
+
+  <!-- Stage 7: Character Sheet Tooltip Container -->
+  <div id="character-tooltip-container"></div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="app.js" type="module"></script>

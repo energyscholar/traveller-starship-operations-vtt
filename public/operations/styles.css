@@ -1282,6 +1282,96 @@ input[type="checkbox"] {
   50% { opacity: 0.5; }
 }
 
+/* ==================== Stage 6: Jump Map ==================== */
+.jump-map-section {
+  background: var(--bg-darker);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+}
+
+.jump-map-controls {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.jump-map-controls select {
+  flex: 1;
+}
+
+.jump-map-container {
+  background: #000;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jump-map-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.jump-map-loading {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.jump-destinations {
+  margin-top: var(--space-sm);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.destinations-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-dark);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.destination-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.15s;
+}
+
+.destination-item:hover {
+  background: var(--bg-dark);
+}
+
+.destination-item.selected {
+  background: rgba(0, 200, 100, 0.15);
+  border-left: 2px solid var(--accent-green);
+}
+
+.dest-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.dest-uwp {
+  color: var(--accent-cyan);
+  font-family: monospace;
+}
+
+.dest-distance {
+  color: var(--accent-yellow);
+  text-align: right;
+}
+
 .jump-status-display {
   margin: var(--space-sm) 0;
 }
@@ -2412,4 +2502,355 @@ input[type="checkbox"] {
 .wiki-link:hover {
   text-decoration: underline;
   color: #5aa0ff;
+}
+
+/* ==================== Stage 7: Character Tooltip ==================== */
+
+#character-tooltip-container {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+#character-tooltip-container.visible {
+  opacity: 1;
+}
+
+.crew-name.has-character {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
+.crew-name.has-character:hover {
+  color: var(--accent-blue);
+}
+
+.character-tooltip {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  min-width: 260px;
+  max-width: 320px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 12px rgba(74, 106, 138, 0.3);
+}
+
+.character-tooltip .char-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.character-tooltip .char-portrait {
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+}
+
+.character-tooltip .char-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--accent-blue);
+}
+
+.character-tooltip .char-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.character-tooltip .char-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  min-width: 36px;
+}
+
+.character-tooltip .stat-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.character-tooltip .stat-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--accent-yellow);
+}
+
+.character-tooltip .char-skills-section {
+  margin-top: var(--space-xs);
+}
+
+.character-tooltip .char-skills-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.character-tooltip .char-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.character-tooltip .char-skill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--bg-input);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+.character-tooltip .no-skills {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* ==================== Observer Role ==================== */
+.role-option.unlimited {
+  border-style: dashed;
+  opacity: 0.85;
+}
+
+.role-option.unlimited:hover {
+  opacity: 1;
+}
+
+.observer-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  text-align: center;
+}
+
+.observer-ascii-art {
+  margin-bottom: var(--space-md);
+}
+
+.observer-ascii-art .ship-ascii-art {
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.observer-info h4 {
+  color: var(--accent-blue);
+  margin-bottom: var(--space-sm);
+}
+
+.observer-message {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: var(--space-sm);
+}
+
+.observer-hint {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.user-role-badge.role-observer {
+  background: rgba(150, 150, 150, 0.2);
+  color: var(--text-muted);
+  border-color: var(--text-muted);
+}
+
+/* ==================== Stage 3: Weapons Display ==================== */
+.weapons-section {
+  grid-column: 1 / -1;
+  margin-top: var(--space-md);
+}
+
+.weapon-row {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.weapon-row:last-child {
+  border-bottom: none;
+}
+
+.turret-type {
+  color: var(--accent-red);
+  min-width: 140px;
+  font-weight: 500;
+}
+
+.weapon-list {
+  color: var(--text-primary);
+}
+
+.tooltip-weapons {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.tooltip-weapons strong {
+  color: var(--accent-red);
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+
+.tooltip-weapons .weapon-row {
+  font-size: 0.8rem;
+  padding: 2px 0;
+}
+
+.tooltip-weapons .turret-type {
+  min-width: 100px;
+  font-size: 0.8rem;
+}
+
+/* ==================== Stage 2: Role Personality (Autorun 3) ==================== */
+.role-quirk-display {
+  font-size: 0.85rem;
+  color: var(--accent-orange);
+  margin-left: var(--space-xs);
+}
+
+.role-quirk-display:empty {
+  display: none;
+}
+
+.icon-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
+  font-family: var(--font-mono);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--bg-panel);
+  border-color: var(--accent-blue);
+}
+
+.icon-btn.selected {
+  background: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: var(--bg-base);
+}
+
+.field-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* ==================== Stage 5: System Lookup (Autorun 3) ==================== */
+.search-input-group {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.search-input-group input {
+  flex: 1;
+}
+
+.system-search-results {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: var(--space-sm);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+}
+
+.search-placeholder {
+  padding: var(--space-md);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.search-loading {
+  padding: var(--space-md);
+  text-align: center;
+  color: var(--accent-blue);
+}
+
+.system-result-item {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.system-result-item:last-child {
+  border-bottom: none;
+}
+
+.system-result-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.system-result-item.selected {
+  background: var(--accent-blue);
+  color: var(--bg-base);
+}
+
+.system-result-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.system-result-details {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: var(--space-xs);
+}
+
+.system-result-item.selected .system-result-details {
+  color: var(--bg-secondary);
+}
+
+.system-result-uwp {
+  font-family: var(--font-mono);
+  background: var(--bg-base);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-left: var(--space-xs);
+}
+
+.system-result-item.selected .system-result-uwp {
+  background: rgba(0, 0, 0, 0.2);
 }
