@@ -1,61 +1,45 @@
 # Resume Point - Operations VTT Development
 
 **Last Updated:** 2025-12-01
-**Session Status:** Interrupted mid-autorun
+**Session Status:** 5-STAGE AUTORUN COMPLETE
 
-## COMPLETED THIS SESSION
-- DB-3: Gold Master DB + reset script (tools/rebuild-db.js, tools/reset-db.js)
-- DB-4: Clean up test ships/NPCs (cleanupTestData in database.js)
-- GM-3: GOD MODE for GM (HTML/CSS/JS/handlers complete)
-- SQL-1: schema.sql and destroy-db.sql scripts
-- TIP-4: Static mouseover tooltips throughout UI
-- LOG-1: Ship log entries ("Contact established with Dorannia Starport One", "Data link established", "You have mail")
-- LINK-1: Feedback link in role panel footer
+## COMPLETED THIS SESSION (5-Stage Autorun)
 
-## 5-STAGE AUTORUN IN PROGRESS
+### Stage 1: UI-8 Crew Readiness Colors ✅
+### Stage 2: NAV-4 Dynamic Role Removal ✅
+### Stage 3: TIP-3 UWP Mouseover Encyclopedia ✅
+### Stage 4: SHIP-4/5 Launch + X-Carrier Templates ✅
+- `data/ships/v2/launch.json` - 20-ton ship's boat
+- `data/ships/v2/x_carrier.json` - 600-ton Subsidized Merchant conversion
+- `data/ships/v2/light_fighter.json` - 10-ton carrier-based fighter (Zhodani variant: Tlatl)
 
-### Stage 1: UI-8 Crew Readiness Colors (NEXT - STARTING)
-- Add CSS classes for crew status: .crew-online (green), .crew-npc (yellow), .crew-offline (gray), .crew-self (blue highlight)
-- Find crew rendering in app.js (search: crew-list, updateCrewDisplay, renderCrew)
-- Apply classes based on socket_id presence and NPC flag
-
-### Stage 2: NAV-4 Dynamic Role Removal (PENDING)
-- Allow players to leave roles dynamically
-- Add "Leave Role" button to role panel
-- Socket handler for ops:leaveRole
-
-### Stage 3: TIP-3 UWP Mouseover Encyclopedia (PENDING)
-- Create UWP data structure with explanations
-- Add tooltip on UWP display showing decoded values
-- Example: "A867943-D" → "Size 8, Atmo 6 (Standard), Hydro 7..."
-
-### Stage 4: SHIP-4/5 Launch + X-Carrier Templates (PENDING)
-- SHIP-4: Add Launch (20-ton small craft) to ship templates
-- SHIP-5: Design X-Carrier (400-ton carrier with small craft bays)
-
-### Stage 5: SHIP-6 + PUP-A1 ASCII Art + Puppeteer Auth (PENDING)
-- SHIP-6: ASCII art representations for ships in tooltips/modals
-- PUP-A1: Basic Puppeteer authentication message handler
-
-## DEFERRED TO FUTURE SESSION
-- PUP-A2: gzip tarball log retrieval
-- PUP-A3: Event subscription system
+### Stage 5: SHIP-6 + PUP-A1 ASCII Art + Puppeteer Auth ✅
+- SHIP-6: ASCII art data structure in `app.js` (lines 2400-2503)
+- SHIP-6: CSS for `.ship-ascii-art` in `styles.css` (lines 2110-2124)
+- SHIP-6: `getShipAsciiArt()` function and display in `showContactTooltip()`
+- PUP-A1: `ops:puppeteerAuth` handler in `operations.handlers.js` (lines 53-94)
+- PUP-A1: `ops:puppeteerGetState` utility handler (lines 97-122)
 
 ## FILES MODIFIED THIS SESSION
-- tools/rebuild-db.js (NEW)
-- tools/reset-db.js (NEW)
-- data/schema/schema.sql (NEW)
-- data/schema/destroy-db.sql (NEW)
-- data/snapshots/gold-master.db (NEW)
-- lib/operations/database.js (added cleanupTestData)
-- lib/operations/seed-dorannia.js (added log entries)
-- lib/socket-handlers/operations.handlers.js (god mode handlers)
-- public/operations/index.html (god mode UI, tooltips, feedback link)
-- public/operations/styles.css (god mode styles, feedback link styles)
-- public/operations/app.js (god mode button handlers)
+- `public/operations/app.js` - ASCII art data, getShipAsciiArt(), tooltip integration
+- `public/operations/styles.css` - .ship-ascii-art styling
+- `lib/socket-handlers/operations.handlers.js` - Puppeteer auth handlers
+- `data/ships/v2/launch.json` (NEW)
+- `data/ships/v2/x_carrier.json` (NEW)
+- `data/ships/v2/light_fighter.json` (NEW)
 
-## TO START NEXT SESSION
+## TESTS: ALL 308 PASS ✅
+
+## FUTURE TODOs (Not implemented yet)
+1. **PC Role Quirks** - Add personalization for crew roles per PC (Asao: firefighting gear, Von Sydo: GF photo). Add 'quirk' column to player_accounts or role_assignments table.
+2. **Chip jack +1 skill boost** - Future feature for skill bonuses
+3. **Time-for-skill optional rule** - Consider implementing
+4. **Populate Ator/Flammarion** - Add encyclopedia data like Dorannia
+5. **Spinward Marches UWP database** - Bulk import canonical data
+6. **Campaign notes integration** - PC experiences, Flammarion asteroid base
+
+## TO CONTINUE NEXT SESSION
 ```
-Resume the 5-stage autorun from Stage 1: UI-8 Crew Readiness Colors.
-Search app.js for crew rendering code and add status color classes.
+All 5 stages complete. Ready for manual testing at http://localhost:3000/operations/
+Next priorities: PC role quirks, or additional encyclopedia data for other systems.
 ```

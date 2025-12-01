@@ -1,0 +1,145 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "light_fighter",
+  "type": "Small Craft",
+  "name": "Light Fighter",
+  "designation": "Fighter",
+  "className": "Light Fighter",
+  "tonnage": 10,
+  "techLevel": 12,
+  "role": "military",
+  "thrust": 6,
+  "turrets": [
+    {
+      "id": "fixed_1",
+      "type": "single",
+      "weapons": ["pulse_laser"]
+    }
+  ],
+
+  "hull": {
+    "tonnage": 10,
+    "configuration": "streamlined",
+    "hullPoints": 4,
+    "cost": 600000
+  },
+
+  "armour": {
+    "type": "crystaliron",
+    "rating": 4,
+    "tonnage": 0.5,
+    "cost": 120000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 6,
+      "tonnage": 1,
+      "cost": 2000000
+    },
+    "jump": null
+  },
+
+  "power": {
+    "type": "fusion_tl12",
+    "output": 15,
+    "tonnage": 1,
+    "cost": 1000000
+  },
+
+  "fuel": {
+    "total": 1,
+    "jump": 0,
+    "powerPlant": 1,
+    "weeks": 2
+  },
+
+  "bridge": {
+    "type": "cockpit",
+    "tonnage": 1.5,
+    "cost": 100000
+  },
+
+  "computer": {
+    "model": "Computer/5",
+    "processing": 5,
+    "cost": 30000
+  },
+
+  "sensors": {
+    "grade": "basic",
+    "tonnage": 0,
+    "cost": 0,
+    "power": 0,
+    "dm": -4
+  },
+
+  "weapons": [
+    {
+      "mount": "fixed_mount",
+      "weapons": ["pulse_laser"],
+      "tonnage": 1,
+      "cost": 500000,
+      "power": 2
+    }
+  ],
+
+  "craft": [],
+
+  "systems": [],
+
+  "staterooms": {
+    "acceleration_couch": {
+      "count": 1,
+      "tonnage": 0,
+      "cost": 0
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "fire_control",
+      "rating": 1,
+      "cost": 2000000
+    }
+  ],
+
+  "cargo": {
+    "tonnage": 0
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 0,
+      "engineer": 0,
+      "gunner": 0,
+      "steward": 0,
+      "medic": 0,
+      "marines": 0
+    },
+    "description": "Pilot (pilot also operates weapons)"
+  },
+
+  "costs": {
+    "base": 6350000,
+    "maintenance": 529
+  },
+
+  "powerRequirements": {
+    "basic": 2,
+    "manoeuvre": 6,
+    "jump": 0,
+    "sensors": 0,
+    "weapons": 2,
+    "other": 0,
+    "total": 10
+  },
+
+  "notes": "The 10-ton Light Fighter is a nimble interceptor designed for carrier operations. High thrust-to-weight ratio (6G acceleration) and crystaliron armour make it effective against pirates and small craft. Fixed-mount pulse laser provides reasonable firepower for its size. Limited endurance (2 weeks fuel) requires carrier or base support. Standard complement for X-Carriers and fleet auxiliary vessels. Zhodani variant: Tlatl Missile Fighter (same basic hull)."
+}

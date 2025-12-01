@@ -1,0 +1,126 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "launch",
+  "type": "Small Craft",
+  "name": "Launch",
+  "designation": "Ship's Boat",
+  "className": "Launch",
+  "tonnage": 20,
+  "techLevel": 8,
+  "role": "transport",
+  "thrust": 1,
+  "turrets": [],
+
+  "hull": {
+    "tonnage": 20,
+    "configuration": "streamlined",
+    "hullPoints": 8,
+    "cost": 1200000
+  },
+
+  "armour": {
+    "type": "none",
+    "rating": 0,
+    "tonnage": 0,
+    "cost": 0
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 1,
+      "tonnage": 1,
+      "cost": 2000000
+    },
+    "jump": null
+  },
+
+  "power": {
+    "type": "fusion_tl8",
+    "output": 10,
+    "tonnage": 1,
+    "cost": 500000
+  },
+
+  "fuel": {
+    "total": 1,
+    "jump": 0,
+    "powerPlant": 1,
+    "weeks": 4
+  },
+
+  "bridge": {
+    "type": "cockpit",
+    "tonnage": 2,
+    "cost": 200000
+  },
+
+  "computer": {
+    "model": "Computer/0",
+    "processing": 0,
+    "cost": 0
+  },
+
+  "sensors": {
+    "grade": "basic",
+    "tonnage": 0,
+    "cost": 0,
+    "power": 0,
+    "dm": -4
+  },
+
+  "weapons": [],
+
+  "craft": [],
+
+  "systems": [],
+
+  "staterooms": {
+    "acceleration_benches": {
+      "count": 12,
+      "tonnage": 2,
+      "cost": 0
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    }
+  ],
+
+  "cargo": {
+    "tonnage": 13
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 0,
+      "engineer": 0,
+      "gunner": 0,
+      "steward": 0,
+      "medic": 0,
+      "marines": 0
+    },
+    "description": "Pilot (can carry 12 passengers on acceleration benches)"
+  },
+
+  "costs": {
+    "base": 3900000,
+    "maintenance": 325
+  },
+
+  "powerRequirements": {
+    "basic": 4,
+    "manoeuvre": 2,
+    "jump": 0,
+    "sensors": 0,
+    "weapons": 0,
+    "other": 0,
+    "total": 6
+  },
+
+  "notes": "The Launch is a basic 20-ton ship's boat used for ferry operations between ship and ground. Standard equipment on Safari Ships, Far Traders, and larger vessels. Carries up to 12 passengers on acceleration benches with 13 tons cargo capacity. No jump capability, limited to in-system operations."
+}

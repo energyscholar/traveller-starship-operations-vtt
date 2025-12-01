@@ -253,6 +253,7 @@
           <div class="panel-header">
             <h2 id="role-panel-title">Your Role</h2>
             <span id="role-name" class="role-indicator" title="Current duty station. Click Change Role button to switch roles.">Pilot</span>
+            <button id="btn-leave-role" class="btn btn-small btn-warning" title="Go off-duty - NPC will take over your station">Leave</button>
           </div>
           <div id="role-actions" class="role-actions">
             <!-- Populated based on role -->
@@ -797,6 +798,9 @@
       <button class="btn btn-secondary" data-close-modal>Close</button>
     </div>
   </template>
+
+  <!-- TIP-3: UWP Tooltip Container -->
+  <div id="uwp-tooltip-container"></div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="app.js" type="module"></script>

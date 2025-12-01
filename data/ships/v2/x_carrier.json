@@ -1,0 +1,309 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "x_carrier",
+  "type": "X-Class",
+  "name": "Auxiliary Carrier",
+  "designation": "X-Carrier",
+  "className": "Q-Ship/Auxiliary Carrier (Subsidized Merchant Conversion)",
+  "tonnage": 600,
+  "techLevel": 13,
+  "role": "military",
+  "thrust": 2,
+  "turrets": [
+    {
+      "id": "turret_1",
+      "type": "triple",
+      "weapons": ["beam_laser", "beam_laser", "beam_laser"]
+    },
+    {
+      "id": "turret_2",
+      "type": "triple",
+      "weapons": ["sandcaster", "sandcaster", "missile_rack"]
+    },
+    {
+      "id": "turret_3",
+      "type": "triple",
+      "weapons": ["pulse_laser", "pulse_laser", "sandcaster"]
+    },
+    {
+      "id": "turret_pop_1",
+      "type": "double",
+      "weapons": ["pulse_laser", "pulse_laser"],
+      "concealed": true
+    },
+    {
+      "id": "turret_pop_2",
+      "type": "double",
+      "weapons": ["missile_rack", "missile_rack"],
+      "concealed": true
+    }
+  ],
+
+  "hull": {
+    "tonnage": 600,
+    "configuration": "streamlined",
+    "hullPoints": 240,
+    "cost": 36000000,
+    "baseDesign": "Subsidized Merchant (Type-R)"
+  },
+
+  "armour": {
+    "type": "crystaliron",
+    "rating": 6,
+    "tonnage": 45,
+    "cost": 9000000
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 2,
+      "tonnage": 12,
+      "cost": 24000000
+    },
+    "jump": {
+      "rating": 2,
+      "tonnage": 45,
+      "cost": 67500000
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl13",
+    "output": 280,
+    "tonnage": 18,
+    "cost": 18000000
+  },
+
+  "fuel": {
+    "total": 144,
+    "jump": 120,
+    "powerPlant": 24,
+    "weeks": 6
+  },
+
+  "bridge": {
+    "type": "military",
+    "tonnage": 20,
+    "cost": 3000000
+  },
+
+  "computer": {
+    "model": "Computer/15fib",
+    "processing": 20,
+    "cost": 3000000
+  },
+
+  "sensors": {
+    "grade": "military",
+    "tonnage": 2,
+    "cost": 4100000,
+    "power": 2,
+    "dm": 0
+  },
+
+  "weapons": [
+    {
+      "mount": "triple_turret",
+      "weapons": ["beam_laser", "beam_laser", "beam_laser"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 12
+    },
+    {
+      "mount": "triple_turret",
+      "weapons": ["sandcaster", "sandcaster", "missile_rack"],
+      "tonnage": 1,
+      "cost": 1750000,
+      "power": 0
+    },
+    {
+      "mount": "triple_turret",
+      "weapons": ["pulse_laser", "pulse_laser", "sandcaster"],
+      "tonnage": 1,
+      "cost": 1500000,
+      "power": 4
+    },
+    {
+      "mount": "pop_up_double_turret",
+      "weapons": ["pulse_laser", "pulse_laser"],
+      "tonnage": 2,
+      "cost": 1500000,
+      "power": 4,
+      "concealed": true
+    },
+    {
+      "mount": "pop_up_double_turret",
+      "weapons": ["missile_rack", "missile_rack"],
+      "tonnage": 2,
+      "cost": 1000000,
+      "power": 0,
+      "concealed": true
+    }
+  ],
+
+  "craft": [
+    {
+      "type": "hangar",
+      "capacity": 80,
+      "tonnage": 88,
+      "cost": 17600000,
+      "description": "Full hangar with launch/recovery capability",
+      "craft": [
+        {
+          "type": "light_fighter",
+          "name": "Light Fighter",
+          "quantity": 8,
+          "tonnage": 10,
+          "cost": 8500000
+        }
+      ]
+    },
+    {
+      "type": "docking_space",
+      "capacity": 25,
+      "tonnage": 28,
+      "cost": 7000000,
+      "craft": {
+        "type": "launch",
+        "name": "Ship's Launch",
+        "tonnage": 20,
+        "cost": 7000000
+      }
+    }
+  ],
+
+  "systems": [
+    {
+      "type": "fuel_processor",
+      "tonnage": 6,
+      "cost": 300000,
+      "power": 6,
+      "capacity": 120
+    },
+    {
+      "type": "fuel_scoops",
+      "tonnage": 0,
+      "cost": 0,
+      "power": 0
+    },
+    {
+      "type": "repair_drones",
+      "tonnage": 4,
+      "cost": 800000,
+      "power": 4
+    },
+    {
+      "type": "armoury",
+      "tonnage": 6,
+      "cost": 750000,
+      "power": 0
+    },
+    {
+      "type": "medical_bay",
+      "tonnage": 4,
+      "cost": 2000000,
+      "power": 1
+    },
+    {
+      "type": "breaching_tube",
+      "tonnage": 3,
+      "cost": 3000000,
+      "power": 0
+    },
+    {
+      "type": "workshop",
+      "tonnage": 6,
+      "cost": 900000,
+      "power": 0
+    }
+  ],
+
+  "staterooms": {
+    "standard": {
+      "count": 14,
+      "tonnage": 56,
+      "cost": 7000000
+    },
+    "barracks": {
+      "count": 16,
+      "tonnage": 16,
+      "cost": 800000
+    }
+  },
+
+  "software": [
+    {
+      "name": "manoeuvre",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "jump_control",
+      "rating": 2,
+      "cost": 200000
+    },
+    {
+      "name": "library",
+      "rating": 0,
+      "cost": 0
+    },
+    {
+      "name": "fire_control",
+      "rating": 2,
+      "cost": 4000000
+    },
+    {
+      "name": "auto_repair",
+      "rating": 1,
+      "cost": 5000000
+    },
+    {
+      "name": "battle_network",
+      "rating": 1,
+      "cost": 5000000
+    },
+    {
+      "name": "intellect",
+      "rating": 0,
+      "cost": 0
+    }
+  ],
+
+  "cargo": {
+    "tonnage": 45,
+    "description": "Reduced from standard 200t cargo to accommodate military conversion"
+  },
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "astrogator": 1,
+      "engineer": 3,
+      "gunner": 5,
+      "steward": 1,
+      "medic": 1,
+      "marines": 8
+    },
+    "flight_crew": {
+      "pilots": 8
+    },
+    "description": "Pilot, Astrogator, 3x Engineer, 5x Gunner, 8x Fighter Pilots, Steward, Medic, 8x Marines"
+  },
+
+  "costs": {
+    "base": 225700000,
+    "maintenance": 18808
+  },
+
+  "powerRequirements": {
+    "basic": 120,
+    "manoeuvre": 120,
+    "jump": 120,
+    "sensors": 2,
+    "weapons": 20,
+    "other": 11,
+    "total": 393
+  },
+
+  "notes": "The X-Carrier is a military conversion of the 600-ton Subsidized Merchant (Type-R) hull. Externally indistinguishable from a standard freighter, it conceals significant military capability. Features include: 8x Light Fighters in full hangar bay (80 tons with launch/recovery), ship's launch for ground operations, 5 weapon turrets (2 concealed as cargo hatches), marine complement with breaching tube and armoury, and military-grade sensors/computer. The Q-Ship configuration allows passage through civilian traffic while maintaining escort/raider capability. Standard merchie transponder codes can be used until weapons are deployed."
+}

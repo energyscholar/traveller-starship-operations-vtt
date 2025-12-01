@@ -1324,19 +1324,73 @@ input[type="checkbox"] {
   border-radius: var(--radius-sm);
 }
 
+/* UI-8: Crew Readiness Colors */
+
+/* NPC crew - yellow/amber indicator */
 .crew-member.npc {
-  opacity: 0.7;
+  opacity: 0.85;
+  border-left: 3px solid var(--accent-yellow);
+  margin-left: -3px;
+  background: rgba(234, 179, 8, 0.05);
+}
+
+.crew-member.npc .online-indicator {
+  background: var(--accent-yellow);
 }
 
 .crew-member.npc .crew-name::after {
   content: ' (NPC)';
   font-size: 10px;
-  color: var(--text-muted);
+  color: var(--accent-yellow);
+}
+
+/* Online player - green glow */
+.crew-member:not(.npc) {
+  border-left: 3px solid transparent;
+  margin-left: -3px;
+}
+
+.crew-member:not(.npc):has(.online-indicator.online) {
+  border-left-color: var(--accent-green);
+  background: rgba(42, 170, 74, 0.05);
+}
+
+.crew-member .online-indicator.online {
+  box-shadow: 0 0 6px var(--accent-green);
+}
+
+/* Offline player - muted gray */
+.crew-member:not(.npc):not(:has(.online-indicator.online)) {
+  border-left-color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* Current user - blue highlight with pulse */
+.crew-member.is-you {
+  border-left-color: var(--accent-blue) !important;
+  background: rgba(58, 138, 255, 0.1) !important;
+  opacity: 1 !important;
 }
 
 .crew-member.is-you .crew-name {
   color: var(--accent-blue);
-  font-weight: 500;
+  font-weight: 600;
+}
+
+.crew-member.is-you .online-indicator {
+  background: var(--accent-blue);
+  animation: pulse-indicator 2s ease-in-out infinite;
+}
+
+@keyframes pulse-indicator {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--accent-blue);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 8px var(--accent-blue), 0 0 12px var(--accent-blue);
+    transform: scale(1.2);
+  }
 }
 
 /* Ship Log */
@@ -2053,6 +2107,22 @@ input[type="checkbox"] {
   margin-bottom: 0;
 }
 
+/* SHIP-6: ASCII art in tooltips */
+.ship-ascii-art {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.1;
+  color: var(--accent-green);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  margin: 0 0 var(--space-sm) 0;
+  text-align: center;
+  white-space: pre;
+  overflow: hidden;
+}
+
 .tooltip-row .label {
   color: var(--text-muted);
 }
@@ -2234,4 +2304,112 @@ input[type="checkbox"] {
 
 .btn-success:hover {
   background: #22894a;
+}
+
+/* ==================== TIP-3: UWP Tooltip System ==================== */
+
+/* Global tooltip container - positioned via JavaScript */
+#uwp-tooltip-container {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+#uwp-tooltip-container.visible {
+  opacity: 1;
+}
+
+/* UWP code styling - clickable/hoverable elements */
+.uwp-code {
+  font-family: var(--font-mono);
+  background: var(--bg-dark);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  cursor: help;
+  transition: all 0.2s ease;
+}
+
+.uwp-code:hover {
+  border-color: var(--accent-blue);
+  background: var(--bg-panel);
+}
+
+/* UWP tooltip popup */
+.uwp-tooltip {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  min-width: 320px;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 12px rgba(74, 106, 138, 0.3);
+}
+
+.uwp-tooltip .uwp-header {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--accent-blue);
+  text-align: center;
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+  letter-spacing: 2px;
+}
+
+.uwp-tooltip .uwp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.uwp-tooltip .uwp-table tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.uwp-tooltip .uwp-table td {
+  padding: 4px 8px;
+  vertical-align: middle;
+}
+
+.uwp-tooltip .uwp-table .uwp-label {
+  color: var(--text-muted);
+  width: 100px;
+  text-align: right;
+  padding-right: var(--space-md);
+}
+
+.uwp-tooltip .uwp-table .uwp-code {
+  font-family: var(--font-mono);
+  color: var(--accent-yellow);
+  width: 20px;
+  text-align: center;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.uwp-tooltip .uwp-detail {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Wiki link styling */
+.wiki-link {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-size: 11px;
+}
+
+.wiki-link:hover {
+  text-decoration: underline;
+  color: #5aa0ff;
 }
