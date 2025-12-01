@@ -32,7 +32,12 @@
 
 ## FUTURE TODOs (Not implemented yet)
 1. **PC Role Quirks** - Add personalization for crew roles per PC (Asao: firefighting gear, Von Sydo: GF photo). Add 'quirk' column to player_accounts or role_assignments table.
-2. **Chip jack +1 skill boost** - Future feature for skill bonuses
+2. **Custom Role Description/Name** - Player can add custom description and/or name near Crew Role for personalization and job description.
+3. **Starship Weapon Display** - Show full weapon complement on ship detail card. Include turret type (e.g. "triple turret") and name each weapon. Be concise and clear.
+4. **BUG: Crew Status Not Updating** - Crew status display doesn't update when new players join/take roles. Probably doesn't remove either. Need state machine or design pattern to track crew presence changes. Not trivial.
+5. **Character Sheet Mouseover** - Mouseover of character name brings up character sheet and art showing PC.
+6. **OBSERVER Role** - Add crew role OBSERVER with unlimited count. Sees standard bridge view with no role panel. Show fun ASCII art instead of role panel.
+7. **Chip jack +1 skill boost** - Future feature for skill bonuses
 3. **Time-for-skill optional rule** - Consider implementing
 4. **Populate Ator/Flammarion** - Add encyclopedia data like Dorannia
 5. **Spinward Marches UWP database** - Bulk import canonical data
