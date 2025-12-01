@@ -471,6 +471,11 @@ function initSocket() {
     }
   });
 
+  // Autorun 5: Handle jump plot result
+  state.socket.on('ops:jumpPlotted', (data) => {
+    handleJumpPlotted(data);
+  });
+
   state.socket.on('ops:jumpInitiated', (data) => {
     state.jumpStatus = {
       inJump: true,
@@ -485,6 +490,9 @@ function initSocket() {
     if (state.ship?.current_state) {
       state.ship.current_state.fuel = data.fuelRemaining;
     }
+    // Hide plot result since we're now jumping
+    const plotResult = document.getElementById('jump-plot-result');
+    if (plotResult) plotResult.style.display = 'none';
     showNotification(`Jump initiated to ${data.destination}. ETA: ${data.jumpEndDate}`, 'info');
     renderRoleDetailPanel(state.role);
     renderShipStatus();
@@ -497,9 +505,17 @@ function initSocket() {
     if (data.newDate) {
       state.campaign.current_date = data.newDate;
     }
+    // Autorun 5: Store news and mail for display
+    state.systemNews = data.news || [];
+    state.systemMail = data.mail || {};
+    state.roleContent = data.roleContent || {};
     showNotification(`Arrived at ${data.arrivedAt}`, 'success');
     renderRoleDetailPanel(state.role);
     renderBridge();
+    // Show news/mail modal if there's content
+    if (state.systemNews.length > 0 || Object.keys(state.systemMail).length > 0) {
+      showNewsMailModal(data.arrivedAt);
+    }
   });
 
   state.socket.on('ops:locationChanged', (data) => {
@@ -507,7 +523,41 @@ function initSocket() {
     if (data.newDate) {
       state.campaign.current_date = data.newDate;
     }
+    // Autorun 5: Update contacts if provided
+    if (data.contacts) {
+      state.contacts = data.contacts;
+    }
     renderBridge();
+  });
+
+  // Autorun 5: Handle contacts replaced on jump arrival
+  state.socket.on('ops:contactsReplaced', (data) => {
+    state.contacts = data.contacts || [];
+    showNotification(`Sensor contacts updated: ${state.contacts.length} objects detected`, 'info');
+    renderRoleDetailPanel(state.role);
+  });
+
+  // Autorun 5: Handle sensor scan results
+  state.socket.on('ops:scanResult', (data) => {
+    handleScanResult(data);
+  });
+
+  // Autorun 5: Handle weapons authorization
+  state.socket.on('ops:weaponsAuthorized', (data) => {
+    handleWeaponsAuthorized(data);
+  });
+
+  // Autorun 5: Handle fire results
+  state.socket.on('ops:fireResult', (data) => {
+    handleFireResult(data);
+  });
+
+  // Autorun 5: Handle jump status update (for skip-to-exit feature)
+  state.socket.on('ops:jumpStatusUpdated', (data) => {
+    const { jumpStatus, message } = data;
+    state.jumpStatus = jumpStatus;
+    showNotification(message || 'Jump status updated', 'success');
+    renderRoleDetailPanel(state.role);
   });
 
   // Stage 7: Handle time updates (from jumps or GM actions)
@@ -1644,6 +1694,117 @@ function updateFuelEstimate() {
   }
 }
 
+// Autorun 5: Plot jump course (shows info before committing)
+function plotJumpCourse() {
+  const destination = document.getElementById('jump-destination')?.value?.trim();
+  const distance = parseInt(document.getElementById('jump-distance')?.value) || 1;
+
+  if (!destination) {
+    showNotification('Please enter a destination system', 'error');
+    return;
+  }
+
+  state.socket.emit('ops:plotJump', {
+    destination,
+    distance
+  });
+}
+
+// Handle plotJump result
+function handleJumpPlotted(data) {
+  const resultDiv = document.getElementById('jump-plot-result');
+  if (!resultDiv) return;
+
+  const {
+    destination, distance, canJump, error, fuelNeeded, fuelAvailable,
+    fuelAfterJump, travelTime, currentDate, arrivalDate, warnings = [],
+    destinationInfo, astrogatorSkill
+  } = data;
+
+  let html = `<div class="jump-plot-summary ${canJump ? 'can-jump' : 'cannot-jump'}">`;
+
+  if (!canJump) {
+    html += `
+      <div class="plot-error">
+        <span class="error-icon">!</span>
+        ${error || 'Cannot initiate jump'}
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="plot-header">Course to ${destination} (J-${distance})</div>
+      <div class="plot-stats">
+        <div class="plot-row">
+          <span>Fuel Required:</span>
+          <span class="plot-value">${fuelNeeded} tons</span>
+        </div>
+        <div class="plot-row">
+          <span>Fuel After Jump:</span>
+          <span class="plot-value ${fuelAfterJump < fuelNeeded ? 'text-warning' : ''}">${fuelAfterJump} tons</span>
+        </div>
+        <div class="plot-row">
+          <span>Travel Time:</span>
+          <span class="plot-value">${travelTime}</span>
+        </div>
+        <div class="plot-row">
+          <span>Current Date:</span>
+          <span class="plot-value">${currentDate}</span>
+        </div>
+        <div class="plot-row">
+          <span>ETA:</span>
+          <span class="plot-value">${arrivalDate}</span>
+        </div>
+      </div>
+    `;
+
+    if (destinationInfo) {
+      html += `
+        <div class="plot-destination-info">
+          <div class="plot-row">
+            <span>Starport:</span>
+            <span class="plot-value">${destinationInfo.starport || '?'}</span>
+          </div>
+          ${destinationInfo.gasGiants > 0 ? `
+          <div class="plot-row">
+            <span>Gas Giants:</span>
+            <span class="plot-value">${destinationInfo.gasGiants} (wilderness refuel possible)</span>
+          </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    if (warnings.length > 0) {
+      html += `<div class="plot-warnings">`;
+      warnings.forEach(w => {
+        html += `<div class="plot-warning"><span class="warning-icon">!</span> ${w}</div>`;
+      });
+      html += `</div>`;
+    }
+
+    if (astrogatorSkill) {
+      html += `<div class="plot-skill-note"><em>${astrogatorSkill}</em></div>`;
+    }
+
+    html += `
+      <div class="plot-actions">
+        <button onclick="initiateJumpFromPlot('${destination}', ${distance})" class="btn btn-primary">
+          Initiate Jump
+        </button>
+      </div>
+    `;
+  }
+
+  html += `</div>`;
+  resultDiv.innerHTML = html;
+  resultDiv.style.display = 'block';
+}
+
+// Initiate jump from plotted course
+function initiateJumpFromPlot(destination, distance) {
+  state.socket.emit('ops:initiateJump', { destination, distance });
+}
+
 function initiateJump() {
   const destination = document.getElementById('jump-destination')?.value?.trim();
   const distance = parseInt(document.getElementById('jump-distance')?.value) || 1;
@@ -1661,6 +1822,278 @@ function initiateJump() {
 
 function completeJump() {
   state.socket.emit('ops:completeJump');
+}
+
+function skipToJumpExit() {
+  // Testing feature: Advance time to allow jump exit
+  state.socket.emit('ops:skipToJumpExit');
+  showNotification('Advancing time to jump exit...', 'info');
+}
+
+// ==================== Sensor Operations (Autorun 5) ====================
+
+function performScan(scanType = 'passive') {
+  state.socket.emit('ops:sensorScan', { scanType });
+  showNotification(`Initiating ${scanType} sensor scan...`, 'info');
+}
+
+function handleScanResult(data) {
+  const { scanType, contacts, categorized, totalCount, description, skillNote } = data;
+
+  // Update state contacts
+  state.contacts = contacts;
+
+  // Show notification
+  showNotification(description, 'success');
+
+  // Update scan result display if visible
+  const scanResultDiv = document.getElementById('scan-result-display');
+  if (scanResultDiv) {
+    let html = `
+      <div class="detail-section">
+        <h4>Scan Results</h4>
+        <div class="scan-description">${description}</div>
+        <div class="scan-categories">
+    `;
+
+    if (categorized) {
+      if (categorized.celestial?.length > 0) {
+        html += `<div class="scan-category">
+          <span class="category-label">Celestial:</span>
+          <span class="category-list">${categorized.celestial.map(c => c.name || c.type).join(', ')}</span>
+        </div>`;
+      }
+      if (categorized.stations?.length > 0) {
+        html += `<div class="scan-category">
+          <span class="category-label">Stations:</span>
+          <span class="category-list">${categorized.stations.map(c => c.transponder || c.name || c.type).join(', ')}</span>
+        </div>`;
+      }
+      if (categorized.ships?.length > 0) {
+        html += `<div class="scan-category">
+          <span class="category-label">Ships:</span>
+          <span class="category-list">${categorized.ships.map(c => c.transponder || c.name || 'Unknown').join(', ')}</span>
+        </div>`;
+      }
+      if (categorized.unknown?.length > 0) {
+        html += `<div class="scan-category">
+          <span class="category-label">Other:</span>
+          <span class="category-list">${categorized.unknown.map(c => c.name || c.type || 'Contact').join(', ')}</span>
+        </div>`;
+      }
+    }
+
+    if (skillNote) {
+      html += `<div class="scan-skill-note"><em>${skillNote}</em></div>`;
+    }
+
+    html += `</div></div>`;
+    scanResultDiv.innerHTML = html;
+    scanResultDiv.style.display = 'block';
+  }
+
+  // Re-render panel to update contact counts
+  renderRoleDetailPanel(state.role);
+}
+
+// ==================== News & Mail Display (Autorun 5) ====================
+
+function showNewsMailModal(systemName) {
+  const news = state.systemNews || [];
+  const mail = state.systemMail || {};
+  const roleContent = state.roleContent || {};
+
+  // Get role-specific mail if available
+  const myMail = mail[state.role] || null;
+  const myRoleAdvice = roleContent[state.role] || null;
+
+  // Create modal content
+  let html = `
+    <div class="news-mail-modal">
+      <div class="news-mail-header">
+        <h3>DATA LINK ESTABLISHED: ${systemName.toUpperCase()}</h3>
+        <button onclick="closeNewsMailModal()" class="close-btn">&times;</button>
+      </div>
+      <div class="news-mail-content">
+  `;
+
+  // Role-specific advice section
+  if (myRoleAdvice) {
+    html += `
+      <div class="role-advice-section">
+        <h4>STATION BRIEF: ${state.role.replace('_', ' ').toUpperCase()}</h4>
+        <div class="role-advice-content">${myRoleAdvice}</div>
+      </div>
+    `;
+  }
+
+  // Personal mail section
+  if (myMail) {
+    html += `
+      <div class="mail-section">
+        <h4>PERSONAL MESSAGE</h4>
+        <div class="mail-item">
+          <div class="mail-header">
+            <span class="mail-from">From: ${myMail.from}</span>
+            <span class="mail-subject">Re: ${myMail.subject}</span>
+          </div>
+          <div class="mail-body">${myMail.content}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // News section
+  if (news.length > 0) {
+    html += `
+      <div class="news-section">
+        <h4>SYSTEM NEWS</h4>
+        ${news.map(item => `
+          <div class="news-item">
+            <div class="news-headline">${item.headline}</div>
+            <div class="news-source">— ${item.source}</div>
+            <div class="news-content">${item.content}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  html += `
+      </div>
+      <div class="news-mail-footer">
+        <button onclick="closeNewsMailModal()" class="btn btn-primary">Acknowledge</button>
+      </div>
+    </div>
+  `;
+
+  // Create and show modal
+  let modal = document.getElementById('news-mail-overlay');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'news-mail-overlay';
+    modal.className = 'news-mail-overlay';
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = html;
+  modal.style.display = 'flex';
+}
+
+function closeNewsMailModal() {
+  const modal = document.getElementById('news-mail-overlay');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+// ==================== Weapons Operations (Autorun 5) ====================
+
+function authorizeWeapons() {
+  const targetSelect = document.getElementById('auth-target-select');
+  if (!targetSelect) {
+    showNotification('No target selected', 'error');
+    return;
+  }
+
+  const contactId = targetSelect.value;
+  const targetName = targetSelect.options[targetSelect.selectedIndex]?.text || 'Target';
+
+  state.socket.emit('ops:authorizeWeapons', { contactId });
+  showNotification(`Authorizing weapons on ${targetName}...`, 'info');
+}
+
+function handleWeaponsAuthorized(data) {
+  const { contact, message } = data;
+
+  showNotification(message || `Weapons authorized on ${contact?.name || 'target'}`, 'success');
+
+  // Update contacts in state
+  if (state.contacts && contact) {
+    const idx = state.contacts.findIndex(c => c.id === contact.id);
+    if (idx >= 0) {
+      state.contacts[idx] = contact;
+    }
+  }
+
+  // Re-render to update both Captain and Gunner panels
+  renderRoleDetailPanel(state.role);
+}
+
+function fireAtTarget() {
+  const targetSelect = document.getElementById('fire-target-select');
+  const weaponSelect = document.getElementById('fire-weapon-select');
+
+  if (!targetSelect) {
+    showNotification('No target selected', 'error');
+    return;
+  }
+
+  const contactId = targetSelect.value;
+  const weaponIndex = parseInt(weaponSelect?.value) || 0;
+  const targetName = targetSelect.options[targetSelect.selectedIndex]?.text || 'Target';
+
+  state.socket.emit('ops:fireAtContact', { contactId, weaponIndex });
+  showNotification(`Firing at ${targetName}...`, 'warning');
+}
+
+function handleFireResult(data) {
+  const { hit, roll, target, damage, damageRoll, targetDestroyed, description, message } = data;
+
+  // Show notification
+  showNotification(message, hit ? 'success' : 'info');
+
+  // Update contact in state if damaged
+  if (state.contacts && data.contact) {
+    const idx = state.contacts.findIndex(c => c.id === data.contact.id);
+    if (idx >= 0) {
+      state.contacts[idx] = data.contact;
+    }
+  }
+
+  // Show detailed fire result
+  const fireResultDiv = document.getElementById('fire-result-display');
+  if (fireResultDiv) {
+    let html = `
+      <div class="detail-section fire-result ${hit ? 'hit' : 'miss'}">
+        <h4>${hit ? 'HIT!' : 'MISS'}</h4>
+        <div class="fire-details">
+          <div class="stat-row">
+            <span>Target:</span>
+            <span class="stat-value">${target || 'Unknown'}</span>
+          </div>
+          <div class="stat-row">
+            <span>Attack Roll:</span>
+            <span class="stat-value">${roll || '?'}</span>
+          </div>
+    `;
+
+    if (hit && damage !== undefined) {
+      html += `
+          <div class="stat-row">
+            <span>Damage:</span>
+            <span class="stat-value">${damage} ${damageRoll ? `(${damageRoll})` : ''}</span>
+          </div>
+      `;
+    }
+
+    if (targetDestroyed) {
+      html += `
+          <div class="target-destroyed">TARGET DESTROYED!</div>
+      `;
+    }
+
+    html += `
+          <div class="fire-description">${description || ''}</div>
+        </div>
+      </div>
+    `;
+
+    fireResultDiv.innerHTML = html;
+    fireResultDiv.style.display = 'block';
+  }
+
+  // Re-render panel
+  renderRoleDetailPanel(state.role);
 }
 
 // ==================== Jump Map (Stage 6) ====================
@@ -2777,6 +3210,14 @@ window.openRefuelModal = openRefuelModal;
 window.openProcessFuelModal = openProcessFuelModal;
 window.completeJump = completeJump;
 window.initiateJump = initiateJump;
+window.plotJumpCourse = plotJumpCourse;
+window.initiateJumpFromPlot = initiateJumpFromPlot;
+window.performScan = performScan;
+window.authorizeWeapons = authorizeWeapons;
+window.fireAtTarget = fireAtTarget;
+window.skipToJumpExit = skipToJumpExit;
+window.showNewsMailModal = showNewsMailModal;
+window.closeNewsMailModal = closeNewsMailModal;
 window.updateFuelEstimate = updateFuelEstimate;
 window.setRefuelMax = setRefuelMax;
 window.setProcessMax = setProcessMax;

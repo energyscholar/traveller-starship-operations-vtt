@@ -1376,6 +1376,100 @@ input[type="checkbox"] {
   margin: var(--space-sm) 0;
 }
 
+/* Autorun 5: Jump Plot Result */
+.jump-plot-result {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.jump-plot-summary.can-jump {
+  border-left: 3px solid var(--accent-green);
+}
+
+.jump-plot-summary.cannot-jump {
+  border-left: 3px solid var(--alert-red);
+}
+
+.plot-header {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--accent-green);
+  margin-bottom: var(--space-sm);
+}
+
+.plot-error {
+  color: var(--alert-red);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.plot-error .error-icon {
+  font-weight: bold;
+}
+
+.plot-stats {
+  margin: var(--space-sm) 0;
+}
+
+.plot-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--bg-dark);
+}
+
+.plot-value {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.plot-value.text-warning {
+  color: var(--alert-yellow);
+}
+
+.plot-destination-info {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.plot-warnings {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+.plot-warning {
+  color: var(--alert-yellow);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.plot-warning .warning-icon {
+  margin-right: var(--space-xs);
+}
+
+.plot-skill-note {
+  margin-top: var(--space-sm);
+  font-size: 11px;
+  color: var(--accent-cyan);
+}
+
+.plot-actions {
+  margin-top: var(--space-md);
+  text-align: center;
+}
+
+.astrogator-skill-note {
+  text-align: center;
+  color: var(--text-muted);
+}
+
 /* Crew List */
 .crew-list {
   flex: 1;
@@ -2853,4 +2947,367 @@ input[type="checkbox"] {
 
 .system-result-item.selected .system-result-uwp {
   background: rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== Weapons Authorization (Autorun 5) ==================== */
+
+.authorize-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.auth-select,
+.fire-select {
+  width: 100%;
+  padding: var(--space-sm);
+  background: var(--bg-base);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.authorized-targets {
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.authorized-targets h5 {
+  margin: 0 0 var(--space-sm) 0;
+  color: var(--alert-yellow);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.auth-target-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.auth-target-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--border-color);
+  font-size: 12px;
+}
+
+.auth-target-item .target-name {
+  color: var(--text-primary);
+}
+
+.auth-target-item .target-range {
+  color: var(--text-secondary);
+}
+
+.auth-target-item .target-health {
+  color: var(--alert-green);
+}
+
+/* Gunner Fire Control */
+
+.gunner-blocked {
+  text-align: center;
+  padding: var(--space-md);
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid var(--alert-red);
+  border-radius: var(--radius-sm);
+}
+
+.blocked-message {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--alert-red);
+  letter-spacing: 2px;
+}
+
+.blocked-reason {
+  margin-top: var(--space-sm);
+  color: var(--text-secondary);
+}
+
+.fire-control-ready {
+  text-align: center;
+  padding: var(--space-md);
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid var(--alert-yellow);
+  border-radius: var(--radius-sm);
+}
+
+.ready-message {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--alert-yellow);
+  letter-spacing: 2px;
+  margin-bottom: var(--space-md);
+}
+
+.target-select-group,
+.weapon-select-group {
+  margin-bottom: var(--space-sm);
+  text-align: left;
+}
+
+.target-select-group label,
+.weapon-select-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.btn-danger {
+  background: var(--alert-red);
+  color: var(--bg-base);
+  border: none;
+  padding: var(--space-sm) var(--space-lg);
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: var(--space-sm);
+}
+
+.btn-danger:hover {
+  background: #ff4444;
+}
+
+/* Fire Result Display */
+
+.fire-result-display {
+  margin-top: var(--space-md);
+}
+
+.fire-result {
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.fire-result.hit {
+  background: rgba(255, 152, 0, 0.2);
+  border: 2px solid var(--alert-yellow);
+}
+
+.fire-result.miss {
+  background: rgba(128, 128, 128, 0.2);
+  border: 2px solid var(--text-secondary);
+}
+
+.fire-result h4 {
+  margin: 0 0 var(--space-sm) 0;
+  font-size: 24px;
+  letter-spacing: 4px;
+}
+
+.fire-result.hit h4 {
+  color: var(--alert-yellow);
+}
+
+.fire-result.miss h4 {
+  color: var(--text-secondary);
+}
+
+.fire-details {
+  text-align: left;
+}
+
+.target-destroyed {
+  margin-top: var(--space-md);
+  padding: var(--space-sm);
+  background: var(--alert-red);
+  color: var(--bg-base);
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 2px;
+  animation: pulse-red 0.5s ease-in-out 3;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.fire-description {
+  margin-top: var(--space-sm);
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.gunner-skill-note,
+.captain-weapons-note {
+  margin-top: var(--space-sm);
+  color: var(--text-muted);
+}
+
+/* Testing/Dev Features */
+
+.jump-skip-testing {
+  margin-top: var(--space-md);
+  padding: var(--space-sm);
+  background: rgba(128, 0, 128, 0.1);
+  border: 1px dashed var(--text-muted);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.jump-skip-testing button {
+  font-size: 11px;
+}
+
+.testing-note {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-style: italic;
+}
+
+/* ==================== News & Mail Modal (Autorun 5) ==================== */
+
+.news-mail-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-lg);
+}
+
+.news-mail-modal {
+  background: var(--bg-dark);
+  border: 2px solid var(--accent-cyan);
+  border-radius: var(--radius-md);
+  max-width: 700px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgba(0, 188, 212, 0.3);
+}
+
+.news-mail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md);
+  background: var(--accent-cyan);
+  color: var(--bg-base);
+}
+
+.news-mail-header h3 {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.news-mail-header .close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--bg-base);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.news-mail-content {
+  padding: var(--space-md);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.role-advice-section,
+.mail-section,
+.news-section {
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.role-advice-section h4,
+.mail-section h4,
+.news-section h4 {
+  margin: 0 0 var(--space-sm) 0;
+  color: var(--accent-cyan);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.role-advice-content {
+  color: var(--text-primary);
+  font-style: italic;
+  padding: var(--space-sm);
+  background: rgba(0, 188, 212, 0.1);
+  border-left: 3px solid var(--accent-cyan);
+}
+
+.mail-item {
+  background: var(--bg-base);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+}
+
+.mail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.mail-from {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.mail-subject {
+  color: var(--text-primary);
+  font-weight: bold;
+}
+
+.mail-body {
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.news-item {
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm);
+  background: var(--bg-base);
+  border-radius: var(--radius-sm);
+}
+
+.news-headline {
+  color: var(--text-primary);
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.news-source {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-bottom: var(--space-xs);
+}
+
+.news-content {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.news-mail-footer {
+  padding: var(--space-md);
+  text-align: center;
+  border-top: 1px solid var(--border-color);
 }

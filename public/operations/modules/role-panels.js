@@ -132,10 +132,10 @@ export function getRoleDetailContent(role, context) {
       return getEngineerPanel(shipState, template, systemStatus, damagedSystems, fuelStatus);
 
     case 'gunner':
-      return getGunnerPanel(shipState, template);
+      return getGunnerPanel(shipState, template, contacts);
 
     case 'captain':
-      return getCaptainPanel(shipState, template, ship, crewOnline);
+      return getCaptainPanel(shipState, template, ship, crewOnline, contacts);
 
     case 'sensor_operator':
       return getSensorOperatorPanel(shipState, contacts);
@@ -284,21 +284,66 @@ function getEngineerPanel(shipState, template, systemStatus, damagedSystems, fue
   `;
 }
 
-function getGunnerPanel(shipState, template) {
+function getGunnerPanel(shipState, template, contacts) {
   const weapons = template.weapons || [];
   const ammo = shipState.ammo || {};
+
+  // Filter to authorized targets only
+  const authorizedTargets = contacts?.filter(c => c.is_targetable && c.weapons_free) || [];
+  const hasTargets = authorizedTargets.length > 0;
+  const hasWeapons = weapons.length > 0;
 
   return `
     <div class="detail-section">
       <h4>Weapons Status</h4>
       <div class="weapons-list">
-        ${weapons.length > 0 ? weapons.map((w, i) => `
+        ${hasWeapons ? weapons.map((w, i) => `
           <div class="weapon-item">
             <span class="weapon-name">${w.name || w.id || 'Weapon ' + (i + 1)}</span>
             <span class="weapon-status">${shipState.weaponStatus?.[i] || 'Ready'}</span>
           </div>
         `).join('') : '<div class="placeholder">No weapons configured</div>'}
       </div>
+    </div>
+    <div class="detail-section">
+      <h4>Fire Control</h4>
+      ${!hasTargets ? `
+        <div class="gunner-blocked">
+          <div class="blocked-message">WEAPONS HOLD</div>
+          <div class="blocked-reason">Awaiting Captain's authorization to fire</div>
+          <small>Captain must authorize weapons on a contact before you can engage</small>
+        </div>
+      ` : `
+        <div class="fire-control-ready">
+          <div class="ready-message">WEAPONS FREE</div>
+          <div class="target-select-group">
+            <label for="fire-target-select">Target:</label>
+            <select id="fire-target-select" class="fire-select">
+              ${authorizedTargets.map(c => `
+                <option value="${c.id}">${escapeHtml(c.name || 'Unknown')} - ${c.range_band || 'Unknown'} ${c.health !== undefined ? `(${c.health}%)` : ''}</option>
+              `).join('')}
+            </select>
+          </div>
+          ${hasWeapons ? `
+            <div class="weapon-select-group">
+              <label for="fire-weapon-select">Weapon:</label>
+              <select id="fire-weapon-select" class="fire-select">
+                ${weapons.map((w, i) => `
+                  <option value="${i}">${w.name || w.id || 'Weapon ' + (i + 1)} (${w.damage || '1d6'})</option>
+                `).join('')}
+              </select>
+            </div>
+            <button onclick="fireAtTarget()" class="btn btn-danger">
+              FIRE!
+            </button>
+          ` : `
+            <div class="placeholder">No weapons available to fire</div>
+          `}
+        </div>
+      `}
+    </div>
+    <div id="fire-result-display" class="fire-result-display" style="display: none;">
+      <!-- Populated by fire results -->
     </div>
     <div class="detail-section">
       <h4>Ammunition</h4>
@@ -313,10 +358,18 @@ function getGunnerPanel(shipState, template) {
         </div>
       </div>
     </div>
+    <div class="detail-section gunner-skill-note">
+      <small><em>Your Gunner skill affects attack accuracy. Roll 8+ to hit.</em></small>
+    </div>
   `;
 }
 
-function getCaptainPanel(shipState, template, ship, crewOnline) {
+function getCaptainPanel(shipState, template, ship, crewOnline, contacts) {
+  // Filter to targetable contacts only
+  const targetableContacts = contacts?.filter(c => c.is_targetable) || [];
+  const authorizedTargets = targetableContacts.filter(c => c.weapons_free);
+  const unauthorizedTargets = targetableContacts.filter(c => !c.weapons_free);
+
   return `
     <div class="detail-section">
       <h4>Ship Overview</h4>
@@ -348,27 +401,105 @@ function getCaptainPanel(shipState, template, ship, crewOnline) {
         </div>
       </div>
     </div>
+    <div class="detail-section">
+      <h4>Weapons Authorization</h4>
+      ${targetableContacts.length === 0 ? `
+        <div class="placeholder">No targetable contacts in range</div>
+        <div class="captain-weapons-note">
+          <small>Sensor operator must identify targets before weapons can be authorized</small>
+        </div>
+      ` : `
+        <div class="weapons-auth-status">
+          <div class="stat-row">
+            <span>Targets Authorized:</span>
+            <span class="stat-value ${authorizedTargets.length > 0 ? 'text-warning' : ''}">${authorizedTargets.length}</span>
+          </div>
+          <div class="stat-row">
+            <span>Awaiting Auth:</span>
+            <span class="stat-value">${unauthorizedTargets.length}</span>
+          </div>
+        </div>
+        ${unauthorizedTargets.length > 0 ? `
+          <div class="authorize-controls">
+            <label for="auth-target-select">Authorize Fire On:</label>
+            <select id="auth-target-select" class="auth-select">
+              ${unauthorizedTargets.map(c => `
+                <option value="${c.id}">${escapeHtml(c.name || 'Unknown')} (${c.type || 'Unknown'}) - ${c.range_band || 'Unknown'}</option>
+              `).join('')}
+            </select>
+            <button onclick="authorizeWeapons()" class="btn btn-warning btn-small">
+              Authorize Weapons Free
+            </button>
+          </div>
+        ` : ''}
+        ${authorizedTargets.length > 0 ? `
+          <div class="authorized-targets">
+            <h5>Active Authorizations:</h5>
+            <ul class="auth-target-list">
+              ${authorizedTargets.map(c => `
+                <li class="auth-target-item">
+                  <span class="target-name">${escapeHtml(c.name || 'Unknown')}</span>
+                  <span class="target-range">${c.range_band || 'Unknown'}</span>
+                  <span class="target-health">${c.health !== undefined ? `${c.health}%` : '100%'}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        ` : ''}
+      `}
+    </div>
   `;
 }
 
 function getSensorOperatorPanel(shipState, contacts) {
+  // Categorize contacts for display
+  const celestials = contacts?.filter(c => c.celestial) || [];
+  const stations = contacts?.filter(c => !c.celestial && c.type && ['Station', 'Starport', 'Base'].includes(c.type)) || [];
+  const ships = contacts?.filter(c => !c.celestial && c.type && ['Ship', 'Patrol'].includes(c.type)) || [];
+  const other = contacts?.filter(c => !c.celestial && (!c.type || !['Station', 'Starport', 'Base', 'Ship', 'Patrol'].includes(c.type))) || [];
+
   return `
     <div class="detail-section">
-      <h4>Sensor Status</h4>
+      <h4>Sensor Controls</h4>
+      <div class="sensor-scan-buttons">
+        <button onclick="performScan('passive')" class="btn btn-small" title="Detect transponders and celestials only">
+          Passive Scan
+        </button>
+        <button onclick="performScan('active')" class="btn btn-small btn-warning" title="Full sweep - may reveal our position!">
+          Active Scan
+        </button>
+      </div>
+      <div class="sensor-scan-note">
+        <small>Active scans reveal our position to other ships</small>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h4>Contact Summary</h4>
       <div class="detail-stats">
         <div class="stat-row">
-          <span>Mode:</span>
-          <span class="stat-value">${shipState.sensorMode || 'Passive'}</span>
+          <span>Celestial:</span>
+          <span class="stat-value">${celestials.length}</span>
         </div>
         <div class="stat-row">
-          <span>Range:</span>
-          <span class="stat-value">${shipState.sensorRange || 'Standard'}</span>
+          <span>Stations:</span>
+          <span class="stat-value">${stations.length}</span>
         </div>
         <div class="stat-row">
-          <span>Contacts:</span>
+          <span>Ships:</span>
+          <span class="stat-value">${ships.length}</span>
+        </div>
+        <div class="stat-row">
+          <span>Other:</span>
+          <span class="stat-value">${other.length}</span>
+        </div>
+        <div class="stat-row total">
+          <span>Total:</span>
           <span class="stat-value">${contacts?.length || 0}</span>
         </div>
       </div>
+    </div>
+    <div id="scan-result-display" class="scan-result-display" style="display: none;">
+      <!-- Populated by scan results -->
     </div>
     <div class="detail-section">
       <h4>EW Status</h4>
@@ -377,7 +508,14 @@ function getSensorOperatorPanel(shipState, contacts) {
           <span>Jamming:</span>
           <span class="stat-value">${shipState.jamming ? 'Active' : 'Inactive'}</span>
         </div>
+        <div class="stat-row">
+          <span>Stealth:</span>
+          <span class="stat-value">${shipState.stealth ? 'Active' : 'Off'}</span>
+        </div>
       </div>
+    </div>
+    <div class="detail-section sensor-skill-note">
+      <small><em>Your Electronics (sensors) skill affects detection range and accuracy</em></small>
     </div>
   `;
 }
@@ -410,7 +548,14 @@ function getAstrogatorPanel(shipState, template, jumpStatus, campaign, systemSta
         </div>
         ${jumpStatus.canExit ? `
           <button onclick="completeJump()" class="btn btn-primary">Exit Jump Space</button>
-        ` : ''}
+        ` : `
+          <div class="jump-skip-testing">
+            <button onclick="skipToJumpExit()" class="btn btn-secondary btn-small" title="Testing: Advance time to jump exit">
+              [DEV] Skip to Exit
+            </button>
+            <small class="testing-note">Testing only - advances time 168h</small>
+          </div>
+        `}
       </div>
     `;
   }
@@ -469,25 +614,28 @@ function getAstrogatorPanel(shipState, template, jumpStatus, campaign, systemSta
     </div>
     `}
     <div class="detail-section">
-      <h4>Plot Jump</h4>
+      <h4>Plot Jump Course</h4>
       <div class="jump-controls">
         <div class="form-group">
           <label for="jump-destination">Destination:</label>
-          <input type="text" id="jump-destination" placeholder="System name" class="jump-input">
+          <input type="text" id="jump-destination" placeholder="System name (e.g., Ator)" class="jump-input">
         </div>
         <div class="form-group">
           <label for="jump-distance">Distance:</label>
-          <select id="jump-distance" class="jump-select" onchange="updateFuelEstimate()">
+          <select id="jump-distance" class="jump-select">
             ${[...Array(jumpRating)].map((_, i) => `
               <option value="${i+1}">Jump-${i+1} (${i+1} parsec${i > 0 ? 's' : ''})</option>
             `).join('')}
           </select>
         </div>
-        <div class="fuel-estimate">
-          Fuel required: <span id="fuel-estimate">--</span> tons
-        </div>
-        <button onclick="initiateJump()" class="btn btn-primary">Initiate Jump</button>
+        <button onclick="plotJumpCourse()" class="btn btn-secondary">Plot Course</button>
       </div>
+      <div id="jump-plot-result" class="jump-plot-result" style="display: none;">
+        <!-- Populated by plotJumpCourse() -->
+      </div>
+    </div>
+    <div class="detail-section astrogator-skill-note">
+      <small><em>Your Astrogation skill affects jump accuracy and fuel efficiency</em></small>
     </div>
   `;
 }
