@@ -226,9 +226,25 @@ The easiest way to test:
 - **Server-Authoritative** - All combat actions validated server-side
 - **Event-Driven** - Communication via Socket.io events
 - **Test-Driven Development** - Tests before implementation (1.07:1 ratio)
-- **Modular Architecture** - Clean separation of concerns
+- **MVC Architecture** - Clean separation: state, services, handlers, routes
+- **Design Patterns** - Factory, Strategy, Command, Observer patterns (see below)
 - **Zero Technical Debt** - Maintained across all development stages
 - **British Spelling** - Matches Traveller rules ("armour", not "armor")
+
+### Architecture Patterns
+
+The codebase uses established design patterns for maintainability and extensibility:
+
+| Pattern | Location | Purpose |
+|---------|----------|---------|
+| **MVC** | `lib/` | State/services/handlers separation |
+| **Factory** | `lib/factories/` | Entity creation (ships, crews) |
+| **Strategy** | `lib/combat/ai/`, `lib/combat/weapons/` | AI behaviours, weapon types |
+| **Command** | `lib/combat/commands/` | Combat actions with undo/redo |
+| **Observer** | `lib/events/` | Internal event bus for decoupling |
+| **State** | `lib/combat/states/` | Combat phase machine |
+
+**See:** [.claude/DESIGN-PATTERN-REFACTOR.md](.claude/DESIGN-PATTERN-REFACTOR.md) for implementation details.
 
 ### Key Technical Decisions
 
@@ -245,8 +261,21 @@ The easiest way to test:
 
 ```
 traveller-combat-vtt/
-├── lib/                      # Core game logic
-│   ├── combat.js             # Combat resolution engine
+├── lib/                      # Core game logic (MVC architecture)
+│   ├── state/                # State management (connections, combat, game)
+│   ├── services/             # Rate limiting, metrics, connection management
+│   ├── socket-handlers/      # Socket.io event handlers
+│   │   ├── space.handlers.js # Space combat events
+│   │   ├── legacy.handlers.js# Ground combat events
+│   │   └── operations.handlers.js # Operations VTT events
+│   ├── routes/               # REST API endpoints
+│   ├── combat/               # Combat resolution engine
+│   │   ├── ai/               # AI strategies (Strategy pattern)
+│   │   ├── commands/         # Combat actions (Command pattern)
+│   │   ├── weapons/          # Weapon strategies (Strategy pattern)
+│   │   └── states/           # Combat phases (State pattern)
+│   ├── factories/            # Entity creation (Factory pattern)
+│   ├── events/               # Event bus (Observer pattern)
 │   ├── ship-*.js             # Ship component validation modules
 │   └── export-import.js      # Save/load system
 ├── data/                     # Game data
@@ -270,7 +299,7 @@ traveller-combat-vtt/
 │   ├── SESSION-*-PLAN.md     # Autonomous session plans
 │   ├── handoffs/             # Stage completion documents
 │   └── ROADMAP.md            # Development roadmap
-├── server.js                 # Express + Socket.io server (2,071 LOC)
+├── server.js                 # Express + Socket.io orchestrator (~365 LOC)
 ├── Dockerfile                # Multi-stage production build
 ├── docker-compose.yml        # Dev and prod configurations
 ├── package.json              # Dependencies and scripts
@@ -476,9 +505,9 @@ This is a fan-made tool for playing Traveller. No copyrighted text from Travelle
 **Next Milestone:** Stage 13 (Performance & Scale)
 
 **Recent Updates:**
+- **2025-11-30:** MVC refactor complete (server.js 2700→365 LOC), design pattern implementation planned
 - **Session 5 (2025-11-14):** Professional portfolio foundation - CI/CD pipeline, security automation, governance files
 - **Session 4 (2025-11-13):** Export/import system, Docker containerisation, health endpoints, deployment documentation
-- **Session 3A (2025-11-13):** High Guard reference tables, export schemas, data quality guidelines, process maturity
 
 ---
 
