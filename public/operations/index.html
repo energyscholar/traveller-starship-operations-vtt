@@ -79,6 +79,16 @@
       </header>
 
       <div class="gm-setup-container">
+        <!-- Campaign Code Section -->
+        <section class="setup-section campaign-code-section">
+          <h2>Campaign Code</h2>
+          <div class="campaign-code-display">
+            <code id="campaign-code-value">--------</code>
+            <button id="btn-copy-code" class="btn btn-small" title="Copy to clipboard">Copy</button>
+          </div>
+          <p class="code-hint">Share this code with players to join</p>
+        </section>
+
         <section class="setup-section">
           <h2>Player Slots</h2>
           <div id="gm-player-slots" class="player-slots">
@@ -526,6 +536,98 @@
       <button class="btn btn-secondary" data-close-modal>Cancel</button>
       <button class="btn btn-warning" id="btn-apply-damage">Apply Damage</button>
       <button class="btn btn-success" id="btn-clear-damage">Clear All Damage</button>
+    </div>
+  </template>
+
+  <!-- Refuel Modal Template -->
+  <template id="template-refuel">
+    <div class="modal-header">
+      <h2>Refuel Ship</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="refuel-source">Fuel Source:</label>
+        <select id="refuel-source" onchange="updateRefuelAmountPreview()">
+          <option value="">Loading sources...</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="refuel-amount">Amount (tons):</label>
+        <div class="input-with-button">
+          <input type="number" id="refuel-amount" min="1" value="10" oninput="updateRefuelAmountPreview()">
+          <button class="btn btn-small" onclick="setRefuelMax()">Max</button>
+        </div>
+      </div>
+      <div id="refuel-preview" class="refuel-preview">
+        <div class="refuel-info">Select source and amount</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" onclick="executeRefuel()">Refuel</button>
+    </div>
+  </template>
+
+  <!-- Process Fuel Modal Template -->
+  <template id="template-process-fuel">
+    <div class="modal-header">
+      <h2>Process Unrefined Fuel</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-description">
+        Convert unrefined fuel to processed fuel using the ship's fuel processor.
+        Processing rate: 10 tons per hour.
+      </p>
+      <div class="form-group">
+        <label for="process-amount">Amount to Process (tons):</label>
+        <div class="input-with-button">
+          <input type="number" id="process-amount" min="1" value="10">
+          <button class="btn btn-small" onclick="setProcessMax()">Max</button>
+        </div>
+      </div>
+      <div class="process-info">
+        <p><strong>Note:</strong> Processed fuel has no penalties, unlike unrefined fuel.</p>
+        <p>Unrefined fuel: -2 DM to jump checks, 5% misjump risk</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" onclick="executeProcessFuel()">Start Processing</button>
+    </div>
+  </template>
+
+  <!-- Add Ship Modal Template -->
+  <template id="template-add-ship">
+    <div class="modal-header">
+      <h2>Add Ship</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="ship-name">Ship Name:</label>
+        <input type="text" id="ship-name" placeholder="e.g., The Wandering Star" required>
+      </div>
+      <div class="form-group">
+        <label for="ship-template">Ship Type:</label>
+        <select id="ship-template">
+          <option value="">Loading templates...</option>
+        </select>
+      </div>
+      <div id="ship-template-info" class="template-info">
+        <!-- Populated when template selected -->
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="ship-is-party" checked>
+          Party Ship (players can select this ship)
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" id="btn-create-ship">Add Ship</button>
     </div>
   </template>
 

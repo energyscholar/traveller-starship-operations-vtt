@@ -44,7 +44,8 @@ const unitTests = [
   'tests/operations-handlers.test.js',  // Operations handler smoke tests (27 tests)
   'tests/contacts.test.js',  // Contacts CRUD and visibility tests
   'tests/ship-systems.test.js',  // Ship systems damage and repair (18 tests)
-  'tests/jump.test.js'  // Jump travel and date utilities (23 tests)
+  'tests/jump.test.js',  // Jump travel and date utilities (23 tests)
+  'tests/operations-refueling.test.js'  // Refueling system tests (25 tests)
 ];
 
 // Integration tests

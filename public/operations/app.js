@@ -40,12 +40,58 @@ function initSocket() {
   // Connection events
   state.socket.on('connect', () => {
     console.log('Connected to server');
-    showNotification('Connected', 'success');
+    // Try to reconnect to previous session (Stage 3.5.5)
+    tryReconnect();
   });
 
   state.socket.on('disconnect', () => {
     console.log('Disconnected from server');
     showNotification('Disconnected from server', 'error');
+  });
+
+  // Reconnect events (Stage 3.5.5)
+  state.socket.on('ops:reconnected', (data) => {
+    console.log('Reconnected to session:', data.screen);
+    state.campaign = data.campaign;
+    state.players = data.players || [];
+    state.ships = data.ships || [];
+    state.ship = data.ship || null;
+    state.player = data.account || null;
+    state.selectedRole = data.role || null;
+    state.logEntries = data.logs || [];
+    state.crewOnline = data.crew || [];
+
+    if (data.screen === 'bridge') {
+      state.selectedShipId = data.ship?.id;
+      showScreen('bridge');
+      renderBridge();
+      showNotification('Session restored', 'success');
+    } else if (data.screen === 'player-setup') {
+      showScreen('player-setup');
+      renderPlayerSetup();
+      showNotification('Session restored', 'success');
+    } else if (data.screen === 'gm-setup') {
+      state.isGM = true;
+      showScreen('gm-setup');
+      renderGMSetup();
+      showNotification('Session restored', 'success');
+    }
+  });
+
+  state.socket.on('ops:reconnectFailed', (data) => {
+    console.log('Reconnect failed:', data.reason);
+    // Clear stored session and show login
+    clearStoredSession();
+  });
+
+  // Slot status updates (Stage 3.5.3)
+  state.socket.on('ops:slotStatusUpdate', (data) => {
+    const slot = state.players?.find(p => p.id === data.accountId);
+    if (slot) {
+      slot.inUse = data.status === 'in-use';
+      renderPlayerSlots();
+      renderGMSetup();
+    }
   });
 
   // Campaign events
@@ -71,6 +117,8 @@ function initSocket() {
     if (state.isGM) {
       showScreen('gm-setup');
       renderGMSetup();
+      // Save session for reconnect (Stage 3.5.5)
+      saveSession();
     }
   });
 
@@ -164,6 +212,7 @@ function initSocket() {
   // Bridge events
   state.socket.on('ops:bridgeJoined', (data) => {
     state.ship = data.ship;
+    state.selectedShipId = data.ship?.id;
     state.crewOnline = data.crew;
     state.contacts = [];
     state.logEntries = data.logs || [];
@@ -171,6 +220,8 @@ function initSocket() {
     state.selectedRole = data.role;
     showScreen('bridge');
     renderBridge();
+    // Save session for reconnect (Stage 3.5.5)
+    saveSession();
     // Request system status for engineer panel
     requestSystemStatus();
     // Request jump status for astrogator panel
@@ -208,11 +259,18 @@ function initSocket() {
     state.ships.push(data.ship);
     renderGMSetup();
     renderPlayerSetup();
+    closeModal();
+    showNotification(`Ship "${data.ship.name}" added`, 'success');
   });
 
   state.socket.on('ops:shipDeleted', (data) => {
     state.ships = state.ships.filter(s => s.id !== data.shipId);
     renderGMSetup();
+  });
+
+  state.socket.on('ops:shipTemplates', (data) => {
+    state.shipTemplates = data.templates;
+    populateShipTemplateSelect();
   });
 
   // Contact events
@@ -325,6 +383,71 @@ function initSocket() {
   state.socket.on('ops:locationChanged', (data) => {
     state.campaign.current_system = data.newLocation;
     renderBridge();
+  });
+
+  // Refueling events
+  state.socket.on('ops:fuelStatus', (data) => {
+    state.fuelStatus = data;
+    if (state.selectedRole === 'engineer') {
+      renderRoleDetailPanel('engineer');
+    }
+    renderShipStatus();
+  });
+
+  state.socket.on('ops:refuelOptions', (data) => {
+    state.fuelSources = data.sources;
+    state.fuelTypes = data.fuelTypes;
+    if (data.fuelStatus) {
+      state.fuelStatus = data.fuelStatus;
+    }
+    populateRefuelModal();
+  });
+
+  state.socket.on('ops:canRefuelResult', (data) => {
+    // Update refuel modal with cost/time info
+    updateRefuelPreview(data);
+  });
+
+  state.socket.on('ops:refueled', (data) => {
+    state.fuelStatus = data.newFuelStatus;
+    // Update ship state
+    if (state.ship?.current_state) {
+      state.ship.current_state.fuel = data.newFuelStatus.total;
+      state.ship.current_state.fuelBreakdown = data.newFuelStatus.breakdown;
+    }
+    showNotification(`Refueled ${data.fuelAdded} tons of ${data.fuelType} fuel`, 'success');
+    renderShipStatus();
+    if (state.selectedRole === 'engineer') {
+      renderRoleDetailPanel('engineer');
+    }
+    closeModal();
+  });
+
+  state.socket.on('ops:fuelProcessingStarted', (data) => {
+    showNotification(`Started processing ${data.tons} tons of fuel (${data.timeHours} hours)`, 'info');
+    state.socket.emit('ops:getFuelStatus');
+  });
+
+  state.socket.on('ops:fuelProcessingStatus', (data) => {
+    state.fuelProcessing = data;
+    if (state.selectedRole === 'engineer') {
+      renderRoleDetailPanel('engineer');
+    }
+  });
+
+  state.socket.on('ops:fuelProcessingCompleted', (data) => {
+    state.fuelStatus = data.newFuelStatus;
+    showNotification(`Fuel processing complete: ${data.tons} tons now ready`, 'success');
+    renderShipStatus();
+    if (state.selectedRole === 'engineer') {
+      renderRoleDetailPanel('engineer');
+    }
+  });
+
+  state.socket.on('ops:jumpFuelPenalties', (data) => {
+    if (data.hasUnrefined) {
+      showNotification(`Warning: Using ${data.unrefinedAmount} tons unrefined fuel (DM ${data.dmModifier}, ${data.misjumpRisk * 100}% misjump risk)`, 'warning');
+    }
   });
 
   // Error handling
@@ -484,6 +607,26 @@ function renderPlayerSlots() {
 
 // ==================== GM Setup Screen ====================
 function initGMSetupScreen() {
+  // Copy campaign code button
+  document.getElementById('btn-copy-code').addEventListener('click', () => {
+    const codeEl = document.getElementById('campaign-code-value');
+    const code = codeEl.textContent;
+    if (code && code !== '--------') {
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('btn-copy-code');
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.add('btn-copy-success');
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('btn-copy-success');
+        }, 2000);
+      }).catch(() => {
+        showNotification('Failed to copy code', 'error');
+      });
+    }
+  });
+
   // Add player slot
   document.getElementById('btn-add-player-slot').addEventListener('click', () => {
     const name = document.getElementById('new-slot-name').value.trim();
@@ -498,8 +641,8 @@ function initGMSetupScreen() {
 
   // Add ship
   document.getElementById('btn-add-ship').addEventListener('click', () => {
-    // TODO: Ship selection/creation modal
-    showNotification('Ship creation coming soon', 'info');
+    state.socket.emit('ops:getShipTemplates');
+    showModal('template-add-ship');
   });
 
   // Campaign settings
@@ -533,6 +676,7 @@ function initGMSetupScreen() {
   document.getElementById('btn-gm-logout').addEventListener('click', () => {
     state.campaign = null;
     state.isGM = false;
+    clearStoredSession();
     showScreen('login');
     document.getElementById('campaign-select').classList.add('hidden');
     document.querySelector('.login-options').classList.remove('hidden');
@@ -541,6 +685,13 @@ function initGMSetupScreen() {
 
 function renderGMSetup() {
   document.getElementById('gm-campaign-name').textContent = state.campaign?.name || 'Campaign Setup';
+
+  // Campaign code display
+  const codeEl = document.getElementById('campaign-code-value');
+  if (codeEl && state.campaign?.id) {
+    // Show first 8 characters of campaign ID as the join code
+    codeEl.textContent = state.campaign.id.substring(0, 8).toUpperCase();
+  }
 
   // Campaign settings
   document.getElementById('campaign-date').value = state.campaign?.current_date || '1105-001';
@@ -608,6 +759,7 @@ function initPlayerSetupScreen() {
   // Logout
   document.getElementById('btn-player-logout').addEventListener('click', () => {
     state.player = null;
+    clearStoredSession();
     showScreen('login');
     document.getElementById('player-slot-select').classList.add('hidden');
     document.getElementById('player-select').classList.add('hidden');
@@ -950,6 +1102,15 @@ function getRoleDetailContent(role, shipState, template) {
       const powerPercent = Math.round((currentPower / maxPower) * 100);
       const systemStatus = state.systemStatus || {};
       const damagedSystems = state.damagedSystems || [];
+      const fuelStatus = state.fuelStatus || {
+        total: shipState.fuel ?? template.fuel ?? 40,
+        max: template.fuel || 40,
+        breakdown: { refined: shipState.fuel ?? template.fuel ?? 40, unrefined: 0, processed: 0 },
+        percentFull: 100,
+        processing: null,
+        fuelProcessor: template.fuelProcessor || false
+      };
+      const fuelBreakdown = fuelStatus.breakdown || { refined: fuelStatus.total, unrefined: 0, processed: 0 };
       return `
         <div class="detail-section">
           <h4>System Status</h4>
@@ -978,14 +1139,52 @@ function getRoleDetailContent(role, shipState, template) {
         ` : ''}
         <div class="detail-section">
           <h4>Fuel Status</h4>
+          <div class="fuel-display">
+            <div class="fuel-total">
+              <span class="fuel-amount">${fuelStatus.total}/${fuelStatus.max}</span>
+              <span class="fuel-unit">tons</span>
+              <span class="fuel-percent">(${fuelStatus.percentFull}%)</span>
+            </div>
+            <div class="fuel-bar-container">
+              <div class="fuel-bar-segment refined" style="width: ${(fuelBreakdown.refined / fuelStatus.max) * 100}%" title="Refined: ${fuelBreakdown.refined}t"></div>
+              <div class="fuel-bar-segment processed" style="width: ${(fuelBreakdown.processed / fuelStatus.max) * 100}%" title="Processed: ${fuelBreakdown.processed}t"></div>
+              <div class="fuel-bar-segment unrefined" style="width: ${(fuelBreakdown.unrefined / fuelStatus.max) * 100}%" title="Unrefined: ${fuelBreakdown.unrefined}t"></div>
+            </div>
+            <div class="fuel-breakdown">
+              <div class="fuel-type refined"><span class="fuel-dot"></span>Refined: ${fuelBreakdown.refined}t</div>
+              <div class="fuel-type processed"><span class="fuel-dot"></span>Processed: ${fuelBreakdown.processed}t</div>
+              <div class="fuel-type unrefined"><span class="fuel-dot"></span>Unrefined: ${fuelBreakdown.unrefined}t</div>
+            </div>
+          </div>
+          ${fuelBreakdown.unrefined > 0 ? `
+          <div class="fuel-warning">
+            <span class="warning-icon">⚠</span>
+            Unrefined fuel: -2 DM to jump checks, 5% misjump risk
+          </div>
+          ` : ''}
+          <div class="fuel-actions">
+            <button onclick="openRefuelModal()" class="btn btn-small">Refuel</button>
+            ${fuelStatus.fuelProcessor && fuelBreakdown.unrefined > 0 ? `
+            <button onclick="openProcessFuelModal()" class="btn btn-small">Process Fuel</button>
+            ` : ''}
+          </div>
+          ${fuelStatus.processing ? `
+          <div class="fuel-processing-status">
+            <span class="processing-icon">⚙</span>
+            Processing ${fuelStatus.processing.tons}t: ${fuelStatus.processing.hoursRemaining}h remaining
+          </div>
+          ` : ''}
+        </div>
+        <div class="detail-section">
+          <h4>Jump Capability</h4>
           <div class="detail-stats">
             <div class="stat-row">
-              <span>Fuel:</span>
-              <span class="stat-value">${shipState.fuel ?? template.fuel ?? 40}/${template.fuel || 40} tons</span>
+              <span>Jump Rating:</span>
+              <span class="stat-value">J-${template.jumpRating || 2}</span>
             </div>
             <div class="stat-row">
-              <span>Jump Range:</span>
-              <span class="stat-value">${template.jumpRating || 2} parsecs</span>
+              <span>Fuel per Jump:</span>
+              <span class="stat-value">${Math.round((template.tonnage || 100) * 0.1)}t/parsec</span>
             </div>
           </div>
         </div>
@@ -1434,6 +1633,132 @@ function completeJump() {
   state.socket.emit('ops:completeJump');
 }
 
+// ==================== Refueling ====================
+
+function openRefuelModal() {
+  // Request refuel options from server
+  state.socket.emit('ops:getRefuelOptions');
+  showModal('template-refuel');
+}
+
+function openProcessFuelModal() {
+  showModal('template-process-fuel');
+}
+
+function populateRefuelModal() {
+  const sourceSelect = document.getElementById('refuel-source');
+  if (!sourceSelect) return;
+
+  if (!state.fuelSources || state.fuelSources.length === 0) {
+    sourceSelect.innerHTML = '<option value="">No fuel sources available</option>';
+    return;
+  }
+
+  sourceSelect.innerHTML = state.fuelSources.map(s =>
+    `<option value="${s.id}">${s.name} - ${s.fuelType} (${s.cost > 0 ? 'Cr' + s.cost + '/ton' : 'Free'})</option>`
+  ).join('');
+
+  // Update preview
+  updateRefuelAmountPreview();
+}
+
+function updateRefuelAmountPreview() {
+  const sourceId = document.getElementById('refuel-source')?.value;
+  const tons = parseInt(document.getElementById('refuel-amount')?.value) || 0;
+
+  if (sourceId && tons > 0) {
+    state.socket.emit('ops:canRefuel', { sourceId, tons });
+  } else {
+    updateRefuelPreview({ canRefuel: false });
+  }
+}
+
+function updateRefuelPreview(data) {
+  const previewEl = document.getElementById('refuel-preview');
+  if (!previewEl) return;
+
+  if (!data.canRefuel) {
+    if (data.error) {
+      previewEl.innerHTML = `<div class="refuel-error">${data.error}</div>`;
+    } else {
+      previewEl.innerHTML = '<div class="refuel-info">Select source and amount</div>';
+    }
+    return;
+  }
+
+  previewEl.innerHTML = `
+    <div class="refuel-preview-info">
+      <div class="preview-row">
+        <span>Fuel Type:</span>
+        <span class="preview-value">${data.fuelType}</span>
+      </div>
+      <div class="preview-row">
+        <span>Cost:</span>
+        <span class="preview-value">${data.cost > 0 ? 'Cr' + data.cost : 'Free'}</span>
+      </div>
+      <div class="preview-row">
+        <span>Time:</span>
+        <span class="preview-value">${data.timeHours > 0 ? data.timeHours + ' hours' : 'Instant'}</span>
+      </div>
+      ${data.skillCheck ? `
+      <div class="preview-row">
+        <span>Skill Check:</span>
+        <span class="preview-value">${data.skillCheck.skill} (${data.skillCheck.difficulty}+)</span>
+      </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function executeRefuel() {
+  const sourceId = document.getElementById('refuel-source')?.value;
+  const tons = parseInt(document.getElementById('refuel-amount')?.value) || 0;
+
+  if (!sourceId || tons <= 0) {
+    showNotification('Please select source and amount', 'error');
+    return;
+  }
+
+  state.socket.emit('ops:refuel', { sourceId, tons });
+}
+
+function setRefuelMax() {
+  const fuelStatus = state.fuelStatus || {};
+  const spaceAvailable = (fuelStatus.max || 40) - (fuelStatus.total || 0);
+  const amountInput = document.getElementById('refuel-amount');
+  if (amountInput) {
+    amountInput.value = spaceAvailable;
+    updateRefuelAmountPreview();
+  }
+}
+
+function executeProcessFuel() {
+  const tons = parseInt(document.getElementById('process-amount')?.value) || 0;
+
+  if (tons <= 0) {
+    showNotification('Please enter amount to process', 'error');
+    return;
+  }
+
+  state.socket.emit('ops:startFuelProcessing', { tons });
+  closeModal();
+}
+
+function setProcessMax() {
+  const fuelStatus = state.fuelStatus || {};
+  const unrefined = fuelStatus.breakdown?.unrefined || 0;
+  const amountInput = document.getElementById('process-amount');
+  if (amountInput) {
+    amountInput.value = unrefined;
+  }
+}
+
+function requestFuelStatus() {
+  if (state.socket && state.selectedShipId) {
+    state.socket.emit('ops:getFuelStatus');
+  }
+}
+
 function renderShipLog() {
   const container = document.getElementById('ship-log');
 
@@ -1579,7 +1904,95 @@ function showModal(templateId) {
     });
   }
 
+  if (templateId === 'template-add-ship') {
+    // Populate template dropdown (templates should arrive via socket)
+    populateShipTemplateSelect();
+
+    // Template selection change - show info
+    document.getElementById('ship-template').addEventListener('change', (e) => {
+      updateShipTemplateInfo(e.target.value);
+    });
+
+    // Create ship button
+    document.getElementById('btn-create-ship').addEventListener('click', () => {
+      const name = document.getElementById('ship-name').value.trim();
+      const templateId = document.getElementById('ship-template').value;
+      const isPartyShip = document.getElementById('ship-is-party').checked;
+
+      if (!name) {
+        showNotification('Please enter a ship name', 'error');
+        return;
+      }
+      if (!templateId) {
+        showNotification('Please select a ship type', 'error');
+        return;
+      }
+
+      state.socket.emit('ops:addShipFromTemplate', {
+        templateId,
+        name,
+        isPartyShip
+      });
+    });
+  }
+
   document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function populateShipTemplateSelect() {
+  const select = document.getElementById('ship-template');
+  if (!select) return;
+
+  if (!state.shipTemplates || state.shipTemplates.length === 0) {
+    select.innerHTML = '<option value="">No templates available</option>';
+    return;
+  }
+
+  select.innerHTML = '<option value="">-- Select Ship Type --</option>' +
+    state.shipTemplates.map(t =>
+      `<option value="${t.id}">${t.name} (${t.tonnage}t)</option>`
+    ).join('');
+}
+
+function updateShipTemplateInfo(templateId) {
+  const infoDiv = document.getElementById('ship-template-info');
+  if (!infoDiv) return;
+
+  if (!templateId) {
+    infoDiv.innerHTML = '';
+    return;
+  }
+
+  const template = state.shipTemplates?.find(t => t.id === templateId);
+  if (!template) {
+    infoDiv.innerHTML = '';
+    return;
+  }
+
+  infoDiv.innerHTML = `
+    <div class="template-stats">
+      <div class="template-stat">
+        <span class="label">Tonnage</span>
+        <span class="value">${template.tonnage} dT</span>
+      </div>
+      <div class="template-stat">
+        <span class="label">Jump</span>
+        <span class="value">J-${template.jump || 0}</span>
+      </div>
+      <div class="template-stat">
+        <span class="label">Thrust</span>
+        <span class="value">${template.thrust || 0}G</span>
+      </div>
+      <div class="template-stat">
+        <span class="label">Hull</span>
+        <span class="value">${template.hull} HP</span>
+      </div>
+      <div class="template-stat">
+        <span class="label">Crew Min</span>
+        <span class="value">${Object.values(template.crew || {}).reduce((a, b) => a + b, 0)}</span>
+      </div>
+    </div>
+  `;
 }
 
 function addContact(contactData) {
@@ -1698,6 +2111,51 @@ function showNotification(message, type = 'info') {
   // For now, use browser notification if available
   if (type === 'error') {
     alert(message);
+  }
+}
+
+// ==================== Session Storage (Stage 3.5.5) ====================
+const SESSION_KEY = 'ops_session';
+
+function saveSession() {
+  const sessionData = {
+    campaignId: state.campaign?.id,
+    accountId: state.player?.id,
+    shipId: state.selectedShipId || state.ship?.id,
+    role: state.selectedRole,
+    isGM: state.isGM
+  };
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+  } catch (e) {
+    console.warn('Failed to save session:', e);
+  }
+}
+
+function getStoredSession() {
+  try {
+    const data = localStorage.getItem(SESSION_KEY);
+    return data ? JSON.parse(data) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function clearStoredSession() {
+  try {
+    localStorage.removeItem(SESSION_KEY);
+  } catch (e) {
+    console.warn('Failed to clear session:', e);
+  }
+}
+
+function tryReconnect() {
+  const session = getStoredSession();
+  if (session && session.campaignId) {
+    console.log('Attempting to reconnect to session:', session);
+    state.socket.emit('ops:reconnect', session);
+  } else {
+    showNotification('Connected', 'success');
   }
 }
 

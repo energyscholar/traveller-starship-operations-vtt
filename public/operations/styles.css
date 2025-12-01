@@ -327,6 +327,76 @@ input[type="checkbox"] {
   border-bottom: 1px solid var(--border-color);
 }
 
+/* Campaign Code Display */
+.campaign-code-section {
+  text-align: center;
+}
+
+.campaign-code-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0;
+}
+
+.campaign-code-display code {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--bg-dark);
+  border: 2px solid var(--accent-blue);
+  border-radius: var(--radius-sm);
+  color: var(--accent-blue);
+  user-select: all;
+}
+
+.code-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: var(--space-sm);
+}
+
+.btn-copy-success {
+  background: var(--accent-green) !important;
+  border-color: var(--accent-green) !important;
+}
+
+/* Ship Template Info in Modal */
+.template-info {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  margin-top: var(--space-sm);
+  font-size: 13px;
+}
+
+.template-info .template-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.template-info .template-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.template-info .template-stat .label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.template-info .template-stat .value {
+  font-weight: bold;
+  color: var(--accent-blue);
+}
+
 .player-slots,
 .ships-list {
   display: flex;
@@ -1392,4 +1462,202 @@ input[type="checkbox"] {
   .login-options {
     flex-direction: column;
   }
+}
+
+/* ==================== Fuel Display ==================== */
+
+.fuel-display {
+  margin-bottom: var(--space-md);
+}
+
+.fuel-total {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.fuel-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.fuel-unit {
+  color: var(--text-secondary);
+}
+
+.fuel-percent {
+  color: var(--text-muted);
+}
+
+.fuel-bar-container {
+  display: flex;
+  height: 12px;
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-sm);
+}
+
+.fuel-bar-segment {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.fuel-bar-segment.refined {
+  background: var(--accent-blue);
+}
+
+.fuel-bar-segment.processed {
+  background: var(--accent-green);
+}
+
+.fuel-bar-segment.unrefined {
+  background: var(--accent-orange);
+}
+
+.fuel-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: 0.85rem;
+}
+
+.fuel-type {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--text-secondary);
+}
+
+.fuel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.fuel-type.refined .fuel-dot {
+  background: var(--accent-blue);
+}
+
+.fuel-type.processed .fuel-dot {
+  background: var(--accent-green);
+}
+
+.fuel-type.unrefined .fuel-dot {
+  background: var(--accent-orange);
+}
+
+.fuel-warning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid var(--accent-orange);
+  border-radius: var(--radius-sm);
+  color: var(--accent-orange);
+  font-size: 0.85rem;
+  margin: var(--space-md) 0;
+}
+
+.fuel-warning .warning-icon {
+  font-size: 1.2rem;
+}
+
+.fuel-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.fuel-processing-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(42, 170, 74, 0.15);
+  border: 1px solid var(--accent-green);
+  border-radius: var(--radius-sm);
+  color: var(--accent-green);
+  font-size: 0.85rem;
+  margin-top: var(--space-md);
+}
+
+.processing-icon {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==================== Refuel Modal ==================== */
+
+.input-with-button {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.input-with-button input {
+  flex: 1;
+}
+
+.refuel-preview {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+  min-height: 80px;
+}
+
+.refuel-info {
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.refuel-error {
+  color: var(--accent-red);
+  text-align: center;
+}
+
+.refuel-preview-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.preview-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.preview-value {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.modal-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.process-info {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.process-info p {
+  margin-bottom: var(--space-sm);
+}
+
+.process-info p:last-child {
+  margin-bottom: 0;
+  color: var(--accent-orange);
 }

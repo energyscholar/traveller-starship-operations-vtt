@@ -31,7 +31,7 @@ test-screenshot-*.png
 screenshot-*.png
 *-screenshot.png
 
-# Reference Materials
+# Reference Materials (Copyrighted PDFs - NEVER COMMIT)
 reference/
 *.pdf
 
