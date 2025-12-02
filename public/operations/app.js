@@ -221,6 +221,26 @@ function initSocket() {
     renderPlayerSetup();
   });
 
+  // Relieved from duty by Captain or Medical Officer
+  state.socket.on('ops:relievedFromDuty', (data) => {
+    const roleName = formatRoleName(data.previousRole);
+    state.selectedRole = null;
+    const message = data.reason
+      ? `You have been relieved of ${roleName} duty by ${data.byCaption}: ${data.reason}`
+      : `You have been relieved of ${roleName} duty by ${data.byCaption}`;
+    showNotification(message, 'warning');
+    // Return to player setup to select new role
+    document.getElementById('gm-overlay')?.classList.add('hidden');
+    showScreen('player-setup');
+    renderPlayerSetup();
+  });
+
+  // Confirmation when Captain/Medic relieves someone
+  state.socket.on('ops:crewMemberRelieved', (data) => {
+    showNotification(`${data.slotName} has been relieved of ${formatRoleName(data.previousRole)} duty`, 'success');
+    renderCrewStatus();
+  });
+
   // Character events
   state.socket.on('ops:characterImported', (data) => {
     if (state.player) {
@@ -285,8 +305,8 @@ function initSocket() {
             isNPC: false
           });
         }
-      } else if (data.action === 'left' || data.action === 'disconnected') {
-        // Someone left - remove them or clear their role
+      } else if (data.action === 'left' || data.action === 'disconnected' || data.action === 'relieved') {
+        // Someone left, disconnected, or was relieved - remove them or clear their role
         const existingIdx = state.crewOnline.findIndex(c => c.accountId === data.accountId);
         if (existingIdx >= 0) {
           if (data.action === 'disconnected') {
@@ -573,6 +593,45 @@ function initSocket() {
     if (data.reason) {
       showNotification(`Time advanced: ${data.reason}`, 'info');
     }
+  });
+
+  // Autorun 6: Mail system handlers
+  state.socket.on('ops:mailList', (data) => {
+    showMailModal(data.mail, data.unreadCount);
+  });
+
+  state.socket.on('ops:newMail', (data) => {
+    if (data.recipientId === state.accountId || data.recipientId === 'all') {
+      showNotification(`New mail from ${data.senderName}: ${data.subject}`, 'info');
+      // Update mail badge in menu
+      updateMailBadge();
+    }
+  });
+
+  // Autorun 6: NPC contacts handlers
+  state.socket.on('ops:npcContactsList', (data) => {
+    showNPCContactsModal(data.contacts, data.isGM);
+  });
+
+  state.socket.on('ops:npcContactsRefresh', () => {
+    // Refresh NPC contacts if modal is open
+    if (document.querySelector('.npc-contacts-modal')) {
+      state.socket.emit('ops:getNPCContacts');
+    }
+  });
+
+  // Autorun 6: Feedback handlers
+  state.socket.on('ops:feedbackSubmitted', (data) => {
+    showNotification('Feedback submitted successfully!', 'success');
+    closeModal();
+  });
+
+  state.socket.on('ops:feedbackList', (data) => {
+    renderFeedbackReview(data.feedback, data.stats);
+  });
+
+  state.socket.on('ops:feedbackStatusUpdated', (data) => {
+    showNotification(`Feedback marked as ${data.status}`, 'success');
   });
 
   // Refueling events
@@ -1159,18 +1218,21 @@ function initBridgeScreen() {
   document.getElementById('bridge-ship-name').addEventListener('click', showShipStatusModal);
   document.getElementById('bridge-ship-name').style.cursor = 'pointer';
 
-  // Menu button - show GM menu modal (GM-1)
+  // Menu button - show hamburger menu (Autorun 6)
   document.getElementById('btn-bridge-menu').addEventListener('click', () => {
-    if (state.isGM) {
-      showModal('template-gm-bridge-menu');
-      // Populate campaign code
-      const codeEl = document.getElementById('gm-menu-campaign-code');
-      if (codeEl && state.campaign?.id) {
-        codeEl.textContent = state.campaign.id.substring(0, 8).toUpperCase();
-      }
-    } else {
-      showNotification('Player menu coming soon', 'info');
-    }
+    openHamburgerMenu();
+  });
+
+  // Close hamburger menu
+  document.getElementById('btn-close-menu')?.addEventListener('click', closeHamburgerMenu);
+  document.getElementById('hamburger-menu-overlay')?.addEventListener('click', closeHamburgerMenu);
+
+  // Hamburger menu item clicks
+  document.querySelectorAll('.menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const feature = item.dataset.feature;
+      handleMenuFeature(feature);
+    });
   });
 
   // Change role button (NAV-1)
@@ -1553,7 +1615,8 @@ function renderCrewList() {
       role: c.role,
       isNPC: false,
       isOnline: true,
-      isYou: c.id === state.player?.id,
+      isYou: c.id === state.player?.id || c.accountId === state.player?.accountId,
+      accountId: c.accountId,
       characterData: c.character_data
     });
   });
@@ -1580,16 +1643,33 @@ function renderCrewList() {
     return priorityA - priorityB;
   });
 
+  // Check if current user can relieve crew (Captain or Medic)
+  const canRelieve = state.selectedRole === 'captain' || state.selectedRole === 'medic';
+
   container.innerHTML = allCrew.map(c => {
     const charDataAttr = c.characterData ? `data-character='${JSON.stringify(c.characterData).replace(/'/g, '&#39;')}'` : '';
     const hasCharClass = c.characterData ? 'has-character' : '';
+    // Show relieve button if: can relieve AND not NPC AND not self AND has a role
+    const showRelieveBtn = canRelieve && !c.isNPC && !c.isYou && c.role && c.accountId;
+    const relieveBtn = showRelieveBtn
+      ? `<button class="btn-relieve" onclick="relieveCrewMember('${c.accountId}', '${escapeHtml(c.name)}')" title="Relieve from duty">✕</button>`
+      : '';
     return `
     <div class="crew-member ${c.isNPC ? 'npc' : ''} ${c.isYou ? 'is-you' : ''}">
       <span class="online-indicator ${c.isOnline ? 'online' : ''}"></span>
       <span class="crew-name ${hasCharClass}" ${charDataAttr}>${escapeHtml(c.name)}${c.isYou ? ' (You)' : ''}</span>
       <span class="crew-role">${formatRoleName(c.role)}</span>
+      ${relieveBtn}
     </div>`;
   }).join('') || '<p class="placeholder">No crew</p>';
+}
+
+// Relieve crew member from duty (Captain or Medic only)
+function relieveCrewMember(accountId, name) {
+  if (!confirm(`Relieve ${name} from duty? They will return to role selection.`)) {
+    return;
+  }
+  state.socket.emit('ops:relieveCrewMember', { accountId });
 }
 
 function renderContacts() {
@@ -1611,10 +1691,13 @@ function renderContacts() {
     const gmNotes = state.isGM && c.gm_notes ? `
       <div class="contact-gm-notes">${escapeHtml(c.gm_notes)}</div>
     ` : '';
+    // Authorized target indicator (weapons_free)
+    const authorizedIndicator = c.weapons_free ? '<span class="authorized-indicator" title="Weapons Authorized">🎯</span>' : '';
+    const authorizedClass = c.weapons_free ? 'weapons-authorized' : '';
 
     return `
-      <div class="contact-item ${rangeClass}" data-contact-id="${c.id}">
-        <span class="contact-icon">${getContactIcon(c.type)}</span>
+      <div class="contact-item ${rangeClass} ${authorizedClass}" data-contact-id="${c.id}">
+        <span class="contact-icon">${getContactIcon(c.type)}${authorizedIndicator}</span>
         <div class="contact-info">
           <div class="contact-name">${escapeHtml(c.name || c.type)}</div>
           <div class="contact-details">Bearing: ${c.bearing}° · ${c.transponder || 'No transponder'}</div>
@@ -2950,6 +3033,140 @@ function formatShipWeapons(template) {
 }
 
 // ==================== Contact Tooltip (TIP-1) ====================
+
+// Factory function for star-specific popup content
+function getStarPopupContent(contact) {
+  let content = '';
+
+  // Stellar class (always show for stars)
+  if (contact.stellar_class) {
+    content += `
+      <div class="tooltip-row star-info">
+        <span class="label">Spectral Type:</span>
+        <span class="value">${escapeHtml(contact.stellar_class)}</span>
+      </div>
+    `;
+  }
+
+  // Parse stellar_info if it's JSON, or use individual fields
+  let starInfo = {};
+  if (contact.stellar_info) {
+    try {
+      starInfo = typeof contact.stellar_info === 'string'
+        ? JSON.parse(contact.stellar_info)
+        : contact.stellar_info;
+    } catch (e) {
+      console.warn('Failed to parse stellar_info:', e);
+    }
+  }
+
+  // Temperature
+  if (starInfo.temperature || contact.temperature) {
+    content += `
+      <div class="tooltip-row star-info">
+        <span class="label">Temperature:</span>
+        <span class="value">${escapeHtml(starInfo.temperature || contact.temperature)}</span>
+      </div>
+    `;
+  }
+
+  // Luminosity
+  if (starInfo.luminosity || contact.luminosity) {
+    content += `
+      <div class="tooltip-row star-info">
+        <span class="label">Luminosity:</span>
+        <span class="value">${escapeHtml(starInfo.luminosity || contact.luminosity)}</span>
+      </div>
+    `;
+  }
+
+  // Mass
+  if (starInfo.mass || contact.mass) {
+    content += `
+      <div class="tooltip-row star-info">
+        <span class="label">Mass:</span>
+        <span class="value">${escapeHtml(starInfo.mass || contact.mass)}</span>
+      </div>
+    `;
+  }
+
+  // Habitable zone
+  if (starInfo.habitableZone || contact.habitable_zone) {
+    content += `
+      <div class="tooltip-row star-info">
+        <span class="label">Habitable Zone:</span>
+        <span class="value">${escapeHtml(starInfo.habitableZone || contact.habitable_zone)}</span>
+      </div>
+    `;
+  }
+
+  // Description
+  if (starInfo.description || contact.star_description) {
+    content += `
+      <div class="tooltip-description star-description">
+        ${escapeHtml(starInfo.description || contact.star_description)}
+      </div>
+    `;
+  }
+
+  return content;
+}
+
+// Factory function for ship-specific popup content
+function getShipPopupContent(contact) {
+  let content = '';
+
+  if (contact.tonnage) {
+    content += `
+      <div class="tooltip-row ship-info">
+        <span class="label">Tonnage:</span>
+        <span class="value">${contact.tonnage} dT</span>
+      </div>
+    `;
+  }
+
+  if (contact.crew_count) {
+    content += `
+      <div class="tooltip-row ship-info">
+        <span class="label">Crew:</span>
+        <span class="value">${contact.crew_count}</span>
+      </div>
+    `;
+  }
+
+  return content;
+}
+
+// Factory function for station-specific popup content
+function getStationPopupContent(contact) {
+  let content = '';
+
+  if (contact.population) {
+    content += `
+      <div class="tooltip-row station-info">
+        <span class="label">Population:</span>
+        <span class="value">${contact.population}</span>
+      </div>
+    `;
+  }
+
+  if (contact.services) {
+    const services = typeof contact.services === 'string'
+      ? JSON.parse(contact.services)
+      : contact.services;
+    if (services && services.length) {
+      content += `
+        <div class="tooltip-row station-info">
+          <span class="label">Services:</span>
+          <span class="value">${escapeHtml(services.join(', '))}</span>
+        </div>
+      `;
+    }
+  }
+
+  return content;
+}
+
 function showContactTooltip(contactId, targetElement) {
   const contact = state.contacts.find(c => c.id === contactId);
   if (!contact) return;
@@ -3027,14 +3244,19 @@ function showContactTooltip(contactId, targetElement) {
     `;
   }
 
-  // Stellar class for stars
-  if (contact.stellar_class) {
-    content += `
-      <div class="tooltip-row">
-        <span class="label">Stellar Class:</span>
-        <span class="value">${escapeHtml(contact.stellar_class)}</span>
-      </div>
-    `;
+  // Stellar info for stars (Factory pattern - star-specific content)
+  if (contact.stellar_class || contact.type === 'star') {
+    content += getStarPopupContent(contact);
+  }
+
+  // Ship-specific info (Factory pattern)
+  if (contact.type === 'ship' || contact.type === 'vessel' || contact.tonnage) {
+    content += getShipPopupContent(contact);
+  }
+
+  // Station-specific info (Factory pattern)
+  if (contact.type === 'station' || contact.type === 'starport' || contact.type === 'orbital') {
+    content += getStationPopupContent(contact);
   }
 
   // Trade codes
@@ -3203,6 +3425,470 @@ document.addEventListener('DOMContentLoaded', () => {
   initCharacterTooltips();
 });
 
+// ==================== Hamburger Menu (Autorun 6) ====================
+
+function openHamburgerMenu() {
+  const menu = document.getElementById('hamburger-menu');
+  const overlay = document.getElementById('hamburger-menu-overlay');
+  if (menu) {
+    menu.classList.add('open');
+    overlay?.classList.remove('hidden');
+    overlay?.classList.add('visible');
+  }
+}
+
+function closeHamburgerMenu() {
+  const menu = document.getElementById('hamburger-menu');
+  const overlay = document.getElementById('hamburger-menu-overlay');
+  if (menu) {
+    menu.classList.remove('open');
+    overlay?.classList.add('hidden');
+    overlay?.classList.remove('visible');
+  }
+}
+
+function handleMenuFeature(feature) {
+  closeHamburgerMenu();
+
+  switch (feature) {
+    case 'ship-log':
+      // Ship log is already implemented - show it in a modal
+      if (state.logs && state.logs.length > 0) {
+        showLogModal();
+      } else {
+        showNotification('No log entries yet', 'info');
+      }
+      break;
+
+    case 'mail':
+      // Request mail from server
+      state.socket.emit('ops:getMail');
+      showNotification('Loading mail...', 'info');
+      break;
+
+    case 'contacts':
+      // Request NPC contacts from server
+      state.socket.emit('ops:getNPCContacts');
+      showNotification('Loading contacts...', 'info');
+      break;
+
+    case 'ship-config':
+      showNotification('Ship Configuration - Planned for Autorun 7', 'info');
+      break;
+
+    case 'cargo':
+      showNotification('Cargo Manifest - Planned feature', 'info');
+      break;
+
+    case 'finances':
+      showNotification('Ship Finances - Planned feature', 'info');
+      break;
+
+    case 'crew-roster':
+      showNotification('Crew Roster - Planned feature', 'info');
+      break;
+
+    case 'medical':
+      showNotification('Medical Records - Planned feature', 'info');
+      break;
+
+    case 'library':
+      showNotification('Ship\'s Library - Planned feature', 'info');
+      break;
+
+    case 'feedback':
+      if (state.isGM) {
+        showFeedbackReview();
+      } else {
+        showFeedbackForm();
+      }
+      break;
+
+    default:
+      showNotification(`Feature "${feature}" not yet implemented`, 'info');
+  }
+}
+
+function showLogModal() {
+  const logs = state.logs || [];
+  const recentLogs = logs.slice(-50); // Show last 50 entries
+
+  let html = `
+    <div class="modal-header">
+      <h2>Ship Log</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body log-modal-body">
+      <div class="log-entries">
+  `;
+
+  if (recentLogs.length === 0) {
+    html += '<p class="text-muted">No log entries recorded.</p>';
+  } else {
+    for (const log of recentLogs.reverse()) {
+      const typeClass = log.entry_type === 'sensor' ? 'sensor' :
+                       log.entry_type === 'combat' ? 'combat' :
+                       log.entry_type === 'navigation' ? 'navigation' : '';
+      html += `
+        <div class="log-entry ${typeClass}">
+          <span class="log-timestamp">${log.game_date || ''} ${log.timestamp ? new Date(log.timestamp).toLocaleTimeString() : ''}</span>
+          <span class="log-type">[${log.entry_type || 'system'}]</span>
+          <span class="log-message">${log.message}</span>
+          ${log.actor ? `<span class="log-actor">- ${log.actor}</span>` : ''}
+        </div>
+      `;
+    }
+  }
+
+  html += `
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Close</button>
+    </div>
+  `;
+
+  const modalContent = document.getElementById('modal-content');
+  const modalOverlay = document.getElementById('modal-overlay');
+  modalContent.innerHTML = html;
+  modalOverlay.classList.remove('hidden');
+
+  // Setup close handlers
+  modalContent.querySelectorAll('[data-close-modal]').forEach(btn => {
+    btn.addEventListener('click', () => modalOverlay.classList.add('hidden'));
+  });
+}
+
+// ==================== Mail Modal (Autorun 6) ====================
+
+function showMailModal(mailList, unreadCount) {
+  let html = `
+    <div class="modal-header">
+      <h2>Ship Mail ${unreadCount > 0 ? `<span class="mail-unread-badge">${unreadCount} unread</span>` : ''}</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body mail-modal-body">
+  `;
+
+  if (!mailList || mailList.length === 0) {
+    html += '<p class="text-muted">No mail messages.</p>';
+  } else {
+    html += '<div class="mail-list">';
+    for (const mail of mailList) {
+      const isRead = mail.is_read ? '' : 'unread';
+      html += `
+        <div class="mail-item ${isRead}" data-mail-id="${mail.id}">
+          <div class="mail-item-header">
+            <span class="mail-sender">${mail.sender_name}</span>
+            <span class="mail-date">${mail.sent_date}</span>
+          </div>
+          <div class="mail-subject">${mail.subject}</div>
+          <div class="mail-preview">${mail.body.substring(0, 100)}${mail.body.length > 100 ? '...' : ''}</div>
+        </div>
+      `;
+    }
+    html += '</div>';
+  }
+
+  html += `
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Close</button>
+    </div>
+  `;
+
+  showModalContent(html);
+
+  // Setup mail item click handlers
+  document.querySelectorAll('.mail-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const mailId = item.dataset.mailId;
+      const mail = mailList.find(m => m.id === mailId);
+      if (mail) {
+        showMailDetailModal(mail);
+        if (!mail.is_read) {
+          state.socket.emit('ops:markMailRead', { mailId });
+        }
+      }
+    });
+  });
+}
+
+function showMailDetailModal(mail) {
+  const html = `
+    <div class="modal-header">
+      <h2>Mail</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="mail-detail">
+        <div class="mail-detail-header">
+          <div class="mail-from"><strong>From:</strong> ${mail.sender_name}</div>
+          <div class="mail-subject-line"><strong>Subject:</strong> ${mail.subject}</div>
+          <div class="mail-date-line"><strong>Date:</strong> ${mail.sent_date}</div>
+        </div>
+        <div class="mail-detail-body">
+          ${mail.body.split('\n').join('<br>')}
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="state.socket.emit('ops:getMail')">Back to Inbox</button>
+      <button class="btn btn-secondary" data-close-modal>Close</button>
+    </div>
+  `;
+  showModalContent(html);
+}
+
+function updateMailBadge() {
+  // TODO: Update mail badge count in hamburger menu
+}
+
+// ==================== NPC Contacts Modal (Autorun 6) ====================
+
+function showNPCContactsModal(contacts, isGM) {
+  let html = `
+    <div class="modal-header npc-contacts-modal">
+      <h2>NPC Contacts</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+  `;
+
+  if (!contacts || contacts.length === 0) {
+    html += '<p class="text-muted">No known contacts.</p>';
+  } else {
+    html += '<div class="npc-contacts-list">';
+    for (const contact of contacts) {
+      html += `
+        <div class="npc-contact-item">
+          <div class="npc-contact-name">${contact.name}</div>
+          ${contact.title ? `<div class="npc-contact-title">${contact.title}</div>` : ''}
+          ${contact.location ? `<div class="npc-contact-location">Location: ${contact.location}</div>` : ''}
+          ${contact.description ? `<div class="npc-contact-desc">${contact.description}</div>` : ''}
+          ${isGM ? `<div class="npc-contact-visibility">Visible to: ${Array.isArray(contact.visible_to) && contact.visible_to.includes('all') ? 'Everyone' : (contact.visible_to?.length || 0) + ' players'}</div>` : ''}
+        </div>
+      `;
+    }
+    html += '</div>';
+  }
+
+  if (isGM) {
+    html += `
+      <div class="gm-controls">
+        <button class="btn btn-small" onclick="showAddNPCContactForm()">+ Add Contact</button>
+      </div>
+    `;
+  }
+
+  html += `
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Close</button>
+    </div>
+  `;
+
+  showModalContent(html);
+}
+
+function showAddNPCContactForm() {
+  const html = `
+    <div class="modal-header">
+      <h2>Add NPC Contact</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Name:</label>
+        <input type="text" id="npc-name" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label>Title:</label>
+        <input type="text" id="npc-title" class="form-input" placeholder="e.g., Ship Broker, Scout">
+      </div>
+      <div class="form-group">
+        <label>Location:</label>
+        <input type="text" id="npc-location" class="form-input" placeholder="e.g., Regina Downport">
+      </div>
+      <div class="form-group">
+        <label>Description:</label>
+        <textarea id="npc-description" class="form-input" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" id="npc-visible-all"> Visible to all players</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="state.socket.emit('ops:getNPCContacts')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitNPCContact()">Add Contact</button>
+    </div>
+  `;
+  showModalContent(html);
+}
+
+function submitNPCContact() {
+  const name = document.getElementById('npc-name')?.value;
+  if (!name) {
+    showNotification('Name is required', 'error');
+    return;
+  }
+
+  const data = {
+    name,
+    title: document.getElementById('npc-title')?.value || null,
+    location: document.getElementById('npc-location')?.value || null,
+    description: document.getElementById('npc-description')?.value || null,
+    visibleTo: document.getElementById('npc-visible-all')?.checked ? ['all'] : []
+  };
+
+  state.socket.emit('ops:addNPCContact', data);
+  showNotification('Contact added', 'success');
+  state.socket.emit('ops:getNPCContacts');
+}
+
+function showModalContent(html) {
+  const modalContent = document.getElementById('modal-content');
+  const modalOverlay = document.getElementById('modal-overlay');
+  modalContent.innerHTML = html;
+  modalOverlay.classList.remove('hidden');
+
+  // Setup close handlers
+  modalContent.querySelectorAll('[data-close-modal]').forEach(btn => {
+    btn.addEventListener('click', closeModal);
+  });
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay')?.classList.add('hidden');
+}
+
+// ==================== Feedback Form (Autorun 6) ====================
+
+function showFeedbackForm() {
+  const html = `
+    <div class="modal-header">
+      <h2>Submit Feedback</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body">
+      <p class="feedback-intro">Help improve Traveller VTT! Report bugs or request features.</p>
+      <div class="form-group">
+        <label>Type:</label>
+        <select id="feedback-type" class="form-input">
+          <option value="bug">Bug Report</option>
+          <option value="feature">Feature Request</option>
+          <option value="question">Question</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Title:</label>
+        <input type="text" id="feedback-title" class="form-input" placeholder="Brief description" required>
+      </div>
+      <div class="form-group">
+        <label>Details:</label>
+        <textarea id="feedback-description" class="form-input" rows="5" placeholder="Provide as much detail as possible. For bugs: what happened vs what you expected."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Priority:</label>
+        <select id="feedback-priority" class="form-input">
+          <option value="low">Low - Minor issue</option>
+          <option value="normal" selected>Normal</option>
+          <option value="high">High - Significantly impacts gameplay</option>
+          <option value="critical">Critical - Game-breaking</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" onclick="submitFeedback()">Submit Feedback</button>
+    </div>
+  `;
+  showModalContent(html);
+}
+
+function submitFeedback() {
+  const title = document.getElementById('feedback-title')?.value;
+  if (!title) {
+    showNotification('Title is required', 'error');
+    return;
+  }
+
+  const feedbackType = document.getElementById('feedback-type')?.value || 'other';
+  const description = document.getElementById('feedback-description')?.value || '';
+  const priority = document.getElementById('feedback-priority')?.value || 'normal';
+
+  // Submit as a log entry with type 'feedback'
+  const message = `[${feedbackType.toUpperCase()}] [${priority}] ${title}${description ? ': ' + description : ''}`;
+
+  state.socket.emit('ops:addLogEntry', {
+    entryType: 'feedback',
+    message
+  });
+
+  showNotification('Feedback submitted - check ship log!', 'success');
+  closeModal();
+}
+
+// GM: Show feedback from ship log (filtered by entry_type='feedback')
+function showFeedbackReview() {
+  const feedbackLogs = (state.logs || []).filter(log => log.entry_type === 'feedback');
+
+  let html = `
+    <div class="modal-header">
+      <h2>Feedback Review</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body feedback-review-body">
+      <div class="feedback-stats">
+        <span class="stat-item">Total: ${feedbackLogs.length}</span>
+      </div>
+      <div class="feedback-list">
+  `;
+
+  if (feedbackLogs.length === 0) {
+    html += '<p class="text-muted">No feedback submitted yet. Players can submit feedback via the hamburger menu.</p>';
+  } else {
+    for (const log of feedbackLogs.reverse()) {
+      html += `
+        <div class="feedback-item">
+          <div class="feedback-item-header">
+            <span class="feedback-date">${log.game_date || ''}</span>
+            <span class="feedback-actor">${log.actor || 'Anonymous'}</span>
+          </div>
+          <div class="feedback-message">${log.message}</div>
+          <div class="feedback-actions">
+            <button class="btn btn-small" onclick="copyLogAsTodo('${log.message.replace(/'/g, "\\'")}')">Copy as TODO</button>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  html += `
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Close</button>
+    </div>
+  `;
+
+  showModalContent(html);
+}
+
+function copyLogAsTodo(message) {
+  // Extract the title from the feedback message format: [TYPE] [PRIORITY] Title: Description
+  const match = message.match(/\[.*?\]\s*\[.*?\]\s*(.+)/);
+  const title = match ? match[1].split(':')[0].trim() : message;
+  const todoText = `TODO: ${title}`;
+
+  navigator.clipboard.writeText(todoText).then(() => {
+    showNotification('Copied to clipboard as TODO!', 'success');
+  }).catch(() => {
+    prompt('Copy this TODO:', todoText);
+  });
+}
+
 // ==================== Global Exports for onclick handlers ====================
 // ES6 modules scope functions, but onclick handlers need global access
 window.attemptRepair = attemptRepair;
@@ -3226,3 +3912,10 @@ window.executeProcessFuel = executeProcessFuel;
 // Stage 6: Jump map functions
 window.updateJumpMap = updateJumpMap;
 window.selectJumpDestination = selectJumpDestination;
+// Autorun 6: Mail, NPC contacts, and Feedback
+window.showAddNPCContactForm = showAddNPCContactForm;
+window.submitNPCContact = submitNPCContact;
+window.closeModal = closeModal;
+window.submitFeedback = submitFeedback;
+window.showFeedbackReview = showFeedbackReview;
+window.copyLogAsTodo = copyLogAsTodo;

@@ -1,6 +1,6 @@
-// Traveller Combat VTT - Stage 11 Complete
-// Purpose: Missiles, Sandcasters & UI Improvements
-// Status: Stage 11 Complete - Missiles, Sandcasters, Turn Tracker, Feedback
+// Traveller Starship Operations VTT
+// Purpose: Multi-role crew management for starship operations
+// Status: Operations VTT with legacy space combat support
 //
 // MVC REFACTOR COMPLETE - Now ~365 LOC (down from ~2700)
 // Architecture:
@@ -354,36 +354,33 @@ registerTestAPI(app, io, activeCombats, connections);
 // Start server
 server.listen(config.server.port, () => {
   log.info('========================================');
-  log.info('TRAVELLER COMBAT VTT - STAGE 11 COMPLETE');
+  log.info('TRAVELLER STARSHIP OPERATIONS VTT');
   log.info('========================================');
   log.info(`Server running on http://localhost:${config.server.port}`);
   log.info(`Environment: ${config.env}`);
   log.info(`Log Level: ${config.logging.level}`);
   log.info(`Client Logging: ${config.logging.clientLogging ? 'ENABLED' : 'DISABLED'}`);
   log.info('');
-  log.info('Current Features:');
-  log.info('- Missiles (4D6 damage, 1 band movement per round)');
-  log.info('- Point defense (shoot down missiles, 2D6+Gunner ≥ 8)');
-  log.info('- Sandcasters (1D + Effect armor bonus)');
-  log.info('- Ammo tracking (12 missiles, 20 sand canisters per turret)');
-  log.info('- Turn/phase tracker UI with visual indicators');
-  log.info('- Player feedback system with secure logging');
-  log.info('- Version display (Version 0.11)');
-  log.info('- Multiple weapon types (Pulse Laser, Beam Laser, Missile)');
-  log.info('- Hex-based movement system');
-  log.info('- Initiative-based turn order (2d6 + pilot skill)');
-  log.info('- Crew management (Pilot, Gunner, Engineer)');
-  log.info('- Server-side combat resolution (TDD)');
+  log.info('Operations Features:');
+  log.info('- Multi-role crew stations (Captain, Pilot, Astrogator, Engineer, etc.)');
+  log.info('- Campaign management with persistent state');
+  log.info('- Interstellar jump plotting and execution');
+  log.info('- Sensor contacts and tactical display');
+  log.info('- Weapons authorization flow (Captain → Gunner)');
+  log.info('- Ship systems and damage tracking');
+  log.info('- Real-time multi-player synchronization');
+  log.info('- Role-specific information and controls');
   log.info('');
-  log.info('Status: Stage 11 Complete - Missiles, Sandcasters & UI');
-  log.info('Version: 0.11 - Released 2025-11-11');
+  log.info('Legacy Space Combat (at /combat):');
+  log.info('- Tactical hex-based movement');
+  log.info('- Missiles, point defense, sandcasters');
+  log.info('- Initiative-based turn order');
   log.info('');
   log.info('Instructions:');
-  log.info('1. Open browser to http://localhost:' + config.server.port);
-  log.info('2. Two players connect to select ships');
-  log.info('3. Players move ships, launch missiles, use sandcasters');
-  log.info('4. Initiative determines turn order each round');
-  log.info('5. Combat with full tactical options');
+  log.info('1. Open http://localhost:' + config.server.port + '/operations/');
+  log.info('2. GM creates campaign, players join with code');
+  log.info('3. Each player selects crew role on bridge');
+  log.info('4. GM advances time and manages encounters');
   log.info('========================================');
 });
 

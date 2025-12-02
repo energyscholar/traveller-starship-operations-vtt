@@ -1577,6 +1577,29 @@ input[type="checkbox"] {
   }
 }
 
+/* Relieve crew button (Captain/Medic only) */
+.btn-relieve {
+  background: transparent;
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+  margin-left: auto;
+}
+
+.btn-relieve:hover {
+  opacity: 1;
+  background: var(--accent-red);
+  color: white;
+}
+
 /* Ship Log */
 .ship-log {
   flex: 1;
@@ -1734,6 +1757,27 @@ input[type="checkbox"] {
 
 .contact-item.contact-long {
   border-left-color: var(--accent-green);
+}
+
+/* Authorized target (weapons_free) styling */
+.contact-item.weapons-authorized {
+  border-left-color: var(--accent-red);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.contact-item.weapons-authorized:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.authorized-indicator {
+  margin-left: 2px;
+  font-size: 12px;
+  animation: pulse-target 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-target {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .contact-icon {
@@ -2326,6 +2370,31 @@ input[type="checkbox"] {
 
 .tooltip-row.gm-only .label {
   color: var(--accent-purple);
+}
+
+/* Star info styling */
+.tooltip-row.star-info .label {
+  color: var(--accent-yellow);
+}
+
+.tooltip-description.star-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+  line-height: 1.4;
+}
+
+/* Ship info styling */
+.tooltip-row.ship-info .label {
+  color: var(--accent-blue);
+}
+
+/* Station info styling */
+.tooltip-row.station-info .label {
+  color: var(--accent-green);
 }
 
 .contact-item.selected {
@@ -3310,4 +3379,400 @@ input[type="checkbox"] {
   padding: var(--space-md);
   text-align: center;
   border-top: 1px solid var(--border-color);
+}
+
+/* ==================== Hamburger Menu (Autorun 6) ==================== */
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.menu-overlay.visible {
+  opacity: 1;
+}
+
+.hamburger-menu {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border-glow);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s ease;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.hamburger-menu.open {
+  right: 0;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-dark);
+}
+
+.menu-header h3 {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.menu-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-sm);
+}
+
+.menu-section {
+  margin-bottom: var(--space-md);
+}
+
+.menu-section h4 {
+  color: var(--text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: var(--space-sm) var(--space-sm) var(--space-xs);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  border-radius: var(--radius-sm);
+}
+
+.menu-item:hover {
+  background: var(--bg-panel-light);
+}
+
+.menu-item:active {
+  background: var(--border-color);
+}
+
+.menu-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.menu-label {
+  flex: 1;
+  font-size: 14px;
+}
+
+.menu-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  background: var(--accent-blue);
+  color: white;
+}
+
+.menu-badge.stub {
+  background: var(--text-muted);
+  color: var(--bg-dark);
+}
+
+.menu-badge.new {
+  background: var(--accent-green);
+}
+
+.menu-badge.count {
+  background: var(--accent-red);
+  min-width: 20px;
+  text-align: center;
+}
+
+.menu-section-feedback {
+  margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-sm);
+}
+
+.menu-item-feedback {
+  background: var(--bg-panel-light);
+  border: 1px dashed var(--border-color);
+}
+
+.menu-item-feedback:hover {
+  border-color: var(--accent-blue);
+}
+
+.menu-footer {
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-dark);
+}
+
+.version-info {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-family: var(--font-mono);
+}
+
+/* ==================== Mail Modal (Autorun 6) ==================== */
+
+.mail-unread-badge {
+  background: var(--accent-red);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  margin-left: var(--space-sm);
+}
+
+.mail-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.mail-item {
+  padding: var(--space-sm);
+  background: var(--bg-panel-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.mail-item:hover {
+  background: var(--bg-darker);
+}
+
+.mail-item.unread {
+  border-left-color: var(--accent-blue);
+  background: rgba(58, 138, 255, 0.1);
+}
+
+.mail-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+}
+
+.mail-sender {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mail-date {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.mail-subject {
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+}
+
+.mail-preview {
+  color: var(--text-secondary);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mail-detail {
+  background: var(--bg-panel-light);
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+}
+
+.mail-detail-header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.mail-detail-header > div {
+  margin-bottom: var(--space-xs);
+  color: var(--text-secondary);
+}
+
+.mail-detail-body {
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* ==================== NPC Contacts Modal (Autorun 6) ==================== */
+
+.npc-contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.npc-contact-item {
+  padding: var(--space-md);
+  background: var(--bg-panel-light);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-blue);
+}
+
+.npc-contact-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.npc-contact-title {
+  color: var(--accent-yellow);
+  font-size: 13px;
+  margin-bottom: var(--space-xs);
+}
+
+.npc-contact-location {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-bottom: var(--space-xs);
+}
+
+.npc-contact-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.npc-contact-visibility {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--border-color);
+}
+
+.gm-controls {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+/* ==================== Feedback Review (Autorun 6) ==================== */
+
+.feedback-intro {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.feedback-stats {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-sm);
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-md);
+}
+
+.stat-item {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.stat-item.new {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.feedback-item {
+  padding: var(--space-md);
+  background: var(--bg-panel-light);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--accent-blue);
+}
+
+.feedback-item-header {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.feedback-type {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.feedback-priority {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--bg-dark);
+}
+
+.feedback-priority.priority-low { color: var(--text-muted); }
+.feedback-priority.priority-normal { color: var(--text-secondary); }
+.feedback-priority.priority-high { color: var(--accent-orange); }
+.feedback-priority.priority-critical { color: var(--accent-red); font-weight: 600; }
+
+.feedback-status {
+  font-size: 11px;
+  margin-left: auto;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.feedback-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.feedback-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+  line-height: 1.4;
+}
+
+.feedback-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.feedback-actions {
+  display: flex;
+  gap: var(--space-xs);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--border-color);
 }

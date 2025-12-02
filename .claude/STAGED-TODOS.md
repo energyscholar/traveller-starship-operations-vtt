@@ -115,6 +115,43 @@
 
 ---
 
+## Stage 9: Character Import System
+**Risk:** MEDIUM | **Time:** 3-4 hours | **Priority:** MEDIUM
+**Autorun:** Not yet created
+
+### Problem Statement:
+Everyone stores Traveller characters slightly differently - no 100% standard format exists.
+Need to support both precise imports and "best effort" fuzzy imports.
+
+### Tasks:
+1. Define canonical JSON character schema for VTT
+2. Precise JSON import (direct mapping when format matches)
+3. AI-assisted best-effort import:
+   - Parse various text/JSON formats
+   - Extract stats (STR, DEX, END, INT, EDU, SOC)
+   - Extract skills with levels
+   - Handle UPP notation (e.g., "777777")
+   - Extract equipment, credits, etc.
+   - Flag uncertain fields for user review
+4. Character export (to canonical JSON)
+5. Clipboard paste import (for quick entry)
+
+### Supported Import Sources (Target):
+- Traveller Character Generator outputs
+- PDF copy-paste text
+- Roll20 character sheet exports
+- Foundry VTT exports
+- Plain text "UPP + skills" format
+- Custom JSON from other tools
+
+### Risk Mitigation:
+- AI parsing should be optional (user can skip to manual entry)
+- Show preview before committing import
+- Allow field-by-field correction
+- Log parsing decisions for debugging
+
+---
+
 ## Cleanup TODOs (Any Stage)
 
 ### Delete After MVC Stable:
