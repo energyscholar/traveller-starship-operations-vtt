@@ -113,7 +113,10 @@
           <div id="gm-ships-list" class="ships-list">
             <!-- Populated dynamically -->
           </div>
-          <button id="btn-add-ship" class="btn btn-success" title="Add a ship to campaign - Select from templates">+ Add Ship</button>
+          <div class="button-row">
+            <button id="btn-add-ship" class="btn btn-success" title="Add a ship to campaign - Select from templates">+ Add Ship</button>
+            <button id="btn-custom-ship" class="btn btn-secondary" title="Create a custom ship with full editor">+ Custom Ship</button>
+          </div>
         </section>
 
         <section class="setup-section">
@@ -953,6 +956,225 @@ Skills: Pilot-2, Gunnery-1, Vacc Suit-1"></textarea>
     <div class="modal-footer">
       <button class="btn btn-secondary" data-close-modal>Cancel</button>
       <button class="btn btn-primary" id="btn-create-ship">Add Ship</button>
+    </div>
+  </template>
+
+  <!-- Ship Template Editor Modal (AR-17) -->
+  <template id="template-edit-ship">
+    <div class="modal-header">
+      <h2>Ship Template Editor</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body ship-editor-body">
+      <!-- Template Selector -->
+      <div class="editor-section">
+        <div class="form-group">
+          <label for="edit-ship-name">Ship Name:</label>
+          <input type="text" id="edit-ship-name" placeholder="e.g., The Wandering Star" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-ship-template">Base Template:</label>
+          <select id="edit-ship-template">
+            <option value="">-- Select Base Template --</option>
+          </select>
+        </div>
+        <div id="edit-template-preview" class="template-preview"></div>
+      </div>
+
+      <!-- Editor Tabs -->
+      <div class="editor-tabs">
+        <button class="editor-tab active" data-tab="hull">Hull</button>
+        <button class="editor-tab" data-tab="drives">Drives</button>
+        <button class="editor-tab" data-tab="weapons">Weapons</button>
+        <button class="editor-tab" data-tab="systems">Systems</button>
+        <button class="editor-tab" data-tab="cargo">Cargo/Crew</button>
+      </div>
+
+      <!-- Hull Tab -->
+      <div class="editor-panel" id="editor-panel-hull">
+        <h3>Hull & Armor</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-hull-tonnage">Tonnage:</label>
+            <input type="number" id="edit-hull-tonnage" min="10" max="5000" step="10" readonly>
+            <span class="hint">Fixed from template</span>
+          </div>
+          <div class="form-group">
+            <label for="edit-hull-config">Configuration:</label>
+            <select id="edit-hull-config">
+              <option value="standard">Standard</option>
+              <option value="streamlined">Streamlined</option>
+              <option value="distributed">Distributed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-hull-points">Hull Points:</label>
+            <input type="number" id="edit-hull-points" min="1" max="999">
+          </div>
+          <div class="form-group">
+            <label for="edit-armor-rating">Armor Rating:</label>
+            <input type="number" id="edit-armor-rating" min="0" max="20">
+          </div>
+          <div class="form-group">
+            <label for="edit-armor-type">Armor Type:</label>
+            <select id="edit-armor-type">
+              <option value="none">None</option>
+              <option value="titanium_steel">Titanium Steel</option>
+              <option value="crystaliron">Crystaliron</option>
+              <option value="bonded_superdense">Bonded Superdense</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drives Tab -->
+      <div class="editor-panel hidden" id="editor-panel-drives">
+        <h3>Drives & Power</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-mdrive-thrust">M-Drive Thrust:</label>
+            <select id="edit-mdrive-thrust">
+              <option value="0">0G</option>
+              <option value="1">1G</option>
+              <option value="2">2G</option>
+              <option value="3">3G</option>
+              <option value="4">4G</option>
+              <option value="5">5G</option>
+              <option value="6">6G</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-jdrive-rating">Jump Rating:</label>
+            <select id="edit-jdrive-rating">
+              <option value="0">J-0</option>
+              <option value="1">J-1</option>
+              <option value="2">J-2</option>
+              <option value="3">J-3</option>
+              <option value="4">J-4</option>
+              <option value="5">J-5</option>
+              <option value="6">J-6</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-power-output">Power Output:</label>
+            <input type="number" id="edit-power-output" min="1" max="999">
+          </div>
+          <div class="form-group">
+            <label for="edit-fuel-capacity">Fuel Capacity (tons):</label>
+            <input type="number" id="edit-fuel-capacity" min="0" max="999">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-computer">Computer:</label>
+            <select id="edit-computer">
+              <option value="1">Computer/5</option>
+              <option value="2">Computer/10</option>
+              <option value="3">Computer/15</option>
+              <option value="4">Computer/20</option>
+              <option value="5">Computer/25</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="edit-sensors">Sensors:</label>
+            <select id="edit-sensors">
+              <option value="civilian">Civilian (DM-2)</option>
+              <option value="basic_military">Basic Military (DM0)</option>
+              <option value="improved">Improved (DM+1)</option>
+              <option value="advanced">Advanced (DM+2)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weapons Tab -->
+      <div class="editor-panel hidden" id="editor-panel-weapons">
+        <h3>Weapons</h3>
+        <div id="edit-weapons-list" class="weapons-list">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="form-row weapon-add">
+          <div class="form-group">
+            <select id="edit-weapon-type">
+              <option value="pulse_laser">Pulse Laser</option>
+              <option value="beam_laser">Beam Laser</option>
+              <option value="sandcaster">Sandcaster</option>
+              <option value="missile_rack">Missile Rack</option>
+              <option value="particle_beam">Particle Beam</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select id="edit-weapon-mount">
+              <option value="turret_single">Single Turret</option>
+              <option value="turret_double">Double Turret</option>
+              <option value="turret_triple">Triple Turret</option>
+              <option value="barbette">Barbette</option>
+              <option value="bay">Bay</option>
+            </select>
+          </div>
+          <button class="btn btn-secondary" id="btn-add-weapon">+ Add Weapon</button>
+        </div>
+      </div>
+
+      <!-- Systems Tab -->
+      <div class="editor-panel hidden" id="editor-panel-systems">
+        <h3>Ship Systems</h3>
+        <div id="edit-systems-list" class="systems-list">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="form-row system-add">
+          <div class="form-group">
+            <select id="edit-system-type">
+              <option value="fuel_processor">Fuel Processor</option>
+              <option value="fuel_scoops">Fuel Scoops</option>
+              <option value="cargo_crane">Cargo Crane</option>
+              <option value="repair_drones">Repair Drones</option>
+              <option value="probe_drones">Probe Drones</option>
+              <option value="medical_bay">Medical Bay</option>
+              <option value="workshop">Workshop</option>
+            </select>
+          </div>
+          <button class="btn btn-secondary" id="btn-add-system">+ Add System</button>
+        </div>
+      </div>
+
+      <!-- Cargo/Crew Tab -->
+      <div class="editor-panel hidden" id="editor-panel-cargo">
+        <h3>Cargo & Crew Quarters</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-cargo-tonnage">Cargo Hold (tons):</label>
+            <input type="number" id="edit-cargo-tonnage" min="0" max="999">
+          </div>
+          <div class="form-group">
+            <label for="edit-staterooms">Staterooms:</label>
+            <input type="number" id="edit-staterooms" min="0" max="99">
+          </div>
+          <div class="form-group">
+            <label for="edit-low-berths">Low Berths:</label>
+            <input type="number" id="edit-low-berths" min="0" max="99">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-common-areas">Common Areas (tons):</label>
+            <input type="number" id="edit-common-areas" min="0" max="99">
+          </div>
+        </div>
+      </div>
+
+      <!-- Validation Summary -->
+      <div id="edit-validation-summary" class="validation-summary">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button class="btn btn-primary" id="btn-save-edited-ship">Save Ship</button>
     </div>
   </template>
 

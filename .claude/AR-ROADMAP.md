@@ -11,7 +11,7 @@
 |----|------|--------|-----|----------|------|
 | AR-15 | Role Polish & UX | COMPLETE (9/10) | 4h actual | P1 | LOW |
 | AR-16 | Security Hardening | COMPLETE | 4h actual | P1 | LOW |
-| AR-17 | Ship Template Editor | PLANNED | 20h | P2 | MED |
+| AR-17 | Ship Template Editor | COMPLETE | 3h actual | P2 | MED |
 | AR-18 | Crew Role Depth | PLANNED | 40-60h | P2 | MED |
 | AR-19 | Character Import | COMPLETE | 1.5h actual | P1 | MED |
 | AR-20 | Ship Library | PLANNED | 20-40h | P3 | LOW |
@@ -66,24 +66,23 @@ Implemented:
 
 ---
 
-## PLANNED ARs
-
 ### AR-17: Ship Template Editor
 **File:** `AR-17-SHIP-TEMPLATE-EDITOR.md`
-**Status:** PLANNED
-**Est:** 20 hours
-**Priority:** P2
+**Status:** COMPLETE (10/10 stages)
 
-Scope (reduced from full Ship Builder):
-- Template selector dropdown by tonnage
-- Hull, armor, drives, weapons editors
-- Systems and cargo editors
-- Validation (tonnage, power)
-- Database persistence
-
-10 stages, no dependencies.
+Implemented:
+- Template selector with preview
+- Hull & armor editors
+- Drives, power, computer, sensors editors
+- Weapons add/remove with mount types
+- Systems add/remove
+- Cargo & staterooms editor
+- Tonnage & power validation bars
+- Database persistence (update/create)
 
 ---
+
+## PLANNED ARs
 
 ### AR-18: Crew Role Depth
 **File:** `AR-18-CREW-ROLE-DEPTH.md`
@@ -122,9 +121,7 @@ Plus: Template validation, JSON schema documentation.
 
 ## Recommended Execution Order
 
-1. **AR-17: Ship Template Editor** (20h)
-   - Good standalone work
-   - Enables GM customization
+1. ~~**AR-17: Ship Template Editor** (20h)~~ ✅ COMPLETE (3h actual)
 
 2. **AR-18: Crew Role Depth** (40-60h)
    - Largest AR, can be split into sub-phases
@@ -157,6 +154,7 @@ Plus: Template validation, JSON schema documentation.
 ## Notes
 
 - AR-14 (Gunner Combat System) completed 2025-12-02
-- AR-15, AR-16, AR-19 completed faster than estimated due to pre-existing code
+- AR-15, AR-16, AR-17, AR-19 completed faster than estimated due to pre-existing code
 - AR-18 is the largest remaining work item
 - All 339 tests currently passing
+- **5 of 6 ARs complete** - only AR-18 and AR-20 remain

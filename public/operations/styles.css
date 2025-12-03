@@ -5866,3 +5866,303 @@ input[type="checkbox"] {
   color: var(--text-muted);
   border-top: 1px solid var(--border-color);
 }
+
+/* ==================== Ship Template Editor (AR-17) ==================== */
+
+.ship-editor-body {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.editor-section {
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.template-preview {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  margin-top: var(--space-sm);
+  font-size: 13px;
+}
+
+.template-preview .preview-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+}
+
+.template-preview .preview-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.template-preview .preview-stat .label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.template-preview .preview-stat .value {
+  font-weight: bold;
+  color: var(--accent-blue);
+}
+
+/* Editor Tabs */
+.editor-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--space-md);
+}
+
+.editor-tab {
+  padding: var(--space-sm) var(--space-md);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.editor-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-panel-light);
+}
+
+.editor-tab.active {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+}
+
+/* Editor Panels */
+.editor-panel {
+  padding: var(--space-md);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.editor-panel.hidden {
+  display: none;
+}
+
+.editor-panel h3 {
+  margin-bottom: var(--space-md);
+  color: var(--text-primary);
+  font-size: 16px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-sm);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.form-row .form-group {
+  flex: 1;
+  min-width: 120px;
+}
+
+.form-row .form-group label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.form-row .form-group input,
+.form-row .form-group select {
+  width: 100%;
+  padding: var(--space-sm);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.form-row .form-group input:focus,
+.form-row .form-group select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.form-row .form-group input[readonly] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-row .form-group .hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  display: block;
+}
+
+/* Weapons/Systems List */
+.weapons-list,
+.systems-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.weapon-item,
+.system-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.weapon-item .weapon-info,
+.system-item .system-info {
+  flex: 1;
+}
+
+.weapon-item .weapon-name,
+.system-item .system-name {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.weapon-item .weapon-mount,
+.system-item .system-detail {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.weapon-item .btn-remove,
+.system-item .btn-remove {
+  background: transparent;
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.weapon-item .btn-remove:hover,
+.system-item .btn-remove:hover {
+  background: var(--accent-red);
+  color: white;
+}
+
+.weapon-add,
+.system-add {
+  align-items: flex-end;
+}
+
+/* Validation Summary */
+.validation-summary {
+  padding: var(--space-md);
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-md);
+}
+
+.validation-summary .tonnage-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.validation-summary .tonnage-bar .bar {
+  flex: 1;
+  height: 12px;
+  background: var(--bg-panel);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.validation-summary .tonnage-bar .bar-fill {
+  height: 100%;
+  background: var(--accent-green);
+  transition: width 0.3s ease;
+}
+
+.validation-summary .tonnage-bar .bar-fill.warning {
+  background: var(--accent-yellow);
+}
+
+.validation-summary .tonnage-bar .bar-fill.error {
+  background: var(--accent-red);
+}
+
+.validation-summary .tonnage-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.validation-summary .power-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.validation-summary .power-bar .bar {
+  flex: 1;
+  height: 12px;
+  background: var(--bg-panel);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.validation-summary .power-bar .bar-fill {
+  height: 100%;
+  background: var(--accent-blue);
+  transition: width 0.3s ease;
+}
+
+.validation-summary .power-bar .bar-fill.warning {
+  background: var(--accent-yellow);
+}
+
+.validation-summary .power-bar .bar-fill.error {
+  background: var(--accent-red);
+}
+
+.validation-summary .power-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.validation-summary .validation-errors {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.validation-summary .validation-error {
+  color: var(--accent-red);
+  font-size: 13px;
+  margin-bottom: var(--space-xs);
+}
+
+.validation-summary .validation-error::before {
+  content: "⚠ ";
+}
+
+/* Button row for multiple buttons */
+.button-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
