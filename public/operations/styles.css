@@ -4720,3 +4720,879 @@ input[type="checkbox"] {
   margin-top: var(--space-lg);
   text-align: center;
 }
+
+/* ============================================
+   Expandable Role Panel (Stage 13.3)
+   ============================================ */
+
+/* Expand control buttons in panel header */
+.panel-expand-controls {
+  display: flex;
+  gap: var(--space-xs);
+  margin-left: auto;
+}
+
+.btn-expand {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.btn-expand:hover {
+  background: var(--accent-primary);
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Half-screen expanded state - role panel claims sensor area */
+.bridge-main.role-expanded-half {
+  grid-template-rows: 1fr;
+}
+
+.bridge-main.role-expanded-half .sensor-panel {
+  display: none;
+}
+
+.bridge-main.role-expanded-half .role-panel {
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 400px;
+}
+
+.bridge-main.role-expanded-half .crew-panel {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.bridge-main.role-expanded-half .log-panel {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+/* Full-screen expanded state - role panel takes viewport */
+.role-panel.expanded-full {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  border-radius: 0;
+  animation: expandFull 0.3s ease;
+}
+
+@keyframes expandFull {
+  from {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hide normal expand buttons when expanded, show collapse button */
+.role-panel.expanded-full #btn-expand-half,
+.role-panel.expanded-full #btn-expand-full,
+.bridge-main.role-expanded-half #btn-expand-half {
+  display: none;
+}
+
+.role-panel.expanded-full #btn-collapse-panel,
+.bridge-main.role-expanded-half #btn-collapse-panel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Expanded panel enhancements */
+.role-panel.expanded-full .role-detail,
+.bridge-main.role-expanded-half .role-panel .role-detail {
+  flex: 1;
+  display: block !important;
+}
+
+.role-panel.expanded-full .role-actions {
+  padding: var(--space-lg);
+}
+
+/* Expanded panel footer - ensure always visible */
+.role-panel.expanded-full .role-panel-footer {
+  padding: var(--space-md) var(--space-lg);
+}
+
+/* Map container expansion for Astrogator */
+.role-panel.expanded-full #jump-map-container,
+.bridge-main.role-expanded-half .role-panel #jump-map-container {
+  height: 60vh;
+  min-height: 400px;
+}
+
+/* Expansion indicator in header */
+.role-panel.expanded-full .panel-header h2::after {
+  content: ' (Expanded)';
+  font-size: 12px;
+  color: var(--accent-primary);
+  font-weight: normal;
+}
+
+/* ============================================
+   Full-Screen Email App (Stage 13.4)
+   ============================================ */
+
+.email-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 900;
+  background: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.email-app.hidden {
+  display: none;
+}
+
+.email-app-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.email-app-header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.email-unread-badge {
+  background: var(--accent-red);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.email-unread-badge:empty {
+  display: none;
+}
+
+.email-app-actions {
+  margin-left: auto;
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.email-app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.email-sidebar {
+  width: 320px;
+  min-width: 280px;
+  max-width: 400px;
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-panel);
+  overflow-y: auto;
+}
+
+.email-inbox-list {
+  padding: var(--space-sm);
+}
+
+.email-item {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.email-item:hover {
+  background: var(--bg-hover);
+}
+
+.email-item.selected {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.email-item.unread {
+  border-left: 3px solid var(--accent-primary);
+}
+
+.email-item.unread .email-item-subject {
+  font-weight: bold;
+}
+
+.email-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+}
+
+.email-item-from {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.email-item-date {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.email-item-subject {
+  color: var(--text-secondary);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email-item-preview {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: var(--space-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.email-message-view {
+  flex: 1;
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.email-message-view .placeholder {
+  text-align: center;
+  color: var(--text-muted);
+  padding-top: 100px;
+}
+
+/* Selected email display */
+.email-display {
+  max-width: 800px;
+}
+
+.email-display-header {
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.email-display-subject {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-sm);
+}
+
+.email-display-meta {
+  display: flex;
+  gap: var(--space-lg);
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.email-display-body {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.email-display-actions {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* Compose view */
+.email-compose-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+}
+
+.email-compose-view.hidden {
+  display: none;
+}
+
+.compose-header {
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.compose-to {
+  color: var(--text-secondary);
+}
+
+.compose-to span {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.compose-subject {
+  width: 100%;
+  padding: var(--space-md);
+  font-size: 1.1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.compose-body {
+  flex: 1;
+  width: 100%;
+  min-height: 200px;
+  padding: var(--space-md);
+  font-size: 14px;
+  font-family: inherit;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  resize: none;
+}
+
+.compose-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+/* Email Inbox Item Styles (JS generates email-inbox-* classes) */
+.email-inbox-item {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.email-inbox-item:hover {
+  background: var(--bg-hover);
+}
+
+.email-inbox-item.selected {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.email-inbox-item.selected .email-inbox-sender,
+.email-inbox-item.selected .email-inbox-subject,
+.email-inbox-item.selected .email-inbox-date,
+.email-inbox-item.selected .email-inbox-preview {
+  color: var(--bg-primary);
+}
+
+.email-inbox-item.unread {
+  border-left: 3px solid var(--accent-primary);
+  background: rgba(var(--accent-primary-rgb), 0.05);
+}
+
+.email-inbox-item.unread .email-inbox-subject {
+  font-weight: bold;
+}
+
+.email-inbox-sender {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.email-inbox-subject {
+  color: var(--text-secondary);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email-inbox-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.email-inbox-preview {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: var(--space-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Email Message View Styles */
+.email-no-selection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+}
+
+.email-message-header {
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.email-message-from,
+.email-message-subject,
+.email-message-date {
+  margin-bottom: var(--space-xs);
+  color: var(--text-secondary);
+}
+
+.email-message-from strong,
+.email-message-subject strong,
+.email-message-date strong {
+  color: var(--text-muted);
+}
+
+.email-message-body {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  padding: var(--space-md) 0;
+}
+
+.email-message-actions {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ============================================
+   GUNNER PANEL STYLES (Autorun 14)
+   ============================================ */
+
+/* Gunner Header */
+.gunner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md);
+  border-bottom: 2px solid var(--accent-red);
+}
+
+.gunner-header h4 {
+  color: var(--accent-red);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.gunner-status-badge {
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.gunner-status-badge.weapons-free {
+  background: var(--accent-red);
+  color: white;
+  animation: pulse-red 1.5s ease-in-out infinite;
+}
+
+.gunner-status-badge.weapons-hold {
+  background: var(--text-muted);
+  color: var(--bg-dark);
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Target Section */
+.target-section {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: var(--space-md) 0;
+}
+
+.no-target-locked {
+  text-align: center;
+  padding: var(--space-lg);
+  color: var(--text-muted);
+}
+
+.no-target-locked .locked-icon {
+  font-size: 48px;
+  margin-bottom: var(--space-md);
+  opacity: 0.3;
+}
+
+.no-target-text {
+  font-size: 16px;
+  margin-bottom: var(--space-sm);
+}
+
+.target-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+}
+
+.target-item {
+  background: var(--bg-panel);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.target-item:hover {
+  border-color: var(--accent-red);
+  background: var(--bg-panel-light);
+}
+
+.target-item.selected {
+  border-color: var(--accent-red);
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.target-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.target-indicator {
+  font-size: 18px;
+  color: var(--accent-red);
+}
+
+.target-name {
+  flex: 1;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.target-disposition {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.target-disposition.hostile {
+  background: var(--accent-red);
+  color: white;
+}
+
+.target-disposition.neutral {
+  background: var(--accent-yellow);
+  color: var(--bg-dark);
+}
+
+.target-disposition.unknown {
+  background: var(--text-muted);
+  color: var(--bg-dark);
+}
+
+.target-details {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.target-health-bar {
+  position: relative;
+  height: 16px;
+  background: var(--bg-dark);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.target-health-bar .health-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-red), var(--accent-orange));
+  transition: width 0.3s ease;
+}
+
+.target-health-bar .health-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 2px black;
+}
+
+/* Weapons Section */
+.weapons-section {
+  margin: var(--space-md) 0;
+}
+
+.weapons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+}
+
+.weapon-card {
+  background: var(--bg-panel);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: all 0.2s ease;
+}
+
+.weapon-card.assigned {
+  border-color: var(--accent-blue);
+}
+
+.weapon-card.unassigned {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.weapon-card.weapon-ready {
+  border-left: 4px solid var(--accent-green);
+}
+
+.weapon-card.weapon-fired {
+  border-left: 4px solid var(--accent-yellow);
+  opacity: 0.7;
+}
+
+.weapon-card.weapon-damaged {
+  border-left: 4px solid var(--accent-orange);
+}
+
+.weapon-card.weapon-destroyed {
+  border-left: 4px solid var(--accent-red);
+  opacity: 0.4;
+}
+
+.weapon-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.weapon-header input[type="radio"] {
+  accent-color: var(--accent-red);
+}
+
+.weapon-name {
+  flex: 1;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.weapon-mount {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-dark);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.weapon-stats {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.weapon-ammo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.ammo-count.ammo-low {
+  color: var(--accent-red);
+  font-weight: bold;
+}
+
+.weapon-status-indicator {
+  text-align: right;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--accent-green);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: var(--space-xs);
+}
+
+.weapon-card.weapon-fired .weapon-status-indicator {
+  color: var(--accent-yellow);
+}
+
+.weapon-card.weapon-damaged .weapon-status-indicator {
+  color: var(--accent-orange);
+}
+
+.weapon-card.weapon-destroyed .weapon-status-indicator {
+  color: var(--accent-red);
+}
+
+/* Fire Control Section */
+.fire-control-section {
+  padding: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.fire-buttons {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+}
+
+.btn-fire {
+  flex: 2;
+  padding: var(--space-md) var(--space-xl);
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(180deg, #dc2626, #991b1b);
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-fire:hover:not(:disabled) {
+  background: linear-gradient(180deg, #ef4444, #dc2626);
+  box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
+  transform: scale(1.02);
+}
+
+.btn-fire:disabled {
+  background: var(--text-muted);
+  border-color: var(--border-color);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btn-point-defense {
+  flex: 1;
+  padding: var(--space-md);
+  font-size: 12px;
+}
+
+/* Combat Log Section */
+.combat-log-section {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-md);
+  margin: var(--space-md) 0;
+}
+
+.combat-log-list {
+  max-height: 150px;
+  overflow-y: auto;
+  padding: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.log-entry {
+  padding: var(--space-xs);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-entry.log-hit {
+  color: var(--accent-green);
+  background: rgba(42, 170, 74, 0.1);
+}
+
+.log-entry.log-miss {
+  color: var(--accent-red);
+  opacity: 0.7;
+}
+
+.log-entry.log-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-md);
+}
+
+.log-time {
+  color: var(--text-muted);
+  margin-right: var(--space-sm);
+}
+
+.log-message {
+  color: inherit;
+}
+
+/* Gunner skill note */
+.gunner-skill-note {
+  text-align: center;
+  padding: var(--space-sm);
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-color);
+}

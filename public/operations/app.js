@@ -357,7 +357,8 @@ function initSocket() {
             name: data.slotName || data.playerName || 'Unknown',
             role: data.role,
             roleInstance: data.roleInstance,
-            isNPC: false
+            isNPC: false,
+            character_data: data.character_data || null  // AR-14.7.4: Include character data for crew cards
           });
         }
       } else if (data.action === 'left' || data.action === 'disconnected' || data.action === 'relieved') {

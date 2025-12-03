@@ -1,19 +1,144 @@
 # Staged TODOs for Operations VTT
 
 **Created:** 2025-11-30
-**Last Updated:** 2025-12-02
+**Last Updated:** 2025-12-03
 
 ---
 
-## Known Bugs (AUTORUN-13 Stage 13.1)
+## AR-16: Security Hardening (Easy/Medium Fixes)
 
-| Bug | Description | Severity | Status |
-|-----|-------------|----------|--------|
-| GM as Crew | GM appears in crew list with relieve button | HIGH | AUTORUN-13 |
-| Captain Conflict | "Role captain already taken" error on reconnect | HIGH | AUTORUN-13 |
-| Relieve UI Missing | Relieve button not showing for some crew | MEDIUM | AUTORUN-13 |
+**Total Est:** 4-6 hours | **Risk:** LOW-MEDIUM | **Impact:** Production-ready security
 
-Screenshots: `screenshots/Bug_GM_shows_as_crew*.png`, `screenshots/relieve_of_duty*.png`
+### Stage 16.1: Gate Eval on NODE_ENV (CRITICAL)
+- Gate puppetry:eval handler behind NODE_ENV !== 'production'
+- Keep functionality for test/dev automation
+- **LOC:** +5 | **Time:** 15min
+- **Risk:** LOW (preserves test capability)
+
+### Stage 16.2: Error Message Sanitization
+- Category hints in prod: 'Campaign error', 'Role error' (no stack details)
+- Full error.message in dev/test mode (NODE_ENV gating)
+- TODO: Audit all error messages for debug helpfulness
+- ~60 locations in operations.handlers.js
+- **LOC:** +50 | **Time:** 1hr
+- **Tests:** Add unit tests + Puppeteer tests for error messages
+
+### Stage 16.3: Console.log Cleanup (Client)
+- Remove/gate debug console.log in app.js
+- ~15 locations
+- **LOC:** -30 | **Time:** 20min
+
+### Stage 16.4: XSS - Onclick to Data Attributes
+- Replace inline onclick with event delegation
+- Affects: relieveCrewMember, gmAssignRole, hailContact, etc.
+- ~20 locations
+- **LOC:** +50 | **Time:** 1.5hr
+- **Tests:** Puppeteer coverage for all affected buttons (required)
+- **Risk:** MEDIUM (UI changes, needs testing)
+
+### Stage 16.5: Input Validation Schema (DEFERRED)
+- **Branch:** security/input-validation
+- Add simple validation for socket event data
+- Validate: accountId, campaignId, shipId formats
+- Create lib/operations/validators.js
+- **LOC:** +100 | **Time:** 1hr
+
+### Stage 16.6: Rate Limiting (Operations) (DEFERRED)
+- **Branch:** security/rate-limit
+- Port rate limiting from space.handlers.js
+- Apply to: campaign creation, role assignment, deletions
+- **LOC:** +40 | **Time:** 30min
+
+### Stage 16.7: SQL Template Hardening
+- Replace dynamic field building with explicit field maps
+- accounts.js:97-102, combat.js:72,173
+- **LOC:** +20 | **Time:** 30min
+
+### Stage 16.8: Seed Script Safety
+- Add env check to seed-dorannia.js
+- Prevent accidental production seeding
+- **LOC:** +10 | **Time:** 10min
+
+### Stage 16.9: Escape IDs in Templates
+- Ensure accountId, contactId escaped in onclick handlers
+- Complement to 16.4 for any remaining inline handlers
+- **LOC:** +20 | **Time:** 20min
+
+### Stage 16.10: Security Test Suite (DEFERRED)
+- **Branch:** security/tests
+- Add tests verifying security fixes
+- Test: error sanitization, input validation, rate limits
+- **LOC:** +150 | **Time:** 1hr
+
+---
+
+### AR-16 Summary
+| Metric | Value |
+|--------|-------|
+| Stages | 10 |
+| Total Time | 4-6 hours |
+| Net LOC | +370 |
+| Issues Fixed | 9 |
+| TypeScript Impact | LOW (validation logic reusable) |
+
+---
+
+---
+
+## AUTORUN-14 COMPLETED (2025-12-02)
+
+### Gunner Role Deep Dive + New Combat System
+- **Stage 14.1:** Combat State in Operations DB (ship_weapons, combat_log tables)
+- **Stage 14.2:** Gunner Panel UI (target list, weapon cards, fire log)
+- **Stage 14.3:** Combat Resolution Engine (lib/operations/combat-engine.js)
+  - Traveller rules: 2D6 + skill + modifiers >= 8 to hit
+  - Range band DMs, critical hits on effect 6+
+  - 31 unit tests in tests/combat-engine.test.js
+- **Stage 14.4:** Gunner Socket Events (ops:fireWeapon, ops:acquireTarget, etc.)
+- **Stage 14.5:** GM Contact Management (Contacts tab in prep panel)
+- **Stage 14.6:** Polish & Testing (combat module refactored to modules/combat.js)
+
+### Key Decisions:
+- Discard old combat system - Operations owns state
+- Gunner role only (deep implementation)
+- Full Traveller combat rules
+- Unit tests required (31 new tests)
+
+---
+
+## AUTORUN-13 COMPLETED (2025-12-02)
+
+### Stage 13.0: Puppeteer Role Test Suite
+- Created `tests/e2e/puppeteer-role-tests.js` (~450 LOC)
+- Tests for all 11 crew roles
+- Role selection and assignment validation
+
+### Stage 13.1: Bug Fixes
+| Bug | Description | Fix |
+|-----|-------------|-----|
+| GM as Crew | GM appeared in crew list with relieve button | Added GM filters in crewUpdate, bridgeJoined handlers |
+| Captain Conflict | "Role captain already taken" on reconnect | Root cause was GM-as-crew, now fixed |
+| Relieve UI Missing | Relieve button not showing | Fixed isYou detection, updated state before re-render |
+
+### Stage 13.3: Expandable Role Panels
+- Half-screen and full-screen expansion modes
+- Keyboard shortcuts: F for fullscreen, Escape to collapse
+- State persistence per role
+
+### Stage 13.4: Full-Screen Email App
+- Replaced modal-based email with full-screen app
+- Two-pane layout: inbox list + message view
+- Compose, reply, archive functionality
+
+### Stage 13.5: Guest Login Completion
+- Removed TODO placeholder
+- Guest indicator shows skill level
+- Full guest login flow verified
+
+### Stage 13.6: File Modularization
+- Existing modules documented (~1,444 LOC extracted)
+- Module structure: utils, ascii-art, uwp-decoder, tooltips, role-panels
+- Main app.js: 6,073 LOC (further extraction deferred to AR-14)
 
 ---
 
@@ -286,3 +411,289 @@ Full CRUD ship customization with High Guard rules:
 - Import/Export
 
 **Test Case:** Gorram (600-ton X-Carrier) - `data/ships/gorram.json`
+
+---
+
+## Crew Role Depth Implementation
+
+**Priority:** HIGH | **Scope:** AR-14+ (Multiple Autoruns)
+
+Each crew role needs full implementation to make gameplay engaging. Currently roles show placeholder panels - these need real functionality.
+
+---
+
+### ROLE 1: Captain
+**Current:** Basic panel with crew list and alert controls
+**Priority:** HIGH (core leadership role)
+
+#### Actions to Implement:
+- [ ] **Set Alert Status** - Green/Yellow/Red with ship-wide effects
+- [ ] **Issue Orders** - Send orders to specific crew members (appears in their panel)
+- [ ] **Authorize Combat** - Required before weapons can fire
+- [ ] **Hail Contact** - Open comms with sensor contacts
+- [ ] **Request Status** - Ping crew for status updates
+- [ ] **Relieve Crew** - Remove underperforming/incapacitated crew from stations
+- [ ] **Battle Stations** - Quick alert escalation with position assignments
+- [ ] **Abandon Ship** - Emergency protocol initiation
+
+#### Panel Display:
+- [ ] Crew status grid (who's where, health status)
+- [ ] Ship status overview (hull, power, critical systems)
+- [ ] Pending orders queue
+- [ ] Contact summary from Sensors
+- [ ] Alert status indicator with quick-change buttons
+
+---
+
+### ROLE 2: Pilot
+**Current:** Basic panel with thrust/maneuver placeholders
+**Priority:** HIGH (primary ship control)
+
+#### Actions to Implement:
+- [ ] **Set Course** - Define destination (system/orbit/dock)
+- [ ] **Evasive Maneuvers** - Defensive flying (-DM to incoming fire)
+- [ ] **Pursuit/Intercept** - Chase a contact
+- [ ] **Match Velocity** - Parallel a contact for boarding/docking
+- [ ] **Emergency Thrust** - Burn extra fuel for speed
+- [ ] **Dock/Undock** - Initiate docking sequence
+- [ ] **Landing** - Atmospheric descent (if capable)
+- [ ] **Hold Position** - Station keeping
+
+#### Panel Display:
+- [ ] Current vector/heading visualization
+- [ ] Fuel gauge with burn calculations
+- [ ] Maneuver queue (planned actions)
+- [ ] G-force indicator
+- [ ] Range to current destination
+- [ ] Docking status when applicable
+
+---
+
+### ROLE 3: Astrogator
+**Current:** Jump map iframe integration
+**Priority:** HIGH (critical for travel)
+
+#### Actions to Implement:
+- [ ] **Plot Jump** - Calculate jump to destination system
+- [ ] **Verify Coordinates** - Double-check jump calculation (reduces misjump)
+- [ ] **Emergency Jump** - Quick plot with higher misjump risk
+- [ ] **Calculate ETA** - Time to destination at current thrust
+- [ ] **Plot Intercept** - Calculate course to contact
+- [ ] **Survey System** - Catalog system bodies and features
+- [ ] **Mark Waypoint** - Save locations for future reference
+
+#### Panel Display:
+- [ ] TravellerMap integration (expandable to full-screen)
+- [ ] Jump route planning interface
+- [ ] Fuel requirements for plotted jumps
+- [ ] System data (UWP, bases, gas giants)
+- [ ] Current position in system
+- [ ] Jump countdown when in-jump
+
+---
+
+### ROLE 4: Engineer
+**Current:** Power allocation placeholder
+**Priority:** HIGH (keeps ship running)
+
+#### Actions to Implement:
+- [ ] **Allocate Power** - Distribute power between systems
+- [ ] **Emergency Repairs** - Fix damaged systems during combat
+- [ ] **Boost System** - Overclock a system temporarily
+- [ ] **Damage Control** - Prioritize repair efforts
+- [ ] **Purge Atmosphere** - Vent compartments (fire/breach)
+- [ ] **Bypass Safety** - Risk for extra performance
+- [ ] **Fuel Transfer** - Manage fuel between tanks
+- [ ] **System Shutdown** - Power down non-essential systems
+
+#### Panel Display:
+- [ ] Power grid diagram (what's using what)
+- [ ] System health status (all ship systems)
+- [ ] Repair queue with time estimates
+- [ ] Fuel status (refined/unrefined)
+- [ ] Power plant output vs demand
+- [ ] Critical warnings and alarms
+
+---
+
+### ROLE 5: Gunner
+**Current:** IMPLEMENTED (AR-14) - Full combat system
+**Priority:** HIGH (combat effectiveness)
+
+#### Actions to Implement:
+- [x] **Acquire Target** - Lock onto sensor contact (AR-14)
+- [x] **Fire Weapon** - Execute attack on locked target (AR-14)
+- [ ] **Select Ammunition** - Choose warhead type (HE, AP, nuclear)
+- [x] **Switch Weapon** - Change active weapon mount (AR-14)
+- [x] **Point Defense** - Automated missile intercept mode (AR-14)
+- [ ] **Suppressive Fire** - Area denial (-DM to targets)
+- [ ] **Called Shot** - Target specific system (+difficulty, +effect)
+- [ ] **Hold Fire** - Maintain lock without firing
+
+#### Panel Display:
+- [x] Weapon mounts status (loaded, charged, damaged) (AR-14)
+- [x] Current target with lock indicator (AR-14)
+- [x] Ammunition counts by type (AR-14 - basic)
+- [x] Range to target with hit probability (AR-14)
+- [ ] Fire arc visualization
+- [x] Recent shots log with results (AR-14)
+
+---
+
+### ROLE 6: Sensors
+**Current:** Contact list placeholder
+**Priority:** HIGH (situational awareness)
+
+#### Actions to Implement:
+- [ ] **Active Scan** - Ping for contacts (reveals position)
+- [ ] **Passive Scan** - Listen only (stealthy)
+- [ ] **Analyze Contact** - Identify ship type/class
+- [ ] **Track Contact** - Maintain lock on specific contact
+- [ ] **ECM Jamming** - Disrupt enemy sensors/missiles
+- [ ] **ECCM** - Counter enemy jamming
+- [ ] **Transponder** - Toggle ship's ID broadcast
+- [ ] **Sensor Log** - Record contact history
+
+#### Panel Display:
+- [ ] Sensor display (range bands, contacts)
+- [ ] Contact list with classification
+- [ ] Detailed contact info panel
+- [ ] Sensor mode indicator (active/passive)
+- [ ] ECM/ECCM status
+- [ ] Detection range circles
+
+---
+
+### ROLE 7: Communications (Comms)
+**Current:** Basic placeholder
+**Priority:** MEDIUM (coordination role)
+
+#### Actions to Implement:
+- [ ] **Hail Contact** - Open channel to ship/station
+- [ ] **Broadcast** - Send to all in range
+- [ ] **Encrypt Message** - Secure communication
+- [ ] **Decrypt Intercept** - Decode enemy comms
+- [ ] **Distress Call** - Emergency broadcast
+- [ ] **Jam Communications** - Block enemy comms
+- [ ] **Relay Message** - Forward between parties
+- [ ] **Log Transmission** - Record all comms
+
+#### Panel Display:
+- [ ] Active channel indicator
+- [ ] Message queue (incoming/outgoing)
+- [ ] Frequency scanner
+- [ ] Encryption status
+- [ ] Range to comm targets
+- [ ] Transmission log
+
+---
+
+### ROLE 8: Medic
+**Current:** Crew health placeholder
+**Priority:** MEDIUM (crew survival)
+
+#### Actions to Implement:
+- [ ] **Treat Wounds** - Heal injured crew
+- [ ] **Stabilize** - Prevent death of critical crew
+- [ ] **Administer Drugs** - Combat drugs, antidotes, sedatives
+- [ ] **Diagnose** - Identify medical conditions
+- [ ] **Surgery** - Major medical procedures
+- [ ] **Quarantine** - Isolate infected crew
+- [ ] **Triage** - Prioritize treatment order
+- [ ] **Medical Report** - Status to Captain
+
+#### Panel Display:
+- [ ] Crew health roster (all crew conditions)
+- [ ] Treatment queue
+- [ ] Medical supplies inventory
+- [ ] Sickbay capacity
+- [ ] Casualties log
+- [ ] Drug effects timers
+
+---
+
+### ROLE 9: Marine
+**Current:** Basic placeholder
+**Priority:** MEDIUM (boarding/security)
+
+#### Actions to Implement:
+- [ ] **Security Patrol** - Internal ship security
+- [ ] **Boarding Prep** - Ready team for boarding action
+- [ ] **Board Target** - Execute boarding action
+- [ ] **Repel Boarders** - Defend against enemy boarding
+- [ ] **Guard Prisoner** - Secure captured personnel
+- [ ] **Breach Door** - Force entry to compartment
+- [ ] **Arm/Disarm** - Weapon readiness
+- [ ] **Tactical Assessment** - Evaluate boarding risks
+
+#### Panel Display:
+- [ ] Marine team roster with loadout
+- [ ] Ship deck plan (compartment status)
+- [ ] Boarding status (if in progress)
+- [ ] Armory inventory
+- [ ] Intruder alerts
+- [ ] Combat log
+
+---
+
+### ROLE 10: Steward
+**Current:** Basic placeholder
+**Priority:** LOW (non-combat support)
+
+#### Actions to Implement:
+- [ ] **Serve Passengers** - Maintain passenger satisfaction
+- [ ] **Prepare Meal** - Crew/passenger meals
+- [ ] **Inventory Check** - Track supplies
+- [ ] **Passenger Manifest** - Who's aboard
+- [ ] **Entertainment** - Passenger activities
+- [ ] **Cargo Check** - Verify cargo status
+- [ ] **Resupply Request** - Request supplies at port
+- [ ] **Morale Report** - Crew morale status
+
+#### Panel Display:
+- [ ] Passenger list with satisfaction
+- [ ] Supplies inventory (food, consumables)
+- [ ] Cargo manifest
+- [ ] Life support status
+- [ ] Morale indicator
+- [ ] Event log (meals served, issues)
+
+---
+
+### ROLE 11: Observer
+**Current:** ASCII art view, read-only access
+**Priority:** COMPLETE (already implemented)
+
+#### Features (Implemented):
+- [x] Read-only view of bridge activity
+- [x] Ship ASCII art display
+- [x] Can view but not interact
+- [x] Multiple observers allowed
+- [x] No skill requirements
+
+---
+
+## Role Implementation Priority
+
+| Priority | Roles | Rationale |
+|----------|-------|-----------|
+| P0 | Captain, Pilot, Gunner | Core combat loop |
+| P1 | Engineer, Sensors, Astrogator | Combat support + travel |
+| P2 | Medic, Marine, Comms | Extended gameplay |
+| P3 | Steward | Roleplay/flavor |
+
+---
+
+## Cross-Role Interactions
+
+These interactions make multiplayer engaging:
+
+- [ ] **Captain → Crew** - Orders appear in crew panels, require acknowledgment
+- [ ] **Sensors → Gunner** - Sensor locks enable targeting
+- [ ] **Sensors → Captain** - Contact reports to command
+- [ ] **Engineer → All** - Power allocation affects all systems
+- [ ] **Pilot → Gunner** - Maneuvers affect fire arcs
+- [ ] **Medic → Captain** - Crew fitness reports
+- [ ] **Marine → Captain** - Security status reports
+- [ ] **Comms → All** - Message routing between roles
+- [ ] **Astrogator → Pilot** - Jump coordinates handoff
