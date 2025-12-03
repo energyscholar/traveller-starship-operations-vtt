@@ -9,6 +9,16 @@ import { escapeHtml, formatRoleName, formatActionName, formatRange, getRangeClas
 import { UWP_DATA, decodeUWP, formatUWPTooltip, getUWPSummary, createUWPSpan, initUWPTooltips } from './modules/uwp-decoder.js';
 import { formatSkillName, formatCharacterTooltip, initCharacterTooltips } from './modules/tooltips.js';
 import { getRoleDetailContent, getActionMessage, renderSystemStatusItem } from './modules/role-panels.js';
+import * as combat from './modules/combat.js';
+import { show, hide, toggle, setText, getValue } from './modules/dom-helpers.js';
+import { copyWithFeedback } from './modules/clipboard.js';
+
+// ==================== Debug Configuration ====================
+// SECURITY: Debug logging only enabled on localhost
+const DEBUG = ['localhost', '127.0.0.1'].includes(location.hostname);
+const debugLog = (...args) => DEBUG && console.log(...args);
+const debugWarn = (...args) => DEBUG && console.warn(...args);
+const debugError = (...args) => DEBUG && console.error(...args);
 
 // ==================== State ====================
 const state = {
@@ -57,7 +67,7 @@ function initSocket() {
 
   // Connection events
   state.socket.on('connect', () => {
-    console.log('Connected to server');
+    debugLog('Connected to server');
     // Try to reconnect to previous session (Stage 3.5.5)
     tryReconnect();
 
@@ -69,7 +79,7 @@ function initSocket() {
   });
 
   state.socket.on('disconnect', () => {
-    console.log('Disconnected from server');
+    debugLog('Disconnected from server');
     showNotification('Disconnected from server', 'error');
     // Stop heartbeat on disconnect
     if (state.heartbeatInterval) {
@@ -80,7 +90,7 @@ function initSocket() {
 
   // Reconnect events (Stage 3.5.5)
   state.socket.on('ops:reconnected', (data) => {
-    console.log('Reconnected to session:', data.screen);
+    debugLog('Reconnected to session:', data.screen);
     state.campaign = data.campaign;
     state.players = data.players || [];
     state.ships = data.ships || [];
@@ -108,7 +118,7 @@ function initSocket() {
   });
 
   state.socket.on('ops:reconnectFailed', (data) => {
-    console.log('Reconnect failed:', data.reason);
+    debugLog('Reconnect failed:', data.reason);
     // Clear stored session and show login
     clearStoredSession();
   });
@@ -254,9 +264,16 @@ function initSocket() {
     renderPlayerSetup();
   });
 
-  // Confirmation when Captain/Medic relieves someone
+  // Confirmation when Captain/Medic/GM relieves someone
   state.socket.on('ops:crewMemberRelieved', (data) => {
     showNotification(`${data.slotName} has been relieved of ${formatRoleName(data.previousRole)} duty`, 'success');
+    // Update local crew state - find the relieved crew member and clear their role
+    const crewIdx = state.crewOnline.findIndex(c =>
+      (c.id && c.id === data.accountId) || (c.accountId && c.accountId === data.accountId)
+    );
+    if (crewIdx >= 0) {
+      state.crewOnline[crewIdx].role = null;
+    }
     renderCrewList();
   });
 
@@ -311,7 +328,7 @@ function initSocket() {
 
   state.socket.on('ops:crewUpdate', (data) => {
     // Another player changed their role
-    console.log('[OPS] Crew update received:', data);
+    debugLog('[OPS] Crew update received:', data);
 
     // Update role selection if on player-setup screen
     if (state.currentScreen === 'player-setup') {
@@ -320,10 +337,14 @@ function initSocket() {
 
     // Update bridge crew display if on bridge screen
     if (state.currentScreen === 'bridge') {
+      // Skip GM entries - GM is an observer, not crew
+      if (data.role === 'gm' || data.isGM) {
+        return;
+      }
       // Update crewOnline array with the change
       if (data.crew) {
-        // Full crew list provided
-        state.crewOnline = data.crew;
+        // Full crew list provided - filter out any GM entries
+        state.crewOnline = data.crew.filter(c => c.role !== 'gm' && !c.isGM);
       } else if (data.action === 'joined' || data.role) {
         // Someone joined or took a role - add/update them
         const existingIdx = state.crewOnline.findIndex(c => c.accountId === data.accountId);
@@ -359,7 +380,8 @@ function initSocket() {
     state.ship = data.ship;
     state.ship.npcCrew = data.npcCrew || [];  // Store NPC crew on ship object
     state.selectedShipId = data.ship?.id;
-    state.crewOnline = data.crew;
+    // Filter out any GM entries from crew - GM is observer, not crew
+    state.crewOnline = (data.crew || []).filter(c => c.role !== 'gm' && !c.isGM);
     state.contacts = data.contacts || [];  // Use contacts from server
     state.logEntries = data.logs || [];
     state.campaign = data.campaign;
@@ -449,11 +471,13 @@ function initSocket() {
   state.socket.on('ops:contacts', (data) => {
     state.contacts = data.contacts;
     renderContacts();
+    renderCombatContactsList(); // Autorun 14
   });
 
   state.socket.on('ops:contactAdded', (data) => {
     state.contacts.push(data.contact);
     renderContacts();
+    renderCombatContactsList(); // Autorun 14
     showNotification(`Contact added: ${data.contact.name || data.contact.type}`, 'info');
   });
 
@@ -461,16 +485,19 @@ function initSocket() {
     const idx = state.contacts.findIndex(c => c.id === data.contact.id);
     if (idx >= 0) state.contacts[idx] = data.contact;
     renderContacts();
+    renderCombatContactsList(); // Autorun 14
   });
 
   state.socket.on('ops:contactDeleted', (data) => {
     state.contacts = state.contacts.filter(c => c.id !== data.contactId);
     renderContacts();
+    renderCombatContactsList(); // Autorun 14
   });
 
   state.socket.on('ops:scanResult', (data) => {
     state.contacts = data.contacts;
     renderContacts();
+    renderCombatContactsList(); // Autorun 14
     showNotification(`Sensor scan complete: ${data.contacts.length} contacts`, 'info');
   });
 
@@ -589,6 +616,7 @@ function initSocket() {
     state.contacts = data.contacts || [];
     showNotification(`Sensor contacts updated: ${state.contacts.length} objects detected`, 'info');
     renderRoleDetailPanel(state.role);
+    renderCombatContactsList(); // Autorun 14
   });
 
   // Autorun 5: Handle sensor scan results
@@ -642,7 +670,87 @@ function initSocket() {
 
   // Autorun 5: Handle fire results
   state.socket.on('ops:fireResult', (data) => {
-    handleFireResult(data);
+    handleFireResult(data.result || data);
+  });
+
+  // Autorun 14: Combat system handlers
+  state.socket.on('ops:targetAcquired', (data) => {
+    const contact = data.contact;
+    state.lockedTarget = contact.id;
+    showNotification(`Target locked: ${contact.name}`, 'success');
+    renderRoleDetailPanel(state.role);
+  });
+
+  state.socket.on('ops:combatAction', (data) => {
+    // Handle combat action broadcast (hit/miss/point defense)
+    const { type, attacker, target, weapon, damage, message, targetDestroyed } = data;
+
+    // Add to combat log in state
+    if (!state.combatLog) state.combatLog = [];
+    state.combatLog.unshift({
+      timestamp: new Date().toISOString(),
+      type,
+      attacker,
+      target,
+      weapon,
+      damage,
+      message
+    });
+
+    // Keep only last 50 entries
+    if (state.combatLog.length > 50) {
+      state.combatLog = state.combatLog.slice(0, 50);
+    }
+
+    // Show notification for combat events
+    if (type === 'hit') {
+      showNotification(`${attacker} HIT ${target} for ${damage} damage!`, 'warning');
+    } else if (type === 'miss') {
+      showNotification(`${attacker} missed ${target}`, 'info');
+    } else if (type === 'pointDefense') {
+      showNotification(message, 'info');
+    }
+
+    // Refresh gunner panel to update combat log
+    if (state.role === 'gunner') {
+      renderRoleDetailPanel('gunner');
+    }
+  });
+
+  state.socket.on('ops:targetDestroyed', (data) => {
+    const { contactId, name, destroyedBy } = data;
+    showNotification(`TARGET DESTROYED: ${name} by ${destroyedBy}!`, 'success');
+
+    // Remove from contacts
+    if (state.contacts) {
+      state.contacts = state.contacts.filter(c => c.id !== contactId);
+    }
+
+    // Clear locked target if it was destroyed
+    if (state.lockedTarget === contactId) {
+      state.lockedTarget = null;
+    }
+
+    renderRoleDetailPanel(state.role);
+  });
+
+  state.socket.on('ops:shipWeapons', (data) => {
+    state.shipWeapons = data.weapons || [];
+    renderRoleDetailPanel(state.role);
+  });
+
+  state.socket.on('ops:combatLog', (data) => {
+    state.combatLog = data.log || [];
+    renderRoleDetailPanel(state.role);
+  });
+
+  state.socket.on('ops:pointDefenseStatus', (data) => {
+    state.pointDefenseEnabled = data.enabled;
+    const btn = document.querySelector('.btn-point-defense');
+    if (btn) {
+      btn.classList.toggle('active', data.enabled);
+      btn.textContent = data.enabled ? 'Point Defense ON' : 'Point Defense';
+    }
   });
 
   // Autorun 5: Handle jump status update (for skip-to-exit feature)
@@ -672,7 +780,7 @@ function initSocket() {
   state.socket.on('ops:mailList', (data) => {
     state.unreadMailCount = data.unreadCount || 0;
     updateMailBadge();
-    showMailModal(data.mail, data.unreadCount);
+    openEmailApp(data.mail, data.unreadCount);
   });
 
   state.socket.on('ops:newMail', (data) => {
@@ -855,7 +963,13 @@ function initSocket() {
   // ==================== Puppetry Debug System ====================
   // Quick-and-dirty eval-based puppetry for debugging
   // Server can send commands to manipulate DOM, click buttons, etc.
+  // SECURITY: Only enabled on localhost (dev/test environments) - uses global DEBUG
+
   state.socket.on('puppetry:eval', (data) => {
+    if (!DEBUG) {
+      debugWarn('[PUPPETRY] eval disabled in production');
+      return;
+    }
     const { code, requestId } = data;
     console.log('[PUPPETRY] Executing:', code);
     try {
@@ -1023,8 +1137,7 @@ function initLoginScreen() {
     }
   });
 
-  // Guest login flow
-  // TODO: Complete guest login implementation in future autorun
+  // Guest login flow (Stage 13.5 - completed)
   const btnJoinGuest = document.getElementById('btn-join-guest');
   if (btnJoinGuest) {
     btnJoinGuest.addEventListener('click', () => {
@@ -1124,18 +1237,7 @@ function initGMSetupScreen() {
     const codeEl = document.getElementById('campaign-code-value');
     const code = codeEl.textContent;
     if (code && code !== '--------') {
-      navigator.clipboard.writeText(code).then(() => {
-        const btn = document.getElementById('btn-copy-code');
-        const originalText = btn.textContent;
-        btn.textContent = 'Copied!';
-        btn.classList.add('btn-copy-success');
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.classList.remove('btn-copy-success');
-        }, 2000);
-      }).catch(() => {
-        showNotification('Failed to copy code', 'error');
-      });
+      copyWithFeedback(code, 'btn-copy-code');
     }
   });
 
@@ -1457,6 +1559,40 @@ function initBridgeScreen() {
     btn.textContent = detail.classList.contains('hidden') ? 'Show Details ▼' : 'Hide Details ▲';
   });
 
+  // Expandable Role Panel Controls (Stage 13.3)
+  document.getElementById('btn-expand-half')?.addEventListener('click', () => {
+    expandRolePanel('half');
+  });
+
+  document.getElementById('btn-expand-full')?.addEventListener('click', () => {
+    expandRolePanel('full');
+  });
+
+  document.getElementById('btn-collapse-panel')?.addEventListener('click', () => {
+    collapseRolePanel();
+  });
+
+  // Keyboard shortcuts for panel expansion
+  document.addEventListener('keydown', (e) => {
+    if (state.currentScreen !== 'bridge') return;
+
+    // Escape collapses any expanded panel
+    if (e.key === 'Escape') {
+      collapseRolePanel();
+    }
+
+    // F key for fullscreen toggle (when not in input)
+    if (e.key === 'f' || e.key === 'F') {
+      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+      const rolePanel = document.getElementById('role-panel');
+      if (rolePanel.classList.contains('expanded-full')) {
+        collapseRolePanel();
+      } else {
+        expandRolePanel('full');
+      }
+    }
+  });
+
   // Add log note
   document.getElementById('btn-add-log').addEventListener('click', () => {
     const note = prompt('Log entry:');
@@ -1610,6 +1746,11 @@ function initGMControls() {
     }
   });
 
+  // Autorun 14: Add combat contact from prep panel
+  document.getElementById('btn-add-combat-contact')?.addEventListener('click', () => {
+    showAddCombatContactModal();
+  });
+
   // System damage button (if exists)
   const damageBtn = document.getElementById('btn-gm-damage');
   if (damageBtn) {
@@ -1658,12 +1799,18 @@ function renderBridge() {
     locationEl.textContent = state.campaign?.current_system || 'Unknown';
   }
 
-  // Guest indicator
+  // Guest indicator with skill level
   const guestIndicator = document.getElementById('guest-indicator');
-  if (state.isGuest) {
-    guestIndicator.classList.remove('hidden');
-  } else {
-    guestIndicator.classList.add('hidden');
+  if (guestIndicator) {
+    if (state.isGuest) {
+      guestIndicator.classList.remove('hidden');
+      const badge = guestIndicator.querySelector('.guest-badge');
+      if (badge) {
+        badge.textContent = `GUEST (Skill ${state.guestSkill || 0})`;
+      }
+    } else {
+      guestIndicator.classList.add('hidden');
+    }
   }
 
   // User identity display (Name, Role, Ship)
@@ -1890,16 +2037,22 @@ function renderCrewList() {
     'gm': 0  // GM always first
   };
 
-  // Add online players (filter out GM from player views)
+  // Add online players (always filter out GM entries - GM is observer, not crew)
   state.crewOnline.forEach(c => {
-    // Skip GM entries when viewing as a player (non-GM)
-    if (c.role === 'gm' && state.selectedRole !== 'gm' && !state.isGM) {
+    // Always skip GM entries - GM should never appear in crew list
+    if (c.role === 'gm' || c.isGM) {
       return;
     }
-    // Determine if this is the current user - must have matching IDs (not undefined)
+    // Determine if this is the current user
+    // GM is never "you" in crew list - they're an observer
+    // For players, must have valid matching IDs (non-empty strings)
     const playerId = state.player?.id;
     const playerAccountId = state.player?.accountId;
-    const isYou = (playerId && c.id === playerId) || (playerAccountId && c.accountId === playerAccountId);
+    const crewId = c.id || c.accountId;
+    const isYou = !state.isGM && crewId && (
+      (playerId && typeof playerId === 'string' && playerId === crewId) ||
+      (playerAccountId && typeof playerAccountId === 'string' && playerAccountId === crewId)
+    );
     allCrew.push({
       name: c.character_name || c.slot_name || c.name,
       role: c.role,
@@ -1942,12 +2095,12 @@ function renderCrewList() {
     // Show relieve button if: can relieve AND not NPC AND not self AND has a role
     const showRelieveBtn = canRelieve && !c.isNPC && !c.isYou && c.role && c.accountId;
     const relieveBtn = showRelieveBtn
-      ? `<button class="btn-relieve" onclick="relieveCrewMember('${c.accountId}', '${escapeHtml(c.name)}', '${c.role}')" title="Relieve from duty">✕</button>`
+      ? `<button class="btn-relieve" data-action="relieve" data-account-id="${escapeHtml(c.accountId)}" data-name="${escapeHtml(c.name)}" data-role="${escapeHtml(c.role)}" title="Relieve from duty">✕</button>`
       : '';
     // Show assign button if: GM AND not NPC AND not self AND (no role OR we want reassign option)
     const showAssignBtn = state.isGM && !c.isNPC && !c.isYou && c.accountId;
     const assignBtn = showAssignBtn
-      ? `<button class="btn-assign" onclick="gmAssignRole('${c.accountId}', '${escapeHtml(c.name)}')" title="Assign role">⚙</button>`
+      ? `<button class="btn-assign" data-action="assign" data-account-id="${escapeHtml(c.accountId)}" data-name="${escapeHtml(c.name)}" title="Assign role">⚙</button>`
       : '';
     return `
     <div class="crew-member ${c.isNPC ? 'npc' : ''} ${c.isYou ? 'is-you' : ''}">
@@ -2466,12 +2619,18 @@ function fireAtTarget() {
   }
 
   const contactId = targetSelect.value;
-  const weaponIndex = parseInt(weaponSelect?.value) || 0;
+  const weaponId = weaponSelect?.value || null;
   const targetName = targetSelect.options[targetSelect.selectedIndex]?.text || 'Target';
 
-  state.socket.emit('ops:fireAtContact', { contactId, weaponIndex });
+  state.socket.emit('ops:fireWeapon', { targetId: contactId, weaponId });
   showNotification(`Firing at ${targetName}...`, 'warning');
 }
+
+// Combat module wrappers (AR-14) - delegate to combat.js module
+function fireWeapon() { combat.fireWeapon(state); }
+function lockTarget(contactId) { combat.lockTarget(state, contactId); }
+function selectWeapon(weaponId) { combat.selectWeapon(state, weaponId); }
+function togglePointDefense() { combat.togglePointDefense(state); }
 
 /**
  * Update fire button text when weapon selection changes
@@ -3266,6 +3425,13 @@ function addContact(contactData) {
   state.socket.emit('ops:addContact', contactData);
 }
 
+// Combat contact functions - delegated to combat module (Autorun 14)
+function showAddCombatContactModal() { combat.showAddCombatContactModal(state); }
+function submitCombatContact() { combat.submitCombatContact(state); }
+function renderCombatContactsList() { combat.renderCombatContactsList(state); }
+function toggleWeaponsFree(contactId) { combat.toggleWeaponsFree(state, contactId); }
+function removeCombatContact(contactId) { combat.removeCombatContact(state, contactId); }
+
 function applySystemDamage(system, severity) {
   state.socket.emit('ops:applySystemDamage', {
     shipId: state.shipId,
@@ -3586,7 +3752,7 @@ function getStarPopupContent(contact) {
         ? JSON.parse(contact.stellar_info)
         : contact.stellar_info;
     } catch (e) {
-      console.warn('Failed to parse stellar_info:', e);
+      debugWarn('Failed to parse stellar_info:', e);
     }
   }
 
@@ -3899,7 +4065,7 @@ function hailContact(contactId) {
 
 function showNotification(message, type = 'info') {
   // Simple notification - could be enhanced with toast UI
-  console.log(`[${type.toUpperCase()}] ${message}`);
+  debugLog(`[${type.toUpperCase()}] ${message}`);
 
   // For now, use browser notification if available
   if (type === 'error') {
@@ -3921,7 +4087,7 @@ function saveSession() {
   try {
     localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
   } catch (e) {
-    console.warn('Failed to save session:', e);
+    debugWarn('Failed to save session:', e);
   }
 }
 
@@ -3938,14 +4104,14 @@ function clearStoredSession() {
   try {
     localStorage.removeItem(SESSION_KEY);
   } catch (e) {
-    console.warn('Failed to clear session:', e);
+    debugWarn('Failed to clear session:', e);
   }
 }
 
 function tryReconnect() {
   const session = getStoredSession();
   if (session && session.campaignId) {
-    console.log('Attempting to reconnect to session:', session);
+    debugLog('Attempting to reconnect to session:', session);
     state.socket.emit('ops:reconnect', session);
   } else {
     showNotification('Connected', 'success');
@@ -3959,6 +4125,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initGMSetupScreen();
   initPlayerSetupScreen();
   initBridgeScreen();
+  initEmailAppHandlers();
 
   // GM-2: Check for campaign code in URL parameters
   const urlParams = new URLSearchParams(window.location.search);
@@ -3996,6 +4163,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Stage 7: Initialize character tooltip system
   initCharacterTooltips();
+
+  // AR-16.4: Event delegation for crew list buttons (security - avoid inline onclick)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    const accountId = btn.dataset.accountId;
+    const name = btn.dataset.name;
+    const role = btn.dataset.role;
+
+    if (action === 'relieve' && accountId && name && role) {
+      relieveCrewMember(accountId, name, role);
+    } else if (action === 'assign' && accountId && name) {
+      gmAssignRole(accountId, name);
+    }
+  });
 });
 
 // ==================== Hamburger Menu (Autorun 6) ====================
@@ -4264,6 +4448,305 @@ function updateMailBadge() {
   } else {
     badge.classList.add('hidden');
   }
+}
+
+// ==================== Full-Screen Email App (Stage 13.4) ====================
+
+// Store current mail list for reference
+let currentMailList = [];
+let selectedMailId = null;
+
+function openEmailApp(mailList, unreadCount) {
+  currentMailList = mailList || [];
+  selectedMailId = null;
+
+  const emailApp = document.getElementById('email-app');
+  if (!emailApp) return;
+
+  // Update unread badge
+  const badge = document.getElementById('email-unread-count');
+  if (badge) {
+    if (unreadCount > 0) {
+      badge.textContent = `${unreadCount} unread`;
+      badge.classList.remove('hidden');
+    } else {
+      badge.textContent = '';
+      badge.classList.add('hidden');
+    }
+  }
+
+  // Render inbox list
+  renderEmailInbox(mailList);
+
+  // Clear message view
+  const messageView = document.getElementById('email-message-view');
+  if (messageView) {
+    messageView.innerHTML = `
+      <div class="email-no-selection">
+        <p>Select a message to read</p>
+      </div>
+    `;
+  }
+
+  // Hide compose view
+  const composeView = document.getElementById('email-compose-view');
+  if (composeView) {
+    composeView.classList.add('hidden');
+  }
+
+  // Show email app
+  emailApp.classList.remove('hidden');
+
+  // Add keyboard listener for escape
+  document.addEventListener('keydown', emailAppKeyHandler);
+}
+
+function closeEmailApp() {
+  const emailApp = document.getElementById('email-app');
+  if (emailApp) {
+    emailApp.classList.add('hidden');
+  }
+  document.removeEventListener('keydown', emailAppKeyHandler);
+  selectedMailId = null;
+}
+
+function emailAppKeyHandler(e) {
+  if (e.key === 'Escape') {
+    closeEmailApp();
+  }
+}
+
+function renderEmailInbox(mailList) {
+  const inboxList = document.getElementById('email-inbox-list');
+  if (!inboxList) return;
+
+  if (!mailList || mailList.length === 0) {
+    inboxList.innerHTML = '<p class="placeholder">No messages</p>';
+    return;
+  }
+
+  let html = '';
+  for (const mail of mailList) {
+    const isRead = mail.is_read ? 'read' : 'unread';
+    const isSelected = mail.id === selectedMailId ? 'selected' : '';
+    html += `
+      <div class="email-inbox-item ${isRead} ${isSelected}" data-mail-id="${mail.id}">
+        <div class="email-inbox-sender">${escapeHtml(mail.sender_name)}</div>
+        <div class="email-inbox-subject">${escapeHtml(mail.subject)}</div>
+        <div class="email-inbox-date">${mail.sent_date}</div>
+        <div class="email-inbox-preview">${escapeHtml(mail.body.substring(0, 60))}${mail.body.length > 60 ? '...' : ''}</div>
+      </div>
+    `;
+  }
+
+  inboxList.innerHTML = html;
+
+  // Add click handlers
+  inboxList.querySelectorAll('.email-inbox-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const mailId = item.dataset.mailId;
+      selectEmailMessage(mailId);
+    });
+  });
+}
+
+function selectEmailMessage(mailId) {
+  const mail = currentMailList.find(m => m.id === mailId);
+  if (!mail) return;
+
+  selectedMailId = mailId;
+
+  // Update selection highlight in inbox
+  document.querySelectorAll('.email-inbox-item').forEach(item => {
+    item.classList.toggle('selected', item.dataset.mailId === mailId);
+    if (item.dataset.mailId === mailId) {
+      item.classList.remove('unread');
+      item.classList.add('read');
+    }
+  });
+
+  // Mark as read on server
+  if (!mail.is_read) {
+    state.socket.emit('ops:markMailRead', { mailId });
+    mail.is_read = true;
+    state.unreadMailCount = Math.max(0, (state.unreadMailCount || 1) - 1);
+    updateMailBadge();
+    // Update email app badge too
+    const badge = document.getElementById('email-unread-count');
+    if (badge) {
+      if (state.unreadMailCount > 0) {
+        badge.textContent = `${state.unreadMailCount} unread`;
+      } else {
+        badge.textContent = '';
+        badge.classList.add('hidden');
+      }
+    }
+  }
+
+  // Show message in message view
+  const messageView = document.getElementById('email-message-view');
+  if (messageView) {
+    messageView.innerHTML = `
+      <div class="email-message-header">
+        <div class="email-message-from"><strong>From:</strong> ${escapeHtml(mail.sender_name)}</div>
+        <div class="email-message-subject"><strong>Subject:</strong> ${escapeHtml(mail.subject)}</div>
+        <div class="email-message-date"><strong>Date:</strong> ${mail.sent_date}</div>
+      </div>
+      <div class="email-message-body">
+        ${escapeHtml(mail.body).split('\n').join('<br>')}
+      </div>
+      <div class="email-message-actions">
+        <button class="btn btn-primary btn-small" id="btn-email-reply" data-mail-id="${mail.id}">Reply</button>
+        <button class="btn btn-warning btn-small" id="btn-email-archive" data-mail-id="${mail.id}">Archive</button>
+      </div>
+    `;
+
+    // Reply button handler
+    document.getElementById('btn-email-reply')?.addEventListener('click', () => {
+      showEmailCompose(mail);
+    });
+
+    // Archive button handler
+    document.getElementById('btn-email-archive')?.addEventListener('click', () => {
+      state.socket.emit('ops:archiveMail', { mailId: mail.id });
+      showNotification('Mail archived', 'success');
+      // Remove from local list and re-render
+      currentMailList = currentMailList.filter(m => m.id !== mail.id);
+      renderEmailInbox(currentMailList);
+      selectedMailId = null;
+      messageView.innerHTML = `
+        <div class="email-no-selection">
+          <p>Select a message to read</p>
+        </div>
+      `;
+    });
+  }
+
+  // Hide compose view
+  const composeView = document.getElementById('email-compose-view');
+  if (composeView) {
+    composeView.classList.add('hidden');
+  }
+}
+
+function showEmailCompose(replyTo = null) {
+  const messageView = document.getElementById('email-message-view');
+  const composeView = document.getElementById('email-compose-view');
+
+  if (!composeView) return;
+
+  // Clear and setup compose form - match HTML element IDs
+  const recipientSpan = document.getElementById('compose-recipient');
+  const subjectField = document.getElementById('compose-subject-input');
+  const bodyField = document.getElementById('compose-body-input');
+
+  if (replyTo) {
+    if (recipientSpan) recipientSpan.textContent = replyTo.sender_name;
+    if (subjectField) subjectField.value = `Re: ${replyTo.subject}`;
+    if (bodyField) {
+      bodyField.value = '';
+      bodyField.placeholder = 'Type your reply...';
+    }
+    composeView.dataset.replyToId = replyTo.id;
+    composeView.dataset.replyToSender = replyTo.sender_name;
+  } else {
+    if (recipientSpan) recipientSpan.textContent = 'GM';
+    if (subjectField) subjectField.value = '';
+    if (bodyField) {
+      bodyField.value = '';
+      bodyField.placeholder = 'Type your message...';
+    }
+    delete composeView.dataset.replyToId;
+    delete composeView.dataset.replyToSender;
+  }
+
+  // Show compose, hide message view content
+  if (messageView) {
+    messageView.innerHTML = '';
+  }
+  composeView.classList.remove('hidden');
+
+  // Focus the body field
+  if (bodyField) bodyField.focus();
+}
+
+function sendEmail() {
+  const composeView = document.getElementById('email-compose-view');
+  const subjectField = document.getElementById('compose-subject-input');
+  const bodyField = document.getElementById('compose-body-input');
+
+  const subject = subjectField?.value?.trim();
+  const body = bodyField?.value?.trim();
+
+  if (!body) {
+    showError('Please enter a message');
+    return;
+  }
+
+  const replyToId = composeView?.dataset?.replyToId;
+  const replyToSender = composeView?.dataset?.replyToSender;
+
+  if (replyToId) {
+    // Reply to existing mail
+    state.socket.emit('ops:replyToMail', {
+      originalMailId: replyToId,
+      subject: subject || 'Re: (no subject)',
+      body
+    });
+  } else {
+    // New mail to GM
+    state.socket.emit('ops:sendMail', {
+      to: 'GM',
+      subject: subject || '(no subject)',
+      body
+    });
+  }
+
+  showNotification('Message sent', 'success');
+
+  // Clear and hide compose
+  if (subjectField) subjectField.value = '';
+  if (bodyField) bodyField.value = '';
+  composeView.classList.add('hidden');
+
+  // Request updated mail list
+  state.socket.emit('ops:getMail');
+}
+
+function cancelEmailCompose() {
+  const composeView = document.getElementById('email-compose-view');
+  const messageView = document.getElementById('email-message-view');
+
+  if (composeView) {
+    composeView.classList.add('hidden');
+  }
+
+  // If we had a selected message, re-show it
+  if (selectedMailId) {
+    selectEmailMessage(selectedMailId);
+  } else if (messageView) {
+    messageView.innerHTML = `
+      <div class="email-no-selection">
+        <p>Select a message to read</p>
+      </div>
+    `;
+  }
+}
+
+function initEmailAppHandlers() {
+  // Close button
+  document.getElementById('btn-close-email-app')?.addEventListener('click', closeEmailApp);
+
+  // Compose button
+  document.getElementById('btn-compose-email')?.addEventListener('click', () => {
+    showEmailCompose(null);
+  });
+
+  // Send button in compose view
+  document.getElementById('btn-send-email')?.addEventListener('click', sendEmail);
+
+  // Cancel button in compose view
+  document.getElementById('btn-cancel-compose')?.addEventListener('click', cancelEmailCompose);
 }
 
 // ==================== Crew Roster (Stage 11.4) ====================
@@ -5600,6 +6083,63 @@ function showHandoutDetail(handoutId) {
   showModalContent(html);
 }
 
+// ==================== Expandable Role Panel (Stage 13.3) ====================
+
+/**
+ * Expand role panel to half-screen or full-screen mode
+ * @param {string} mode - 'half' or 'full'
+ */
+function expandRolePanel(mode) {
+  const rolePanel = document.getElementById('role-panel');
+  const bridgeMain = document.querySelector('.bridge-main');
+
+  // Collapse any existing expansion first
+  collapseRolePanel();
+
+  if (mode === 'half') {
+    bridgeMain.classList.add('role-expanded-half');
+    // Also show detail view in half-screen mode
+    const detail = document.getElementById('role-detail-view');
+    detail?.classList.remove('hidden');
+  } else if (mode === 'full') {
+    rolePanel.classList.add('expanded-full');
+    // Also show detail view in full-screen mode
+    const detail = document.getElementById('role-detail-view');
+    detail?.classList.remove('hidden');
+  }
+
+  // Remember expansion state for this role
+  if (state.selectedRole) {
+    state.rolePanelExpanded = state.rolePanelExpanded || {};
+    state.rolePanelExpanded[state.selectedRole] = mode;
+  }
+}
+
+/**
+ * Collapse role panel back to normal size
+ */
+function collapseRolePanel() {
+  const rolePanel = document.getElementById('role-panel');
+  const bridgeMain = document.querySelector('.bridge-main');
+
+  rolePanel.classList.remove('expanded-full');
+  bridgeMain.classList.remove('role-expanded-half');
+
+  // Clear remembered expansion state
+  if (state.selectedRole && state.rolePanelExpanded) {
+    state.rolePanelExpanded[state.selectedRole] = null;
+  }
+}
+
+/**
+ * Restore expansion state when switching roles
+ */
+function restoreRolePanelExpansion() {
+  if (state.selectedRole && state.rolePanelExpanded?.[state.selectedRole]) {
+    expandRolePanel(state.rolePanelExpanded[state.selectedRole]);
+  }
+}
+
 // ==================== Global Exports for onclick handlers ====================
 // ES6 modules scope functions, but onclick handlers need global access
 window.attemptRepair = attemptRepair;
@@ -5612,7 +6152,17 @@ window.initiateJumpFromPlot = initiateJumpFromPlot;
 window.performScan = performScan;
 window.authorizeWeapons = authorizeWeapons;
 window.fireAtTarget = fireAtTarget;
+window.fireWeapon = fireWeapon;
+window.lockTarget = lockTarget;
+window.selectWeapon = selectWeapon;
+window.togglePointDefense = togglePointDefense;
 window.updateFireButton = updateFireButton;
+// Autorun 14: Combat contact management
+window.showAddCombatContactModal = showAddCombatContactModal;
+window.submitCombatContact = submitCombatContact;
+window.renderCombatContactsList = renderCombatContactsList;
+window.toggleWeaponsFree = toggleWeaponsFree;
+window.removeCombatContact = removeCombatContact;
 window.skipToJumpExit = skipToJumpExit;
 window.showNewsMailModal = showNewsMailModal;
 window.closeNewsMailModal = closeNewsMailModal;
@@ -5653,3 +6203,7 @@ window.queueEmail = queueEmail;
 window.shareHandout = shareHandout;
 window.hideHandout = hideHandout;
 window.showHandoutDetail = showHandoutDetail;
+// Stage 13.3: Expandable Role Panel
+window.expandRolePanel = expandRolePanel;
+window.collapseRolePanel = collapseRolePanel;
+window.restoreRolePanelExpansion = restoreRolePanelExpansion;
