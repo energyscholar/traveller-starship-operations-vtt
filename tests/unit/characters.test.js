@@ -34,6 +34,12 @@ function assertTrue(value, msg = '') {
   }
 }
 
+function assertFalse(value, msg = '') {
+  if (value) {
+    throw new Error(`${msg} Expected false, got ${value}`);
+  }
+}
+
 function assertDeepEqual(actual, expected, msg = '') {
   if (JSON.stringify(actual) !== JSON.stringify(expected)) {
     throw new Error(`${msg} Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
@@ -198,6 +204,131 @@ test('deleteCharacter removes character', () => {
   const result = characters.deleteCharacter(testCharId);
   assertTrue(result);
   assertEqual(characters.getCharacter(testCharId), null);
+});
+
+// AR-19: Character Import Validation Tests
+console.log('\nCharacter Import Validation (8 tests):');
+
+test('validateCharacterImport accepts valid data', () => {
+  const result = characters.validateCharacterImport({
+    name: 'Test Character',
+    upp: '789A87',
+    skills: { Pilot: 2, Gunnery: 1 }
+  });
+  assertTrue(result.valid);
+  assertEqual(result.errors.length, 0);
+  assertEqual(result.sanitized.name, 'Test Character');
+});
+
+test('validateCharacterImport requires name', () => {
+  const result = characters.validateCharacterImport({
+    upp: '789A87'
+  });
+  assertFalse(result.valid);
+  assertTrue(result.errors.some(e => e.includes('name')));
+});
+
+test('validateCharacterImport validates UPP format', () => {
+  const result = characters.validateCharacterImport({
+    name: 'Test',
+    upp: 'invalid'
+  });
+  assertFalse(result.valid);
+  assertTrue(result.errors.some(e => e.includes('UPP')));
+});
+
+test('validateCharacterImport validates stat ranges', () => {
+  const result = characters.validateCharacterImport({
+    name: 'Test',
+    stats: { str: 20 }
+  });
+  assertFalse(result.valid);
+  assertTrue(result.errors.some(e => e.includes('STR')));
+});
+
+test('validateCharacterImport sanitizes skills', () => {
+  const result = characters.validateCharacterImport({
+    name: 'Test',
+    skills: { Pilot: 3, Invalid: 10 }
+  });
+  assertTrue(result.valid);
+  assertEqual(result.sanitized.skills.Pilot, 3);
+  assertEqual(result.sanitized.skills.Invalid, undefined);
+});
+
+test('validateCharacterImport validates age', () => {
+  const result = characters.validateCharacterImport({
+    name: 'Test',
+    age: -5
+  });
+  assertFalse(result.valid);
+  assertTrue(result.errors.some(e => e.includes('Age')));
+});
+
+test('validateCharacterImport sanitizes careers', () => {
+  const result = characters.validateCharacterImport({
+    name: 'Test',
+    careers: [{ name: 'Navy', terms: 3 }]
+  });
+  assertTrue(result.valid);
+  assertEqual(result.sanitized.careers.length, 1);
+  assertEqual(result.sanitized.careers[0].name, 'Navy');
+});
+
+test('validateCharacterImport sanitizes equipment', () => {
+  const result = characters.validateCharacterImport({
+    name: 'Test',
+    equipment: [{ name: 'Cloth Armor' }]
+  });
+  assertTrue(result.valid);
+  assertEqual(result.sanitized.equipment.length, 1);
+  assertEqual(result.sanitized.equipment[0].quantity, 1);
+});
+
+// AR-19: Fuzzy Text Parsing Tests
+console.log('\nFuzzy Text Parsing (6 tests):');
+
+test('parseFuzzyText parses valid JSON', () => {
+  const json = JSON.stringify({ name: 'Marcus Cole', upp: '789A87', skills: { Pilot: 2 } });
+  const result = characters.parseFuzzyText(json);
+  assertEqual(result.confidence, 100);
+  assertEqual(result.data.name, 'Marcus Cole');
+});
+
+test('parseFuzzyText extracts name from text', () => {
+  const text = 'Marcus Cole\nUPP: 789A87\nSkills: Pilot-2';
+  const result = characters.parseFuzzyText(text);
+  assertEqual(result.data.name, 'Marcus Cole');
+  assertTrue(result.confidence >= 40);
+});
+
+test('parseFuzzyText extracts UPP', () => {
+  const text = 'Name: Test\nUPP: 789A87\n';
+  const result = characters.parseFuzzyText(text);
+  assertEqual(result.data.stats.str, 7);
+  assertEqual(result.data.stats.int, 10);
+});
+
+test('parseFuzzyText extracts skills', () => {
+  const text = 'Test Character\nSkills: Pilot-2, Gunnery-1, Astrogation-1';
+  const result = characters.parseFuzzyText(text);
+  // parseSkills may extract different patterns - check that something was found
+  assertTrue(Object.keys(result.data.skills).length >= 2);
+  assertEqual(result.data.skills.Gunnery, 1);
+  assertEqual(result.data.skills.Astrogation, 1);
+});
+
+test('parseFuzzyText extracts credits', () => {
+  const text = 'Test\nCredits: 10,000\nPilot-1';
+  const result = characters.parseFuzzyText(text);
+  assertEqual(result.data.credits, 10000);
+});
+
+test('parseFuzzyText returns warnings for incomplete data', () => {
+  const text = 'Just a name';
+  const result = characters.parseFuzzyText(text);
+  assertTrue(result.warnings.length > 0);
+  assertTrue(result.confidence < 50);
 });
 
 // Cleanup

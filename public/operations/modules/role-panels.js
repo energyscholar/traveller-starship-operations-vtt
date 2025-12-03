@@ -247,7 +247,7 @@ function getEngineerPanel(shipState, template, systemStatus, damagedSystems, fue
         <select id="repair-target" class="repair-select">
           ${damagedSystems.map(s => `<option value="${s}">${formatSystemName(s)}</option>`).join('')}
         </select>
-        <button onclick="attemptRepair()" class="btn btn-small">Attempt Repair</button>
+        <button onclick="attemptRepair()" class="btn btn-small" title="Roll Engineer check (8+) to repair selected system. DM penalty equals damage severity.">Attempt Repair</button>
       </div>
       <div class="repair-info">
         <small>Engineer check (8+) with DM = -Severity</small>
@@ -255,7 +255,7 @@ function getEngineerPanel(shipState, template, systemStatus, damagedSystems, fue
     </div>
     ` : ''}
     <div class="detail-section">
-      <h4>Fuel Status</h4>
+      <h4 title="Fuel is consumed by maneuver drives and jump drives. Unrefined fuel risks misjump.">Fuel Status</h4>
       <div class="fuel-display">
         <div class="fuel-total">
           <span class="fuel-amount">${fs.total}/${fs.max}</span>
@@ -280,9 +280,9 @@ function getEngineerPanel(shipState, template, systemStatus, damagedSystems, fue
       </div>
       ` : ''}
       <div class="fuel-actions">
-        <button onclick="openRefuelModal()" class="btn btn-small">Refuel</button>
+        <button onclick="openRefuelModal()" class="btn btn-small" title="Refuel ship from starport, gas giant, or water source">Refuel</button>
         ${fs.fuelProcessor && fuelBreakdown.unrefined > 0 ? `
-        <button onclick="openProcessFuelModal()" class="btn btn-small">Process Fuel</button>
+        <button onclick="openProcessFuelModal()" class="btn btn-small" title="Process unrefined fuel to remove misjump risk (takes time)">Process Fuel</button>
         ` : ''}
       </div>
       ${fs.processing ? `
@@ -325,6 +325,10 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
   const hasTargets = hostileContacts.length > 0;
   const hasWeapons = weapons.length > 0;
 
+  // Selected weapon (from state or first available)
+  const selectedWeaponId = shipState.selectedWeapon || (weapons[0]?.id || 0);
+  const selectedWeapon = weapons.find(w => (w.id || weapons.indexOf(w)) === selectedWeaponId) || weapons[0];
+
   // Selected target (from state or first available)
   const selectedTargetId = shipState.lockedTarget || (hostileContacts[0]?.id);
   const selectedTarget = hostileContacts.find(c => c.id === selectedTargetId);
@@ -340,16 +344,46 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
     }
   };
 
-  // Range band DM display
+  // Range band DM calculation
   const getRangeDM = (band) => {
-    const dms = { adjacent: '+1', close: '+0', short: '+0', medium: '-1', long: '-2', extreme: '-4', distant: '-6' };
-    return dms[band] || '-4';
+    const dms = { adjacent: 1, close: 0, short: 0, medium: -1, long: -2, extreme: -4, distant: -6 };
+    return dms[band] ?? -4;
   };
+
+  const formatRangeDM = (dm) => dm >= 0 ? `+${dm}` : `${dm}`;
+
+  // AR-15.6: Calculate hit probability
+  const calculateHitProbability = (weapon, target, gunnerySkill = 0) => {
+    if (!weapon || !target) return null;
+    const rangeDM = getRangeDM(target.range_band);
+    const totalDM = gunnerySkill + rangeDM;
+    // 2D6 >= 8 - DM to hit
+    const targetNumber = 8 - totalDM;
+    // Probability calculation for 2D6
+    let successCount = 0;
+    for (let d1 = 1; d1 <= 6; d1++) {
+      for (let d2 = 1; d2 <= 6; d2++) {
+        if (d1 + d2 >= targetNumber) successCount++;
+      }
+    }
+    return Math.round((successCount / 36) * 100);
+  };
+
+  // Calculate hit chance for selected weapon/target
+  const gunnerySkill = shipState.gunnerySkill || 0;
+  const hitChance = selectedWeapon && selectedTarget
+    ? calculateHitProbability(selectedWeapon, selectedTarget, gunnerySkill)
+    : null;
+
+  // Group weapons by type for selector
+  const weaponTypes = [...new Set(weapons.map(w => w.weapon_type || w.type || 'beam'))];
+  const hasMissiles = weapons.some(w => (w.weapon_type || w.type || '').toLowerCase().includes('missile'));
 
   return `
     <div class="detail-section gunner-header">
       <h4>GUNNER STATION ${assignedTurret ? `- TURRET ${assignedTurret}` : ''}</h4>
-      <div class="gunner-status-badge ${hasTargets ? 'weapons-free' : 'weapons-hold'}">
+      <div class="gunner-status-badge ${hasTargets ? 'weapons-free' : 'weapons-hold'}"
+           title="${hasTargets ? 'Captain has authorized weapons fire on hostile contacts' : 'Awaiting Captain authorization or hostile contact detection'}">
         ${hasTargets ? 'WEAPONS FREE' : 'WEAPONS HOLD'}
       </div>
     </div>
@@ -364,52 +398,76 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
         </div>
       ` : `
         <div class="target-list">
-          ${hostileContacts.map(c => `
+          ${hostileContacts.map(c => {
+            const targetHitChance = selectedWeapon ? calculateHitProbability(selectedWeapon, c, gunnerySkill) : null;
+            return `
             <div class="target-item ${c.id === selectedTargetId ? 'selected' : ''}"
-                 onclick="lockTarget('${c.id}')" data-contact-id="${c.id}">
+                 onclick="lockTarget('${c.id}')" data-contact-id="${c.id}"
+                 title="Click to lock target${targetHitChance ? ` - ${targetHitChance}% hit chance` : ''}">
               <div class="target-header">
                 <span class="target-indicator">${c.id === selectedTargetId ? '◉' : '○'}</span>
                 <span class="target-name">${escapeHtml(c.name || 'Unknown')}</span>
                 <span class="target-disposition ${c.disposition || 'unknown'}">${c.disposition || '?'}</span>
               </div>
               <div class="target-details">
-                <span class="target-range">${c.range_band || 'Unknown'} (${getRangeDM(c.range_band)} DM)</span>
+                <span class="target-range">${c.range_band || 'Unknown'} (${formatRangeDM(getRangeDM(c.range_band))} DM)</span>
                 <span class="target-distance">${c.range_km || '?'}km</span>
+                ${targetHitChance !== null ? `<span class="target-hit-chance">${targetHitChance}%</span>` : ''}
               </div>
               <div class="target-health-bar">
                 <div class="health-fill" style="width: ${Math.max(0, (c.health / (c.max_health || 100)) * 100)}%"></div>
                 <span class="health-text">${c.health || 0}/${c.max_health || 100}</span>
               </div>
             </div>
-          `).join('')}
+          `}).join('')}
         </div>
       `}
     </div>
 
     <div class="detail-section weapons-section">
       <h4>WEAPONS</h4>
+      ${hasWeapons && weapons.length > 1 ? `
+      <div class="weapon-selector-dropdown">
+        <label for="weapon-type-select">Active Weapon:</label>
+        <select id="weapon-type-select" class="weapon-select" onchange="selectWeaponByIndex(this.value)"
+                title="Select weapon to fire">
+          ${weapons.map((w, i) => {
+            const isAssigned = assignedTurret === null || i === assignedTurret - 1;
+            const isMissile = (w.weapon_type || w.type || '').toLowerCase().includes('missile');
+            const ammoText = w.ammo_max !== null && w.ammo_max !== undefined ? ` [${w.ammo_current}/${w.ammo_max}]` : '';
+            return `<option value="${i}" ${!isAssigned ? 'disabled' : ''} ${(w.id || i) === selectedWeaponId ? 'selected' : ''}>
+              ${w.name || 'Weapon ' + (i + 1)}${ammoText}${isMissile ? ' (Missile)' : ''}
+            </option>`;
+          }).join('')}
+        </select>
+      </div>
+      ` : ''}
       <div class="weapons-grid">
         ${hasWeapons ? weapons.map((w, i) => {
           const isAssigned = assignedTurret === null || i === assignedTurret - 1;
+          const isSelected = (w.id || i) === selectedWeaponId;
           const status = w.status || 'ready';
           const hasAmmo = w.ammo_max === null || (w.ammo_current > 0);
+          const isMissile = (w.weapon_type || w.type || '').toLowerCase().includes('missile');
           return `
-            <div class="weapon-card ${isAssigned ? 'assigned' : 'unassigned'} ${getWeaponStatusClass(status)}">
+            <div class="weapon-card ${isAssigned ? 'assigned' : 'unassigned'} ${isSelected ? 'selected' : ''} ${getWeaponStatusClass(status)}"
+                 onclick="selectWeaponByIndex(${i})" title="${w.name || 'Weapon ' + (i + 1)}: ${w.damage || '2d6'} damage, ${w.range || 'Medium'} range">
               <div class="weapon-header">
-                <input type="radio" name="weapon-select" value="${w.id || i}"
-                       ${i === 0 ? 'checked' : ''} ${!isAssigned ? 'disabled' : ''}
-                       onchange="selectWeapon('${w.id || i}')">
+                <span class="weapon-select-indicator">${isSelected ? '◉' : '○'}</span>
                 <span class="weapon-name">${w.name || 'Weapon ' + (i + 1)}</span>
                 <span class="weapon-mount">${w.mount || 'Turret'}</span>
+                ${isMissile ? '<span class="weapon-type-badge missile">MSL</span>' : ''}
               </div>
               <div class="weapon-stats">
-                <span class="weapon-range">Range: ${w.range || 'Medium'}</span>
-                <span class="weapon-damage">Damage: ${w.damage || '2d6'}</span>
+                <span class="weapon-range" title="Optimal engagement range">Range: ${w.range || 'Medium'}</span>
+                <span class="weapon-damage" title="Damage on hit">Damage: ${w.damage || '2d6'}</span>
               </div>
               ${w.ammo_max !== null && w.ammo_max !== undefined ? `
-                <div class="weapon-ammo">
+                <div class="weapon-ammo" title="${w.ammo_current} rounds remaining of ${w.ammo_max}">
                   <span class="ammo-label">Ammo:</span>
-                  <span class="ammo-count ${w.ammo_current <= 3 ? 'ammo-low' : ''}">${w.ammo_current}/${w.ammo_max}</span>
+                  <span class="ammo-count ${w.ammo_current <= 3 ? 'ammo-low' : ''} ${w.ammo_current === 0 ? 'ammo-empty' : ''}">${w.ammo_current}/${w.ammo_max}</span>
+                  ${isMissile && w.ammo_current > 0 ? '<span class="ammo-ready">LOADED</span>' : ''}
+                  ${w.ammo_current === 0 ? '<span class="ammo-depleted">DEPLETED</span>' : ''}
                 </div>
               ` : ''}
               <div class="weapon-status-indicator">${status.toUpperCase()}</div>
@@ -420,12 +478,21 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
     </div>
 
     <div class="detail-section fire-control-section">
+      ${hitChance !== null && hasTargets ? `
+      <div class="hit-probability-display" title="Calculated from: 2D6 + Gunnery ${gunnerySkill >= 0 ? '+' : ''}${gunnerySkill} + Range DM ${formatRangeDM(getRangeDM(selectedTarget?.range_band))} >= 8">
+        <span class="hit-label">Hit Chance:</span>
+        <span class="hit-value ${hitChance >= 70 ? 'hit-high' : hitChance >= 40 ? 'hit-medium' : 'hit-low'}">${hitChance}%</span>
+        <span class="hit-breakdown">(2D6 + ${gunnerySkill} ${formatRangeDM(getRangeDM(selectedTarget?.range_band))} >= 8)</span>
+      </div>
+      ` : ''}
       <div class="fire-buttons">
         <button onclick="fireWeapon()" class="btn btn-danger btn-fire"
+                title="${hasTargets ? `Fire ${selectedWeapon?.name || 'weapon'} at ${selectedTarget?.name || 'target'}${hitChance ? ` (${hitChance}% hit chance)` : ''}` : 'No target locked - awaiting hostile contacts or Captain authorization'}"
                 ${!hasTargets || !hasWeapons ? 'disabled' : ''}>
-          FIRE!
+          ${selectedWeapon && (selectedWeapon.weapon_type || selectedWeapon.type || '').toLowerCase().includes('missile') ? 'LAUNCH!' : 'FIRE!'}
         </button>
         <button onclick="togglePointDefense()" class="btn btn-warning btn-point-defense"
+                title="Point Defense: Automatically intercept incoming missiles. Uses ammo each round."
                 ${!hasWeapons ? 'disabled' : ''}>
           Point Defense
         </button>
@@ -452,7 +519,7 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
     </div>
 
     <div class="detail-section gunner-skill-note">
-      <small>Attack: 2D6 + Gunnery skill + Range DM >= 8 to hit</small>
+      <small>Attack: 2D6 + Gunnery skill + Range DM >= 8 to hit | Critical: Effect 6+</small>
     </div>
   `;
 }
@@ -520,7 +587,8 @@ function getCaptainPanel(shipState, template, ship, crewOnline, contacts) {
                 <option value="${c.id}">${escapeHtml(c.name || 'Unknown')} (${c.type || 'Unknown'}) - ${c.range_band || 'Unknown'}</option>
               `).join('')}
             </select>
-            <button onclick="authorizeWeapons()" class="btn btn-warning btn-small">
+            <button onclick="authorizeWeapons()" class="btn btn-warning btn-small"
+                    title="Authorize gunners to engage this target. Required before weapons can fire.">
               Authorize Weapons Free
             </button>
           </div>
@@ -589,13 +657,13 @@ function getSensorOperatorPanel(shipState, contacts) {
     <div class="detail-section">
       <h4>Sensor Controls</h4>
       <div class="sensor-scan-buttons">
-        <button onclick="performScan('passive')" class="btn btn-small" title="Detect transponders and celestials only">
+        <button onclick="performScan('passive')" class="btn btn-small" title="Passive Scan: Detect transponders and celestials only. Does not reveal your position.">
           Passive Scan
         </button>
-        <button onclick="performScan('active')" class="btn btn-small btn-warning" title="Full sweep - may reveal our position!">
+        <button onclick="performScan('active')" class="btn btn-small btn-warning" title="Active Scan: Full sensor sweep. WARNING: May reveal your position to other ships!">
           Active Scan
         </button>
-        <button onclick="performScan('deep')" class="btn btn-small btn-danger" title="Deep scan - definitely detected!">
+        <button onclick="performScan('deep')" class="btn btn-small btn-danger" title="Deep Scan: Detailed analysis of contacts. CAUTION: Definitely reveals your position!">
           Deep Scan
         </button>
       </div>
@@ -663,6 +731,12 @@ function getSensorOperatorPanel(shipState, contacts) {
 function getAstrogatorPanel(shipState, template, jumpStatus, campaign, systemStatus) {
   const jumpRating = template.jumpRating || 2;
   const fuelAvailable = shipState.fuel ?? template.fuel ?? 40;
+  const tonnage = template.tonnage || 100;
+  const fuelPerParsec = Math.round(tonnage * 0.1); // 10% of tonnage per parsec
+
+  // AR-15.8: Calculate max jump range based on fuel
+  const maxJumpWithFuel = Math.min(jumpRating, Math.floor(fuelAvailable / fuelPerParsec));
+  const jDriveDisabled = systemStatus?.jDrive?.disabled;
 
   if (jumpStatus.inJump) {
     return `
@@ -687,7 +761,7 @@ function getAstrogatorPanel(shipState, template, jumpStatus, campaign, systemSta
           </div>
         </div>
         ${jumpStatus.canExit ? `
-          <button onclick="completeJump()" class="btn btn-primary">Exit Jump Space</button>
+          <button onclick="completeJump()" class="btn btn-primary" title="Exit jump space at destination">Exit Jump Space</button>
         ` : `
           <div class="jump-skip-testing">
             <button onclick="skipToJumpExit()" class="btn btn-secondary btn-small" title="Testing: Advance time to jump exit">
@@ -712,15 +786,21 @@ function getAstrogatorPanel(shipState, template, jumpStatus, campaign, systemSta
         </div>
         <div class="stat-row">
           <span>Jump Drive:</span>
-          <span class="stat-value">${systemStatus?.jDrive?.disabled ? 'DAMAGED' : 'Operational'}</span>
+          <span class="stat-value ${jDriveDisabled ? 'text-danger' : ''}">${jDriveDisabled ? 'DAMAGED' : 'Operational'}</span>
         </div>
-        <div class="stat-row">
+        <div class="stat-row" title="Maximum jump distance capability">
           <span>Jump Rating:</span>
           <span class="stat-value">J-${jumpRating}</span>
         </div>
-        <div class="stat-row">
+        <div class="stat-row" title="${fuelAvailable} tons available, ${fuelPerParsec} tons per parsec">
           <span>Fuel Available:</span>
-          <span class="stat-value">${fuelAvailable} tons</span>
+          <span class="stat-value ${fuelAvailable < fuelPerParsec ? 'text-danger' : ''}">${fuelAvailable} tons</span>
+        </div>
+        <div class="stat-row" title="Maximum jump distance with current fuel">
+          <span>Max Jump Range:</span>
+          <span class="stat-value ${maxJumpWithFuel < jumpRating ? 'text-warning' : 'text-success'}">
+            J-${maxJumpWithFuel} ${maxJumpWithFuel < jumpRating ? '(fuel limited)' : ''}
+          </span>
         </div>
       </div>
     </div>
@@ -728,21 +808,33 @@ function getAstrogatorPanel(shipState, template, jumpStatus, campaign, systemSta
     <div class="detail-section jump-map-section">
       <h4>Jump Map</h4>
       <div class="jump-map-controls">
-        <select id="jump-map-range" class="jump-select" onchange="updateJumpMap()">
-          ${[...Array(jumpRating)].map((_, i) => `
-            <option value="${i+1}">J-${i+1} Range</option>
-          `).join('')}
+        <select id="jump-map-range" class="jump-select" onchange="updateJumpMap()" title="Display systems within jump range">
+          ${[...Array(jumpRating)].map((_, i) => {
+            const canReach = (i + 1) <= maxJumpWithFuel;
+            return `<option value="${i+1}" ${!canReach ? 'class="jump-out-of-range"' : ''}>
+              J-${i+1} Range${!canReach ? ' (needs fuel)' : ''}
+            </option>`;
+          }).join('')}
         </select>
-        <select id="jump-map-style" class="jump-select" onchange="updateJumpMap()">
+        <select id="jump-map-style" class="jump-select" onchange="updateJumpMap()" title="Map display style">
           <option value="terminal">Terminal</option>
           <option value="poster">Poster</option>
           <option value="candy">Candy</option>
           <option value="atlas">Atlas</option>
         </select>
+        <select id="jump-map-size" class="jump-select" onchange="setMapSize(this.value)" title="Map display size">
+          <option value="small">Small</option>
+          <option value="medium" selected>Medium</option>
+          <option value="large">Large</option>
+          <option value="full">Full Screen</option>
+        </select>
       </div>
-      <div id="jump-map-container" class="jump-map-container">
+      <div id="jump-map-container" class="jump-map-container" data-size="medium">
         <img id="jump-map-image" src="" alt="Jump Map" style="display: none;">
         <div class="jump-map-loading">Loading jump map...</div>
+      </div>
+      <div class="jump-map-hint">
+        <small>Drag to pan | Scroll to zoom | Click system for details</small>
       </div>
       <div id="jump-destinations" class="jump-destinations">
         <div class="jump-destinations-loading">Fetching nearby systems...</div>
@@ -755,20 +847,34 @@ function getAstrogatorPanel(shipState, template, jumpStatus, campaign, systemSta
     `}
     <div class="detail-section">
       <h4>Plot Jump Course</h4>
+      ${jDriveDisabled ? `
+      <div class="jump-warning">
+        <span class="warning-icon">⚠</span>
+        <span>Jump drive damaged - repairs required before jump</span>
+      </div>
+      ` : ''}
       <div class="jump-controls">
         <div class="form-group">
           <label for="jump-destination">Destination:</label>
-          <input type="text" id="jump-destination" placeholder="System name (e.g., Ator)" class="jump-input">
+          <input type="text" id="jump-destination" placeholder="System name (e.g., Ator)" class="jump-input"
+                 title="Enter destination system name">
         </div>
         <div class="form-group">
           <label for="jump-distance">Distance:</label>
-          <select id="jump-distance" class="jump-select">
-            ${[...Array(jumpRating)].map((_, i) => `
-              <option value="${i+1}">Jump-${i+1} (${i+1} parsec${i > 0 ? 's' : ''})</option>
-            `).join('')}
+          <select id="jump-distance" class="jump-select" title="Select jump distance (limited by fuel and drive rating)">
+            ${[...Array(jumpRating)].map((_, i) => {
+              const distance = i + 1;
+              const fuelNeeded = distance * fuelPerParsec;
+              const canJump = distance <= maxJumpWithFuel && !jDriveDisabled;
+              return `<option value="${distance}" ${!canJump ? 'disabled' : ''}>
+                Jump-${distance} (${distance} parsec${distance > 1 ? 's' : ''}, ${fuelNeeded}t fuel)${!canJump ? ' - unavailable' : ''}
+              </option>`;
+            }).join('')}
           </select>
         </div>
-        <button onclick="plotJumpCourse()" class="btn btn-secondary">Plot Course</button>
+        <button onclick="plotJumpCourse()" class="btn btn-secondary ${jDriveDisabled || maxJumpWithFuel === 0 ? 'disabled' : ''}"
+                title="${jDriveDisabled ? 'Jump drive damaged' : maxJumpWithFuel === 0 ? 'Insufficient fuel for any jump' : 'Calculate jump coordinates and verify fuel requirements'}"
+                ${jDriveDisabled || maxJumpWithFuel === 0 ? 'disabled' : ''}>Plot Course</button>
       </div>
       <div id="jump-plot-result" class="jump-plot-result" style="display: none;">
         <!-- Populated by plotJumpCourse() -->
@@ -817,7 +923,7 @@ function getDamageControlPanel(shipState, template, systemStatus = {}, damagedSy
         <select id="repair-target" class="repair-select">
           ${damagedSystems.map(s => `<option value="${s}">${formatSystemName(s)}</option>`).join('')}
         </select>
-        <button onclick="attemptRepair()" class="btn btn-small">Attempt Repair</button>
+        <button onclick="attemptRepair()" class="btn btn-small" title="Roll repair check (8+) to fix selected system. DM penalty equals damage severity.">Attempt Repair</button>
       </div>
       <div class="repair-info">
         <small>Repair check (8+) with DM = -Severity</small>

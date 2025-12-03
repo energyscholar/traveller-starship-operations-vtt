@@ -8,6 +8,7 @@ import { SHIP_ASCII_ART, getShipAsciiArt } from './modules/ascii-art.js';
 import { escapeHtml, formatRoleName, formatActionName, formatRange, getRangeClass, formatRangeBand, formatSystemName, getStatusColor, getContactIcon } from './modules/utils.js';
 import { UWP_DATA, decodeUWP, formatUWPTooltip, getUWPSummary, createUWPSpan, initUWPTooltips } from './modules/uwp-decoder.js';
 import { formatSkillName, formatCharacterTooltip, initCharacterTooltips } from './modules/tooltips.js';
+import tooltipStrategy from './modules/tooltips-strategy.js';
 import { getRoleDetailContent, getActionMessage, renderSystemStatusItem } from './modules/role-panels.js';
 import * as combat from './modules/combat.js';
 import { show, hide, toggle, setText, getValue } from './modules/dom-helpers.js';
@@ -1212,7 +1213,15 @@ function renderPlayerSlots() {
     return;
   }
 
-  container.innerHTML = state.players.map(p => `
+  // AR-16: Deduplicate players by ID
+  const seenIds = new Set();
+  const uniquePlayers = state.players.filter(p => {
+    if (seenIds.has(p.id)) return false;
+    seenIds.add(p.id);
+    return true;
+  });
+
+  container.innerHTML = uniquePlayers.map(p => `
     <div class="slot-item ${p.character_name ? 'has-character' : ''}" data-player-id="${p.id}">
       <div>
         <div class="slot-name">${escapeHtml(p.slot_name)}</div>
@@ -2039,17 +2048,27 @@ function renderCrewList() {
   };
 
   // Add online players (always filter out GM entries - GM is observer, not crew)
+  // AR-16: Deduplicate by accountId to prevent duplicate entries
+  const seenAccountIds = new Set();
   state.crewOnline.forEach(c => {
     // Always skip GM entries - GM should never appear in crew list
     if (c.role === 'gm' || c.isGM) {
       return;
+    }
+    // Dedupe by accountId
+    const accountId = c.id || c.accountId;
+    if (accountId && seenAccountIds.has(accountId)) {
+      return; // Skip duplicate
+    }
+    if (accountId) {
+      seenAccountIds.add(accountId);
     }
     // Determine if this is the current user
     // GM is never "you" in crew list - they're an observer
     // For players, must have valid matching IDs (non-empty strings)
     const playerId = state.player?.id;
     const playerAccountId = state.player?.accountId;
-    const crewId = c.id || c.accountId;
+    const crewId = accountId;
     const isYou = !state.isGM && crewId && (
       (playerId && typeof playerId === 'string' && playerId === crewId) ||
       (playerAccountId && typeof playerAccountId === 'string' && playerAccountId === crewId)
@@ -2060,7 +2079,7 @@ function renderCrewList() {
       isNPC: false,
       isOnline: true,
       isYou: isYou,
-      accountId: c.id || c.accountId,  // Server sends 'id', map to accountId
+      accountId: accountId,  // Server sends 'id', map to accountId
       characterData: c.character_data
     });
   });
@@ -2965,6 +2984,64 @@ function showModal(templateId) {
   }
 
   if (templateId === 'template-character-import') {
+    // AR-19.3-4: File upload and drag-drop handlers
+    const dropZone = document.getElementById('char-file-drop');
+    const fileInput = document.getElementById('char-file-input');
+    const pasteArea = document.getElementById('char-paste');
+    const statusEl = document.getElementById('parse-status');
+
+    // Handle file selection
+    const handleFile = (file) => {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        pasteArea.value = e.target.result;
+        // Auto-trigger parse
+        document.getElementById('btn-parse-character').click();
+      };
+      reader.onerror = () => {
+        statusEl.textContent = 'Error reading file';
+        statusEl.className = 'parse-status error';
+      };
+      reader.readAsText(file);
+    };
+
+    // File input change handler
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    });
+
+    // Drag and drop handlers
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.add('drag-over');
+    });
+
+    dropZone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.remove('drag-over');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.remove('drag-over');
+      if (e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    // Click on drop zone opens file dialog
+    dropZone.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'LABEL') {
+        fileInput.click();
+      }
+    });
+
     // Parse button - extract data from pasted text
     document.getElementById('btn-parse-character').addEventListener('click', () => {
       const text = document.getElementById('char-paste').value.trim();
@@ -4164,6 +4241,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Stage 7: Initialize character tooltip system
   initCharacterTooltips();
+
+  // AR-15.1: Initialize tooltip strategy system
+  tooltipStrategy.init();
 
   // AR-16.4: Event delegation for crew list buttons (security - avoid inline onclick)
   document.addEventListener('click', (e) => {

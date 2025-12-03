@@ -926,8 +926,11 @@ input[type="checkbox"] {
   background: var(--accent-cyan);
 }
 
+/* AR-15.9: Power bar with gradient (green→yellow→red as power decreases) */
 .status-bar.power-bar {
-  background: var(--alert-yellow);
+  background: linear-gradient(90deg, var(--alert-red), var(--alert-yellow), var(--alert-normal));
+  background-size: 300% 100%;
+  background-position: 100% 0;
 }
 
 .status-value {
@@ -1338,11 +1341,35 @@ input[type="checkbox"] {
 .jump-map-container {
   background: #000;
   border-radius: var(--radius-sm);
-  overflow: hidden;
+  overflow: auto;
   min-height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: grab;
+  transition: height 0.3s ease;
+}
+
+.jump-map-container:active {
+  cursor: grabbing;
+}
+
+/* AR-15.7: Map Size Options */
+.jump-map-container[data-size="small"] {
+  height: 150px;
+}
+
+.jump-map-container[data-size="medium"] {
+  height: 250px;
+}
+
+.jump-map-container[data-size="large"] {
+  height: 400px;
+}
+
+.jump-map-container[data-size="full"] {
+  height: 70vh;
+  min-height: 500px;
 }
 
 .jump-map-container img {
@@ -1353,6 +1380,52 @@ input[type="checkbox"] {
 .jump-map-loading {
   color: var(--text-secondary);
   font-size: 12px;
+}
+
+/* AR-15.7: Map Hint */
+.jump-map-hint {
+  text-align: center;
+  padding: var(--space-xs);
+  color: var(--text-muted);
+}
+
+.jump-map-hint small {
+  font-size: 0.75rem;
+}
+
+/* AR-15.8: Jump Warning */
+.jump-warning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--accent-red);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+  color: var(--accent-red);
+}
+
+.jump-warning .warning-icon {
+  font-size: 1.2rem;
+}
+
+/* AR-15.8: Jump Out of Range Indicator */
+.jump-out-of-range {
+  color: var(--text-muted);
+}
+
+/* Text color utilities */
+.text-danger {
+  color: var(--accent-red) !important;
+}
+
+.text-warning {
+  color: var(--accent-yellow) !important;
+}
+
+.text-success {
+  color: var(--accent-green) !important;
 }
 
 .jump-destinations {
@@ -1989,6 +2062,71 @@ input[type="checkbox"] {
   gap: var(--space-sm);
   padding: var(--space-md) var(--space-lg);
   border-top: 1px solid var(--border-color);
+}
+
+/* Character Import file drop zone (AR-19.3-4) */
+.file-drop-zone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-darker);
+}
+
+.file-drop-zone:hover,
+.file-drop-zone.drag-over {
+  border-color: var(--accent-primary);
+  background: rgba(0, 150, 255, 0.1);
+}
+
+.file-drop-zone .drop-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--space-sm);
+  opacity: 0.7;
+}
+
+.file-drop-zone .drop-text {
+  color: var(--text-secondary);
+}
+
+.file-drop-zone .file-label {
+  color: var(--accent-primary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.import-divider-or {
+  position: relative;
+  text-align: center;
+  margin: var(--space-md) 0;
+}
+
+.import-divider-or::before,
+.import-divider-or::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.import-divider-or::before {
+  left: 0;
+}
+
+.import-divider-or::after {
+  right: 0;
+}
+
+.import-divider-or span {
+  background: var(--bg-dark);
+  padding: 0 var(--space-sm);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
 }
 
 /* Character Import paste section */
@@ -5536,6 +5674,138 @@ input[type="checkbox"] {
   flex: 1;
   padding: var(--space-md);
   font-size: 12px;
+}
+
+/* AR-15.4: Weapon Selector Dropdown */
+.weapon-selector-dropdown {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm);
+  background: var(--bg-dark);
+  border-radius: var(--radius-md);
+}
+
+.weapon-selector-dropdown label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.weapon-select {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.weapon-select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+/* AR-15.4: Weapon Card Selection */
+.weapon-card.selected {
+  border-color: var(--accent-green);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.weapon-select-indicator {
+  color: var(--accent-green);
+  font-size: 1.1rem;
+  margin-right: var(--space-xs);
+}
+
+/* AR-15.5: Missile Badge */
+.weapon-type-badge {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.weapon-type-badge.missile {
+  background: var(--accent-orange);
+  color: var(--bg-dark);
+}
+
+.ammo-ready {
+  font-size: 0.65rem;
+  color: var(--accent-green);
+  padding: 2px 4px;
+  border: 1px solid var(--accent-green);
+  border-radius: var(--radius-sm);
+  margin-left: var(--space-xs);
+}
+
+.ammo-depleted {
+  font-size: 0.65rem;
+  color: var(--accent-red);
+  padding: 2px 4px;
+  border: 1px solid var(--accent-red);
+  border-radius: var(--radius-sm);
+  margin-left: var(--space-xs);
+}
+
+.ammo-empty {
+  color: var(--accent-red);
+}
+
+/* AR-15.6: Hit Probability Display */
+.hit-probability-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  background: var(--bg-dark);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.hit-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.hit-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  min-width: 50px;
+  text-align: center;
+}
+
+.hit-value.hit-high {
+  color: var(--accent-green);
+}
+
+.hit-value.hit-medium {
+  color: var(--accent-yellow);
+}
+
+.hit-value.hit-low {
+  color: var(--accent-red);
+}
+
+.hit-breakdown {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* AR-15.6: Target Hit Chance */
+.target-hit-chance {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--accent-blue);
+  padding: 2px 6px;
+  background: rgba(74, 158, 255, 0.15);
+  border-radius: var(--radius-sm);
 }
 
 /* Combat Log Section */

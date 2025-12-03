@@ -8,54 +8,92 @@
 Expand ship library with more templates.
 Collect future TODOs for later prioritization.
 
-## Stages
+---
 
-### 20.1 Core Rulebook Ships (8h) - LOW risk
-| Ship | Tonnage | Notes |
-|------|---------|-------|
-| Scout/Courier | 100 | ✅ Have |
-| Free Trader | 200 | ✅ Have |
-| Far Trader | 200 | Need |
-| Yacht | 200 | Need |
-| Safari Ship | 200 | Need |
-| Seeker | 200 | Need |
-| Patrol Corvette | 400 | Need |
-| Mercenary Cruiser | 800 | ✅ Have |
-| Subsidized Merchant | 400 | Need |
-| Laboratory Ship | 400 | Need |
+## Stage 20.1: Core Rulebook Traders (4h)
 
-### 20.2 Small Craft (4h) - LOW risk
-| Craft | Tonnage | Notes |
-|-------|---------|-------|
-| Ship's Boat | 30 | Need |
-| Pinnace | 40 | Need |
-| Cutter | 50 | Need |
-| Shuttle | 95 | Need |
-| Launch | 20 | Need |
-| Gig | 20 | Need |
+| Ship | Tonnage | Est | Notes |
+|------|---------|-----|-------|
+| Far Trader | 200 | 1h | Extended range variant |
+| Subsidized Merchant | 400 | 1.5h | Subbie |
+| Subsidized Liner | 600 | 1.5h | Passenger variant |
 
-### 20.3 Fighters (3h) - LOW risk
-| Fighter | Tonnage | Notes |
-|---------|---------|-------|
-| Light Fighter | 10 | Need |
-| Medium Fighter | 20 | Need |
-| Heavy Fighter | 50 | Need |
+---
 
-### 20.4 Military Vessels (8h) - MEDIUM risk
-| Vessel | Tonnage | Notes |
-|--------|---------|-------|
-| System Defense Boat | 400 | Need |
-| Patrol Cruiser | 400 | Need |
-| Close Escort | 400 | Need |
-| Destroyer Escort | 1000 | Need |
-| Light Cruiser | 25000 | Need (scaled) |
+## Stage 20.2: Core Rulebook Specials (4h)
 
-### 20.5 High Guard Ships (future) - DEFERRED
-- Capital ships
-- Fleet tenders
-- Assault carriers
+| Ship | Tonnage | Est | Notes |
+|------|---------|-----|-------|
+| Yacht | 200 | 1h | Luxury vessel |
+| Safari Ship | 200 | 1h | Hunting expedition |
+| Laboratory Ship | 400 | 1h | Research vessel |
+| Seeker | 200 | 1h | Mining/prospecting |
 
-## Future TODOs (Collected)
+---
+
+## Stage 20.3: Military Patrol Craft (4h)
+
+| Ship | Tonnage | Est | Notes |
+|------|---------|-----|-------|
+| Patrol Corvette | 400 | 1.5h | System patrol |
+| System Defense Boat | 400 | 1.5h | Non-jump capable |
+| Close Escort | 400 | 1h | Convoy protection |
+
+---
+
+## Stage 20.4: Small Craft - Utility (2h)
+
+| Craft | Tonnage | Est | Notes |
+|-------|---------|-----|-------|
+| Ship's Boat | 30 | 30m | General transport |
+| Pinnace | 40 | 30m | Armed transport |
+| Cutter | 50 | 30m | Modular |
+| Launch | 20 | 30m | Taxi/ferry |
+
+---
+
+## Stage 20.5: Small Craft - Combat (2h)
+
+| Craft | Tonnage | Est | Notes |
+|-------|---------|-----|-------|
+| Light Fighter | 10 | 30m | Interceptor |
+| Medium Fighter | 20 | 30m | Multi-role |
+| Heavy Fighter | 50 | 30m | Attack craft |
+| Shuttle | 95 | 30m | Orbital transport |
+
+---
+
+## Stage 20.6: Destroyers & Cruisers (4h)
+
+| Vessel | Tonnage | Est | Notes |
+|--------|---------|-----|-------|
+| Destroyer Escort | 1000 | 1.5h | Fleet escort |
+| Patrol Cruiser | 400 | 1h | Long-range patrol |
+| Light Cruiser | 25000 | 1.5h | Scaled stats |
+
+---
+
+## Stage 20.7: Ship Template Validation (2h)
+
+| Task | Est | Deliverable |
+|------|-----|-------------|
+| Validate all tonnage math | 45m | Components fit hull |
+| Validate power requirements | 45m | Plant supports drives |
+| Validate crew minimums | 30m | Sufficient berths |
+
+---
+
+## Stage 20.8: Ship JSON Schema (2h)
+
+| Task | Est | Deliverable |
+|------|-----|-------------|
+| Document JSON format | 1h | Schema spec |
+| Add schema validation | 30m | Runtime checks |
+| Example templates | 30m | Reference files |
+
+---
+
+## Stage 20.9: Future TODOs Collection
 
 ### Visual Enhancements
 - [ ] Animated SVGs for crew role actions
@@ -80,6 +118,19 @@ Collect future TODOs for later prioritization.
 - [ ] Foundry VTT bridge
 - [ ] Discord bot integration
 
+---
+
+## Stage 20.10: High Guard Ships (DEFERRED)
+
+| Category | Notes |
+|----------|-------|
+| Capital Ships | Future expansion |
+| Fleet Tenders | Future expansion |
+| Assault Carriers | Future expansion |
+| Battle Riders | Future expansion |
+
+---
+
 ## Dependencies
 - None (content work)
 
@@ -87,3 +138,4 @@ Collect future TODOs for later prioritization.
 - [ ] 20+ ship templates available
 - [ ] All Core Rulebook ships present
 - [ ] Small craft for ship's complement
+- [ ] All templates pass validation

@@ -578,6 +578,19 @@
       <button class="btn-close" data-close-modal>×</button>
     </div>
     <div class="modal-body">
+      <!-- File Upload Section (AR-19.3-4) -->
+      <div class="form-group import-file-section">
+        <div class="file-drop-zone" id="char-file-drop">
+          <input type="file" id="char-file-input" accept=".json,.txt" hidden>
+          <span class="drop-icon">📁</span>
+          <span class="drop-text">Drag & drop JSON file here or <label for="char-file-input" class="file-label">browse</label></span>
+        </div>
+      </div>
+
+      <div class="import-divider-or">
+        <span>OR</span>
+      </div>
+
       <!-- Paste Import Section -->
       <div class="form-group import-paste-section">
         <label for="char-paste">Paste Character Text or JSON:</label>
