@@ -61,9 +61,11 @@ const services = require('./lib/services');
 // SECURITY: Basic security headers
 app.use((req, res, next) => {
   // CSP: Allow self, inline scripts/styles (for onclick handlers), data URLs for images
+  // frame-src allows embedding TravellerMap.com in shared map iframe
   res.setHeader('Content-Security-Policy',
     "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; " +
-    "img-src 'self' data: https:; connect-src 'self' ws: wss:; font-src 'self'"
+    "img-src 'self' data: https:; connect-src 'self' ws: wss:; font-src 'self'; " +
+    "frame-src https://travellermap.com https://*.travellermap.com"
   );
   res.setHeader('X-Content-Type-Options', 'nosniff');
   next();

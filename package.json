@@ -4,7 +4,7 @@
   "description": "Traveller Combat VTT - Multiplayer space combat tracker",
   "main": "server.js",
   "scripts": {
-    "start": "echo '\n👥 Operations VTT: http://localhost:3000\n' && node server.js",
+    "start": "echo '\n👥 Operations VTT: http://localhost:3000\n   If port blocked: lsof -t -i:3000 | xargs kill -9\n' && node server.js",
     "start:fresh": "lsof -t -i:3000 | xargs kill -9 2>/dev/null || true && npm run db:reset && npm run start",
     "start:quick": "lsof -t -i:3000 | xargs kill -9 2>/dev/null || true && npm run start",
     "dev": "echo '\n🎮 SINGLE-PLAYER TEST MODE: http://localhost:3000/test.html\n' && node server.js",

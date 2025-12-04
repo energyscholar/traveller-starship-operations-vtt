@@ -5736,10 +5736,18 @@ function showSharedMap() {
   overlay.id = 'shared-map-overlay';
   overlay.className = 'shared-map-overlay';
 
-  // Build TravellerMap URL
-  let mapUrl = 'https://travellermap.com/?options=41975&style=poster';
-  if (state.campaign?.current_sector && state.campaign?.current_hex) {
-    mapUrl = `https://travellermap.com/?p=${encodeURIComponent(state.campaign.current_sector)}/${state.campaign.current_hex}&scale=64&options=41975&style=poster`;
+  // Build TravellerMap poster API URL (static image - avoids third-party cookie issues)
+  // Using poster API instead of iframe embed due to browser security restrictions
+  let mapUrl = 'https://travellermap.com/api/poster?sector=Spinward+Marches&scale=32&style=poster&options=41975';
+  if (state.campaign?.current_sector) {
+    const sector = encodeURIComponent(state.campaign.current_sector);
+    if (state.campaign?.current_hex) {
+      // Jump map centered on current location
+      mapUrl = `https://travellermap.com/api/jumpmap?sector=${sector}&hex=${state.campaign.current_hex}&jump=4&style=poster`;
+    } else {
+      // Sector poster
+      mapUrl = `https://travellermap.com/api/poster?sector=${sector}&scale=32&style=poster&options=41975`;
+    }
   }
 
   overlay.innerHTML = `
@@ -5760,7 +5768,7 @@ function showSharedMap() {
         <p>TravellerMap is currently unavailable.</p>
         <p class="text-muted">The map service may be down or unreachable. You can retry or continue without the map.</p>
       </div>
-      <iframe id="shared-map-frame" src="${mapUrl}" frameborder="0"></iframe>
+      <img id="shared-map-image" src="${mapUrl}" alt="TravellerMap" />
       <div id="map-debug-overlay" class="debug-overlay"></div>
       <div id="map-cache-toggle" class="cache-toggle">
         <label class="toggle-switch">
@@ -5778,28 +5786,28 @@ function showSharedMap() {
   document.getElementById('btn-close-map').addEventListener('click', closeSharedMap);
 
   // Graceful failure handling for TravellerMap
-  const iframe = document.getElementById('shared-map-frame');
+  const mapImage = document.getElementById('shared-map-image');
   const loadingIndicator = document.getElementById('shared-map-loading');
   const errorMessage = document.getElementById('shared-map-error');
   const retryBtn = document.getElementById('btn-retry-map');
 
-  // Set timeout for iframe load (TravellerMap may be slow or unavailable)
+  // Set timeout for image load (TravellerMap may be slow or unavailable)
   const loadTimeout = setTimeout(() => {
     handleMapLoadError();
   }, 15000); // 15 second timeout
 
-  iframe.addEventListener('load', () => {
+  mapImage.addEventListener('load', () => {
     clearTimeout(loadTimeout);
     loadingIndicator?.classList.add('hidden');
-    iframe.classList.remove('hidden');
+    mapImage.classList.remove('hidden');
 
-    // Welcome message after 10 seconds
+    // Welcome message after 2 seconds
     setTimeout(() => {
-      mapDebugMessage('Welcome to Shared TravellerMap! Many thanks to Joshua Bell <inexorabletash@gmail.com> for hosting https://travellermap.com/ & its API.');
-    }, 10000);
+      mapDebugMessage('Shared TravellerMap loaded! Thanks to Joshua Bell for hosting https://travellermap.com/');
+    }, 2000);
   });
 
-  iframe.addEventListener('error', () => {
+  mapImage.addEventListener('error', () => {
     clearTimeout(loadTimeout);
     handleMapLoadError();
   });
@@ -5808,7 +5816,7 @@ function showSharedMap() {
     loadingIndicator?.classList.add('hidden');
     errorMessage?.classList.remove('hidden');
     retryBtn?.classList.remove('hidden');
-    iframe.classList.add('hidden');
+    mapImage.classList.add('hidden');
     showNotification('TravellerMap unavailable - service may be down', 'warning');
     mapDebugMessage('TravellerMap load failed (timeout or error)', 'error');
   }
@@ -5817,9 +5825,9 @@ function showSharedMap() {
     errorMessage?.classList.add('hidden');
     retryBtn?.classList.add('hidden');
     loadingIndicator?.classList.remove('hidden');
-    iframe.classList.remove('hidden');
+    mapImage.classList.remove('hidden');
     mapDebugMessage('Retrying TravellerMap load...', 'warn');
-    iframe.src = iframe.src; // Reload iframe
+    mapImage.src = mapImage.src + '&retry=' + Date.now(); // Force reload
     setTimeout(() => {
       if (loadingIndicator && !loadingIndicator.classList.contains('hidden')) {
         handleMapLoadError();
@@ -5904,20 +5912,24 @@ function updateSharedMapButtons() {
 }
 
 function updateSharedMapFrame(data) {
-  const iframe = document.getElementById('shared-map-frame');
-  if (!iframe || !data) return;
+  const mapImage = document.getElementById('shared-map-image');
+  if (!mapImage || !data) return;
 
-  // Build URL from shared state
-  let mapUrl = 'https://travellermap.com/?options=41975&style=poster';
+  // Build poster API URL from shared state
+  let mapUrl = 'https://travellermap.com/api/poster?sector=Spinward+Marches&scale=32&style=poster&options=41975';
   if (data.sector && data.hex) {
-    mapUrl = `https://travellermap.com/?p=${encodeURIComponent(data.sector)}/${data.hex}&scale=${data.zoom || 64}&options=41975&style=poster`;
-  } else if (data.center) {
-    mapUrl = `https://travellermap.com/?p=${encodeURIComponent(data.center)}&scale=${data.zoom || 64}&options=41975&style=poster`;
+    // Jump map centered on location
+    mapUrl = `https://travellermap.com/api/jumpmap?sector=${encodeURIComponent(data.sector)}&hex=${data.hex}&jump=4&style=poster`;
+  } else if (data.sector) {
+    // Sector poster
+    mapUrl = `https://travellermap.com/api/poster?sector=${encodeURIComponent(data.sector)}&scale=32&style=poster&options=41975`;
   }
 
-  // Only update if URL changed
-  if (iframe.src !== mapUrl) {
-    iframe.src = mapUrl;
+  // Only update if URL changed (compare without query params that might differ)
+  const currentBase = mapImage.src.split('?')[0];
+  const newBase = mapUrl.split('?')[0];
+  if (currentBase !== newBase || !mapImage.src.includes(data.sector || 'Spinward')) {
+    mapImage.src = mapUrl;
     mapDebugMessage(`Loading: ${data.sector || 'default'}${data.hex ? '/' + data.hex : ''}`);
   }
 }
