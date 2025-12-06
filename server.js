@@ -15,6 +15,7 @@
 //   4. Starts the server
 
 const express = require('express');
+const path = require('path');
 const config = require('./config');
 const { server: log, socket: socketLog, game: gameLog, combat: combatLog } = require('./lib/logger');
 
@@ -192,6 +193,24 @@ app.post('/api/cache/clear', (req, res) => {
   const { sector } = req.body || {};
   const result = systemCache.clearCache(sector);
   res.json(result);
+});
+
+// AR-29.7: Subsector data API
+const fs = require('fs');
+const subsectorPath = path.join(__dirname, 'data', 'subsectors');
+app.get('/api/subsectors/:id', (req, res) => {
+  const { id } = req.params;
+  const filePath = path.join(subsectorPath, `${id}.json`);
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: `Subsector '${id}' not found` });
+  }
+  try {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    res.json(data);
+  } catch (err) {
+    console.error('Failed to load subsector:', err);
+    res.status(500).json({ error: 'Failed to load subsector data' });
+  }
 });
 
 // Track connections and ship assignments (from lib/state)

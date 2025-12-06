@@ -518,6 +518,7 @@
           <button id="btn-gm-add-log" class="btn" title="Add entry to ship's log - Narrative events, system notes">Add Log</button>
           <button id="btn-gm-add-contact" class="btn" title="Create new sensor contact - Ships, asteroids, stations">Add Contact</button>
           <button id="btn-gm-lookup-system" class="btn" title="Search TravellerMap for system data - Set current location">Lookup System</button>
+          <button id="btn-subsector-map" class="btn" onclick="toggleSubsectorMap()" title="View District 268 subsector map - Click system to navigate">Subsector</button>
           <button id="btn-gm-damage" class="btn btn-warning" title="Apply damage to ship systems - Selective or random">System Damage</button>
           <button id="btn-gm-initiative" class="btn btn-warning" title="Roll initiative for all crew - Sets action order">Call Initiative</button>
           <button id="btn-gm-combat" class="btn btn-danger" title="Enter tactical combat mode - Full space combat system">Start Combat</button>
@@ -1563,7 +1564,17 @@ Skills: Pilot-2, Gunnery-1, Vacc Suit-1"></textarea>
   <!-- Stage 7: Character Sheet Tooltip Container -->
   <div id="character-tooltip-container"></div>
 
+  <!-- AR-29.7: Subsector Map Overlay -->
+  <div id="subsector-map-container" class="subsector-map-overlay" style="display: none;">
+    <div class="subsector-map-header">
+      <h3>District 268 Subsector</h3>
+      <button class="btn btn-icon" onclick="hideSubsectorMap()" title="Close">×</button>
+    </div>
+    <div id="subsector-map-canvas-container" class="subsector-map-content"></div>
+  </div>
+
   <script src="/socket.io/socket.io.js"></script>
+  <script src="modules/subsector-map.js"></script>
   <script src="app.js" type="module"></script>
 </body>
 </html>

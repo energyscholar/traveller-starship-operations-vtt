@@ -5632,6 +5632,86 @@ input[type="checkbox"] {
 }
 
 /* ============================================
+   Role-Specific Panel Sizing (AR-29.7 Phase 2)
+   ============================================ */
+
+/* Gunner: Larger role panel for targeting */
+body.role-gunner .role-panel {
+  grid-row: span 2;
+}
+body.role-gunner .sensor-panel {
+  grid-column: span 2;
+}
+
+/* Sensors: Emphasis on contact list */
+body.role-sensors .sensor-panel {
+  grid-row: span 2;
+}
+body.role-sensors .contacts-list {
+  max-height: 400px;
+}
+
+/* Astrogator: More space for jump map */
+body.role-astrogator .role-panel {
+  grid-row: span 2;
+}
+
+/* Engineer: Systems focused */
+body.role-engineer .role-panel .role-actions {
+  max-height: 350px;
+}
+
+/* ============================================
+   Subsector Map Overlay (AR-29.7 Phase 3)
+   ============================================ */
+
+.subsector-map-overlay {
+  position: fixed;
+  top: 60px;
+  left: 50px;
+  right: 50px;
+  bottom: 80px;
+  z-index: 850;
+  background: var(--bg-dark, #0a0a12);
+  border: 2px solid var(--accent-primary, #4488ff);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.subsector-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 15px;
+  background: rgba(40, 60, 80, 0.5);
+  border-bottom: 1px solid var(--border-color, #334455);
+}
+
+.subsector-map-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-light, #aabbcc);
+}
+
+.subsector-map-header .btn-icon {
+  padding: 4px 10px;
+  font-size: 18px;
+}
+
+.subsector-map-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+#subsector-map-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
    Full-Screen Email App (Stage 13.4)
    ============================================ */
 
