@@ -5970,6 +5970,17 @@ body.role-engineer .role-panel .role-actions {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
 }
 
+/* ESC hint for fullscreen overlays */
+.esc-hint {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  z-index: 10;
+}
+
 .sector-map-header {
   display: flex;
   justify-content: space-between;
@@ -7563,18 +7574,27 @@ body.role-engineer .role-panel .role-actions {
   min-width: 60px;
 }
 
-.time-speed-label {
+.time-speed-label,
+.date-input-label {
   color: var(--text-secondary);
   font-size: 12px;
   margin-left: var(--space-sm);
 }
 
-.simulated-days {
+.simulated-date {
   color: var(--accent-color);
   font-weight: bold;
   font-size: 14px;
   margin-left: var(--space-md);
-  min-width: 100px;
+  min-width: 80px;
+  font-family: 'Courier New', monospace;
+}
+
+#date-year-input,
+#date-day-input {
+  padding: 2px 4px;
+  font-size: 12px;
+  text-align: center;
 }
 
 /* System Map Info Panel */

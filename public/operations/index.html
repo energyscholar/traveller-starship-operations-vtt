@@ -515,7 +515,7 @@
           <button id="btn-gm-add-log" class="btn" title="Add entry to ship's log - Narrative events, system notes">Add Log</button>
           <button id="btn-gm-add-contact" class="btn" title="Create new sensor contact - Ships, asteroids, stations">Add Contact</button>
           <button id="btn-gm-lookup-system" class="btn" title="Search TravellerMap for system data - Set current location">Lookup System</button>
-          <button id="btn-subsector-map" class="btn" onclick="toggleSubsectorMap()" title="View District 268 subsector map - Click system to navigate">Subsector</button>
+          <button id="btn-subsector-map" class="btn" onclick="toggleSubsectorMap()" title="View shared map of known space - Click system to navigate">Known Space</button>
           <button id="btn-gm-damage" class="btn btn-warning" title="Apply damage to ship systems - Selective or random">System Damage</button>
           <button id="btn-gm-initiative" class="btn btn-warning" title="Roll initiative for all crew - Sets action order">Call Initiative</button>
           <button id="btn-gm-combat" class="btn btn-danger" title="Enter tactical combat mode - Full space combat system">Start Combat</button>
@@ -642,7 +642,7 @@
           </button>
           <button class="menu-item" data-feature="system-map" id="menu-system-map">
             <span class="menu-icon">🪐</span>
-            <span class="menu-label">System Map</span>
+            <span class="menu-label">Star System</span>
             <span class="menu-badge new">NEW</span>
           </button>
         </div>
@@ -1611,8 +1611,9 @@ Skills: Pilot-2, Gunnery-1, Vacc Suit-1"></textarea>
 
   <!-- AR-29.7: Sector Map Overlay -->
   <div id="sector-map-container" class="sector-map-overlay" style="display: none;">
+    <div class="esc-hint">ESC to close</div>
     <div class="sector-map-header">
-      <h3 id="sector-map-title">District 268 Subsector</h3>
+      <h3 id="sector-map-title">Shared Map of Known Space</h3>
       <select id="sector-selector" onchange="loadSectorData(this.value)" title="Select subsector">
         <option value="district268">District 268</option>
         <option value="five-sisters">Five Sisters</option>
@@ -1631,8 +1632,9 @@ Skills: Pilot-2, Gunnery-1, Vacc Suit-1"></textarea>
 
   <!-- AR-29.6: Star System Map Overlay -->
   <div id="system-map-container" class="system-map-overlay" style="display: none;">
+    <div class="esc-hint">ESC to close</div>
     <div class="system-map-header">
-      <h3 id="system-map-title">Star System</h3>
+      <h3 id="system-map-title">Shared System Map</h3>
       <div class="system-map-controls">
         <button class="btn btn-icon btn-small" onclick="zoomSystemMap(1.3)" title="Zoom In">+</button>
         <button class="btn btn-icon btn-small" onclick="zoomSystemMap(0.7)" title="Zoom Out">−</button>

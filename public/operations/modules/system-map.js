@@ -451,6 +451,12 @@ function calculateTravelTime(auDistance) {
  * Start the render loop (with time control support)
  */
 function startRenderLoop() {
+  // Prevent multiple render loops
+  if (systemMapState.animationFrame) {
+    cancelAnimationFrame(systemMapState.animationFrame);
+    systemMapState.animationFrame = null;
+  }
+
   function loop() {
     if (!systemMapState.paused) {
       systemMapState.time += 0.016 * systemMapState.timeSpeed; // ~60fps, scaled by speed
@@ -497,9 +503,12 @@ function render() {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.setLineDash([]);
 
-  // Clear to space background
+  // Clear ENTIRE canvas (use actual pixel dimensions, not CSS dimensions)
   ctx.fillStyle = systemMapState.colors.space;
-  ctx.fillRect(0, 0, width, height);
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Scale for HiDPI displays after clearing
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
   // Calculate center
   const centerX = width / 2 + offsetX;
@@ -1409,9 +1418,10 @@ function loadTestSystem(systemKey) {
 /**
  * Time control state - extends systemMapState
  */
-systemMapState.timeSpeed = 1;        // Multiplier: 1 = real time, 10 = 10x faster
+systemMapState.timeSpeed = 0;        // Multiplier: 0 = frozen, 1 = realtime (1 sec = 1 sec)
 systemMapState.paused = false;       // Pause orbital animation
-systemMapState.simulatedDate = 0;    // Days since epoch
+systemMapState.simulatedDate = 0;    // Days since epoch (Imperial calendar)
+systemMapState.baseDate = { year: 1105, day: 1 }; // Imperial date epoch
 
 /**
  * Pause/resume orbital animation
@@ -1424,11 +1434,43 @@ function togglePause() {
 
 /**
  * Set time speed multiplier
- * @param {number} speed - 0.1 to 100
+ * @param {number} speed - 0 to 100 (0 = frozen, 1 = realtime)
  */
 function setTimeSpeed(speed) {
-  systemMapState.timeSpeed = Math.max(0.1, Math.min(100, speed));
+  systemMapState.timeSpeed = Math.max(0, Math.min(100, speed));
   console.log(`[SystemMap] Time speed: ${systemMapState.timeSpeed}x`);
+}
+
+/**
+ * Set simulation to a specific Imperial date
+ * @param {number} year - Imperial year (e.g., 1105)
+ * @param {number} day - Day of year (1-365)
+ */
+function setDate(year, day) {
+  // Calculate days from base epoch
+  const yearDiff = year - systemMapState.baseDate.year;
+  const dayDiff = day - systemMapState.baseDate.day;
+  const totalDays = yearDiff * 365 + dayDiff;
+
+  systemMapState.simulatedDate = totalDays;
+  // Convert to animation time (1 day = 0.1 time units for orbital motion)
+  systemMapState.time = totalDays * 0.1;
+
+  console.log(`[SystemMap] Date set to ${year}.${day.toString().padStart(3, '0')} (day ${totalDays})`);
+}
+
+/**
+ * Get current Imperial date
+ * @returns {Object} { year, day }
+ */
+function getDate() {
+  const totalDays = Math.floor(systemMapState.simulatedDate);
+  const years = Math.floor(totalDays / 365);
+  const days = (totalDays % 365) + 1;
+  return {
+    year: systemMapState.baseDate.year + years,
+    day: days
+  };
 }
 
 /**
@@ -1688,6 +1730,8 @@ export {
   advanceTime,
   rewindTime,
   resetTime,
+  setDate,
+  getDate,
   showPlacesOverlay,
   hidePlacesOverlay,
   updateShipPosition,

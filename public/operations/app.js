@@ -24,6 +24,8 @@ import {
   advanceTime as advanceMapTime,
   rewindTime as rewindMapTime,
   resetTime as resetMapTime,
+  setDate as setMapDate,
+  getDate as getMapDate,
   systemMapState,
   showPlacesOverlay,
   hidePlacesOverlay,
@@ -6892,8 +6894,9 @@ function showSystemMap() {
     .join('');
 
   overlay.innerHTML = `
+    <div class="esc-hint">ESC to close</div>
     <div class="system-map-header">
-      <h2>System Map: <span id="system-map-name">${escapeHtml(systemName)}</span></h2>
+      <h2>Shared System Map: <span id="system-map-name">${escapeHtml(systemName)}</span></h2>
       <div class="system-map-controls">
         <select id="test-system-select" class="form-control" style="width: auto; display: inline-block; min-width: 150px;">
           <option value="caladbolg">Caladbolg</option>
@@ -6921,13 +6924,18 @@ function showSystemMap() {
       <button id="btn-time-forward-100" class="btn btn-sm">+100d ▶▶</button>
       <span class="time-speed-label">Speed:</span>
       <select id="time-speed-select" class="form-control" style="width: auto; display: inline-block;">
-        <option value="0.1">0.1x</option>
-        <option value="1" selected>1x</option>
+        <option value="0" selected>0x</option>
+        <option value="1">1x</option>
         <option value="5">5x</option>
         <option value="10">10x</option>
         <option value="50">50x</option>
       </select>
-      <span id="simulated-days" class="simulated-days">Day: 0</span>
+      <span class="date-input-label">Date:</span>
+      <input type="number" id="date-year-input" class="form-control" style="width: 70px; display: inline-block;" value="1105" min="1" max="9999" title="Imperial Year">
+      <span>.</span>
+      <input type="number" id="date-day-input" class="form-control" style="width: 55px; display: inline-block;" value="001" min="1" max="365" title="Day of Year (001-365)">
+      <button id="btn-set-date" class="btn btn-sm">Set</button>
+      <span id="simulated-date" class="simulated-date">1105.001</span>
     </div>
     <div class="system-map-instructions">
       Scroll to zoom | Drag to pan | Time controls affect orbital positions
@@ -6944,9 +6952,11 @@ function showSystemMap() {
       if (container) {
         initSystemMap(container);
 
-        // Auto-load Flammarion as default system
-        loadTestSystem('flammarion');
-        document.getElementById('system-map-name').textContent = TEST_SYSTEMS['flammarion'].name;
+        // Try to load current system, fallback to Flammarion
+        const currentSystem = state.campaign?.current_system?.toLowerCase().replace(/\s+/g, '');
+        const systemToLoad = (currentSystem && TEST_SYSTEMS[currentSystem]) ? currentSystem : 'flammarion';
+        loadTestSystem(systemToLoad);
+        document.getElementById('system-map-name').textContent = TEST_SYSTEMS[systemToLoad].name;
 
         // Resize canvas after a short delay to ensure proper dimensions
         setTimeout(() => {
@@ -6988,7 +6998,7 @@ function showSystemMap() {
       loadTestSystem(select.value);
       document.getElementById('system-map-name').textContent = TEST_SYSTEMS[select.value].name;
       resetMapTime();
-      updateSimulatedDays();
+      updateSimulatedDate();
       showNotification(`Switched to ${TEST_SYSTEMS[select.value].name} system`, 'success');
     }
   });
@@ -7021,11 +7031,11 @@ function showSystemMap() {
   // Time controls
   document.getElementById('btn-time-rewind-100').addEventListener('click', () => {
     rewindMapTime(100);
-    updateSimulatedDays();
+    updateSimulatedDate();
   });
   document.getElementById('btn-time-rewind-10').addEventListener('click', () => {
     rewindMapTime(10);
-    updateSimulatedDays();
+    updateSimulatedDate();
   });
   document.getElementById('btn-time-pause').addEventListener('click', () => {
     const paused = togglePause();
@@ -7033,30 +7043,39 @@ function showSystemMap() {
   });
   document.getElementById('btn-time-forward-10').addEventListener('click', () => {
     advanceMapTime(10);
-    updateSimulatedDays();
+    updateSimulatedDate();
   });
   document.getElementById('btn-time-forward-100').addEventListener('click', () => {
     advanceMapTime(100);
-    updateSimulatedDays();
+    updateSimulatedDate();
   });
   document.getElementById('time-speed-select').addEventListener('change', (e) => {
     setTimeSpeed(parseFloat(e.target.value));
   });
 
-  // Update simulated days display periodically
+  // Date input handler
+  document.getElementById('btn-set-date').addEventListener('click', () => {
+    const year = parseInt(document.getElementById('date-year-input').value) || 1105;
+    const day = parseInt(document.getElementById('date-day-input').value) || 1;
+    setMapDate(year, Math.max(1, Math.min(365, day)));
+    updateSimulatedDate();
+  });
+
+  // Update simulated date display periodically
   const daysInterval = setInterval(() => {
-    if (!document.getElementById('simulated-days')) {
+    if (!document.getElementById('simulated-date')) {
       clearInterval(daysInterval);
       return;
     }
-    updateSimulatedDays();
+    updateSimulatedDate();
   }, 500);
 }
 
-function updateSimulatedDays() {
-  const daysEl = document.getElementById('simulated-days');
-  if (daysEl) {
-    daysEl.textContent = `Day: ${Math.round(systemMapState.simulatedDate)}`;
+function updateSimulatedDate() {
+  const dateEl = document.getElementById('simulated-date');
+  if (dateEl) {
+    const date = getMapDate();
+    dateEl.textContent = `${date.year}.${date.day.toString().padStart(3, '0')}`;
   }
 }
 

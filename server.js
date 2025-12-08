@@ -328,6 +328,8 @@ server.listen(config.server.port, () => {
   log.info('2. GM creates campaign, players join with code');
   log.info('3. Each player selects crew role on bridge');
   log.info('4. GM advances time and manages encounters');
+  log.info('');
+  log.info('Database: npm run db:reset');
   log.info('========================================');
 });
 

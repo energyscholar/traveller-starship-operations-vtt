@@ -208,6 +208,33 @@ function setShipLocation(hex) {
   renderSectorMap();
 }
 
+// AR-36: Center map on a specific hex
+function centerOnHex(hex) {
+  if (!hex || !sectorMapState.canvas) return;
+
+  const scale = sectorMapState.scale;
+  const size = sectorMapState.HEX_SIZE * scale;
+  const width = size * Math.sqrt(3);
+  const height = size * 2;
+
+  // Parse hex (e.g., "0530" -> col=5, row=30)
+  const col = parseInt(hex.substring(0, 2), 10);
+  const row = parseInt(hex.substring(2, 4), 10);
+
+  // Calculate hex position without current offset
+  const hexX = col * width * 0.75 + 60 * scale;
+  const hexY = row * height * 0.75 + (col % 2 === 0 ? 0 : height * 0.375) + 40 * scale;
+
+  // Center the canvas on this position
+  const canvasCenterX = sectorMapState.canvas.width / (2 * window.devicePixelRatio);
+  const canvasCenterY = sectorMapState.canvas.height / (2 * window.devicePixelRatio);
+
+  sectorMapState.offsetX = canvasCenterX - hexX;
+  sectorMapState.offsetY = canvasCenterY - hexY;
+
+  renderSectorMap();
+}
+
 // AR-34: Set jump range (based on ship's jump rating)
 function setJumpRange(rating) {
   sectorMapState.jumpRange = Math.max(1, Math.min(6, rating));
@@ -791,6 +818,13 @@ function showSectorMap() {
       initSectorMap(canvasContainer);
     }
     loadSectorData('district268');
+
+    // AR-36: Center on ship's current location after a brief delay for rendering
+    setTimeout(() => {
+      if (sectorMapState.currentShipHex) {
+        centerOnHex(sectorMapState.currentShipHex);
+      }
+    }, 100);
   }
 }
 
@@ -822,6 +856,7 @@ window.sectorMapState = sectorMapState; // For debugging
 // AR-34: Jump range and distance functions
 window.setShipLocation = setShipLocation;
 window.setJumpRange = setJumpRange;
+window.centerOnHex = centerOnHex;
 window.toggleJumpCircles = toggleJumpCircles;
 window.startMeasurement = startMeasurement;
 window.clearMeasurement = clearMeasurement;
