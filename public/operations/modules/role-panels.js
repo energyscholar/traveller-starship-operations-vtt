@@ -528,7 +528,7 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
     </div>
 
     <div class="detail-section target-section">
-      <h4>TARGET</h4>
+      <h4>TARGET PRIORITY QUEUE</h4>
       ${!hasTargets ? `
         <div class="no-target-locked">
           <div class="locked-icon">○</div>
@@ -537,16 +537,27 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
         </div>
       ` : `
         <div class="target-list">
-          ${hostileContacts.map(c => {
-            const targetHitChance = selectedWeapon ? calculateHitProbability(selectedWeapon, c, gunnerySkill) : null;
+          ${hostileContacts
+            .map(c => ({
+              ...c,
+              hitChance: selectedWeapon ? calculateHitProbability(selectedWeapon, c, gunnerySkill) : 0,
+              threat: c.marking === 'hostile' ? 3 : c.marking === 'unknown' ? 2 : 1,
+              priority: (c.marking === 'hostile' ? 100 : 50) + (selectedWeapon ? calculateHitProbability(selectedWeapon, c, gunnerySkill) : 0)
+            }))
+            .sort((a, b) => b.priority - a.priority)
+            .map((c, idx) => {
+            const targetHitChance = c.hitChance;
+            const threatLevel = c.threat === 3 ? 'HIGH' : c.threat === 2 ? 'MED' : 'LOW';
+            const threatClass = c.threat === 3 ? 'text-danger' : c.threat === 2 ? 'text-warning' : 'text-success';
             return `
             <div class="target-item ${c.id === selectedTargetId ? 'selected' : ''}"
                  onclick="lockTarget('${c.id}')" data-contact-id="${c.id}"
-                 title="Click to lock target${targetHitChance ? ` - ${targetHitChance}% hit chance` : ''}">
+                 title="Priority #${idx + 1} - Click to lock${targetHitChance ? ` - ${targetHitChance}% hit chance` : ''}">
               <div class="target-header">
                 <span class="target-indicator">${c.id === selectedTargetId ? '◉' : '○'}</span>
+                <span class="target-priority" style="font-size: 10px; color: var(--text-muted);">#${idx + 1}</span>
                 <span class="target-name">${escapeHtml(c.name || 'Unknown')}</span>
-                <span class="target-disposition ${c.disposition || 'unknown'}">${c.disposition || '?'}</span>
+                <span class="target-threat ${threatClass}" title="Threat level">${threatLevel}</span>
               </div>
               <div class="target-details">
                 <span class="target-range">${c.range_band || 'Unknown'} (${formatRangeDM(getRangeDM(c.range_band))} DM)</span>
@@ -617,19 +628,32 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
     </div>
 
     <div class="detail-section fire-control-section">
-      ${hitChance !== null && hasTargets ? `
-      <div class="hit-probability-display" title="Calculated from: 2D6 + Gunnery ${gunnerySkill >= 0 ? '+' : ''}${gunnerySkill} + Range DM ${formatRangeDM(getRangeDM(selectedTarget?.range_band))} >= 8">
-        <span class="hit-label">Hit Chance:</span>
-        <span class="hit-value ${hitChance >= 70 ? 'hit-high' : hitChance >= 40 ? 'hit-medium' : 'hit-low'}">${hitChance}%</span>
-        <span class="hit-breakdown">(2D6 + ${gunnerySkill} ${formatRangeDM(getRangeDM(selectedTarget?.range_band))} >= 8)</span>
+      ${hitChance !== null && hasTargets && selectedWeapon ? `
+      <div class="fire-solution" style="background: var(--panel-bg); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+        <div class="hit-probability-display" title="Calculated from: 2D6 + Gunnery ${gunnerySkill >= 0 ? '+' : ''}${gunnerySkill} + Range DM ${formatRangeDM(getRangeDM(selectedTarget?.range_band))} >= 8">
+          <span class="hit-label">Hit Chance:</span>
+          <span class="hit-value ${hitChance >= 70 ? 'hit-high' : hitChance >= 40 ? 'hit-medium' : 'hit-low'}">${hitChance}%</span>
+        </div>
+        <div class="damage-prediction" style="margin-top: 4px;">
+          <span style="color: var(--text-muted);">Expected Damage:</span>
+          <span style="color: var(--danger); font-weight: bold;">${selectedWeapon.damage || '2d6'}</span>
+          <span style="color: var(--text-muted); font-size: 11px;">(avg ~${Math.round(((selectedWeapon.damage || '2d6').match(/(\d+)d(\d+)/)?.[1] * (parseInt((selectedWeapon.damage || '2d6').match(/(\d+)d(\d+)/)?.[2]) + 1) / 2) || 7)})</span>
+        </div>
       </div>
       ` : ''}
-      <div class="fire-buttons">
+      <div class="fire-buttons" style="display: flex; gap: 5px; flex-wrap: wrap;">
         <button onclick="fireWeapon()" class="btn btn-danger btn-fire"
                 title="${hasTargets ? `Fire ${selectedWeapon?.name || 'weapon'} at ${selectedTarget?.name || 'target'}${hitChance ? ` (${hitChance}% hit chance)` : ''}` : 'No target locked - awaiting hostile contacts or authorization'}"
                 ${!hasTargets || !hasWeapons ? 'disabled' : ''}>
           ${selectedWeapon && (selectedWeapon.weapon_type || selectedWeapon.type || '').toLowerCase().includes('missile') ? 'LAUNCH!' : 'FIRE!'}
         </button>
+        ${weapons.length > 1 ? `
+        <button onclick="window.fireAllWeapons()" class="btn btn-danger"
+                title="Fire all ready weapons at locked target"
+                ${!hasTargets || !hasWeapons ? 'disabled' : ''}>
+          FIRE ALL
+        </button>
+        ` : ''}
         <button onclick="togglePointDefense()" class="btn btn-warning btn-point-defense"
                 title="Point Defense: Automatically intercept incoming missiles. Uses ammo each round."
                 ${!hasWeapons ? 'disabled' : ''}>

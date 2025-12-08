@@ -3794,6 +3794,22 @@ function fireAtTarget() {
 
 // Combat module wrappers (AR-14) - delegate to combat.js module
 function fireWeapon() { combat.fireWeapon(state); }
+function fireAllWeapons() {
+  // AR-37: Fire all ready weapons at locked target
+  const weapons = state.shipWeapons || [];
+  const targetId = state.shipState?.lockedTarget;
+  if (!targetId) {
+    showNotification('No target locked', 'warning');
+    return;
+  }
+  weapons.forEach((w, idx) => {
+    if (w.status === 'ready' || !w.status) {
+      state.shipState.selectedWeapon = idx;
+      combat.fireWeapon(state);
+    }
+  });
+  showNotification(`Fired ${weapons.filter(w => w.status === 'ready' || !w.status).length} weapons`, 'info');
+}
 function lockTarget(contactId) { combat.lockTarget(state, contactId); }
 function selectWeapon(weaponId) { combat.selectWeapon(state, weaponId); }
 function selectWeaponByIndex(index) {
@@ -9215,6 +9231,7 @@ window.setSensorLock = setSensorLock;
 window.authorizeWeapons = authorizeWeapons;
 window.fireAtTarget = fireAtTarget;
 window.fireWeapon = fireWeapon;
+window.fireAllWeapons = fireAllWeapons;
 window.lockTarget = lockTarget;
 window.selectWeapon = selectWeapon;
 window.selectWeaponByIndex = selectWeaponByIndex;
