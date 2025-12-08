@@ -1241,6 +1241,15 @@ function initSocket() {
   // ==================== AR-48: Medical Records Events ====================
   state.socket.on('ops:medicalRecords', handleMedicalRecords);
 
+  // ==================== AR-49: Environmental Monitoring Events ====================
+  state.socket.on('ops:environmentalData', (data) => {
+    state.environmentalData = data;
+    // Refresh sensors panel if active
+    if (state.selectedRole === 'sensor_operator') {
+      renderRoleDetailPanel(state.selectedRole);
+    }
+  });
+
   // ==================== AR-27: Shared Map Events ====================
 
   // GM shared the map - auto-switch all players
@@ -2659,7 +2668,8 @@ function renderRoleDetailPanel(role) {
     campaign: state.campaign,
     contacts: state.contacts,
     crewOnline: state.crewOnline,
-    ship: state.ship
+    ship: state.ship,
+    environmentalData: state.environmentalData || null
   };
 
   // Role-specific content from module

@@ -123,7 +123,7 @@ export function renderSystemStatusItem(name, status) {
 export function getRoleDetailContent(role, context) {
   const { shipState = {}, template = {}, systemStatus = {}, damagedSystems = [],
           fuelStatus, jumpStatus = {}, campaign, contacts = [], crewOnline = [], ship,
-          roleInstance = 1, shipWeapons = [], combatLog = [] } = context;
+          roleInstance = 1, shipWeapons = [], combatLog = [], environmentalData = null } = context;
 
   switch (role) {
     case 'pilot':
@@ -139,7 +139,7 @@ export function getRoleDetailContent(role, context) {
       return getCaptainPanel(shipState, template, ship, crewOnline, contacts);
 
     case 'sensor_operator':
-      return getSensorOperatorPanel(shipState, contacts);
+      return getSensorOperatorPanel(shipState, contacts, environmentalData);
 
     case 'astrogator':
       return getAstrogatorPanel(shipState, template, jumpStatus, campaign, systemStatus);
@@ -891,7 +891,7 @@ function getCaptainPanel(shipState, template, ship, crewOnline, contacts) {
   `;
 }
 
-function getSensorOperatorPanel(shipState, contacts) {
+function getSensorOperatorPanel(shipState, contacts, environmentalData = null) {
   // Categorize contacts for display
   const celestials = contacts?.filter(c => c.celestial) || [];
   const stations = contacts?.filter(c => !c.celestial && c.type && ['Station', 'Starport', 'Base'].includes(c.type)) || [];
@@ -1027,6 +1027,54 @@ function getSensorOperatorPanel(shipState, contacts) {
           `;
         }).join('') || '<div class="placeholder">Scan ships to assess threats</div>'}
       </div>
+    </div>
+    ` : ''}
+    ${environmentalData ? `
+    <div class="detail-section environmental-monitoring">
+      <h4>Environmental Monitoring</h4>
+      <div class="detail-stats">
+        ${environmentalData.temperature !== undefined ? `
+        <div class="stat-row">
+          <span>Temperature:</span>
+          <span class="stat-value ${environmentalData.temperature > 100 ? 'text-danger' : environmentalData.temperature < -20 ? 'text-info' : ''}">${environmentalData.temperature}°C</span>
+        </div>
+        ` : ''}
+        ${environmentalData.atmosphere ? `
+        <div class="stat-row">
+          <span>Atmosphere:</span>
+          <span class="stat-value ${environmentalData.atmosphereToxic ? 'text-danger' : ''}">${escapeHtml(environmentalData.atmosphere)}</span>
+        </div>
+        ` : ''}
+        ${environmentalData.visibility ? `
+        <div class="stat-row">
+          <span>Visibility:</span>
+          <span class="stat-value ${environmentalData.visibility === 'Poor' || environmentalData.visibility === 'Zero' ? 'text-warning' : ''}">${environmentalData.visibility}</span>
+        </div>
+        ` : ''}
+        ${environmentalData.radiation !== undefined ? `
+        <div class="stat-row">
+          <span>Radiation:</span>
+          <span class="stat-value ${environmentalData.radiation > 50 ? 'text-danger' : environmentalData.radiation > 20 ? 'text-warning' : ''}">${environmentalData.radiation} mSv/h</span>
+        </div>
+        ` : ''}
+      </div>
+      ${environmentalData.hazards && environmentalData.hazards.length > 0 ? `
+      <div class="hazard-alerts" style="margin-top: 8px;">
+        <div class="alert-header" style="font-weight: bold; color: var(--danger);">⚠ Active Hazards</div>
+        ${environmentalData.hazards.map(h => `
+          <div class="hazard-item" style="padding: 4px 8px; background: rgba(255,0,0,0.1); border-radius: 4px; margin: 4px 0;">
+            <span class="hazard-name">${escapeHtml(h.name)}</span>
+            ${h.distance ? `<span class="hazard-distance" style="float: right;">${h.distance}</span>` : ''}
+            ${h.eta ? `<div class="hazard-eta text-warning" style="font-size: 0.85em;">ETA: ${h.eta}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+      ` : ''}
+      ${environmentalData.prediction ? `
+      <div class="prediction-alert" style="margin-top: 8px; padding: 8px; background: rgba(255,165,0,0.15); border-radius: 4px;">
+        <strong>Prediction:</strong> ${escapeHtml(environmentalData.prediction)}
+      </div>
+      ` : ''}
     </div>
     ` : ''}
     <div class="detail-section sensor-skill-note">
