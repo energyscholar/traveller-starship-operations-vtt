@@ -124,11 +124,11 @@ export function getRoleDetailContent(role, context) {
   const { shipState = {}, template = {}, systemStatus = {}, damagedSystems = [],
           fuelStatus, jumpStatus = {}, campaign, contacts = [], crewOnline = [], ship,
           roleInstance = 1, shipWeapons = [], combatLog = [], environmentalData = null,
-          repairQueue = [] } = context;
+          repairQueue = [], rescueTargets = [], flightConditions = null } = context;
 
   switch (role) {
     case 'pilot':
-      return getPilotPanel(shipState, template, campaign, jumpStatus);
+      return getPilotPanel(shipState, template, campaign, jumpStatus, flightConditions);
 
     case 'engineer':
       return getEngineerPanel(shipState, template, systemStatus, damagedSystems, fuelStatus, repairQueue);
@@ -137,7 +137,7 @@ export function getRoleDetailContent(role, context) {
       return getGunnerPanel(shipState, template, contacts, roleInstance, shipWeapons, combatLog);
 
     case 'captain':
-      return getCaptainPanel(shipState, template, ship, crewOnline, contacts);
+      return getCaptainPanel(shipState, template, ship, crewOnline, contacts, rescueTargets);
 
     case 'sensor_operator':
       return getSensorOperatorPanel(shipState, contacts, environmentalData);
@@ -160,13 +160,51 @@ export function getRoleDetailContent(role, context) {
 
 // ==================== Individual Role Panel Functions ====================
 
-function getPilotPanel(shipState, template, campaign, jumpStatus = {}) {
+function getPilotPanel(shipState, template, campaign, jumpStatus = {}, flightConditions = null) {
   const hasDestination = shipState.destination || campaign?.destination;
   const destination = shipState.destination || campaign?.destination || 'None set';
   const eta = shipState.eta || campaign?.eta || null;
   const evasive = shipState.evasive || false;
   const contacts = campaign?.sensorContacts || [];
   const inJump = jumpStatus?.inJump || false;
+
+  // Flight conditions section HTML
+  const flightConditionsHtml = flightConditions ? `
+    <div class="detail-section flight-conditions">
+      <h4>Flight Conditions</h4>
+      <div class="detail-stats">
+        ${flightConditions.visibility ? `
+        <div class="stat-row">
+          <span>Visibility:</span>
+          <span class="stat-value ${flightConditions.visibility === 'Zero' ? 'text-danger' : flightConditions.visibility === 'Poor' ? 'text-warning' : ''}">${flightConditions.visibility}</span>
+        </div>
+        ` : ''}
+        ${flightConditions.turbulence ? `
+        <div class="stat-row">
+          <span>Turbulence:</span>
+          <span class="stat-value ${flightConditions.turbulence === 'Severe' ? 'text-danger' : flightConditions.turbulence === 'Moderate' ? 'text-warning' : ''}">${flightConditions.turbulence}</span>
+        </div>
+        ` : ''}
+        ${flightConditions.difficultyMod !== undefined ? `
+        <div class="stat-row">
+          <span>Difficulty Mod:</span>
+          <span class="stat-value ${flightConditions.difficultyMod < 0 ? 'text-danger' : ''}">${flightConditions.difficultyMod >= 0 ? '+' : ''}${flightConditions.difficultyMod}</span>
+        </div>
+        ` : ''}
+        ${flightConditions.sensorAssist ? `
+        <div class="stat-row">
+          <span>Sensor Assist:</span>
+          <span class="stat-value text-success">Active</span>
+        </div>
+        ` : ''}
+      </div>
+      ${flightConditions.hazard ? `
+      <div class="flight-hazard" style="margin-top: 8px; padding: 8px; background: rgba(220,53,69,0.15); border-radius: 4px;">
+        <strong class="text-danger">⚠ ${escapeHtml(flightConditions.hazard)}</strong>
+      </div>
+      ` : ''}
+    </div>
+  ` : '';
 
   return `
     <div class="detail-section">
@@ -281,6 +319,7 @@ function getPilotPanel(shipState, template, campaign, jumpStatus = {}) {
       <button onclick="completeJump()" class="btn btn-primary btn-exit-jump" title="Exit jump space at destination">Exit Jump</button>
       ` : ''}
     </div>
+    ${flightConditionsHtml}
   `;
 }
 
@@ -710,7 +749,7 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
   `;
 }
 
-function getCaptainPanel(shipState, template, ship, crewOnline, contacts) {
+function getCaptainPanel(shipState, template, ship, crewOnline, contacts, rescueTargets = []) {
   // Filter to targetable contacts only
   const targetableContacts = contacts?.filter(c => c.is_targetable) || [];
   const authorizedTargets = targetableContacts.filter(c => c.weapons_free);
@@ -882,6 +921,27 @@ function getCaptainPanel(shipState, template, ship, crewOnline, contacts) {
       </div>
       <div id="leadership-result" class="leadership-result" style="margin-top: 10px;"></div>
     </div>
+
+    ${rescueTargets.length > 0 ? `
+    <div class="detail-section captain-rescue-section">
+      <h4>Rescue Priorities (${rescueTargets.length})</h4>
+      <div class="rescue-list">
+        ${rescueTargets.sort((a, b) => (a.eta || 999) - (b.eta || 999)).map((r, i) => `
+          <div class="rescue-item ${r.eta && r.eta < 10 ? 'urgent' : ''}" style="padding: 6px 8px; background: ${i === 0 ? 'rgba(220,53,69,0.15)' : 'var(--bg-secondary)'}; border-radius: 4px; margin: 4px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="rescue-name">${escapeHtml(r.name || 'Unknown')}</span>
+              <span class="rescue-count" style="font-weight: bold;">${r.count || '?'} souls</span>
+            </div>
+            <div style="font-size: 0.85em; color: var(--text-muted); display: flex; justify-content: space-between;">
+              <span>${escapeHtml(r.location || '')}</span>
+              ${r.eta ? `<span class="${r.eta < 10 ? 'text-danger' : 'text-warning'}">ETA: ${r.eta}m</span>` : ''}
+            </div>
+            ${r.notes ? `<div style="font-size: 0.8em; font-style: italic; color: var(--text-muted);">${escapeHtml(r.notes)}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    ` : ''}
 
     <div class="detail-section captain-comms-section">
       <h4>Communications</h4>

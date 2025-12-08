@@ -1259,6 +1259,22 @@ function initSocket() {
     }
   });
 
+  // AR-49: Rescue Targets Events (Captain triage)
+  state.socket.on('ops:rescueTargets', (data) => {
+    state.rescueTargets = data.targets || [];
+    if (state.selectedRole === 'captain') {
+      renderRoleDetailPanel(state.selectedRole);
+    }
+  });
+
+  // AR-49: Flight Conditions Events (Pilot)
+  state.socket.on('ops:flightConditions', (data) => {
+    state.flightConditions = data;
+    if (state.selectedRole === 'pilot') {
+      renderRoleDetailPanel(state.selectedRole);
+    }
+  });
+
   // ==================== AR-27: Shared Map Events ====================
 
   // GM shared the map - auto-switch all players
@@ -2679,7 +2695,9 @@ function renderRoleDetailPanel(role) {
     crewOnline: state.crewOnline,
     ship: state.ship,
     environmentalData: state.environmentalData || null,
-    repairQueue: state.repairQueue || []
+    repairQueue: state.repairQueue || [],
+    rescueTargets: state.rescueTargets || [],
+    flightConditions: state.flightConditions || null
   };
 
   // Role-specific content from module
