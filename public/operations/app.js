@@ -3805,6 +3805,39 @@ function captainQuickOrder(order) {
 }
 
 /**
+ * Issue navigation order (Captain → Pilot)
+ */
+function captainNavOrder(orderType) {
+  if (state.selectedRole !== 'captain' && !state.isGM) {
+    showNotification('Only Captain can issue orders', 'error');
+    return;
+  }
+  state.socket.emit('ops:issueOrder', { target: 'pilot', order: orderType, orderType: 'navigation', requiresAck: true });
+  showNotification(`Navigation: ${orderType}`, orderType === 'Emergency Stop' ? 'warning' : 'info');
+}
+
+/**
+ * Issue contact-targeted order (Captain → Pilot/Gunner)
+ */
+function captainContactOrder(action) {
+  if (state.selectedRole !== 'captain' && !state.isGM) {
+    showNotification('Only Captain can issue orders', 'error');
+    return;
+  }
+  const contactSelect = document.getElementById('order-contact-select');
+  if (!contactSelect?.value) {
+    showNotification('Select a contact first', 'warning');
+    return;
+  }
+  const contactId = contactSelect.value;
+  const contactName = contactSelect.options[contactSelect.selectedIndex]?.text || 'contact';
+  const order = `${action.charAt(0).toUpperCase() + action.slice(1)} ${contactName}`;
+  const target = action === 'intercept' || action === 'avoid' ? 'pilot' : 'all';
+  state.socket.emit('ops:issueOrder', { target, order, contactId, orderType: action, requiresAck: true });
+  showNotification(`Order: ${order}`, action === 'intercept' ? 'warning' : 'info');
+}
+
+/**
  * Issue custom order (Captain only)
  */
 function captainIssueOrder() {
@@ -3904,6 +3937,8 @@ function acknowledgeOrder(orderId) {
 // Expose captain functions to window
 window.captainSetAlert = captainSetAlert;
 window.captainQuickOrder = captainQuickOrder;
+window.captainNavOrder = captainNavOrder;
+window.captainContactOrder = captainContactOrder;
 window.captainIssueOrder = captainIssueOrder;
 window.captainMarkContact = captainMarkContact;
 window.captainWeaponsAuth = captainWeaponsAuth;

@@ -713,12 +713,30 @@ function getCaptainPanel(shipState, template, ship, crewOnline, contacts) {
 
     <div class="detail-section captain-orders-section">
       <h4>Issue Orders</h4>
-      <div class="quick-orders" style="margin-bottom: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
+      <div class="quick-orders" style="margin-bottom: 8px; display: flex; gap: 5px; flex-wrap: wrap;">
         <button onclick="window.captainQuickOrder('Evade')" class="btn btn-small btn-secondary" title="Order evasive maneuvers">Evade</button>
         <button onclick="window.captainQuickOrder('Hold Position')" class="btn btn-small btn-secondary" title="Maintain current position">Hold</button>
         <button onclick="window.captainQuickOrder('Engage')" class="btn btn-small btn-secondary" title="Engage hostiles">Engage</button>
         <button onclick="window.captainQuickOrder('Stand Down')" class="btn btn-small btn-secondary" title="Return to normal ops">Stand Down</button>
       </div>
+      <div class="nav-orders" style="margin-bottom: 8px; display: flex; gap: 5px; flex-wrap: wrap;">
+        <button onclick="window.captainNavOrder('Emergency Stop')" class="btn btn-small btn-danger" title="All stop - emergency">E-Stop</button>
+        <button onclick="window.captainNavOrder('Pursue')" class="btn btn-small btn-warning" title="Pursue target">Pursue</button>
+        <button onclick="window.captainNavOrder('Run Silent')" class="btn btn-small btn-secondary" title="Minimize emissions">Silent</button>
+        <button onclick="window.captainNavOrder('Full Thrust')" class="btn btn-small btn-primary" title="Maximum acceleration">Full</button>
+      </div>
+      ${contacts?.length > 0 ? `
+      <div class="contact-orders" style="margin-bottom: 8px; display: flex; gap: 5px; align-items: center;">
+        <select id="order-contact-select" class="order-select" style="flex: 1; max-width: 150px;">
+          ${contacts.map(c => `
+            <option value="${c.id}">${escapeHtml(c.transponder || c.name || 'Contact')}</option>
+          `).join('')}
+        </select>
+        <button onclick="window.captainContactOrder('intercept')" class="btn btn-small btn-warning" title="Intercept contact">Intercept</button>
+        <button onclick="window.captainContactOrder('track')" class="btn btn-small btn-secondary" title="Track contact">Track</button>
+        <button onclick="window.captainContactOrder('avoid')" class="btn btn-small btn-secondary" title="Avoid contact">Avoid</button>
+      </div>
+      ` : ''}
       <div class="order-input-row" style="display: flex; gap: 5px;">
         <select id="order-target-select" class="order-select" style="flex: 0 0 100px;">
           <option value="all">All Crew</option>
