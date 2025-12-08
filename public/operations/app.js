@@ -1574,7 +1574,7 @@ function renderCampaignList() {
   container.innerHTML = state.campaigns.map(c => `
     <div class="campaign-item" data-campaign-id="${c.id}">
       <div class="campaign-info">
-        <div class="campaign-name" title="Click to rename">${escapeHtml(c.name)}</div>
+        <div class="campaign-name" title="${escapeHtml(c.name)}">${escapeHtml(c.name)}</div>
         <div class="campaign-meta">${escapeHtml(c.gm_name)} · ${c.current_system}</div>
       </div>
       <div class="campaign-actions">
@@ -2959,7 +2959,7 @@ function renderContacts() {
     return `
       <div class="contact-item compact ${rangeClass} ${authorizedClass}" data-contact-id="${c.id}">
         <span class="contact-icon">${getContactIcon(c.type)}${authorizedIndicator}</span>
-        <span class="contact-name">${escapeHtml(c.name || c.type)}</span>
+        <span class="contact-name" title="${escapeHtml(c.name || c.type)}">${escapeHtml(c.name || c.type)}</span>
         ${inlineSummary}
         ${rangeKmDisplay}
         <span class="contact-bearing">${c.bearing}°</span>

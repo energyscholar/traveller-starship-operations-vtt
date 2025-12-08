@@ -91,6 +91,8 @@ html, body {
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 36px;  /* AR-DYNUI-1.0: Accessibility touch target */
+  min-width: 44px;   /* AR-DYNUI-1.0: Minimum touch target */
 }
 
 .btn:hover {
@@ -153,6 +155,8 @@ html, body {
 .btn-small {
   padding: var(--space-xs) var(--space-sm);
   font-size: 12px;
+  min-height: 28px;  /* AR-DYNUI-1.0: Compact variant */
+  min-width: 36px;
 }
 
 .btn-active {
@@ -1077,7 +1081,7 @@ input[type="checkbox"] {
 /* General notification toast system */
 .notification-container {
   position: fixed;
-  bottom: 20px;
+  bottom: 80px;  /* AR-DYNUI-1.0: Clear footer bar */
   right: 20px;
   z-index: 9999;
   display: flex;

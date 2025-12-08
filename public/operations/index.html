@@ -502,6 +502,7 @@
       </button>
 
       <!-- GM Overlay (shown when GM is viewing) --><div id="gm-overlay" class="gm-overlay hidden">
+        <!-- AR-DYNUI-1.0: Grouped footer controls -->
         <div class="gm-controls">
           <!-- Alert Status Controls -->
           <div class="gm-control-group">
@@ -510,16 +511,24 @@
             <button id="btn-alert-yellow" class="btn btn-alert btn-alert-yellow" title="Yellow Alert - Potential danger, all crew to stations">YELLOW</button>
             <button id="btn-alert-red" class="btn btn-alert btn-alert-red" title="Red Alert - Combat imminent, battle stations!">RED</button>
           </div>
-          <!-- GM Actions -->
-          <button id="btn-gm-advance-time" class="btn" title="Advance game time - Minutes, hours, days, or weeks">Advance Time</button>
-          <button id="btn-gm-add-log" class="btn" title="Add entry to ship's log - Narrative events, system notes">Add Log</button>
-          <button id="btn-gm-add-contact" class="btn" title="Create new sensor contact - Ships, asteroids, stations">Add Contact</button>
-          <button id="btn-gm-lookup-system" class="btn" title="Search TravellerMap for system data - Set current location">Lookup System</button>
-          <button id="btn-subsector-map" class="btn" onclick="toggleSubsectorMap()" title="View shared map of known space - Click system to navigate">Known Space</button>
-          <button id="btn-gm-damage" class="btn btn-warning" title="Apply damage to ship systems - Selective or random">System Damage</button>
-          <button id="btn-gm-initiative" class="btn btn-warning" title="Roll initiative for all crew - Sets action order">Call Initiative</button>
-          <button id="btn-gm-combat" class="btn btn-danger" title="Enter tactical combat mode - Full space combat system">Start Combat</button>
-          <button id="btn-spawn-training" class="btn btn-success" title="Spawn training asteroid DRN at Short range - Pre-authorized target for gunnery practice">Training Target</button>
+          <!-- Time & Log Group -->
+          <div class="gm-control-group">
+            <button id="btn-gm-advance-time" class="btn btn-small" title="Advance game time - Minutes, hours, days, or weeks">Advance Time</button>
+            <button id="btn-gm-add-log" class="btn btn-small" title="Add entry to ship's log - Narrative events, system notes">Add Log</button>
+          </div>
+          <!-- Navigation Group -->
+          <div class="gm-control-group">
+            <button id="btn-gm-add-contact" class="btn btn-small" title="Create new sensor contact - Ships, asteroids, stations">Add Contact</button>
+            <button id="btn-gm-lookup-system" class="btn btn-small" title="Search TravellerMap for system data - Set current location">Lookup System</button>
+            <button id="btn-subsector-map" class="btn btn-small" onclick="toggleSubsectorMap()" title="View shared map of known space - Click system to navigate">Known Space</button>
+          </div>
+          <!-- Combat Group -->
+          <div class="gm-control-group gm-control-group-combat">
+            <button id="btn-gm-damage" class="btn btn-small btn-warning" title="Apply damage to ship systems - Selective or random">Damage</button>
+            <button id="btn-gm-initiative" class="btn btn-small btn-warning" title="Roll initiative for all crew - Sets action order">Initiative</button>
+            <button id="btn-gm-combat" class="btn btn-small btn-danger" title="Enter tactical combat mode - Full space combat system">Combat</button>
+            <button id="btn-spawn-training" class="btn btn-small btn-success" title="Spawn training asteroid DRN at Short range">Training</button>
+          </div>
         </div>
       </div>
     </div>
