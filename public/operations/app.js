@@ -8389,9 +8389,9 @@ function handleStarports(data) {
   content.innerHTML = html;
 }
 
-// ==================== AR-48: Crew Roster ====================
+// ==================== AR-48: Crew Roster (Menu) ====================
 
-function showCrewRoster() {
+function showCrewRosterMenu() {
   const ship = state.ship || {};
   const template = state.shipTemplate || {};
   const npcCrew = ship.npc_crew || template.npcCrew || [];
@@ -9647,7 +9647,7 @@ window.searchLibrary = searchLibrary;
 window.showLibraryTab = showLibraryTab;
 window.decodeUWPLibrary = decodeUWPLibrary;
 // AR-48: Menu features
-window.showCrewRoster = showCrewRoster;
+window.showCrewRosterMenu = showCrewRosterMenu;
 window.showShipConfiguration = showShipConfiguration;
 window.showMedicalRecords = showMedicalRecords;
 // Autorun 14: Combat contact management
