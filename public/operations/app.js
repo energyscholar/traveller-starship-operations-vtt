@@ -8386,6 +8386,149 @@ function handleStarports(data) {
   content.innerHTML = html;
 }
 
+// ==================== AR-48: Crew Roster ====================
+
+function showCrewRoster() {
+  const ship = state.ship || {};
+  const template = state.shipTemplate || {};
+  const npcCrew = ship.npc_crew || template.npcCrew || [];
+  const connectedPlayers = state.connectedPlayers || [];
+
+  let html = `
+    <div class="modal-header">
+      <h2>📋 Crew Roster - ${template.name || 'Ship'}</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body crew-roster">
+      <div class="roster-section">
+        <h4>Online Crew (${connectedPlayers.length})</h4>
+        <div class="roster-list">
+  `;
+
+  if (connectedPlayers.length === 0) {
+    html += '<div class="roster-empty">No crew currently online</div>';
+  } else {
+    for (const p of connectedPlayers) {
+      const roleLabel = p.role ? p.role.charAt(0).toUpperCase() + p.role.slice(1).replace('_', ' ') : 'Unassigned';
+      html += `
+        <div class="roster-item online">
+          <span class="roster-status">●</span>
+          <span class="roster-name">${escapeHtml(p.slotName || p.username || 'Unknown')}</span>
+          <span class="roster-role">${roleLabel}</span>
+        </div>
+      `;
+    }
+  }
+
+  html += `
+        </div>
+      </div>
+      <div class="roster-section">
+        <h4>Ship's Complement (${npcCrew.length} NPC)</h4>
+        <div class="roster-list">
+  `;
+
+  if (npcCrew.length === 0) {
+    html += '<div class="roster-empty">No NPC crew assigned</div>';
+  } else {
+    for (const npc of npcCrew) {
+      html += `
+        <div class="roster-item npc">
+          <span class="roster-status npc">◆</span>
+          <span class="roster-name">${escapeHtml(npc.name || 'NPC')}</span>
+          <span class="roster-role">${npc.role || npc.position || 'Crew'}</span>
+        </div>
+      `;
+    }
+  }
+
+  html += `
+        </div>
+      </div>
+      <div class="roster-summary" style="margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color);">
+        <small>Crew Capacity: ${template.staterooms || '?'} staterooms | Low Berths: ${template.lowBerths || 0}</small>
+      </div>
+    </div>
+  `;
+
+  showModalContent(html);
+}
+
+// ==================== AR-48: Ship Configuration ====================
+
+function showShipConfiguration() {
+  const ship = state.ship || {};
+  const template = state.shipTemplate || {};
+  const shipData = ship.ship_data || template || {};
+
+  const weapons = shipData.weapons || [];
+  const drives = {
+    mDrive: shipData.mDrive || shipData.maneuver || '?',
+    jDrive: shipData.jDrive || shipData.jumpRating || '?',
+    powerPlant: shipData.powerPlant || shipData.power || '?'
+  };
+
+  let html = `
+    <div class="modal-header">
+      <h2>🔧 ${shipData.name || template.name || 'Ship'} Configuration</h2>
+      <button class="btn-close" data-close-modal>×</button>
+    </div>
+    <div class="modal-body ship-config">
+      <div class="config-section">
+        <h4>Hull</h4>
+        <table class="config-table">
+          <tr><td>Tonnage</td><td>${shipData.tonnage || template.tonnage || '?'} dT</td></tr>
+          <tr><td>Hull Points</td><td>${shipData.hull || template.hull || '?'}</td></tr>
+          <tr><td>Structure</td><td>${shipData.structure || template.structure || '?'}</td></tr>
+          <tr><td>Armor</td><td>${shipData.armor || template.armor || 0}</td></tr>
+        </table>
+      </div>
+
+      <div class="config-section">
+        <h4>Drives & Power</h4>
+        <table class="config-table">
+          <tr><td>Maneuver</td><td>${drives.mDrive}-G</td></tr>
+          <tr><td>Jump</td><td>Jump-${drives.jDrive}</td></tr>
+          <tr><td>Power Plant</td><td>${drives.powerPlant}</td></tr>
+        </table>
+      </div>
+
+      <div class="config-section">
+        <h4>Fuel & Cargo</h4>
+        <table class="config-table">
+          <tr><td>Fuel Capacity</td><td>${shipData.fuel || template.fuel || '?'} tons</td></tr>
+          <tr><td>Cargo Capacity</td><td>${shipData.cargo || template.cargo || '?'} tons</td></tr>
+        </table>
+      </div>
+
+      <div class="config-section">
+        <h4>Weapons (${weapons.length})</h4>
+        ${weapons.length === 0 ? '<div class="config-empty">No weapons installed</div>' : `
+        <table class="config-table">
+          ${weapons.map(w => `
+            <tr>
+              <td>${w.name || 'Weapon'}</td>
+              <td>${w.damage || '?'} dmg</td>
+              <td>${w.mount || 'Turret'}</td>
+            </tr>
+          `).join('')}
+        </table>
+        `}
+      </div>
+
+      <div class="config-section">
+        <h4>Accommodations</h4>
+        <table class="config-table">
+          <tr><td>Staterooms</td><td>${shipData.staterooms || template.staterooms || '?'}</td></tr>
+          <tr><td>Low Berths</td><td>${shipData.lowBerths || template.lowBerths || 0}</td></tr>
+        </table>
+      </div>
+    </div>
+  `;
+
+  showModalContent(html);
+}
+
 // ==================== GM Prep Panel (AUTORUN-8) ====================
 
 // Initialize prep panel event listeners
@@ -9421,6 +9564,9 @@ window.showLibraryComputer = showLibraryComputer;
 window.searchLibrary = searchLibrary;
 window.showLibraryTab = showLibraryTab;
 window.decodeUWP = decodeUWP;
+// AR-48: Menu features
+window.showCrewRoster = showCrewRoster;
+window.showShipConfiguration = showShipConfiguration;
 // Autorun 14: Combat contact management
 window.showAddCombatContactModal = showAddCombatContactModal;
 window.submitCombatContact = submitCombatContact;
