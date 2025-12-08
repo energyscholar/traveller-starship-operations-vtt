@@ -8306,7 +8306,7 @@ function showLibraryTab(tab) {
       <div class="uwp-decoder">
         <label>Enter UWP Code:</label>
         <input type="text" id="uwp-input" class="form-input" placeholder="e.g. A788899-C"
-               oninput="decodeUWP(this.value)" maxlength="10" style="width: 150px; font-family: monospace;">
+               oninput="decodeUWPLibrary(this.value)" maxlength="10" style="width: 150px; font-family: monospace;">
         <div id="uwp-result" style="margin-top: 10px;"></div>
       </div>
     `;
@@ -8324,7 +8324,7 @@ function showLibraryTab(tab) {
   }
 }
 
-function decodeUWP(uwp) {
+function decodeUWPLibrary(uwp) {
   if (!uwp || uwp.length < 7) {
     document.getElementById('uwp-result').innerHTML = '<div class="text-muted">Enter at least 7 characters</div>';
     return;
@@ -9645,7 +9645,7 @@ window.updateFireButton = updateFireButton;
 window.showLibraryComputer = showLibraryComputer;
 window.searchLibrary = searchLibrary;
 window.showLibraryTab = showLibraryTab;
-window.decodeUWP = decodeUWP;
+window.decodeUWPLibrary = decodeUWPLibrary;
 // AR-48: Menu features
 window.showCrewRoster = showCrewRoster;
 window.showShipConfiguration = showShipConfiguration;
