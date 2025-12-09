@@ -16,8 +16,12 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies (production only)
-# Use npm ci for reproducible builds
-RUN npm ci --omit=dev && \
+# Try npm ci first for reproducible builds, fall back to npm install if lock file missing
+RUN if [ -f package-lock.json ]; then \
+        npm ci --omit=dev; \
+    else \
+        npm install --omit=dev; \
+    fi && \
     npm cache clean --force
 
 # ==================================================================

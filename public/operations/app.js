@@ -1307,15 +1307,15 @@ function initSocket() {
     state.sharedMapView = data;
     updateSharedMapBadge(true);
     mapDebugMessage(`Map shared by ${data.sharedBy || 'GM'}`, 'info');
-    // Auto-switch: show map for all players
-    if (data.autoSwitch) {
+
+    // Auto-switch for PLAYERS only - GM already has map open
+    if (data.autoSwitch && !state.isGM) {
       showSharedMap();
-      // Update iframe if map is already open
       updateSharedMapFrame(data);
-    }
-    if (!state.isGM) {
       showNotification('GM is sharing the map', 'info');
     }
+
+    // GM just needs button state updated
     updateSharedMapButtons();
   });
 
@@ -6923,18 +6923,22 @@ function updateMailBadge() {
 state.sharedMapActive = false;
 state.sharedMapView = null;
 
+// AR-50.1: Shared map settings
+state.sharedMapSettings = {
+  scale: 64,       // Pixels per parsec (zoom level)
+  style: 'poster'  // Map style
+};
+
 function showSharedMap() {
-  // Create fullscreen map overlay with interactive subsector map
+  // Create fullscreen map overlay with interactive TravellerMap iframe
   const existing = document.getElementById('shared-map-overlay');
   if (existing) {
     existing.classList.remove('hidden');
-    // Update ship location if hex changed and center map
-    if (state.campaign?.current_hex && typeof setShipLocation === 'function') {
-      setShipLocation(state.campaign.current_hex);
-      // AR-38.3: Center map on ship location when reopened
-      if (typeof centerOnHex === 'function') {
-        setTimeout(() => centerOnHex(state.campaign.current_hex), 100);
-      }
+    // If player and shared view exists, sync to GM's view
+    if (!state.isGM && state.sharedMapView) {
+      updateSharedMapFrame(state.sharedMapView);
+    } else {
+      updateSharedMapIframe();
     }
     return;
   }
@@ -6943,56 +6947,46 @@ function showSharedMap() {
   overlay.id = 'shared-map-overlay';
   overlay.className = 'shared-map-overlay';
 
-  // Determine current subsector from campaign data
-  const currentSubsector = state.campaign?.current_subsector || 'district268';
+  // AR-50.2: Use shared view data if available (for players), else use campaign data
+  let sector, hex, systemName;
+  if (!state.isGM && state.sharedMapView) {
+    sector = state.sharedMapView.sector || 'Spinward Marches';
+    hex = state.sharedMapView.hex || '0930';
+    systemName = state.sharedMapView.center || 'Unknown';
+  } else {
+    sector = state.campaign?.current_sector || 'Spinward Marches';
+    hex = state.campaign?.current_hex || '0930';
+    systemName = state.campaign?.current_system || 'Unknown';
+  }
 
   overlay.innerHTML = `
     <div class="shared-map-header">
-      <h2>🗺️ Shared Map${state.sharedMapActive ? ' <span class="live-badge">LIVE</span>' : ''}</h2>
-      <div class="shared-map-controls">
+      <h2>Shared Map${state.sharedMapActive ? ' <span class="live-badge">LIVE</span>' : ''}</h2>
+      <div class="shared-map-controls" style="display: flex; gap: 8px; align-items: center;">
+        <span style="color: #888; font-size: 12px;">Centered on: <strong>${systemName}</strong> (${hex})</span>
         ${state.isGM ? `
           <button id="btn-share-map" class="btn btn-primary ${state.sharedMapActive ? 'hidden' : ''}">Share with Players</button>
+          <button id="btn-recenter-players" class="btn btn-secondary ${state.sharedMapActive ? '' : 'hidden'}" title="Sync all players to current location">Re-center Players</button>
           <button id="btn-unshare-map" class="btn btn-danger ${state.sharedMapActive ? '' : 'hidden'}">Stop Sharing</button>
         ` : ''}
         <button id="btn-close-map" class="btn btn-secondary">Close</button>
       </div>
     </div>
-    <div class="shared-map-container" id="shared-sector-map-container" style="flex: 1; position: relative;">
-      <!-- Interactive sector map canvas will be created here -->
+    <div class="shared-map-container" id="shared-sector-map-container" style="flex: 1; position: relative; overflow: hidden; background: #000;">
+      <iframe
+        id="shared-map-iframe"
+        src="${buildTravellerMapUrl(sector, hex)}"
+        style="width: 100%; height: 100%; border: none;"
+        allowfullscreen
+      ></iframe>
     </div>
     <div class="shared-map-footer" style="padding: 8px 16px; background: rgba(0,0,0,0.5); display: flex; gap: 16px; align-items: center;">
-      <span style="color: #aaa;">Scroll to zoom | Drag to pan | Click system for info</span>
-      <span style="color: #666;">Data from travellermap.com</span>
+      <span style="color: #aaa;">Drag to pan | Scroll to zoom | Double-click to zoom in</span>
+      <span style="color: #666; margin-left: auto;">Powered by travellermap.com</span>
     </div>
   `;
 
   document.body.appendChild(overlay);
-
-  // Initialize interactive sector map
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      const container = document.getElementById('shared-sector-map-container');
-      if (container && typeof initSectorMap === 'function') {
-        initSectorMap(container);
-
-        // Load sector data
-        if (typeof loadSectorData === 'function') {
-          loadSectorData(currentSubsector);
-        }
-
-        // Set ship location to current hex if available and center map
-        if (state.campaign?.current_hex && typeof setShipLocation === 'function') {
-          setTimeout(() => {
-            setShipLocation(state.campaign.current_hex);
-            // AR-38.3: Center map on ship location when first opened
-            if (typeof centerOnHex === 'function') {
-              centerOnHex(state.campaign.current_hex);
-            }
-          }, 500);
-        }
-      }
-    });
-  });
 
   // Event handlers
   document.getElementById('btn-close-map').addEventListener('click', closeSharedMap);
@@ -7003,13 +6997,55 @@ function showSharedMap() {
         center: state.campaign?.current_system,
         sector: state.campaign?.current_sector,
         hex: state.campaign?.current_hex,
-        zoom: 64
+        scale: state.sharedMapSettings.scale,
+        style: state.sharedMapSettings.style
       });
+    });
+
+    // AR-50.2: Re-center players button - broadcasts current location to all players
+    document.getElementById('btn-recenter-players')?.addEventListener('click', () => {
+      state.socket.emit('ops:updateMapView', {
+        center: state.campaign?.current_system,
+        sector: state.campaign?.current_sector,
+        hex: state.campaign?.current_hex,
+        scale: state.sharedMapSettings.scale,
+        style: state.sharedMapSettings.style
+      });
+      showNotification('Players re-centered to current location', 'info');
     });
 
     document.getElementById('btn-unshare-map')?.addEventListener('click', () => {
       state.socket.emit('ops:unshareMap');
     });
+  }
+}
+
+// AR-50.1: Build TravellerMap URL for iframe
+function buildTravellerMapUrl(sector, hex) {
+  const { scale, style } = state.sharedMapSettings;
+  const params = new URLSearchParams({
+    sector: sector,
+    hex: hex,
+    scale: scale,
+    style: style
+  });
+  return `https://travellermap.com/?${params.toString()}`;
+}
+
+// AR-50.1: Update iframe src when location changes
+function updateSharedMapIframe() {
+  const iframe = document.getElementById('shared-map-iframe');
+  if (!iframe) return;
+
+  const sector = state.campaign?.current_sector || 'Spinward Marches';
+  const hex = state.campaign?.current_hex || '0930';
+  iframe.src = buildTravellerMapUrl(sector, hex);
+
+  // Update header text
+  const header = document.querySelector('.shared-map-controls span');
+  if (header) {
+    const systemName = state.campaign?.current_system || 'Unknown';
+    header.innerHTML = `Centered on: <strong>${systemName}</strong> (${hex})`;
   }
 }
 
@@ -7318,34 +7354,37 @@ window.closeSystemMap = closeSystemMap;
 function updateSharedMapButtons() {
   const shareBtn = document.getElementById('btn-share-map');
   const unshareBtn = document.getElementById('btn-unshare-map');
+  const recenterBtn = document.getElementById('btn-recenter-players');
   if (shareBtn) shareBtn.classList.toggle('hidden', state.sharedMapActive);
   if (unshareBtn) unshareBtn.classList.toggle('hidden', !state.sharedMapActive);
+  if (recenterBtn) recenterBtn.classList.toggle('hidden', !state.sharedMapActive);
 }
 
+// AR-50.2: Update shared map iframe with new location (for player sync)
 function updateSharedMapFrame(data) {
-  const mapImage = document.getElementById('shared-map-image');
-  if (!mapImage || !data) return;
+  const iframe = document.getElementById('shared-map-iframe');
+  if (!iframe || !data) return;
 
-  // Build poster API URL via local proxy - defaults to Caladbolg (1815)
-  let mapUrl = '/api/map/poster?sector=Spinward+Marches&hex=1815&jump=4&style=poster';
-  if (data.sector && data.hex) {
-    // Jump map centered on location
-    mapUrl = `/api/map/poster?sector=${encodeURIComponent(data.sector)}&hex=${data.hex}&jump=4&style=poster`;
-  } else if (data.sector) {
-    // Sector poster
-    mapUrl = `/api/map/poster?sector=${encodeURIComponent(data.sector)}&scale=32&style=poster&options=41975`;
+  const sector = data.sector || 'Spinward Marches';
+  const hex = data.hex || '0930';
+  const scale = data.scale || state.sharedMapSettings.scale;
+  const style = data.style || state.sharedMapSettings.style;
+
+  // Build URL with shared scale/style (not local settings)
+  const params = new URLSearchParams({ sector, hex, scale, style });
+  const url = `https://travellermap.com/?${params.toString()}`;
+
+  // Only update if URL actually changed
+  if (iframe.src !== url) {
+    iframe.src = url;
+    mapDebugMessage(`Synced to: ${sector}/${hex} scale=${scale}`);
   }
 
-  // Only update if URL parameters actually changed (check sector and hex)
-  const currentUrl = new URL(mapImage.src, window.location.origin);
-  const currentSector = currentUrl.searchParams.get('sector');
-  const currentHex = currentUrl.searchParams.get('hex');
-  const newSector = data.sector || 'Spinward Marches';
-  const newHex = data.hex || '1815';
-
-  if (currentSector !== newSector || currentHex !== newHex) {
-    mapImage.src = mapUrl;
-    mapDebugMessage(`Loading: ${data.sector || 'default'}${data.hex ? '/' + data.hex : ''}`);
+  // Update header text
+  const header = document.querySelector('.shared-map-controls span');
+  if (header) {
+    const systemName = data.center || 'Unknown';
+    header.innerHTML = `Centered on: <strong>${systemName}</strong> (${hex})`;
   }
 }
 

@@ -157,22 +157,63 @@ async function runGMHappyPath() {
 
     // Step 13: Open shared map overlay
     console.log('Step 13: Open shared map...');
-    await page.click('#menu-shared-map');
-    await delay(DELAYS.MEDIUM);
-    const sharedMapOverlay = await page.$('#shared-map-overlay:not(.hidden)');
-    if (sharedMapOverlay) {
-      pass(results, 'Shared map overlay opens');
-    } else {
-      fail(results, 'Shared map overlay opens', 'Overlay not visible');
+    try {
+      // Reopen menu and use evaluate to click (more reliable for dynamic menus)
+      await clickButton(page, 'btn-menu');
+      await delay(DELAYS.SHORT);
+      await page.evaluate(() => {
+        const menuItem = document.querySelector('#menu-shared-map');
+        if (menuItem) menuItem.click();
+      });
+      await delay(DELAYS.LONG);  // Allow time for map image to load
+      const sharedMapOverlay = await page.$('#shared-map-overlay:not(.hidden)');
+      if (sharedMapOverlay) {
+        pass(results, 'Shared map overlay opens');
+      } else {
+        fail(results, 'Shared map overlay opens', 'Overlay not visible');
+      }
+    } catch (clickErr) {
+      fail(results, 'Shared map overlay opens', clickErr.message);
     }
 
-    // Step 14: Share button visible for GM
+    // Step 14: Share button visible for GM (before sharing)
     console.log('Step 14: Check GM share button...');
     const shareBtn = await page.$('#btn-share-map:not(.hidden)');
     if (shareBtn) {
       pass(results, 'GM Share Map button visible');
     } else {
       fail(results, 'GM Share Map button visible', 'Button not found');
+    }
+
+    // Step 14b: Re-center button should be hidden before sharing
+    console.log('Step 14b: Check re-center button hidden before share...');
+    const recenterHidden = await page.$('#btn-recenter-players.hidden, #btn-recenter-players[class*="hidden"]');
+    const recenterVisible = await page.$('#btn-recenter-players:not(.hidden)');
+    if (recenterHidden || !recenterVisible) {
+      pass(results, 'Re-center button hidden before sharing');
+    } else {
+      fail(results, 'Re-center button hidden before sharing', 'Button unexpectedly visible');
+    }
+
+    // Step 14c: Click Share and verify re-center button appears
+    console.log('Step 14c: Click Share and check re-center button...');
+    try {
+      await page.click('#btn-share-map');
+      await delay(DELAYS.MEDIUM);
+      const recenterAfterShare = await page.$('#btn-recenter-players:not(.hidden)');
+      if (recenterAfterShare) {
+        pass(results, 'Re-center button visible after sharing');
+      } else {
+        fail(results, 'Re-center button visible after sharing', 'Button not found or hidden');
+      }
+      // Unshare to clean up
+      const unshareBtn = await page.$('#btn-unshare-map:not(.hidden)');
+      if (unshareBtn) {
+        await page.click('#btn-unshare-map');
+        await delay(DELAYS.SHORT);
+      }
+    } catch (err) {
+      fail(results, 'Re-center button visible after sharing', err.message);
     }
 
     // Step 15: Close shared map
