@@ -845,6 +845,20 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
       </div>
     </div>
 
+    <div class="detail-section gunner-reference-section">
+      <h4>TACTICAL REFERENCE</h4>
+      <div class="action-buttons" style="display: flex; gap: 6px; flex-wrap: wrap;">
+        <button onclick="window.showWeaponsReference()" class="btn btn-small btn-info"
+                title="Open weapons reference - damage, ranges, and tactical tips">
+          Weapons Guide
+        </button>
+        <button onclick="window.showRangeChart()" class="btn btn-small btn-secondary"
+                title="Range bands and DM modifiers">
+          Range Chart
+        </button>
+      </div>
+    </div>
+
     <div class="detail-section combat-log-section">
       <h4>FIRE LOG</h4>
       <div class="combat-log-list" id="gunner-combat-log">

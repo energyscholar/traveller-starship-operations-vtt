@@ -3345,6 +3345,114 @@ function setupTransitCalculator() {
   setTimeout(updateTransitCalculator, 100);
 }
 
+// ==================== AR-51: Gunner Weapons Reference ====================
+
+/**
+ * Show weapons reference modal with stats and tactical tips
+ */
+function showWeaponsReference() {
+  const content = `
+    <div class="weapons-reference-content">
+      <section class="ref-section">
+        <h4>TURRET WEAPONS</h4>
+        <table class="ref-table">
+          <tr><th>Weapon</th><th>Damage</th><th>Range</th><th>Power</th><th>Best For</th></tr>
+          <tr><td>Pulse Laser</td><td>2D</td><td>Short</td><td>1</td><td>Called shots, point defense</td></tr>
+          <tr><td>Beam Laser</td><td>1D</td><td>Medium</td><td>1</td><td>General combat</td></tr>
+          <tr><td>Sandcaster</td><td>-1D*</td><td>Short</td><td>0</td><td>Missile defense</td></tr>
+          <tr><td>Missile Rack</td><td>4D</td><td>Special</td><td>0</td><td>Long range alpha</td></tr>
+        </table>
+        <small>*Sandcaster reduces incoming damage</small>
+      </section>
+
+      <section class="ref-section">
+        <h4>BARBETTE WEAPONS</h4>
+        <table class="ref-table">
+          <tr><th>Weapon</th><th>Damage</th><th>Range</th><th>Power</th><th>Best For</th></tr>
+          <tr><td>Ion</td><td>Special</td><td>Medium</td><td>10</td><td>Disable for boarding</td></tr>
+          <tr><td>Particle</td><td>6D+rad</td><td>V.Long</td><td>15</td><td>Kill shots</td></tr>
+          <tr><td>Plasma</td><td>5D</td><td>Short</td><td>10</td><td>Close combat</td></tr>
+        </table>
+      </section>
+
+      <section class="ref-section">
+        <h4>POINT DEFENSE</h4>
+        <ul class="ref-list">
+          <li><strong>Sandcasters:</strong> -1D to all incoming damage</li>
+          <li><strong>Active PD:</strong> Roll to destroy missiles (needs Fire Control)</li>
+          <li><strong>Evade:</strong> Pilot maneuver, -DM to enemy attacks</li>
+        </ul>
+      </section>
+
+      <section class="ref-section">
+        <h4>TACTICAL TIPS</h4>
+        <ul class="ref-list">
+          <li><strong>Opening:</strong> Let fighters engage with missiles at range</li>
+          <li><strong>Disable:</strong> Ion barbette for system hits before boarding</li>
+          <li><strong>Defense:</strong> Keep one turret on sand duty</li>
+          <li><strong>Called Shots:</strong> Use pulse lasers for precision</li>
+        </ul>
+      </section>
+
+      <section class="ref-section">
+        <h4>TARGET PRIORITY</h4>
+        <ol class="ref-list">
+          <li>Incoming missiles (point defense)</li>
+          <li>Enemy weapons (disable threat)</li>
+          <li>Engines (prevent escape)</li>
+          <li>Bridge (force surrender)</li>
+        </ol>
+      </section>
+    </div>
+  `;
+
+  showModal('Weapons Reference', content);
+}
+
+/**
+ * Show range chart modal with DM modifiers
+ */
+function showRangeChart() {
+  const content = `
+    <div class="range-chart-content">
+      <section class="ref-section">
+        <h4>RANGE BANDS & DM</h4>
+        <table class="ref-table">
+          <tr><th>Range Band</th><th>Distance</th><th>Attack DM</th></tr>
+          <tr><td>Adjacent</td><td>&lt; 1km</td><td class="dm-positive">+1</td></tr>
+          <tr><td>Close</td><td>1-10km</td><td>+0</td></tr>
+          <tr><td>Short</td><td>10-1,250km</td><td>+0</td></tr>
+          <tr><td>Medium</td><td>1,250-10,000km</td><td class="dm-negative">-1</td></tr>
+          <tr><td>Long</td><td>10,000-25,000km</td><td class="dm-negative">-2</td></tr>
+          <tr><td>Very Long</td><td>25,000-50,000km</td><td class="dm-negative">-4</td></tr>
+          <tr><td>Distant</td><td>&gt; 50,000km</td><td class="dm-negative">-6</td></tr>
+        </table>
+      </section>
+
+      <section class="ref-section">
+        <h4>ATTACK FORMULA</h4>
+        <div class="formula-box">
+          <strong>2D6 + Gunnery + Range DM >= 8 to hit</strong>
+        </div>
+        <p>Critical hit on Effect 6+ (roll - target number)</p>
+      </section>
+
+      <section class="ref-section">
+        <h4>WEAPON RANGES</h4>
+        <table class="ref-table">
+          <tr><th>Weapon Type</th><th>Optimal Range</th></tr>
+          <tr><td>Pulse Laser</td><td>Short (no penalty)</td></tr>
+          <tr><td>Beam Laser</td><td>Medium (no penalty)</td></tr>
+          <tr><td>Particle</td><td>Very Long (no penalty)</td></tr>
+          <tr><td>Missiles</td><td>Any (guided)</td></tr>
+        </table>
+      </section>
+    </div>
+  `;
+
+  showModal('Range Chart', content);
+}
+
 // Listen for pilot events
 function setupPilotListeners() {
   if (!state.socket) return;
@@ -10045,6 +10153,9 @@ window.selectWeapon = selectWeapon;
 window.selectWeaponByIndex = selectWeaponByIndex;
 window.togglePointDefense = togglePointDefense;
 window.updateFireButton = updateFireButton;
+// AR-51: Gunner Weapons Reference
+window.showWeaponsReference = showWeaponsReference;
+window.showRangeChart = showRangeChart;
 // AR-40: Library Computer
 window.showLibraryComputer = showLibraryComputer;
 window.searchLibrary = searchLibrary;
