@@ -8535,6 +8535,66 @@ body.role-engineer .role-panel .role-actions {
   font-weight: bold;
 }
 
+/* AR-37: Fire Solution Display */
+.fire-solution-section {
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.fire-solution-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.solution-modifiers {
+  flex: 1;
+}
+
+.mod-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  font-size: 0.85em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mod-row.total {
+  font-weight: bold;
+  border-top: 2px solid var(--border-color);
+  margin-top: 4px;
+  padding-top: 6px;
+}
+
+.dm-value {
+  font-family: monospace;
+  min-width: 40px;
+  text-align: right;
+}
+
+.solution-result {
+  text-align: center;
+  padding: 8px;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+.hit-probability {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.hit-label {
+  font-size: 0.7em;
+  color: var(--text-muted);
+  display: block;
+}
+
+.damage-prediction .stat-row {
+  font-size: 0.85em;
+}
+
 /* AR-30/33: Time Controls */
 .time-controls {
   display: flex;

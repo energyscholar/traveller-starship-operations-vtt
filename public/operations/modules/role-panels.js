@@ -757,6 +757,35 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
     </div>
     ` : ''}
 
+    ${selectedWeapon && selectedTarget ? `
+    <div class="detail-section fire-solution-section">
+      <h4>FIRE SOLUTION</h4>
+      <div class="fire-solution-display">
+        <div class="solution-modifiers">
+          <div class="mod-row"><span>Gunnery Skill:</span><span class="dm-value ${gunnerySkill >= 0 ? 'dm-positive' : 'dm-negative'}">+${gunnerySkill}</span></div>
+          <div class="mod-row"><span>Range (${selectedTarget.range_band || 'Med'}):</span><span class="dm-value ${getRangeDM(selectedTarget.range_band) >= 0 ? 'dm-positive' : 'dm-negative'}">${formatRangeDM(getRangeDM(selectedTarget.range_band))}</span></div>
+          ${shipState?.sensorLock?.targetId === selectedTarget.id ? '<div class="mod-row"><span>Sensor Lock:</span><span class="dm-value dm-positive">+2</span></div>' : ''}
+          ${selectedTarget.dodge ? `<div class="mod-row"><span>Target Dodge:</span><span class="dm-value dm-negative">-${Math.floor((selectedTarget.thrust || 0) / 2)}</span></div>` : ''}
+          <div class="mod-row total"><span>Total DM:</span><span class="dm-value">${formatRangeDM(gunnerySkill + getRangeDM(selectedTarget.range_band) + (shipState?.sensorLock?.targetId === selectedTarget.id ? 2 : 0))}</span></div>
+        </div>
+        <div class="solution-result">
+          <div class="hit-probability" title="Chance to hit on 2D6 ≥ 8">
+            <span class="hit-label">HIT:</span>
+            <span class="hit-value ${hitChance >= 70 ? 'text-success' : hitChance >= 40 ? 'text-warning' : 'text-danger'}">${hitChance}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="damage-prediction" style="margin-top: 8px; padding: 8px; background: var(--bg-tertiary); border-radius: 4px;">
+        <div class="stat-row"><span>Weapon Damage:</span><span class="stat-value">${selectedWeapon.damage || '2D6'}</span></div>
+        <div class="stat-row"><span>Target Armour:</span><span class="stat-value">${selectedTarget.armour || 0}</span></div>
+        <div class="stat-row"><span>Expected Damage:</span><span class="stat-value">${Math.max(0, (parseInt(selectedWeapon.damage) || 2) * 3.5 - (selectedTarget.armour || 0)).toFixed(0)}</span></div>
+        ${selectedTarget.health && selectedTarget.max_health ? `
+        <div class="stat-row"><span>Shots to Kill:</span><span class="stat-value">${Math.ceil(selectedTarget.health / Math.max(1, (parseInt(selectedWeapon.damage) || 2) * 3.5 - (selectedTarget.armour || 0)))}</span></div>
+        ` : ''}
+      </div>
+    </div>
+    ` : ''}
+
     <div class="detail-section weapons-section">
       <h4>WEAPONS</h4>
       ${hasWeapons && weapons.length > 1 ? `
