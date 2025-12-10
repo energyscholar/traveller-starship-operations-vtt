@@ -1181,6 +1181,12 @@ function getSensorOperatorPanel(shipState, contacts, environmentalData = null) {
     `;
   };
 
+  // AR-36: ECM/ECCM state
+  const ecmActive = shipState?.ecmActive || false;
+  const eccmActive = shipState?.eccmActive || false;
+  const sensorGrade = shipState?.sensorGrade || 'civilian';
+  const sensorLock = shipState?.sensorLock || null;
+
   return `
     <div class="detail-section">
       <h4>Sensor Controls</h4>
@@ -1198,6 +1204,35 @@ function getSensorOperatorPanel(shipState, contacts, environmentalData = null) {
       <div class="sensor-scan-note">
         <small>Active/Deep scans reveal our position to other ships</small>
       </div>
+    </div>
+
+    <div class="detail-section ecm-section">
+      <h4>Electronic Warfare</h4>
+      <div class="ecm-status">
+        <div class="stat-row">
+          <span>Sensor Grade:</span>
+          <span class="stat-value ${sensorGrade === 'military' ? 'text-success' : ''}">${sensorGrade === 'military' ? 'Military (+2 DM)' : 'Civilian (+0 DM)'}</span>
+        </div>
+      </div>
+      <div class="ecm-controls" style="display: flex; gap: 8px; margin-top: 8px;">
+        <button onclick="window.toggleECM()" class="btn btn-small ${ecmActive ? 'btn-danger' : 'btn-secondary'}" title="ECM: Jamming gives enemies -2 DM to sensor checks against us">
+          ECM ${ecmActive ? 'ON' : 'OFF'}
+        </button>
+        <button onclick="window.toggleECCM()" class="btn btn-small ${eccmActive ? 'btn-success' : 'btn-secondary'}" title="ECCM: Counter-jamming negates enemy ECM (-2 penalty)">
+          ECCM ${eccmActive ? 'ON' : 'OFF'}
+        </button>
+      </div>
+      ${sensorLock ? `
+        <div class="sensor-lock-status" style="margin-top: 8px; padding: 6px; background: var(--bg-tertiary); border-left: 3px solid var(--success); border-radius: 4px;">
+          <strong>LOCK:</strong> ${escapeHtml(sensorLock.targetName || sensorLock.targetId)}
+          <span class="lock-bonus">(+2 Attack DM)</span>
+          <button onclick="window.breakSensorLock()" class="btn btn-tiny btn-secondary" style="margin-left: 8px;">Break</button>
+        </div>
+      ` : `
+        <div class="sensor-lock-hint" style="margin-top: 8px; color: var(--text-muted); font-size: 0.85em;">
+          Click a contact below to acquire sensor lock (+2 Attack DM)
+        </div>
+      `}
     </div>
     <div class="detail-section sensor-contacts-section">
       <h4>Contacts (${contacts?.length || 0})</h4>

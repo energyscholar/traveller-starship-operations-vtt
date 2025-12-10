@@ -3825,6 +3825,75 @@ function performScan(scanType = 'passive') {
   showNotification(`Initiating ${scanType} sensor scan...`, 'info');
 }
 
+// AR-36: ECM/ECCM Functions (Mongoose 2e rules)
+function toggleECM() {
+  const newState = !state.shipState?.ecmActive;
+  state.socket.emit('ops:setECM', { active: newState });
+  if (!state.shipState) state.shipState = {};
+  state.shipState.ecmActive = newState;
+  showNotification(`ECM ${newState ? 'ACTIVATED' : 'DEACTIVATED'} - Enemies get ${newState ? '-2 DM' : 'no penalty'} to sensors`, newState ? 'warning' : 'info');
+  renderRoleDetailPanel('sensor_operator');
+}
+
+function toggleECCM() {
+  const newState = !state.shipState?.eccmActive;
+  state.socket.emit('ops:setECCM', { active: newState });
+  if (!state.shipState) state.shipState = {};
+  state.shipState.eccmActive = newState;
+  showNotification(`ECCM ${newState ? 'ACTIVATED' : 'DEACTIVATED'} - ${newState ? 'Countering enemy ECM' : 'Vulnerable to jamming'}`, newState ? 'success' : 'info');
+  renderRoleDetailPanel('sensor_operator');
+}
+
+function acquireSensorLock(contactId) {
+  const contact = state.contacts?.find(c => c.id === contactId);
+  if (!contact) return;
+
+  // Check if target has ECM active (breaks lock attempt)
+  if (contact.ecmActive) {
+    showNotification('Lock failed - target ECM active', 'danger');
+    return;
+  }
+
+  state.socket.emit('ops:sensorLock', { targetId: contactId });
+  if (!state.shipState) state.shipState = {};
+  state.shipState.sensorLock = {
+    targetId: contactId,
+    targetName: contact.name || contact.transponder || `Contact ${contactId.slice(0,4)}`,
+    lockedAt: Date.now()
+  };
+  showNotification(`SENSOR LOCK acquired on ${state.shipState.sensorLock.targetName} (+2 Attack DM)`, 'success');
+  renderRoleDetailPanel('sensor_operator');
+}
+
+function breakSensorLock() {
+  state.socket.emit('ops:breakSensorLock', {});
+  if (state.shipState) {
+    state.shipState.sensorLock = null;
+  }
+  showNotification('Sensor lock released', 'info');
+  renderRoleDetailPanel('sensor_operator');
+}
+
+// AR-36: Calculate sensor DM (Mongoose 2e rules)
+function calculateSensorDM(scannerState, targetState, range) {
+  let dm = 0;
+
+  // Sensor grade: Military +2, Civilian +0
+  if (scannerState?.sensorGrade === 'military') dm += 2;
+
+  // Target ECM: -2 (unless we have ECCM)
+  if (targetState?.ecmActive && !scannerState?.eccmActive) dm -= 2;
+
+  // Range DM
+  const rangeDMs = { close: 2, short: 1, medium: 0, long: -1, veryLong: -2, distant: -4 };
+  dm += rangeDMs[range] || 0;
+
+  // Sensor lock bonus
+  if (scannerState?.sensorLock?.targetId === targetState?.id) dm += 2;
+
+  return dm;
+}
+
 function handleScanResult(data) {
   const { scanType, contacts, categorized, totalCount, description, skillNote } = data;
 
@@ -10213,6 +10282,9 @@ window.toggleECM = toggleECM;
 window.toggleECCM = toggleECCM;
 window.toggleStealth = toggleStealth;
 window.setSensorLock = setSensorLock;
+window.acquireSensorLock = acquireSensorLock;
+window.breakSensorLock = breakSensorLock;
+window.calculateSensorDM = calculateSensorDM;
 window.authorizeWeapons = authorizeWeapons;
 window.fireAtTarget = fireAtTarget;
 window.fireWeapon = fireWeapon;
