@@ -184,6 +184,139 @@ const threadingTests = {
   }
 };
 
+// === SHIP ENTITY TESTS ===
+
+const shipEntityTests = {
+  'SHIP is a contact entity with AI Computer': () => {
+    const ship = createShipEntity('free_trader', 'Beowulf');
+    assert.equal(ship.type, 'ship');
+    assert.equal(ship.name, 'Beowulf');
+    assert.ok(ship.hasAIComputer, 'Ship should have AI Computer');
+    assert.ok(ship.canEmail, 'Ship should be able to send/receive email');
+  },
+
+  'Any PC can take role of SHIP': () => {
+    const ship = createShipEntity('free_trader', 'Beowulf');
+    const player = { id: 'player-1', name: 'Captain' };
+
+    const result = assumeShipRole(player, ship);
+    assert.ok(result.success);
+    assert.equal(ship.currentOperator, player.id);
+  },
+
+  'SHIP shows unread email count': () => {
+    const ship = createShipEntity('free_trader', 'Beowulf');
+
+    // Receive emails from starport
+    receiveShipEmail(ship, createAuthorityEmail('berthing', {
+      starportName: 'Regina Highport',
+      berthNumber: 'B-42',
+      duration: '7 days'
+    }));
+    receiveShipEmail(ship, createAuthorityEmail('customs_inspection', {
+      inspectionTime: '0800',
+      requiredDocs: ['Manifest']
+    }));
+
+    assert.equal(getShipUnreadCount(ship), 2);
+  },
+
+  'Traffic control contacts SHIP directly': () => {
+    const ship = createShipEntity('free_trader', 'Beowulf');
+    const email = createTrafficControlEmail('departure_vector', {
+      starportName: 'Regina Highport',
+      vector: '045 mark 12',
+      clearanceCode: 'RH-7742'
+    });
+
+    assert.equal(email.to, 'ship');
+    assert.ok(email.subject.includes('Traffic'));
+  },
+
+  'SHIP can send email as vessel': () => {
+    const ship = createShipEntity('free_trader', 'Beowulf');
+    const email = sendShipEmail(ship, 'Regina Highport Control', 'Requesting departure clearance.');
+
+    assert.equal(email.from, 'Beowulf');
+    assert.equal(email.fromType, 'ship');
+  }
+};
+
+// === MAILSTORM PREVENTION TESTS ===
+
+const mailstormTests = {
+  'AI-to-AI thread limited to 2 exchanges': () => {
+    const thread = createAIThread();
+
+    // NPC initiates
+    const msg1 = addAIMessage(thread, 'npc', 'Initial contact');
+    assert.ok(msg1.success);
+
+    // Ship AI responds
+    const msg2 = addAIMessage(thread, 'ship_ai', 'Acknowledged');
+    assert.ok(msg2.success);
+
+    // NPC replies
+    const msg3 = addAIMessage(thread, 'npc', 'Confirm receipt');
+    assert.ok(msg3.success);
+
+    // Ship AI tries to respond again (4th AI message = blocked)
+    const msg4 = addAIMessage(thread, 'ship_ai', 'Roger');
+    assert.ok(msg4.success);
+
+    // 5th AI message should be blocked (more than 2 back-and-forth)
+    const msg5 = addAIMessage(thread, 'npc', 'Another message');
+    assert.ok(!msg5.success, 'Should block after 2 back-and-forth');
+    assert.equal(msg5.reason, 'ai_exchange_limit');
+  },
+
+  'Player message resets AI exchange counter': () => {
+    const thread = createAIThread();
+
+    // 2 back-and-forth between AI
+    addAIMessage(thread, 'npc', 'Hello');
+    addAIMessage(thread, 'ship_ai', 'Hello');
+    addAIMessage(thread, 'npc', 'Status?');
+    addAIMessage(thread, 'ship_ai', 'All good');
+
+    // Player intervenes
+    addPlayerMessage(thread, 'Manual override');
+
+    // AI exchange counter should reset
+    const msg = addAIMessage(thread, 'npc', 'Understood, Captain');
+    assert.ok(msg.success, 'AI should be able to respond after player message');
+  },
+
+  'AI exchange count tracked per thread': () => {
+    const thread1 = createAIThread();
+    const thread2 = createAIThread();
+
+    // Max out thread1
+    addAIMessage(thread1, 'npc', '1');
+    addAIMessage(thread1, 'ship_ai', '2');
+    addAIMessage(thread1, 'npc', '3');
+    addAIMessage(thread1, 'ship_ai', '4');
+
+    // Thread2 should still work
+    const msg = addAIMessage(thread2, 'npc', 'New conversation');
+    assert.ok(msg.success, 'Different thread should have own counter');
+  },
+
+  'Damping flag marks thread as AI-limited': () => {
+    const thread = createAIThread();
+
+    // Max out exchanges
+    addAIMessage(thread, 'npc', '1');
+    addAIMessage(thread, 'ship_ai', '2');
+    addAIMessage(thread, 'npc', '3');
+    addAIMessage(thread, 'ship_ai', '4');
+    addAIMessage(thread, 'npc', '5'); // Should fail
+
+    assert.ok(thread.aiLimited, 'Thread should be marked as AI-limited');
+    assert.equal(thread.aiExchangeCount, 4);
+  }
+};
+
 // === STUB IMPLEMENTATIONS ===
 
 const emailStore = [];
@@ -352,6 +485,95 @@ function formatCr(amount) {
   return `Cr${amount.toLocaleString()}`;
 }
 
+// === SHIP ENTITY STUBS ===
+
+function createShipEntity(type, name) {
+  return {
+    type: 'ship',
+    shipType: type,
+    name,
+    hasAIComputer: true,
+    canEmail: true,
+    currentOperator: null,
+    inbox: [],
+    unreadCount: 0
+  };
+}
+
+function assumeShipRole(player, ship) {
+  ship.currentOperator = player.id;
+  return { success: true };
+}
+
+function receiveShipEmail(ship, email) {
+  ship.inbox.push({ ...email, read: false });
+  ship.unreadCount++;
+}
+
+function getShipUnreadCount(ship) {
+  return ship.unreadCount;
+}
+
+function createTrafficControlEmail(subtype, data) {
+  return {
+    id: `email-${++emailCounter}`,
+    type: 'traffic_control',
+    subtype,
+    to: 'ship',
+    from: `${data.starportName} Traffic Control`,
+    subject: `Traffic Advisory: ${data.clearanceCode}`,
+    body: `Vector: ${data.vector}\nClearance: ${data.clearanceCode}`,
+    timestamp: Date.now()
+  };
+}
+
+function sendShipEmail(ship, to, body) {
+  return {
+    id: `email-${++emailCounter}`,
+    from: ship.name,
+    fromType: 'ship',
+    to,
+    body,
+    timestamp: Date.now()
+  };
+}
+
+// === MAILSTORM PREVENTION STUBS ===
+
+const AI_EXCHANGE_LIMIT = 4; // 2 back-and-forth = 4 messages
+
+function createAIThread() {
+  return {
+    id: `thread-${++emailCounter}`,
+    messages: [],
+    aiExchangeCount: 0,
+    aiLimited: false,
+    lastPlayerMessageIndex: -1
+  };
+}
+
+function addAIMessage(thread, senderType, content) {
+  // Check if we've hit the limit (only count AI messages after last player message)
+  const aiMessagesSincePlayer = thread.aiExchangeCount;
+
+  if (aiMessagesSincePlayer >= AI_EXCHANGE_LIMIT) {
+    thread.aiLimited = true;
+    return { success: false, reason: 'ai_exchange_limit' };
+  }
+
+  thread.messages.push({ senderType, content, timestamp: Date.now() });
+  thread.aiExchangeCount++;
+  return { success: true };
+}
+
+function addPlayerMessage(thread, content) {
+  thread.messages.push({ senderType: 'player', content, timestamp: Date.now() });
+  thread.lastPlayerMessageIndex = thread.messages.length - 1;
+  thread.aiExchangeCount = 0; // Reset counter
+  thread.aiLimited = false;
+  return { success: true };
+}
+
 // === RUN TESTS ===
 
 console.log('=== AR-38 NPC Email System Tests ===\n');
@@ -368,11 +590,18 @@ const servicesPassed = runTests(servicesTests);
 console.log('\n--- Email Threading ---');
 const threadingPassed = runTests(threadingTests);
 
+console.log('\n--- SHIP Entity ---');
+const shipPassed = runTests(shipEntityTests);
+
+console.log('\n--- Mailstorm Prevention ---');
+const mailstormPassed = runTests(mailstormTests);
+
 console.log('\n==================================================');
 const total = Object.keys(patronTests).length + Object.keys(authorityTests).length +
-              Object.keys(servicesTests).length + Object.keys(threadingTests).length;
+              Object.keys(servicesTests).length + Object.keys(threadingTests).length +
+              Object.keys(shipEntityTests).length + Object.keys(mailstormTests).length;
 console.log(`Total: ${total} tests`);
-const allPassed = patronPassed && authorityPassed && servicesPassed && threadingPassed;
+const allPassed = patronPassed && authorityPassed && servicesPassed && threadingPassed && shipPassed && mailstormPassed;
 console.log(allPassed ? 'ALL TESTS PASSED ✓' : 'SOME TESTS FAILED');
 console.log('==================================================');
 
