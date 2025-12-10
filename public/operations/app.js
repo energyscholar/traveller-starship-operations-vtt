@@ -1591,6 +1591,14 @@ function initLoginScreen() {
     }
   });
 
+  // AR-58: ENTER hotkey for campaign code input
+  document.getElementById('campaign-code')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
+      document.getElementById('btn-join-campaign').click();
+    }
+  });
+
   // Guest login flow (Stage 13.5 - completed)
   const btnJoinGuest = document.getElementById('btn-join-guest');
   if (btnJoinGuest) {
@@ -4577,13 +4585,24 @@ function showModal(templateId) {
 
   // Modal-specific handlers
   if (templateId === 'template-create-campaign') {
-    document.getElementById('btn-confirm-create-campaign').addEventListener('click', () => {
+    const confirmCreate = () => {
       const name = document.getElementById('new-campaign-name').value.trim();
       const gmName = document.getElementById('gm-name').value.trim();
       if (name && gmName) {
         state.socket.emit('ops:createCampaign', { name, gmName });
         closeModal();
       }
+    };
+    document.getElementById('btn-confirm-create-campaign').addEventListener('click', confirmCreate);
+
+    // AR-58: ENTER hotkey for create campaign inputs
+    ['new-campaign-name', 'gm-name'].forEach(id => {
+      document.getElementById(id)?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+          e.preventDefault();
+          confirmCreate();
+        }
+      });
     });
   }
 

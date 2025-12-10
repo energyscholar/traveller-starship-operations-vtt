@@ -294,12 +294,20 @@ input[type="checkbox"] {
 }
 
 /* AR-51: Multi-column grid for player slot selection */
+/* AR-59: Adjusted for 15 players without scroll (3 rows x 5 cols) */
 .slot-list-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: var(--space-sm);
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-xs);
   max-height: none;
   overflow-y: visible;
+}
+
+/* AR-59: Force 5 columns on wider screens for 15-player layout */
+@media (min-width: 900px) {
+  .slot-list-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
 
 .slot-hint {
