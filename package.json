@@ -46,7 +46,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
+    "jest": "^30.2.0",
     "mocha": "^11.7.5",
     "nodemon": "^3.1.11",
     "puppeteer": "^24.29.1",
