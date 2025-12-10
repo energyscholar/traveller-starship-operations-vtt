@@ -1,0 +1,33 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "cutter",
+  "type": "small_craft",
+  "name": "Cutter",
+  "tonnage": 50,
+  "role": "transport",
+  "hull": 20,
+  "armour": 0,
+  "thrust": 4,
+  "jump": 0,
+  "fuel": 2,
+  "cargo": 30,
+  "passengers": 0,
+  "lowBerths": 0,
+  "modules": ["fuel", "passenger", "cargo", "ATV"],
+  "turrets": [],
+  "hardpoints": 0,
+  "hardpointsUsed": 0,
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 0,
+    "engineer": 0,
+    "sensors": 0,
+    "marines": 0
+  },
+  "computer": "Computer/5",
+  "software": ["Manoeuvre/0"],
+  "sensors": "Civilian Grade",
+  "techLevel": 10,
+  "cost": 15500000,
+  "description": "Modular utility craft. 30dT module bay accepts standard modules (fuel, cargo, passenger, ATV). Extremely versatile."
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "launch",
+  "type": "small_craft",
+  "name": "Launch",
+  "tonnage": 20,
+  "role": "transport",
+  "hull": 8,
+  "armour": 0,
+  "thrust": 6,
+  "jump": 0,
+  "fuel": 0.5,
+  "cargo": 4,
+  "passengers": 12,
+  "lowBerths": 0,
+  "turrets": [],
+  "hardpoints": 0,
+  "hardpointsUsed": 0,
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 0,
+    "engineer": 0,
+    "sensors": 0,
+    "marines": 0
+  },
+  "computer": "Computer/5",
+  "software": ["Manoeuvre/0"],
+  "sensors": "Civilian Grade",
+  "techLevel": 10,
+  "cost": 5200000,
+  "description": "Basic personnel transport. Starport taxi, orbital ferry. Simple, reliable, inexpensive."
+}

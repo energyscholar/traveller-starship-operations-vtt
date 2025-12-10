@@ -1,0 +1,37 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "close_escort",
+  "type": "close_escort",
+  "name": "Close Escort",
+  "tonnage": 400,
+  "role": "military",
+  "hull": 160,
+  "armour": 4,
+  "thrust": 4,
+  "jump": 3,
+  "fuel": 120,
+  "cargo": 10,
+  "passengers": 0,
+  "lowBerths": 0,
+  "turrets": [
+    { "id": "turret1", "type": "triple", "weapons": ["Pulse Laser", "Pulse Laser", "Pulse Laser"] },
+    { "id": "turret2", "type": "triple", "weapons": ["Beam Laser", "Beam Laser", "Beam Laser"] },
+    { "id": "turret3", "type": "triple", "weapons": ["Missile Rack", "Sandcaster", "Sandcaster"] },
+    { "id": "turret4", "type": "triple", "weapons": ["Missile Rack", "Sandcaster", "Sandcaster"] }
+  ],
+  "hardpoints": 4,
+  "hardpointsUsed": 4,
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 4,
+    "engineer": 2,
+    "sensors": 1,
+    "marines": 0
+  },
+  "computer": "Computer/15fib",
+  "software": ["Jump Control/3", "Manoeuvre/0", "Library", "Fire Control/3", "Evade/1"],
+  "sensors": "Military Grade",
+  "techLevel": 12,
+  "cost": 127500000,
+  "description": "Fast convoy escort. Designed to protect merchant shipping from pirates and raiders. Jump-3 capability matches most convoy routes."
+}

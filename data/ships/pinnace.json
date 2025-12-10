@@ -1,0 +1,34 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "pinnace",
+  "type": "small_craft",
+  "name": "Pinnace",
+  "tonnage": 40,
+  "role": "transport",
+  "hull": 16,
+  "armour": 2,
+  "thrust": 5,
+  "jump": 0,
+  "fuel": 2,
+  "cargo": 7,
+  "passengers": 8,
+  "lowBerths": 0,
+  "turrets": [
+    { "id": "turret1", "type": "single", "weapons": ["Pulse Laser"] }
+  ],
+  "hardpoints": 1,
+  "hardpointsUsed": 1,
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 1,
+    "engineer": 0,
+    "sensors": 0,
+    "marines": 0
+  },
+  "computer": "Computer/5",
+  "software": ["Manoeuvre/0", "Fire Control/1"],
+  "sensors": "Civilian Grade",
+  "techLevel": 10,
+  "cost": 16000000,
+  "description": "Armed transport craft. Light armament provides deterrent against opportunistic pirates. Popular with free traders."
+}

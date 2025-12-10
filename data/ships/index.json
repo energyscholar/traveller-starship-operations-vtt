@@ -1,28 +1,25 @@
 {
-  "version": 1,
+  "version": 2,
   "description": "Ship index for fast lookups without loading full ship data",
   "ships": [
-    {
-      "id": "scout",
-      "name": "Scout",
-      "tonnage": 100,
-      "role": "exploration",
-      "file": "scout.json"
-    },
-    {
-      "id": "free_trader",
-      "name": "Free Trader",
-      "tonnage": 200,
-      "role": "trading",
-      "file": "free_trader.json"
-    },
-    {
-      "id": "gorram",
-      "name": "Gorram",
-      "class": "Trojan Horse X-Carrier",
-      "tonnage": 600,
-      "role": "military",
-      "file": "gorram.json"
-    }
+    { "id": "scout", "name": "Scout (Type-S)", "tonnage": 100, "role": "exploration", "file": "scout.json" },
+    { "id": "free_trader", "name": "Free Trader (Type-A)", "tonnage": 200, "role": "trading", "file": "free_trader.json" },
+    { "id": "far_trader", "name": "Far Trader (Type-A2)", "tonnage": 200, "role": "trading", "file": "far_trader.json" },
+    { "id": "yacht", "name": "Yacht", "tonnage": 200, "role": "passenger", "file": "yacht.json" },
+    { "id": "seeker", "name": "Seeker", "tonnage": 200, "role": "mining", "file": "seeker.json" },
+    { "id": "safari_ship", "name": "Safari Ship", "tonnage": 200, "role": "exploration", "file": "safari_ship.json" },
+    { "id": "subsidised_merchant", "name": "Subsidised Merchant (Type-R)", "tonnage": 400, "role": "trading", "file": "subsidised_merchant.json" },
+    { "id": "subsidised_liner", "name": "Subsidised Liner (Type-M)", "tonnage": 600, "role": "passenger", "file": "subsidised_liner.json" },
+    { "id": "laboratory_ship", "name": "Laboratory Ship", "tonnage": 400, "role": "research", "file": "laboratory_ship.json" },
+    { "id": "patrol_corvette", "name": "Patrol Corvette", "tonnage": 400, "role": "military", "file": "patrol_corvette.json" },
+    { "id": "system_defense_boat", "name": "System Defense Boat", "tonnage": 400, "role": "military", "file": "system_defense_boat.json" },
+    { "id": "close_escort", "name": "Close Escort", "tonnage": 400, "role": "military", "file": "close_escort.json" },
+    { "id": "mercenary_cruiser", "name": "Mercenary Cruiser", "tonnage": 800, "role": "military", "file": "mercenary_cruiser.json" },
+    { "id": "gorram", "name": "Gorram", "class": "Trojan Horse X-Carrier", "tonnage": 600, "role": "military", "file": "gorram.json" },
+    { "id": "launch", "name": "Launch", "tonnage": 20, "role": "transport", "file": "launch.json" },
+    { "id": "ships_boat", "name": "Ship's Boat", "tonnage": 30, "role": "transport", "file": "ships_boat.json" },
+    { "id": "pinnace", "name": "Pinnace", "tonnage": 40, "role": "transport", "file": "pinnace.json" },
+    { "id": "cutter", "name": "Cutter", "tonnage": 50, "role": "transport", "file": "cutter.json" },
+    { "id": "light_fighter", "name": "Light Fighter", "tonnage": 10, "role": "military", "file": "light_fighter.json" }
   ]
 }

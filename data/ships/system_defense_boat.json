@@ -1,0 +1,37 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "system_defense_boat",
+  "type": "system_defense_boat",
+  "name": "System Defense Boat",
+  "tonnage": 400,
+  "role": "military",
+  "hull": 200,
+  "armour": 8,
+  "thrust": 6,
+  "jump": 0,
+  "fuel": 20,
+  "cargo": 4,
+  "passengers": 0,
+  "lowBerths": 0,
+  "turrets": [
+    { "id": "turret1", "type": "triple", "weapons": ["Pulse Laser", "Pulse Laser", "Pulse Laser"] },
+    { "id": "turret2", "type": "triple", "weapons": ["Pulse Laser", "Pulse Laser", "Pulse Laser"] },
+    { "id": "turret3", "type": "triple", "weapons": ["Missile Rack", "Missile Rack", "Missile Rack"] },
+    { "id": "turret4", "type": "triple", "weapons": ["Missile Rack", "Missile Rack", "Missile Rack"] }
+  ],
+  "hardpoints": 4,
+  "hardpointsUsed": 4,
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 4,
+    "engineer": 2,
+    "sensors": 1,
+    "marines": 0
+  },
+  "computer": "Computer/25fib",
+  "software": ["Manoeuvre/0", "Library", "Fire Control/4", "Evade/2"],
+  "sensors": "Military Grade",
+  "techLevel": 13,
+  "cost": 216000000,
+  "description": "Non-jump capable system patrol craft. Heavy armament, high thrust. Transported between systems by tender. Backbone of system defense networks."
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "ships_boat",
+  "type": "small_craft",
+  "name": "Ship's Boat",
+  "tonnage": 30,
+  "role": "transport",
+  "hull": 12,
+  "armour": 0,
+  "thrust": 6,
+  "jump": 0,
+  "fuel": 1,
+  "cargo": 15,
+  "passengers": 8,
+  "lowBerths": 0,
+  "turrets": [],
+  "hardpoints": 0,
+  "hardpointsUsed": 0,
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 0,
+    "engineer": 0,
+    "sensors": 0,
+    "marines": 0
+  },
+  "computer": "Computer/5",
+  "software": ["Manoeuvre/0"],
+  "sensors": "Civilian Grade",
+  "techLevel": 10,
+  "cost": 11100000,
+  "description": "Standard small craft for ship-to-shore transfers. Reliable, versatile, common across known space."
+}

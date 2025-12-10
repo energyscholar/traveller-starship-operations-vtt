@@ -1,0 +1,36 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "subsidised_merchant",
+  "type": "subsidised_merchant",
+  "name": "Subsidised Merchant (Type-R)",
+  "tonnage": 400,
+  "role": "trading",
+  "hull": 160,
+  "armour": 2,
+  "thrust": 1,
+  "jump": 1,
+  "fuel": 50,
+  "cargo": 200,
+  "passengers": 8,
+  "lowBerths": 10,
+  "turrets": [
+    { "id": "turret1", "type": "single", "weapons": [] },
+    { "id": "turret2", "type": "single", "weapons": [] }
+  ],
+  "hardpoints": 4,
+  "hardpointsUsed": 2,
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 1,
+    "engineer": 1,
+    "sensors": 0,
+    "steward": 1,
+    "marines": 0
+  },
+  "computer": "Computer/5",
+  "software": ["Jump Control/1", "Manoeuvre/0", "Library"],
+  "sensors": "Civilian Grade",
+  "techLevel": 10,
+  "cost": 62610000,
+  "description": "Government-subsidised merchant vessel. Reliable workhorse operating on fixed routes. Crew often bound by subsidy contract terms."
+}

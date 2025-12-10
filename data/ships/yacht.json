@@ -1,0 +1,33 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "yacht",
+  "type": "yacht",
+  "name": "Yacht",
+  "tonnage": 200,
+  "role": "passenger",
+  "hull": 80,
+  "armour": 0,
+  "thrust": 1,
+  "jump": 1,
+  "fuel": 30,
+  "cargo": 11,
+  "passengers": 10,
+  "lowBerths": 0,
+  "turrets": [],
+  "hardpoints": 2,
+  "hardpointsUsed": 0,
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 0,
+    "engineer": 1,
+    "sensors": 0,
+    "steward": 1,
+    "marines": 0
+  },
+  "computer": "Computer/10",
+  "software": ["Jump Control/1", "Manoeuvre/0", "Library", "Auto-Pilot/1"],
+  "sensors": "Civilian Grade",
+  "techLevel": 12,
+  "cost": 51200000,
+  "description": "Luxurious private vessel. Spacious staterooms, fine dining, entertainment. Owner typically travels in style with small entourage."
+}

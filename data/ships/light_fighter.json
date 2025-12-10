@@ -1,0 +1,33 @@
+{
+  "$schema": "../schemas/ship.schema.json",
+  "id": "light_fighter",
+  "type": "small_craft",
+  "name": "Light Fighter",
+  "tonnage": 10,
+  "role": "military",
+  "hull": 4,
+  "armour": 4,
+  "thrust": 6,
+  "jump": 0,
+  "fuel": 0.4,
+  "cargo": 0,
+  "passengers": 0,
+  "lowBerths": 0,
+  "turrets": [],
+  "hardpoints": 1,
+  "hardpointsUsed": 1,
+  "fixedMount": { "weapon": "Pulse Laser" },
+  "crewRequirements": {
+    "pilot": 1,
+    "gunner": 0,
+    "engineer": 0,
+    "sensors": 0,
+    "marines": 0
+  },
+  "computer": "Computer/5fib",
+  "software": ["Manoeuvre/0", "Evade/1", "Fire Control/1"],
+  "sensors": "Military Grade",
+  "techLevel": 12,
+  "cost": 8800000,
+  "description": "Single-seat interceptor. High thrust, minimal protection. Pilot operates all systems. Effective in swarms against larger vessels."
+}
