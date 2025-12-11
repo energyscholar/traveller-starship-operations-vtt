@@ -227,26 +227,40 @@ function handleDoubleClick(e) {
  * Find what body is at a given canvas position
  */
 function findBodyAtPosition(x, y) {
-  if (!systemMapState.system?.planets) return null;
-
   const { zoom, offsetX, offsetY } = systemMapState;
   const rect = systemMapState.canvas.getBoundingClientRect();
   const centerX = rect.width / 2 + offsetX;
   const centerY = rect.height / 2 + offsetY;
   const auToPixels = systemMapState.AU_TO_PIXELS * zoom;
 
-  for (const planet of systemMapState.system.planets) {
-    const orbitRadius = planet.orbitAU * auToPixels;
-    const orbitSpeed = 0.1 / Math.sqrt(planet.orbitAU);
-    const angle = systemMapState.time * orbitSpeed;
-    const planetX = centerX + Math.cos(angle) * orbitRadius;
-    const planetY = centerY + Math.sin(angle) * orbitRadius * 0.6;
+  // AR-71: Check contacts first (they're drawn on top)
+  if (systemMapState.contacts?.length > 0) {
+    for (const contact of systemMapState.contacts) {
+      if (!contact.position) continue;
+      const contactX = centerX + contact.position.x * auToPixels;
+      const contactY = centerY + contact.position.y * auToPixels * 0.6;
+      const dist = Math.sqrt((x - contactX) ** 2 + (y - contactY) ** 2);
+      if (dist < 15) {  // Contact hit radius
+        return { ...contact, isContact: true };
+      }
+    }
+  }
 
-    const planetSize = Math.max(10, Math.min(50, (planet.size / 5000) * zoom * 2));
-    const dist = Math.sqrt((x - planetX) ** 2 + (y - planetY) ** 2);
+  // Check planets
+  if (systemMapState.system?.planets) {
+    for (const planet of systemMapState.system.planets) {
+      const orbitRadius = planet.orbitAU * auToPixels;
+      const orbitSpeed = 0.1 / Math.sqrt(planet.orbitAU);
+      const angle = systemMapState.time * orbitSpeed;
+      const planetX = centerX + Math.cos(angle) * orbitRadius;
+      const planetY = centerY + Math.sin(angle) * orbitRadius * 0.6;
 
-    if (dist < planetSize + 5) {
-      return planet;
+      const planetSize = Math.max(10, Math.min(50, (planet.size / 5000) * zoom * 2));
+      const dist = Math.sqrt((x - planetX) ** 2 + (y - planetY) ** 2);
+
+      if (dist < planetSize + 5) {
+        return planet;
+      }
     }
   }
 
@@ -264,51 +278,78 @@ function showBodyInfoPanel(body) {
   panel.id = 'system-map-info-panel';
   panel.className = 'system-map-info-panel';
 
-  const travelTime = calculateTravelTime(body.orbitAU);
+  // AR-71: Handle contacts differently from celestial bodies
+  if (body.isContact) {
+    const rangeKm = body.rangeKm || 0;
+    const rangeDisplay = rangeKm > 1000000
+      ? `${(rangeKm / 1000000).toFixed(1)}M km`
+      : `${Math.round(rangeKm).toLocaleString()} km`;
 
-  // Starport info for mainworld
-  let starportHtml = '';
-  if (body.isMainworld && body.starport) {
-    const sp = body.starport;
-    starportHtml = `
-      <div class="info-section">
-        <div class="info-section-title">Starport Class ${sp.class}</div>
-        ${sp.hasHighport ? '<div class="info-row"><span class="info-label">Highport:</span> <span class="info-value">Yes</span></div>' : ''}
-        ${sp.hasDownport ? '<div class="info-row"><span class="info-label">Downport:</span> <span class="info-value">Yes</span></div>' : ''}
-        <div class="info-row"><span class="info-label">Fuel:</span> <span class="info-value">${sp.fuel}</span></div>
+    panel.innerHTML = `
+      <div class="info-panel-header">
+        <h3>${body.name || 'Unknown Contact'}</h3>
+        <button class="info-panel-close" onclick="window.hideSystemMapInfoPanel()">×</button>
+      </div>
+      <div class="info-panel-content">
+        <div class="info-row"><span class="info-label">Type:</span> <span class="info-value">${body.type || 'Unknown'}</span></div>
+        <div class="info-row"><span class="info-label">Range:</span> <span class="info-value">${rangeDisplay}</span></div>
+        <div class="info-row"><span class="info-label">Bearing:</span> <span class="info-value">${body.bearing || 0}°</span></div>
+        ${body.signature ? `<div class="info-row"><span class="info-label">Signature:</span> <span class="info-value">${body.signature}</span></div>` : ''}
+        ${body.transponder ? `<div class="info-row"><span class="info-label">Transponder:</span> <span class="info-value">${body.transponder}</span></div>` : ''}
+        <div class="info-section">
+          <button class="btn btn-sm btn-primary" onclick="window.setContactDestination('${body.id}')">Plot Intercept</button>
+          <button class="btn btn-sm btn-secondary" onclick="window.hailContact('${body.id}')">Hail</button>
+        </div>
+      </div>
+    `;
+  } else {
+    // Regular celestial body
+    const travelTime = calculateTravelTime(body.orbitAU);
+
+    // Starport info for mainworld
+    let starportHtml = '';
+    if (body.isMainworld && body.starport) {
+      const sp = body.starport;
+      starportHtml = `
+        <div class="info-section">
+          <div class="info-section-title">Starport Class ${sp.class}</div>
+          ${sp.hasHighport ? '<div class="info-row"><span class="info-label">Highport:</span> <span class="info-value">Yes</span></div>' : ''}
+          ${sp.hasDownport ? '<div class="info-row"><span class="info-label">Downport:</span> <span class="info-value">Yes</span></div>' : ''}
+          <div class="info-row"><span class="info-label">Fuel:</span> <span class="info-value">${sp.fuel}</span></div>
+        </div>
+      `;
+    }
+
+    // Fuel scooping for gas giants
+    let fuelHtml = '';
+    if (body.canScoop) {
+      fuelHtml = `
+        <div class="info-section fuel-section">
+          <div class="info-row"><span class="info-label">Fuel:</span> <span class="info-value">${body.fuelAvailable}</span></div>
+          <button class="btn btn-sm btn-primary" onclick="window.setDestination('${body.id}')">Set as Destination</button>
+        </div>
+      `;
+    }
+
+    panel.innerHTML = `
+      <div class="info-panel-header">
+        <h3>${body.name}</h3>
+        <button class="info-panel-close" onclick="window.hideSystemMapInfoPanel()">×</button>
+      </div>
+      <div class="info-panel-content">
+        <div class="info-row"><span class="info-label">Type:</span> <span class="info-value">${body.type}</span></div>
+        <div class="info-row"><span class="info-label">Orbit:</span> <span class="info-value">${body.orbitAU.toFixed(2)} AU</span></div>
+        <div class="info-row"><span class="info-label">Size:</span> <span class="info-value">${Math.round(body.size).toLocaleString()} km</span></div>
+        <div class="info-row"><span class="info-label">Period:</span> <span class="info-value">${Math.round(body.orbitPeriod)} days</span></div>
+        <div class="info-row"><span class="info-label">Travel:</span> <span class="info-value">${travelTime}</span></div>
+        ${body.isMainworld ? `<div class="info-row"><span class="info-label">UWP:</span> <span class="info-value uwp">${systemMapState.system?.uwp || '?'}</span></div>` : ''}
+        ${body.moons?.length ? `<div class="info-row"><span class="info-label">Moons:</span> <span class="info-value">${body.moons.length}</span></div>` : ''}
+        ${body.hasRings ? `<div class="info-row"><span class="info-label">Rings:</span> <span class="info-value">Yes</span></div>` : ''}
+        ${starportHtml}
+        ${fuelHtml}
       </div>
     `;
   }
-
-  // Fuel scooping for gas giants
-  let fuelHtml = '';
-  if (body.canScoop) {
-    fuelHtml = `
-      <div class="info-section fuel-section">
-        <div class="info-row"><span class="info-label">Fuel:</span> <span class="info-value">${body.fuelAvailable}</span></div>
-        <button class="btn btn-sm btn-primary" onclick="window.setDestination('${body.id}')">Set as Destination</button>
-      </div>
-    `;
-  }
-
-  panel.innerHTML = `
-    <div class="info-panel-header">
-      <h3>${body.name}</h3>
-      <button class="info-panel-close" onclick="window.hideSystemMapInfoPanel()">×</button>
-    </div>
-    <div class="info-panel-content">
-      <div class="info-row"><span class="info-label">Type:</span> <span class="info-value">${body.type}</span></div>
-      <div class="info-row"><span class="info-label">Orbit:</span> <span class="info-value">${body.orbitAU.toFixed(2)} AU</span></div>
-      <div class="info-row"><span class="info-label">Size:</span> <span class="info-value">${Math.round(body.size).toLocaleString()} km</span></div>
-      <div class="info-row"><span class="info-label">Period:</span> <span class="info-value">${Math.round(body.orbitPeriod)} days</span></div>
-      <div class="info-row"><span class="info-label">Travel:</span> <span class="info-value">${travelTime}</span></div>
-      ${body.isMainworld ? `<div class="info-row"><span class="info-label">UWP:</span> <span class="info-value uwp">${systemMapState.system?.uwp || '?'}</span></div>` : ''}
-      ${body.moons?.length ? `<div class="info-row"><span class="info-label">Moons:</span> <span class="info-value">${body.moons.length}</span></div>` : ''}
-      ${body.hasRings ? `<div class="info-row"><span class="info-label">Rings:</span> <span class="info-value">Yes</span></div>` : ''}
-      ${starportHtml}
-      ${fuelHtml}
-    </div>
-  `;
 
   document.body.appendChild(panel);
 }
@@ -492,6 +533,54 @@ window.goToPlace = goToPlace;
 window.setDestination = setDestination;
 
 /**
+ * AR-71: Set contact as pilot destination (intercept course)
+ */
+function setContactDestination(contactId) {
+  console.log('[SystemMap] Setting contact destination:', contactId);
+
+  // Find contact in current contacts
+  const contact = systemMapState.contacts?.find(c => c.id === contactId);
+  if (!contact) {
+    console.error('[SystemMap] Contact not found:', contactId);
+    return;
+  }
+
+  // Calculate travel time from range (km at 1G thrust)
+  // At 1G (10 m/s²), brachistochrone: t = 2 * sqrt(d/a)
+  const distanceKm = contact.rangeKm || 10000;
+  const distanceM = distanceKm * 1000;
+  const accel = 10; // 1G in m/s²
+  const timeSeconds = 2 * Math.sqrt(distanceM / accel);
+  const travelHours = Math.max(1, Math.ceil(timeSeconds / 3600));
+
+  // Format ETA
+  const etaText = travelHours >= 24
+    ? `${Math.floor(travelHours / 24)}d ${travelHours % 24}h`
+    : `${travelHours}h`;
+
+  const targetName = contact.name || `Contact ${contactId}`;
+
+  // Call setCourse via global function (defined in app.js)
+  if (typeof window.setCourse === 'function') {
+    window.setCourse(targetName, etaText, {
+      contactId: contact.id,
+      travelHours,
+      isIntercept: true
+    });
+  }
+
+  // Update info panel to show it's selected as destination
+  hideBodyInfoPanel();
+
+  // Show notification
+  if (typeof window.showNotification === 'function') {
+    window.showNotification(`Intercept course plotted for ${targetName} (${etaText})`, 'success');
+  }
+}
+
+window.setContactDestination = setContactDestination;
+
+/**
  * Hide info panel
  */
 function hideBodyInfoPanel() {
@@ -540,8 +629,12 @@ function startRenderLoop() {
 
   function loop() {
     if (!systemMapState.paused) {
-      systemMapState.time += 0.016 * systemMapState.timeSpeed; // ~60fps, scaled by speed
-      systemMapState.simulatedDate += 0.016 * systemMapState.timeSpeed * 0.5; // Days pass
+      const deltaTime = 0.016 * systemMapState.timeSpeed; // ~60fps, scaled by speed
+      systemMapState.time += deltaTime;
+      systemMapState.simulatedDate += deltaTime * 0.5; // Days pass
+
+      // AR-71 Phase 3: Update contact positions based on motion
+      updateContactMotion(deltaTime);
     }
     render();
     systemMapState.animationFrame = requestAnimationFrame(loop);
@@ -1796,43 +1889,142 @@ function drawPartyShip(ctx, centerX, centerY, zoom) {
 }
 
 /**
+ * AR-71 Phase 3: Update contact positions based on velocity or orbit
+ * Called each frame from the animation loop
+ */
+function updateContactMotion(deltaTime) {
+  if (!shipMapState.contacts || !shipMapState.contacts.length) return;
+
+  for (const contact of shipMapState.contacts) {
+    // Skip contacts without motion
+    if (!contact.velocity && !contact.orbitAU) continue;
+
+    // Handle drifting contacts (velocity vector)
+    if (contact.velocity) {
+      // velocity: { speed: km/s, heading: degrees }
+      const speedKmS = contact.velocity.speed || 0;
+      const headingRad = (contact.velocity.heading || 0) * Math.PI / 180;
+
+      // Convert speed to AU/second
+      const speedAU = speedKmS / 149597870.7;
+
+      // Update position
+      if (!contact.position) {
+        // Initialize from bearing/range if no position set
+        const rangeKm = contact.range_km || contact.rangeKm || 0;
+        const rangeAU = rangeKm / 149597870.7;
+        const bearing = (contact.bearing || 0) * Math.PI / 180;
+        const shipPos = shipMapState.partyShip?.position || { x: 0, y: 0, z: 0 };
+        contact.position = {
+          x: shipPos.x + Math.cos(bearing) * rangeAU,
+          y: shipPos.y + Math.sin(bearing) * rangeAU
+        };
+      }
+
+      contact.position.x += Math.cos(headingRad) * speedAU * deltaTime;
+      contact.position.y += Math.sin(headingRad) * speedAU * deltaTime;
+    }
+
+    // Handle orbiting contacts (use same formula as planets)
+    if (contact.orbitAU && contact.parentBody) {
+      const orbitSpeed = 0.1 / Math.sqrt(contact.orbitAU);
+      const angle = systemMapState.time * orbitSpeed;
+
+      // Get parent body position
+      let parentX = 0, parentY = 0;
+      if (contact.parentBody === 'star') {
+        parentX = 0;
+        parentY = 0;
+      } else {
+        // Find parent planet
+        const parent = systemMapState.system?.planets?.find(p => p.id === contact.parentBody);
+        if (parent) {
+          const parentOrbitSpeed = 0.1 / Math.sqrt(parent.orbitAU);
+          const parentAngle = systemMapState.time * parentOrbitSpeed;
+          parentX = Math.cos(parentAngle) * parent.orbitAU;
+          parentY = Math.sin(parentAngle) * parent.orbitAU;
+        }
+      }
+
+      contact.position = {
+        x: parentX + Math.cos(angle) * contact.orbitAU,
+        y: parentY + Math.sin(angle) * contact.orbitAU
+      };
+    }
+  }
+}
+
+/**
  * Draw sensor contacts on system map
+ * AR-71: Converts bearing/range relative to ship position to absolute AU coords
  */
 function drawMapContacts(ctx, centerX, centerY, zoom) {
-  if (!shipMapState.contacts.length) return;
+  if (!shipMapState.contacts || !shipMapState.contacts.length) return;
 
   const auToPixels = systemMapState.AU_TO_PIXELS * zoom;
 
+  // Get ship position for relative contact positioning
+  const shipPos = shipMapState.partyShip?.position || { x: 0, y: 0, z: 0 };
+  const shipScreenX = centerX + shipPos.x * auToPixels;
+  const shipScreenY = centerY + shipPos.y * auToPixels * 0.6; // Isometric
+
   for (const contact of shipMapState.contacts) {
-    // Convert bearing/range to position (simplified)
-    const range = contact.rangeKm ? contact.rangeKm / 150000000 : 1; // Convert km to AU approx
-    const bearing = (contact.bearing || 0) * Math.PI / 180;
+    // Skip celestial contacts - they're rendered as planets/stars
+    if (contact.celestial) continue;
 
-    const x = Math.cos(bearing) * range;
-    const y = Math.sin(bearing) * range;
+    let screenX, screenY;
 
-    const screenX = centerX + x * auToPixels + systemMapState.offsetX;
-    const screenY = centerY + y * auToPixels + systemMapState.offsetY;
+    // AR-71 Phase 3: If contact has absolute position, use it directly
+    if (contact.position) {
+      screenX = centerX + contact.position.x * auToPixels + systemMapState.offsetX;
+      screenY = centerY + contact.position.y * auToPixels * 0.6 + systemMapState.offsetY;
+    } else {
+      // Convert bearing/range to position relative to ship
+      // range_km is the actual property from database (snake_case)
+      const rangeKm = contact.range_km || contact.rangeKm || 0;
+      const rangeAU = rangeKm / 149597870.7; // km to AU (accurate conversion)
+      const bearing = (contact.bearing || 0) * Math.PI / 180;
 
-    // Contact color by type
-    let color = '#888888';
-    if (contact.hostile) color = '#ff4444';
-    else if (contact.friendly) color = '#44ff44';
-    else if (contact.known) color = '#ffff44';
+      // Calculate screen position relative to ship
+      const offsetX = Math.cos(bearing) * rangeAU * auToPixels;
+      const offsetY = Math.sin(bearing) * rangeAU * auToPixels * 0.6; // Isometric
 
-    // Draw contact
-    const size = 6;
+      screenX = shipScreenX + offsetX;
+      screenY = shipScreenY + offsetY;
+    }
+
+    // Contact color by marking (from captain)
+    const marking = contact.marking || 'unknown';
+    const colors = {
+      hostile: '#ff4444',
+      friendly: '#44ff44',
+      neutral: '#ffff44',
+      unknown: '#888888'
+    };
+    const color = colors[marking] || colors.unknown;
+
+    // Size varies by type
+    const baseSize = contact.type === 'ship' ? 6 : 5;
+    const size = Math.max(3, Math.min(10, baseSize * Math.sqrt(zoom)));
+
+    // Draw contact dot
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
     ctx.fill();
 
-    // Contact designation
-    if (contact.designation) {
+    // Draw border for better visibility
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Contact label (transponder or designation)
+    const label = contact.transponder || contact.designation || contact.name;
+    if (label && zoom > 0.5) {
       ctx.fillStyle = color;
       ctx.font = '9px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(contact.designation, screenX, screenY + size + 10);
+      ctx.fillText(label, screenX, screenY + size + 10);
     }
   }
 }

@@ -29,7 +29,8 @@ import {
   systemMapState,
   showPlacesOverlay,
   hidePlacesOverlay,
-  resizeCanvas as resizeSystemMapCanvas
+  resizeCanvas as resizeSystemMapCanvas,
+  updateMapContacts  // AR-71: Sync contacts to system map
 } from './modules/system-map.js';
 
 // ==================== Debug Configuration ====================
@@ -2547,6 +2548,11 @@ function updateRoleQuirkDisplay() {
 }
 
 function renderBridge() {
+  // AR-71: Sync contacts to system map for rendering
+  if (state.contacts) {
+    updateMapContacts(state.contacts);
+  }
+
   // Ship name
   document.getElementById('bridge-ship-name').textContent = state.ship?.name || 'Unknown Ship';
 
