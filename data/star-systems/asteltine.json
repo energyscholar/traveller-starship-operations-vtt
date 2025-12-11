@@ -43,7 +43,7 @@
       ],
       "atmosphere": "Exotic",
       "breathable": false,
-      "inGoldilocks": true,
+      "inGoldilocks": false,
       "transponder": "ASTELTINE CONTROL",
       "gmNotes": "Mainworld. Pop 10^4. TL10."
     },

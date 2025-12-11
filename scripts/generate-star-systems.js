@@ -116,7 +116,7 @@ function generateSystemJSON(systemData, subsector) {
         tradeCodes: systemData.tradeCodes,
         atmosphere: getAtmosphereDesc(uwp.atmosphere),
         breathable: uwp.atmosphere >= 5 && uwp.atmosphere <= 8,
-        inGoldilocks: true,
+        inGoldilocks: uwp.atmosphere >= 2 && uwp.atmosphere <= 9,
         transponder: `${systemData.name.toUpperCase()} CONTROL`,
         gmNotes: `Mainworld. Pop ${uwp.population > 0 ? '10^' + uwp.population : '0'}. TL${uwp.techLevel}.`
       }

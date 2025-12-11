@@ -47,7 +47,7 @@
       ],
       "atmosphere": "None",
       "breathable": false,
-      "inGoldilocks": true,
+      "inGoldilocks": false,
       "transponder": "BOWMAN CONTROL",
       "gmNotes": "Mainworld. Pop 10^3. TL9."
     },
