@@ -1,0 +1,57 @@
+{
+  "id": "jumpspace",
+  "name": "Jump Space",
+  "sector": "N/A",
+  "subsector": "N/A",
+  "hex": "0000",
+  "uwp": "X000000-0",
+  "tradeCodes": [],
+  "allegiance": "N/A",
+  "bases": [],
+  "stellar": {
+    "primary": "None",
+    "type": "Single"
+  },
+  "worlds": 0,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "The strange dimension ships traverse during interstellar jumps. No navigation possible. Duration: ~168 hours (1 week ± 10%).",
+  "special": true,
+  "isPseudoSystem": true,
+
+  "celestialObjects": [],
+
+  "locations": [
+    {
+      "id": "loc-in-jump",
+      "name": "In Jump Space",
+      "type": "space",
+      "x": 300,
+      "y": 300,
+      "actions": ["wait", "maintain"],
+      "noNavigation": true
+    }
+  ],
+
+  "roleContent": {
+    "captain": "Ship is in jump space. No external communications possible. Review crew status and plan arrival procedures.",
+    "astrogator": "Jump calculations locked. Monitor for any anomalies. Prepare exit coordinates for destination system.",
+    "pilot": "No piloting required in jump space. Rest and prepare for emergence maneuvers.",
+    "engineer": "Monitor jump drive status. Fuel consumption is locked. Prepare for post-jump diagnostics.",
+    "sensors": "External sensors non-functional in jump space. Internal diagnostics only.",
+    "gunner": "Weapons offline during jump. Use time for maintenance and calibration checks.",
+    "medic": "Good opportunity for crew health checks. Some passengers experience jump sickness.",
+    "steward": "Passengers may be anxious. Maintain calm atmosphere. Prepare for arrival activities.",
+    "cargo": "Verify cargo security. Prepare manifests for destination customs."
+  },
+
+  "visualStyle": {
+    "background": "abstract-tunnel",
+    "colorScheme": "blue-purple",
+    "animated": true,
+    "description": "Swirling abstract patterns representing the non-Euclidean geometry of jump space"
+  },
+
+  "news": [],
+  "mail": {}
+}

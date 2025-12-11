@@ -1,0 +1,261 @@
+{
+  "id": "flammarion",
+  "name": "Flammarion",
+  "sector": "Spinward Marches",
+  "subsector": "Sword Worlds",
+  "hex": "0930",
+  "uwp": "A623514-B",
+  "tradeCodes": ["Ni", "Po"],
+  "allegiance": "Im",
+  "bases": ["N", "S"],
+  "stellar": {
+    "primary": "F8 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Corporate world (Ling-Standard Products). Excellent starport with shipyard. Naval and Scout bases on moon.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Flammarion_(world)",
+
+  "celestialObjects": [
+    {
+      "id": "flammarion-star",
+      "name": "Flammarion Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "stellarClass": "F8 V",
+      "stellarInfo": {
+        "temperature": "6,050-6,180 K",
+        "luminosity": "1.78 Solar",
+        "mass": "1.18 Solar",
+        "habitableZone": "1.2-1.4 AU",
+        "description": "A yellow-white main sequence dwarf, slightly hotter and more massive than Sol."
+      },
+      "transponder": "NONE",
+      "gmNotes": "F8 V white main sequence. Mass 1.18 Sol."
+    },
+    {
+      "id": "flammarion-mainworld",
+      "name": "Flammarion",
+      "type": "Planet",
+      "orbitAU": 1.1,
+      "orbitKm": 165000000,
+      "bearing": 270,
+      "uwp": "A623514-B",
+      "tradeCodes": ["Ni", "Po"],
+      "atmosphere": "Very Thin, Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "FLAMMARION CONTROL",
+      "gmNotes": "Medium world, very thin tainted atmosphere. Pop 700,000. Corporate gov (LSP). TL11."
+    },
+    {
+      "id": "flammarion-highport",
+      "name": "Flammarion Highport",
+      "type": "Station",
+      "parent": "flammarion-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "uwp": "A623514-B",
+      "transponder": "FLAMMARION HIGHPORT",
+      "gmNotes": "Class A Excellent starport. Full shipyard facilities. 9,575 port employees.",
+      "celestial": false
+    },
+    {
+      "id": "flammarion-moon",
+      "name": "Flammarion Moon",
+      "type": "Moon",
+      "parent": "flammarion-mainworld",
+      "orbitKm": 85000,
+      "bearing": 275,
+      "transponder": "FLAMMARION BASES",
+      "gmNotes": "Large moon hosting Imperial Naval Base and Scout/X-Boat station."
+    },
+    {
+      "id": "flammarion-naval",
+      "name": "Naval Base Flammarion",
+      "type": "Naval Base",
+      "parent": "flammarion-moon",
+      "orbitKm": 500,
+      "bearing": 276,
+      "transponder": "INS FLAMMARION",
+      "gmNotes": "Imperial Naval Base. Patrol and system defense operations. RESTRICTED.",
+      "celestial": false
+    },
+    {
+      "id": "flammarion-scout",
+      "name": "Scout Base",
+      "type": "Scout Base",
+      "parent": "flammarion-moon",
+      "orbitKm": 500,
+      "bearing": 274,
+      "transponder": "IISS FLAMMARION",
+      "gmNotes": "Imperial Scout Service base. X-Boat link to greater Imperium.",
+      "celestial": false
+    },
+    {
+      "id": "flammarion-belt",
+      "name": "Flammarion Belt",
+      "type": "Planetoid Belt",
+      "orbitAU": 2.5,
+      "orbitKm": 380000000,
+      "bearing": 135,
+      "transponder": "NONE",
+      "gmNotes": "Main planetoid belt. Mining operations by LSP subsidiaries."
+    }
+  ],
+
+  "locations": [
+    {
+      "id": "loc-exit-jump",
+      "name": "Exit Jump Space",
+      "type": "jump_point",
+      "x": 100,
+      "y": 300,
+      "actions": ["scan", "plot_course"]
+    },
+    {
+      "id": "loc-system-jump",
+      "name": "System Departure Jump Point",
+      "type": "jump_point",
+      "linkedTo": "flammarion-star",
+      "x": 50,
+      "y": 150,
+      "actions": ["jump", "scan"],
+      "travelTimeHours": { "loc-exit-jump": 6, "loc-mainworld-jump": 8 }
+    },
+    {
+      "id": "loc-mainworld-jump",
+      "name": "Mainworld Departure Jump Point",
+      "type": "jump_point",
+      "linkedTo": "flammarion-mainworld",
+      "x": 500,
+      "y": 280,
+      "actions": ["jump", "scan"],
+      "travelTimeHours": { "loc-orbit-mainworld": 4 }
+    },
+    {
+      "id": "loc-orbit-mainworld",
+      "name": "Orbit - Flammarion",
+      "type": "orbit",
+      "linkedTo": "flammarion-mainworld",
+      "x": 450,
+      "y": 300,
+      "actions": ["scan", "launch_craft", "dock"],
+      "travelTimeHours": { "loc-dock-highport": 1, "loc-mainworld-jump": 4, "loc-orbit-moon": 6 }
+    },
+    {
+      "id": "loc-dock-highport",
+      "name": "Dock - Flammarion Highport",
+      "type": "dock",
+      "linkedTo": "flammarion-highport",
+      "x": 460,
+      "y": 310,
+      "actions": ["refuel_refined", "repair", "upgrade", "trade", "passengers", "undock"],
+      "travelTimeHours": { "loc-orbit-mainworld": 1 }
+    },
+    {
+      "id": "loc-orbit-moon",
+      "name": "Orbit - Flammarion Moon",
+      "type": "orbit",
+      "linkedTo": "flammarion-moon",
+      "x": 400,
+      "y": 250,
+      "actions": ["scan"],
+      "travelTimeHours": { "loc-orbit-mainworld": 6 }
+    },
+    {
+      "id": "loc-hide-belt",
+      "name": "Hide - Asteroid Belt",
+      "type": "hide",
+      "linkedTo": "flammarion-belt",
+      "x": 550,
+      "y": 150,
+      "actions": ["hide", "scan", "mine"],
+      "travelTimeHours": { "loc-orbit-mainworld": 24 }
+    },
+    {
+      "id": "loc-deep-outer",
+      "name": "Deep Space (Outer System)",
+      "type": "space",
+      "x": 50,
+      "y": 50,
+      "actions": ["scan", "hide"],
+      "travelTimeHours": { "loc-system-jump": 8 }
+    },
+    {
+      "id": "loc-deep-inner",
+      "name": "Deep Space (Inner System)",
+      "type": "space",
+      "x": 350,
+      "y": 250,
+      "actions": ["scan", "hide"],
+      "travelTimeHours": { "loc-orbit-mainworld": 10 }
+    }
+  ],
+
+  "roleContent": {
+    "captain": "CAUTION: Naval base presence. Imperial jurisdiction - Garoovian claims may not hold, but stay alert.",
+    "astrogator": "Destination reached. No gas giants for skimming - plan fuel purchases. Good X-boat links.",
+    "pilot": "Class A port - full facilities. Very thin tainted atmosphere on surface. Use orbital approach.",
+    "engineer": "Excellent shipyard for repairs and upgrades. Refined fuel available. Schedule maintenance.",
+    "sensors": "Heavy traffic near port. Naval patrols active. Maintain proper transponder.",
+    "gunner": "DO NOT engage near Naval Base. Imperial space - weapons must be safed on approach.",
+    "medic": "Full medical facilities available. Restock supplies here.",
+    "steward": "LSP corporate world - business travelers common. Upgrade passenger amenities.",
+    "cargo": "Industrial imports from LSP. Belt mining exports. Good trade opportunities."
+  },
+
+  "news": [
+    {
+      "headline": "LSP QUARTERLY PROFITS EXCEED EXPECTATIONS",
+      "source": "Financial Times Spinward",
+      "content": "Ling-Standard Products reports 8% revenue growth. Belt mining operations credited with strong performance."
+    },
+    {
+      "headline": "NAVAL BASE EXERCISES SCHEDULED",
+      "source": "INS Flammarion Command",
+      "content": "System defense exercises planned for Days 145-152. Commercial traffic may experience minor delays."
+    },
+    {
+      "headline": "NEW X-BOAT ROUTE ANNOUNCED",
+      "source": "Scout Service PR",
+      "content": "Enhanced X-boat service to Sword Worlds border. Message transit times reduced by 40%."
+    },
+    {
+      "headline": "BOUNTY HUNTERS DETAINED AT PORT",
+      "source": "Flammarion Security Bulletin",
+      "content": "Two individuals carrying non-Imperial bounty warrants detained by port security. Reminder: Imperial law supersedes foreign claims."
+    }
+  ],
+
+  "mail": {
+    "captain": {
+      "from": "Flammarion Highport Authority",
+      "subject": "Welcome & Advisory",
+      "content": "Welcome to Flammarion. Note: Non-Imperial bounty claims have no legal standing here. However, we recommend discretion. Safe travels."
+    },
+    "astrogator": {
+      "from": "Navigation Guild, Flammarion Chapter",
+      "subject": "Route Options",
+      "content": "From Flammarion: Multiple routes available spinward. Consider Bowman (J-2) or continue to District 268. Updated charts attached."
+    },
+    "engineer": {
+      "from": "LSP Shipyard Services",
+      "subject": "Maintenance Special",
+      "content": "20% discount on annual maintenance for ships over 500 tons. Class A facilities available. Book now for priority scheduling."
+    },
+    "steward": {
+      "from": "Passenger Services Guild",
+      "subject": "Market Opportunity",
+      "content": "High demand for transport to Regina cluster. Business class passengers willing to pay premium rates."
+    },
+    "medic": {
+      "from": "Flammarion Medical Center",
+      "subject": "Services Available",
+      "content": "Full medical facilities. Bio-scanner calibration, cryo-revival certification, and emergency care. 24-hour availability."
+    }
+  }
+}

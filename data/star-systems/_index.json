@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "description": "Star system registry for Operations VTT",
+  "schemaVersion": "1.0",
+  "systems": [
+    {
+      "id": "dorannia",
+      "name": "Dorannia",
+      "hex": "1525",
+      "subsector": "District 268",
+      "file": "dorannia.json"
+    },
+    {
+      "id": "ator",
+      "name": "Ator",
+      "hex": "0729",
+      "subsector": "Darrian",
+      "file": "ator.json"
+    },
+    {
+      "id": "flammarion",
+      "name": "Flammarion",
+      "hex": "0930",
+      "subsector": "Sword Worlds",
+      "file": "flammarion.json"
+    },
+    {
+      "id": "jumpspace",
+      "name": "Jump Space",
+      "hex": "0000",
+      "subsector": "N/A",
+      "file": "jumpspace.json",
+      "special": true
+    }
+  ],
+  "subsectors": ["Darrian", "District 268", "Five Sisters", "Sword Worlds"]
+}
