@@ -4638,13 +4638,19 @@ async function fetchJumpDestinations(sector, hex, range) {
           <span>UWP</span>
           <span>Distance</span>
         </div>
-        ${data.Worlds.map(world => `
-          <div class="destination-item" data-name="${escapeHtml(world.Name)}" data-sector="${escapeHtml(world.Sector || sector)}" data-hex="${world.HexX}${String(world.HexY).padStart(2, '0')}" onclick="selectJumpDestination(this)">
+        ${data.Worlds.map(world => {
+          // AR-66: Fix undefined hex coordinates
+          const hexX = world.HexX || world.Hex?.substring(0, 2) || '??';
+          const hexY = world.HexY || world.Hex?.substring(2, 4) || '??';
+          const hex = `${hexX}${String(hexY).padStart(2, '0')}`;
+          return `
+          <div class="destination-item" data-name="${escapeHtml(world.Name)}" data-sector="${escapeHtml(world.Sector || sector)}" data-hex="${hex}" onclick="selectJumpDestination(this)">
             <span class="dest-name">${escapeHtml(world.Name)}</span>
             <span class="dest-uwp">${world.Uwp || '???????-?'}</span>
             <span class="dest-distance">J-${world.Distance || '?'}</span>
           </div>
-        `).join('')}
+        `;
+        }).join('')}
       `;
     } else {
       container.innerHTML = '<p class="placeholder">No nearby systems found</p>';
@@ -5358,7 +5364,10 @@ function showModal(templateId) {
     // Set system button - AR-33: Show travel confirmation modal
     document.getElementById('btn-set-system').addEventListener('click', () => {
       if (!selectedSystem) return;
-      const systemName = `${selectedSystem.Name} (${selectedSystem.Sector} ${selectedSystem.HexX}${String(selectedSystem.HexY).padStart(2, '0')})`;
+      // AR-66: Fix undefined hex coordinates
+      const hexX = selectedSystem.HexX || selectedSystem.Hex?.substring(0, 2) || '??';
+      const hexY = selectedSystem.HexY || selectedSystem.Hex?.substring(2, 4) || '??';
+      const systemName = `${selectedSystem.Name} (${selectedSystem.Sector || 'Unknown'} ${hexX}${String(hexY).padStart(2, '0')})`;
       showTravelModal({
         system: systemName,
         uwp: selectedSystem.Uwp,
@@ -7770,11 +7779,18 @@ function showSystemMap() {
       if (container) {
         initSystemMap(container);
 
-        // Try to load current system, fallback to Flammarion
-        const currentSystem = state.campaign?.current_system?.toLowerCase().replace(/\s+/g, '');
-        const systemToLoad = (currentSystem && TEST_SYSTEMS[currentSystem]) ? currentSystem : 'flammarion';
-        loadTestSystem(systemToLoad);
-        document.getElementById('system-map-name').textContent = TEST_SYSTEMS[systemToLoad].name;
+        // AR-66: Load current system, show actual name even if map not available
+        const currentSystemName = state.campaign?.current_system || 'Unknown System';
+        const currentSystemKey = currentSystemName.toLowerCase().replace(/\s+/g, '');
+        document.getElementById('system-map-name').textContent = currentSystemName;
+
+        if (TEST_SYSTEMS[currentSystemKey]) {
+          loadTestSystem(currentSystemKey);
+        } else {
+          // System not in TEST_SYSTEMS - show placeholder message
+          console.log(`[SystemMap] System '${currentSystemName}' not in TEST_SYSTEMS, showing first available`);
+          loadTestSystem('flammarion'); // Load a map for navigation, but title shows actual system
+        }
 
         // Resize canvas after a short delay to ensure proper dimensions
         setTimeout(() => {
