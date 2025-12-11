@@ -4804,8 +4804,8 @@ function populateRefuelModal() {
     `<option value="${s.id}">${s.name} - ${s.fuelType} (${s.cost > 0 ? 'Cr' + s.cost + '/ton' : 'Free'})</option>`
   ).join('');
 
-  // Update preview
-  updateRefuelAmountPreview();
+  // AR-60: Default amount to MAX
+  setRefuelMax();
 }
 
 function updateRefuelAmountPreview() {
