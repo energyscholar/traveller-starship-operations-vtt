@@ -1919,6 +1919,19 @@ function getCommsPanel(shipState, contacts = [], crewOnline = []) {
         </button>
       </div>
     </div>
+
+    <div class="detail-section comms-bridge-chat">
+      <h4>Bridge Chat</h4>
+      <div id="bridge-chat-log" class="chat-log" style="height: 150px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px; margin-bottom: 8px; font-size: 12px;">
+        <div class="chat-placeholder" style="color: #666; font-style: italic;">No messages yet...</div>
+      </div>
+      <div style="display: flex; gap: 6px;">
+        <input type="text" id="bridge-chat-input" class="form-control" placeholder="Type message..."
+               style="flex: 1; padding: 6px; background: rgba(255,255,255,0.1); border: 1px solid #444; border-radius: 4px; color: #fff;"
+               onkeypress="if(event.key==='Enter') window.sendBridgeChatMessage()">
+        <button onclick="window.sendBridgeChatMessage()" class="btn btn-small btn-primary">Send</button>
+      </div>
+    </div>
   `;
 }
 

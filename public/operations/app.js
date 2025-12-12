@@ -492,6 +492,11 @@ function initSocket() {
     renderShipLog();
   });
 
+  // AR-97: Bridge Chat - receive transmissions
+  state.socket.on('comms:newTransmission', (transmission) => {
+    addBridgeChatMessage(transmission);
+  });
+
   state.socket.on('ops:timeAdvanced', (data) => {
     document.getElementById('bridge-date').textContent = data.newDate;
     showNotification(`Time advanced to ${data.newDate}`, 'info');
@@ -3318,55 +3323,7 @@ function getPendingTravel() {
 // Educational physics: t = 2 * sqrt(d / a)
 // User learned Newtonian physics from Traveller at age ~12
 
-/**
- * Calculate brachistochrone transit time and metrics
- * @param {number} distanceKm - Distance in kilometers
- * @param {number} accelG - Acceleration in G's
- * @returns {Object} { timeSeconds, timeFormatted, turnoverKm, maxVelocityKmh, formula }
- */
-function calculateBrachistochrone(distanceKm, accelG) {
-  const distanceM = distanceKm * 1000;
-  const accelMs2 = accelG * 9.81;
-
-  // t = 2 * sqrt(d / a) - total transit time
-  const timeSeconds = 2 * Math.sqrt(distanceM / accelMs2);
-
-  // v_max = sqrt(a * d) - velocity at turnover
-  const maxVelocityMs = Math.sqrt(accelMs2 * distanceM);
-  const maxVelocityKmh = maxVelocityMs * 3.6;
-
-  return {
-    timeSeconds,
-    timeFormatted: formatTransitTime(timeSeconds),
-    turnoverKm: distanceKm / 2,
-    maxVelocityKmh,
-    formula: `t = 2 × √(${distanceKm.toLocaleString()} km ÷ ${accelG}G) = ${formatTransitTime(timeSeconds)}`
-  };
-}
-
-/**
- * Format transit time in human-readable format
- */
-function formatTransitTime(seconds) {
-  if (seconds < 60) return `${Math.round(seconds)}s`;
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ${Math.round(seconds % 60)}s`;
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  if (hours < 24) return `${hours}h ${minutes}m`;
-  const days = Math.floor(hours / 24);
-  const remainingHours = hours % 24;
-  return `${days}d ${remainingHours}h`;
-}
-
-/**
- * Format large numbers with units (km, Mm, AU)
- */
-function formatDistance(km) {
-  if (km < 1000) return `${km.toLocaleString()} km`;
-  if (km < 1000000) return `${(km / 1000).toFixed(1)}k km`;
-  if (km < 150000000) return `${(km / 1000000).toFixed(2)} Mkm`;
-  return `${(km / 150000000).toFixed(3)} AU`;
-}
+// AR-103 Phase 6: calculateBrachistochrone, formatTransitTime, formatDistance moved to modules/helpers.js
 
 /**
  * Update transit calculator display
@@ -4039,25 +3996,7 @@ function setSensorLock(contactId) {
   }
 }
 
-// AR-36: Calculate sensor DM (Mongoose 2e rules)
-function calculateSensorDM(scannerState, targetState, range) {
-  let dm = 0;
-
-  // Sensor grade: Military +2, Civilian +0
-  if (scannerState?.sensorGrade === 'military') dm += 2;
-
-  // Target ECM: -2 (unless we have ECCM)
-  if (targetState?.ecmActive && !scannerState?.eccmActive) dm -= 2;
-
-  // Range DM
-  const rangeDMs = { close: 2, short: 1, medium: 0, long: -1, veryLong: -2, distant: -4 };
-  dm += rangeDMs[range] || 0;
-
-  // Sensor lock bonus
-  if (scannerState?.sensorLock?.targetId === targetState?.id) dm += 2;
-
-  return dm;
-}
+// AR-103: calculateSensorDM moved to modules/helpers.js
 
 function handleScanResult(data) {
   const { scanType, contacts, categorized, totalCount, description, skillNote } = data;
@@ -6304,107 +6243,7 @@ function closeModal() {
 // ==================== Utilities (imported from modules/utils.js) ====================
 
 // Parse character text (client-side version of lib/operations/characters.js parsers)
-function parseCharacterText(text) {
-  const result = {
-    name: null,
-    stats: {},
-    skills: {}
-  };
-
-  // Try to parse as JSON first
-  if (text.trim().startsWith('{')) {
-    try {
-      const json = JSON.parse(text);
-      if (json.name) result.name = json.name;
-      if (json.stats) result.stats = json.stats;
-      if (json.skills) result.skills = json.skills;
-      if (json.upp) {
-        const parsed = parseUPP(json.upp);
-        if (parsed) result.stats = { ...result.stats, ...parsed };
-      }
-      return result;
-    } catch (e) {
-      // Not valid JSON, continue with text parsing
-    }
-  }
-
-  // Extract name (first non-empty line that doesn't look like a data field)
-  const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-  for (const line of lines) {
-    if (!line.includes(':') && !line.match(/^[A-F0-9]{6,7}$/i)) {
-      result.name = line;
-      break;
-    }
-  }
-
-  // Extract UPP
-  const uppMatch = text.match(/UPP[:\s]*([A-F0-9]{6,7})/i) ||
-                   text.match(/\b([A-F0-9]{6,7})\b/);
-  if (uppMatch) {
-    const parsed = parseUPP(uppMatch[1]);
-    if (parsed) result.stats = parsed;
-  }
-
-  // Extract skills
-  result.skills = parseSkills(text);
-
-  return result;
-}
-
-// Parse UPP string (e.g., "789A87" -> stats object)
-function parseUPP(upp) {
-  if (!upp || typeof upp !== 'string') return null;
-  const clean = upp.replace(/[^0-9A-Fa-f]/g, '').toUpperCase();
-  if (clean.length < 6) return null;
-
-  const STAT_ORDER = ['str', 'dex', 'end', 'int', 'edu', 'soc'];
-  const stats = {};
-  const chars = clean.split('');
-
-  for (let i = 0; i < 6 && i < chars.length; i++) {
-    const val = parseInt(chars[i], 16);
-    if (isNaN(val)) return null;
-    stats[STAT_ORDER[i]] = val;
-  }
-
-  if (chars.length >= 7) {
-    const psi = parseInt(chars[6], 16);
-    if (!isNaN(psi)) stats.psi = psi;
-  }
-
-  return stats;
-}
-
-// Parse skills from text
-function parseSkills(text) {
-  if (!text || typeof text !== 'string') return {};
-  const skills = {};
-
-  // Patterns to match skill entries
-  const patterns = [
-    /([A-Za-z][A-Za-z\s]+?)\s*[-:]\s*(\d+)/g,  // "Pilot-2" or "Pilot: 2"
-    /([A-Za-z][A-Za-z\s]+?)\s+(\d+)(?=[,;\n]|$)/g,  // "Pilot 2"
-    /([A-Za-z][A-Za-z\s]+?)\s*\((\d+)\)/g  // "Pilot (2)"
-  ];
-
-  for (const pattern of patterns) {
-    let match;
-    while ((match = pattern.exec(text)) !== null) {
-      let skillName = match[1].trim();
-      const level = parseInt(match[2], 10);
-
-      // Normalize skill name (capitalize first letter of each word)
-      skillName = skillName.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-
-      // Skip if already found (prefer first match)
-      if (skills[skillName] === undefined) {
-        skills[skillName] = level;
-      }
-    }
-  }
-
-  return skills;
-}
+// AR-103 Phase 4: parseCharacterText, parseUPP, parseSkills moved to modules/helpers.js
 
 // ==================== SHIP-6: ASCII Art (imported from modules/ascii-art.js) ====================
 
@@ -6412,55 +6251,7 @@ function parseSkills(text) {
 
 // ==================== Stage 7: Character Tooltip (imported from modules/tooltips.js) ====================
 
-function getRoleConfig(role) {
-  const configs = {
-    pilot: {
-      name: 'Helm Control',
-      actions: ['setCourse', 'dock', 'undock', 'evasiveAction', 'land']
-    },
-    captain: {
-      name: 'Command',
-      actions: ['setAlertStatus', 'issueOrders', 'authorizeWeapons', 'hail']
-    },
-    astrogator: {
-      name: 'Navigation',
-      actions: ['plotJump', 'calculateIntercept', 'verifyPosition']
-    },
-    engineer: {
-      name: 'Engineering',
-      actions: ['allocatePower', 'fieldRepair', 'overloadSystem']
-    },
-    sensor_operator: {
-      name: 'Sensors & Comms',
-      actions: ['activeScan', 'deepScan', 'hail', 'jam']
-    },
-    gunner: {
-      name: 'Weapons',
-      actions: ['fireWeapon', 'pointDefense', 'sandcaster']
-    },
-    damage_control: {
-      name: 'Damage Control',
-      actions: ['directRepair', 'prioritizeSystem', 'emergencyProcedure']
-    },
-    marines: {
-      name: 'Security',
-      actions: ['securityPatrol', 'prepareBoarding', 'repelBoarders']
-    },
-    medic: {
-      name: 'Medical Bay',
-      actions: ['treatInjury', 'triage', 'checkSupplies']
-    },
-    steward: {
-      name: 'Passenger Services',
-      actions: ['attendPassenger', 'checkSupplies', 'boostMorale']
-    },
-    cargo_master: {
-      name: 'Cargo Operations',
-      actions: ['checkManifest', 'loadCargo', 'unloadCargo']
-    }
-  };
-  return configs[role] || { name: 'Unknown Role', actions: [] };
-}
+// AR-103 Phase 5: getRoleConfig moved to modules/helpers.js
 
 // ==================== Ship Status Modal (TIP-2) ====================
 function showShipStatusModal() {
@@ -6531,85 +6322,9 @@ function showShipStatusModal() {
   document.getElementById('ship-status-content').innerHTML = content;
 }
 
-// Format weapon ID to readable name
-function formatWeaponName(weaponId) {
-  const names = {
-    'beam_laser': 'Beam Laser',
-    'pulse_laser': 'Pulse Laser',
-    'missile_rack': 'Missile Rack',
-    'sandcaster': 'Sandcaster',
-    'particle_beam': 'Particle Beam',
-    'fusion_gun': 'Fusion Gun',
-    'plasma_gun': 'Plasma Gun',
-    'meson_gun': 'Meson Gun'
-  };
-  return names[weaponId] || weaponId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-}
+// AR-103 Phase 7: formatWeaponName, formatTurretType, formatShipWeapons moved to modules/helpers.js
 
-// Format turret type
-function formatTurretType(type) {
-  const types = {
-    'single': 'Single Turret',
-    'double': 'Double Turret',
-    'triple': 'Triple Turret',
-    'pop_up_single': 'Pop-up Single',
-    'pop_up_double': 'Pop-up Double',
-    'barbette': 'Barbette',
-    'bay': 'Bay Weapon',
-    'spinal': 'Spinal Mount'
-  };
-  return types[type] || type;
-}
-
-// Get formatted weapons list from ship template
-function formatShipWeapons(template) {
-  const turrets = template?.turrets || [];
-  if (turrets.length === 0) return null;
-
-  return turrets.map(turret => {
-    const type = formatTurretType(turret.type);
-    const weapons = (turret.weapons || []).map(formatWeaponName);
-    const concealed = turret.concealed ? ' (Concealed)' : '';
-    return `<div class="weapon-row">
-      <span class="turret-type">${type}${concealed}:</span>
-      <span class="weapon-list">${weapons.join(', ')}</span>
-    </div>`;
-  }).join('');
-}
-
-// Format population with suffix
-function formatPopulation(pop) {
-  if (!pop) return 'Unknown';
-  if (pop >= 1000000000) return `${(pop / 1000000000).toFixed(1)}B`;
-  if (pop >= 1000000) return `${(pop / 1000000).toFixed(1)}M`;
-  if (pop >= 1000) return `${(pop / 1000).toFixed(1)}K`;
-  return pop.toString();
-}
-
-// Interpret UWP code to human readable description
-function interpretUWP(uwp) {
-  if (!uwp || uwp.length < 7) return '';
-  const starport = uwp[0];
-  const size = parseInt(uwp[1], 16);
-  const atmo = parseInt(uwp[2], 16);
-  const hydro = parseInt(uwp[3], 16);
-  const pop = parseInt(uwp[4], 16);
-  const gov = parseInt(uwp[5], 16);
-  const law = parseInt(uwp[6], 16);
-
-  const starportNames = { A: 'Excellent', B: 'Good', C: 'Routine', D: 'Poor', E: 'Frontier', X: 'None' };
-  const sizeNames = ['Asteroid', 'Small', 'Small', 'Small', 'Medium', 'Medium', 'Medium', 'Large', 'Large', 'Large', 'Large'];
-  const atmoNames = ['None', 'Trace', 'V.Thin Tainted', 'V.Thin', 'Thin Tainted', 'Thin', 'Standard', 'Standard Tainted', 'Dense', 'Dense Tainted', 'Exotic', 'Corrosive', 'Insidious', 'Dense High', 'Thin Low', 'Unusual'];
-  const popNames = ['None', 'Few', 'Hundreds', 'Thousands', '10K', '100K', 'Millions', '10M', '100M', 'Billions', '10B+'];
-
-  const parts = [];
-  if (starportNames[starport]) parts.push(`${starportNames[starport]} Starport`);
-  if (sizeNames[size]) parts.push(`${sizeNames[size]} World`);
-  if (atmoNames[atmo]) parts.push(`${atmoNames[atmo]} Atmo`);
-  if (popNames[pop]) parts.push(`Pop: ${popNames[pop]}`);
-
-  return parts.join(', ');
-}
+// AR-103: formatPopulation, interpretUWP moved to modules/helpers.js
 
 // ==================== Contact Tooltip (TIP-1) ====================
 
@@ -7022,6 +6737,58 @@ function sendCommsMessage() {
   showNotification(`Message sent to ${contactName}`, 'info');
 }
 
+// ==================== AR-97: Bridge Chat System ====================
+
+/**
+ * Send bridge chat message to all crew
+ */
+function sendBridgeChatMessage() {
+  const input = document.getElementById('bridge-chat-input');
+  const message = input?.value?.trim();
+
+  if (!message) return;
+
+  state.socket.emit('comms:sendTransmission', {
+    message,
+    channel: 'bridge'
+  });
+
+  input.value = '';
+}
+
+/**
+ * Add message to bridge chat log
+ */
+function addBridgeChatMessage(transmission) {
+  const log = document.getElementById('bridge-chat-log');
+  if (!log) return;
+
+  // Remove placeholder if present
+  const placeholder = log.querySelector('.chat-placeholder');
+  if (placeholder) placeholder.remove();
+
+  const time = new Date(transmission.timestamp || Date.now()).toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  const sender = escapeHtml(transmission.fromName || 'Unknown');
+  const msg = escapeHtml(transmission.message || '');
+
+  const msgEl = document.createElement('div');
+  msgEl.className = 'chat-message';
+  msgEl.style.cssText = 'margin-bottom: 4px; line-height: 1.3;';
+  msgEl.innerHTML = `<span style="color: #888;">[${time}]</span> <strong style="color: #4da6ff;">${sender}:</strong> ${msg}`;
+
+  log.appendChild(msgEl);
+  log.scrollTop = log.scrollHeight;
+
+  // Keep only last 50 messages
+  while (log.children.length > 50) {
+    log.removeChild(log.firstChild);
+  }
+}
+
 // ============================================
 // Panel Copy Functions (for debugging)
 // ============================================
@@ -7101,51 +6868,13 @@ function copyRolePanel() {
     .catch(() => showNotification('Copy failed', 'error'));
 }
 
-// Notification container (created once)
-let notificationContainer = null;
+// AR-103: showNotification, getNotificationContainer moved to modules/notifications.js
 
-function getNotificationContainer() {
-  if (!notificationContainer) {
-    notificationContainer = document.createElement('div');
-    notificationContainer.className = 'notification-container';
-    document.body.appendChild(notificationContainer);
-  }
-  return notificationContainer;
-}
-
-function showNotification(message, type = 'info', duration = 4000) {
-  debugLog(`[${type.toUpperCase()}] ${message}`);
-
-  const container = getNotificationContainer();
-
-  // Icon based on type
-  const icons = {
-    info: 'ℹ️',
-    success: '✓',
-    warning: '⚠',
-    error: '✕'
-  };
-
-  const toast = document.createElement('div');
-  toast.className = `notification-toast ${type}`;
-  toast.innerHTML = `
-    <span class="notification-icon">${icons[type] || icons.info}</span>
-    <span class="notification-message">${message}</span>
-  `;
-
-  container.appendChild(toast);
-
-  // Auto-remove after duration
-  setTimeout(() => {
-    toast.classList.add('fade-out');
-    setTimeout(() => toast.remove(), 300);
-  }, duration);
-}
-
-// ==================== Session Storage (Stage 3.5.5) ====================
-const SESSION_KEY = 'ops_session';
+// AR-103 Phase 8: Session storage moved to modules/session-storage.js
+// Functions available via window: getStoredSession, clearStoredSession, saveSessionData
 
 function saveSession() {
+  // Wrapper that extracts data from state and calls the module function
   const sessionData = {
     campaignId: state.campaign?.id,
     accountId: state.player?.id,
@@ -7153,28 +6882,7 @@ function saveSession() {
     role: state.selectedRole,
     isGM: state.isGM
   };
-  try {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-  } catch (e) {
-    debugWarn('Failed to save session:', e);
-  }
-}
-
-function getStoredSession() {
-  try {
-    const data = localStorage.getItem(SESSION_KEY);
-    return data ? JSON.parse(data) : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-function clearStoredSession() {
-  try {
-    localStorage.removeItem(SESSION_KEY);
-  } catch (e) {
-    debugWarn('Failed to clear session:', e);
-  }
+  saveSessionData(sessionData);
 }
 
 function tryReconnect() {
@@ -7327,7 +7035,7 @@ function handleMenuFeature(feature) {
       break;
 
     case 'medical':
-      showNotification('Medical Records - Planned feature', 'info');
+      showMedicalRecords();
       break;
 
     case 'library':
@@ -8712,15 +8420,7 @@ function showCrewRoster() {
   }
 }
 
-function getSkillLabel(level) {
-  switch (level) {
-    case 0: return 'Green';
-    case 1: return 'Average';
-    case 2: return 'Veteran';
-    case 3: return 'Elite';
-    default: return 'Unknown';
-  }
-}
+// AR-103: getSkillLabel moved to modules/helpers.js
 
 function showAddCrewModal() {
   const html = `
@@ -9571,11 +9271,28 @@ function handleMedicalRecords(data) {
   let html = '';
 
   if (triage.length === 0 && health.length === 0) {
+    // AR-93: Medical Records Easter Egg - Traveller-themed medical humor
+    const medicalJokes = [
+      { warning: 'CAUTION: Crew member claims "space madness" is real', note: 'Recommend ignoring unless they start talking to the ship.' },
+      { warning: 'REMINDER: Jump sickness is not cured by "hair of the dog"', note: 'Engineering has been notified about the still.' },
+      { warning: 'NOTE: "Vacc suit rash" is not contagious', note: 'But telling the crew that is.' },
+      { warning: 'ALERT: Someone has been eating the Zhodani rations again', note: 'Telepathic indigestion is not covered by ship insurance.' },
+      { warning: 'WARNING: Ship medic found practicing with a "healing crystal"', note: 'It was a broken sensor relay.' },
+      { warning: 'NOTICE: Low gravity bone density is not an excuse to skip workout', note: 'Captain has authorized "motivational airlocks."' },
+      { warning: 'UPDATE: Cure for "Vargr fleas" still not found', note: 'Recommend not arm wrestling on shore leave.' },
+      { warning: 'MEMO: "Aslan honor duel wounds" not covered as workplace injury', note: 'Should have declined the challenge.' }
+    ];
+    const joke = medicalJokes[Math.floor(Math.random() * medicalJokes.length)];
     html = `
       <div class="medical-summary" style="text-align: center; padding: 20px;">
         <div style="font-size: 48px; margin-bottom: 10px;">✓</div>
         <h4>All Crew Healthy</h4>
         <p style="color: var(--text-muted);">No injuries or conditions to report.</p>
+        <hr style="margin: 20px 0; border-color: var(--border-color);">
+        <div style="text-align: left; padding: 10px; background: rgba(255,193,7,0.1); border-radius: 4px; border-left: 3px solid var(--warning-color);">
+          <strong style="color: var(--warning-color);">${joke.warning}</strong>
+          <p style="color: var(--text-muted); margin: 5px 0 0 0; font-size: 0.9em;">${joke.note}</p>
+        </div>
       </div>
     `;
   } else {
@@ -10711,6 +10428,7 @@ window.scanContact = scanContact;  // AR-70
 window.hailSelectedContact = hailSelectedContact;
 window.broadcastMessage = broadcastMessage;
 window.sendCommsMessage = sendCommsMessage;
+window.sendBridgeChatMessage = sendBridgeChatMessage;
 // Panel copy functions
 window.copyShipLog = copyShipLog;
 window.copySensorPanel = copySensorPanel;
