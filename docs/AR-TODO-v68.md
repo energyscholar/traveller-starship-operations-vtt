@@ -1,6 +1,10 @@
 # AR TODOs from v68 (Processed 2025-12-11)
 
-## AR-67: Fix hailContact Timing Bug
+**STATUS: ALL COMPLETE** (AR-67 through AR-72)
+
+---
+
+## AR-67: Fix hailContact Timing Bug ✅ DONE
 **Priority:** HIGH (JS console error)
 **Source:** prompts_for_TODOS_v68.txt line 3-8
 **Symptoms:** `Uncaught ReferenceError: hailContact is not defined` when captain clicks Hail button
@@ -10,7 +14,7 @@
 
 ---
 
-## AR-68: Astrogator Verify Position After Jump
+## AR-68: Astrogator Verify Position After Jump ✅ DONE
 **Priority:** MEDIUM (gameplay feature)
 **Source:** prompts_for_TODOS_v68.txt line 26
 **Description:** After emerging from jump at STARSYSTEM JUMP EXIT POINT, pilot course plotting is blocked until Astrogator performs "Verify Position".
@@ -24,7 +28,7 @@
 
 ---
 
-## AR-69: Von Sydo Corrupt Player Data
+## AR-69: Von Sydo Corrupt Player Data ✅ DONE
 **Priority:** LOW (specific data issue)
 **Source:** prompts_for_TODOS_v68.txt line 1
 **Symptoms:**
@@ -37,7 +41,7 @@
 
 ---
 
-## AR-70: Sensor Role Enhancement - Scan Buttons
+## AR-70: Sensor Role Enhancement - Scan Buttons ✅ DONE
 **Priority:** HIGH (core gameplay)
 **Source:** prompts_for_TODOS_v68.txt line 10
 **Risk:** LOW → Rules research COMPLETE

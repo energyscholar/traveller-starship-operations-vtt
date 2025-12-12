@@ -4109,13 +4109,6 @@ function handleScanResult(data) {
   renderRoleDetailPanel(state.selectedRole);
 }
 
-// Scan a specific contact to increase detection level
-function scanContact(contactId, targetLevel) {
-  const scanType = targetLevel === 2 ? 'active' : 'deep';
-  state.socket.emit('ops:scanContact', { contactId, scanType });
-  showNotification(`Targeting contact for ${scanType} scan...`, 'info');
-}
-
 // Show scan result overlay with newly discovered info highlighted - AR-30
 function showScanResultOverlay(contact, discoveries, oldLevel, newLevel) {
   // Define what fields are revealed at each scan level
