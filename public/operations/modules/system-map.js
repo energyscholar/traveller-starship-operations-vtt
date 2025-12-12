@@ -2363,6 +2363,383 @@ window.resetSystemMapView = resetSystemMapView;
 window.toggleSystemMapLabels = toggleSystemMapLabels;
 window.snapToNow = snapToNow;
 
+// ==================== AR-102: Embedded Map for Pilot Navigation ====================
+
+/**
+ * Embedded map state - separate from main system map
+ */
+const embeddedMapState = {
+  canvas: null,
+  ctx: null,
+  container: null,
+  zoom: 0.8,
+  offsetX: 0,
+  offsetY: 0,
+  animationFrame: null,
+  selectedDestination: null,
+  currentCameraAngle: 0,
+  lastClickedDestination: null
+};
+
+// AR-102: Camera presets for dramatic destination views
+const CAMERA_PRESETS = [
+  { name: 'close-up', zoom: 2.5, offsetX: 0.15, offsetY: 0.1, description: 'Dramatic close-up' },
+  { name: 'wide-context', zoom: 0.6, offsetX: -0.2, offsetY: -0.15, description: 'Wide system view' },
+  { name: 'orbital-view', zoom: 1.2, offsetX: 0, offsetY: 0.25, description: 'Orbital perspective' }
+];
+
+/**
+ * AR-102: Initialize embedded system map for pilot navigation
+ * @param {HTMLCanvasElement} canvas - The embedded canvas element
+ * @param {HTMLElement} container - The container element
+ */
+function initEmbeddedMap(canvas, container) {
+  if (!canvas || !container) {
+    console.warn('[EmbeddedMap] Missing canvas or container');
+    return;
+  }
+
+  embeddedMapState.canvas = canvas;
+  embeddedMapState.ctx = canvas.getContext('2d');
+  embeddedMapState.container = container;
+
+  // Set initial size
+  resizeEmbeddedCanvas();
+
+  // Add event listeners
+  canvas.addEventListener('wheel', handleEmbeddedWheel, { passive: false });
+  canvas.addEventListener('mousedown', handleEmbeddedMouseDown);
+  canvas.addEventListener('mousemove', handleEmbeddedMouseMove);
+  canvas.addEventListener('mouseup', handleEmbeddedMouseUp);
+  canvas.addEventListener('mouseleave', handleEmbeddedMouseUp);
+  canvas.addEventListener('click', handleEmbeddedClick);
+
+  // ResizeObserver for container size changes
+  const resizeObserver = new ResizeObserver(() => resizeEmbeddedCanvas());
+  resizeObserver.observe(container);
+
+  // Start render loop
+  renderEmbeddedMap();
+  console.log('[EmbeddedMap] Initialized');
+}
+
+/**
+ * AR-102: Resize embedded canvas to container
+ */
+function resizeEmbeddedCanvas() {
+  if (!embeddedMapState.canvas || !embeddedMapState.container) return;
+  const { canvas, container, ctx } = embeddedMapState;
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = container.clientWidth * dpr;
+  canvas.height = container.clientHeight * dpr;
+  canvas.style.width = container.clientWidth + 'px';
+  canvas.style.height = container.clientHeight + 'px';
+  ctx.scale(dpr, dpr);
+}
+
+/**
+ * AR-102: Render embedded map frame
+ */
+function renderEmbeddedMap() {
+  if (!embeddedMapState.canvas || !embeddedMapState.ctx) return;
+
+  const { canvas, ctx, zoom, offsetX, offsetY, selectedDestination } = embeddedMapState;
+  const width = canvas.width / (window.devicePixelRatio || 1);
+  const height = canvas.height / (window.devicePixelRatio || 1);
+
+  // Clear canvas
+  ctx.fillStyle = '#0a0a14';
+  ctx.fillRect(0, 0, width, height);
+
+  // Check if main system data is loaded
+  if (!systemMapState.systemData) {
+    ctx.fillStyle = '#4a9eff';
+    ctx.font = '14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Loading system...', width / 2, height / 2);
+    embeddedMapState.animationFrame = requestAnimationFrame(renderEmbeddedMap);
+    return;
+  }
+
+  const centerX = width / 2 + offsetX;
+  const centerY = height / 2 + offsetY;
+  const baseScale = Math.min(width, height) / 20; // AU to pixels
+  const scale = baseScale * zoom;
+
+  // Draw goldilocks zone (using main map's data)
+  if (systemMapState.goldilocksZone) {
+    const { inner, outer } = systemMapState.goldilocksZone;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, outer * scale, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, inner * scale, 0, Math.PI * 2, true);
+    ctx.fillStyle = 'rgba(34, 139, 34, 0.15)';
+    ctx.fill();
+  }
+
+  // Draw orbits and celestial bodies from main system state
+  const objects = systemMapState.celestialObjects || [];
+  objects.forEach(obj => {
+    const x = centerX + (obj.currentX || 0) * scale;
+    const y = centerY + (obj.currentY || 0) * scale;
+    const radius = Math.max(3, (obj.radius || 0.02) * scale * 0.3);
+
+    // Draw orbit
+    if (obj.orbitRadius) {
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, obj.orbitRadius * scale, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(100, 100, 140, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Draw body
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = obj.color || '#8888aa';
+    ctx.fill();
+
+    // Highlight selected destination
+    if (selectedDestination && selectedDestination.id === obj.id) {
+      ctx.strokeStyle = '#ffff00';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // Label
+    if (zoom > 0.5 && obj.name) {
+      ctx.fillStyle = '#aaaacc';
+      ctx.font = '10px monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText(obj.name, x + radius + 4, y + 3);
+    }
+  });
+
+  // Draw ship position
+  const shipPos = shipMapState.position || { x: 0, y: 0 };
+  const shipX = centerX + shipPos.x * scale;
+  const shipY = centerY + shipPos.y * scale;
+
+  // Ship triangle
+  ctx.save();
+  ctx.translate(shipX, shipY);
+  ctx.beginPath();
+  ctx.moveTo(0, -8);
+  ctx.lineTo(-5, 6);
+  ctx.lineTo(5, 6);
+  ctx.closePath();
+  ctx.fillStyle = '#00ff00';
+  ctx.fill();
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.restore();
+
+  // Ship label
+  ctx.fillStyle = '#00ff00';
+  ctx.font = '9px monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('SHIP', shipX + 10, shipY + 3);
+
+  // Draw course line if destination selected
+  if (selectedDestination) {
+    const destX = centerX + (selectedDestination.currentX || 0) * scale;
+    const destY = centerY + (selectedDestination.currentY || 0) * scale;
+
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = '#ffff00';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(shipX, shipY);
+    ctx.lineTo(destX, destY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Camera angle indicator (dots)
+  if (selectedDestination) {
+    const dotY = height - 15;
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.arc(width - 30 + i * 10, dotY, 3, 0, Math.PI * 2);
+      ctx.fillStyle = i === embeddedMapState.currentCameraAngle ? '#ffffff' : '#444466';
+      ctx.fill();
+    }
+  }
+
+  embeddedMapState.animationFrame = requestAnimationFrame(renderEmbeddedMap);
+}
+
+/**
+ * AR-102: Handle wheel zoom on embedded map
+ */
+function handleEmbeddedWheel(e) {
+  e.preventDefault();
+  const factor = e.deltaY > 0 ? 0.9 : 1.1;
+  embeddedMapState.zoom = Math.max(0.2, Math.min(10, embeddedMapState.zoom * factor));
+}
+
+// Embedded map drag state
+let embeddedDragging = false;
+let embeddedLastX = 0;
+let embeddedLastY = 0;
+
+function handleEmbeddedMouseDown(e) {
+  embeddedDragging = true;
+  embeddedLastX = e.clientX;
+  embeddedLastY = e.clientY;
+  embeddedMapState.canvas.style.cursor = 'grabbing';
+}
+
+function handleEmbeddedMouseMove(e) {
+  if (!embeddedDragging) return;
+  embeddedMapState.offsetX += e.clientX - embeddedLastX;
+  embeddedMapState.offsetY += e.clientY - embeddedLastY;
+  embeddedLastX = e.clientX;
+  embeddedLastY = e.clientY;
+}
+
+function handleEmbeddedMouseUp() {
+  embeddedDragging = false;
+  if (embeddedMapState.canvas) {
+    embeddedMapState.canvas.style.cursor = 'grab';
+  }
+}
+
+/**
+ * AR-102: Handle click on embedded map - select destination
+ */
+function handleEmbeddedClick(e) {
+  if (!embeddedMapState.canvas || !systemMapState.celestialObjects) return;
+
+  const rect = embeddedMapState.canvas.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const clickY = e.clientY - rect.top;
+
+  const width = rect.width;
+  const height = rect.height;
+  const centerX = width / 2 + embeddedMapState.offsetX;
+  const centerY = height / 2 + embeddedMapState.offsetY;
+  const baseScale = Math.min(width, height) / 20;
+  const scale = baseScale * embeddedMapState.zoom;
+
+  // Find clicked object
+  let nearest = null;
+  let minDist = 30; // Click tolerance in pixels
+
+  systemMapState.celestialObjects.forEach(obj => {
+    const objX = centerX + (obj.currentX || 0) * scale;
+    const objY = centerY + (obj.currentY || 0) * scale;
+    const dist = Math.sqrt((clickX - objX) ** 2 + (clickY - objY) ** 2);
+    if (dist < minDist) {
+      minDist = dist;
+      nearest = obj;
+    }
+  });
+
+  if (nearest) {
+    selectEmbeddedDestination(nearest);
+  }
+}
+
+/**
+ * AR-102: Select destination and animate camera
+ */
+function selectEmbeddedDestination(destination) {
+  const { lastClickedDestination, currentCameraAngle } = embeddedMapState;
+
+  // Cycle camera angles if clicking same destination
+  if (lastClickedDestination && lastClickedDestination.id === destination.id) {
+    embeddedMapState.currentCameraAngle = (currentCameraAngle + 1) % CAMERA_PRESETS.length;
+  } else {
+    embeddedMapState.currentCameraAngle = 0;
+    embeddedMapState.lastClickedDestination = destination;
+  }
+
+  embeddedMapState.selectedDestination = destination;
+
+  // Get camera preset
+  const preset = CAMERA_PRESETS[embeddedMapState.currentCameraAngle];
+
+  // Calculate target camera position
+  const width = embeddedMapState.container.clientWidth;
+  const height = embeddedMapState.container.clientHeight;
+  const baseScale = Math.min(width, height) / 20;
+
+  const targetZoom = preset.zoom;
+  const targetOffsetX = -(destination.currentX || 0) * baseScale * targetZoom + width * preset.offsetX;
+  const targetOffsetY = -(destination.currentY || 0) * baseScale * targetZoom + height * preset.offsetY;
+
+  // Animate camera (300ms ease-out)
+  animateEmbeddedCamera(targetZoom, targetOffsetX, targetOffsetY, 300);
+
+  // Update transit calculator in app.js
+  if (typeof window.updatePilotTransitCalc === 'function') {
+    window.updatePilotTransitCalc(destination);
+  }
+
+  console.log(`[EmbeddedMap] Selected: ${destination.name} (${preset.name})`);
+}
+
+/**
+ * AR-102: Animate embedded camera to target
+ */
+function animateEmbeddedCamera(targetZoom, targetX, targetY, duration) {
+  const startZoom = embeddedMapState.zoom;
+  const startX = embeddedMapState.offsetX;
+  const startY = embeddedMapState.offsetY;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+
+    embeddedMapState.zoom = startZoom + (targetZoom - startZoom) * eased;
+    embeddedMapState.offsetX = startX + (targetX - startX) * eased;
+    embeddedMapState.offsetY = startY + (targetY - startY) * eased;
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+/**
+ * AR-102: Zoom embedded map (for button controls)
+ */
+function zoomEmbeddedMap(factor) {
+  embeddedMapState.zoom = Math.max(0.2, Math.min(10, embeddedMapState.zoom * factor));
+}
+
+/**
+ * AR-102: Get destinations list for dropdown
+ */
+function getEmbeddedDestinations() {
+  if (!systemMapState.celestialObjects) return [];
+  return systemMapState.celestialObjects
+    .filter(obj => obj.type !== 'Star')
+    .map(obj => ({ id: obj.id, name: obj.name, type: obj.type }));
+}
+
+/**
+ * AR-102: Select destination by ID (for dropdown)
+ */
+function selectEmbeddedDestinationById(id) {
+  const obj = systemMapState.celestialObjects?.find(o => o.id === id);
+  if (obj) {
+    selectEmbeddedDestination(obj);
+  }
+}
+
+// Export embedded map functions globally
+window.initEmbeddedMap = initEmbeddedMap;
+window.zoomEmbeddedMap = zoomEmbeddedMap;
+window.getEmbeddedDestinations = getEmbeddedDestinations;
+window.selectEmbeddedDestinationById = selectEmbeddedDestinationById;
+window.embeddedMapState = embeddedMapState;
+
 // Export for ES modules (app.js imports these)
 export {
   initSystemMap,
@@ -2392,5 +2769,11 @@ export {
   zoomSystemMap,
   resetSystemMapView,
   toggleSystemMapLabels,
-  snapToNow
+  snapToNow,
+  // AR-102: Embedded map for pilot navigation
+  initEmbeddedMap,
+  zoomEmbeddedMap,
+  getEmbeddedDestinations,
+  selectEmbeddedDestinationById,
+  embeddedMapState
 };
