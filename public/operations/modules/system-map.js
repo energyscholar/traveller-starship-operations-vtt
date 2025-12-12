@@ -916,7 +916,8 @@ function drawFullSystem(ctx, centerX, centerY, zoom, system) {
     const planetY = centerY + Math.sin(angle) * orbitRadius * 0.6; // Isometric ellipse
 
     // Size scales with zoom but has min/max for visibility
-    const planetSize = Math.max(3, Math.min(50, (planet.size / 5000) * zoom * 2));
+    // Guard against undefined size - use default 5000
+    const planetSize = Math.max(3, Math.min(50, ((planet.size || 5000) / 5000) * zoom * 2));
 
     drawPlanet(ctx, planetX, planetY, planetSize, planet.type);
 
@@ -1611,9 +1612,9 @@ function loadSystemFromJSON(jsonData) {
     });
   }
 
-  // Extract planets (include Planet, Moon as renderable bodies)
+  // Extract planets (include Planet, Moon, Gas Giant, Ice Giant as renderable bodies)
   const planets = celestialObjects
-    .filter(obj => obj.type === 'Planet' || obj.type === 'Moon')
+    .filter(obj => ['Planet', 'Moon', 'Gas Giant', 'Ice Giant'].includes(obj.type))
     .map((planet, i) => {
       const size = estimatePlanetSize(planet);
       return {
