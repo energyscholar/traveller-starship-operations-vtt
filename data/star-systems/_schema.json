@@ -88,7 +88,17 @@
           "inGoldilocks": { "type": "boolean", "description": "Within habitable zone" },
           "transponder": { "type": "string" },
           "gmNotes": { "type": "string" },
-          "celestial": { "type": "boolean", "default": true }
+          "celestial": { "type": "boolean", "default": true },
+          "fuelSource": {
+            "type": "object",
+            "description": "AR-72: Fuel availability at this celestial object",
+            "properties": {
+              "type": { "type": "string", "enum": ["gas_giant", "ice", "comet", "ring"] },
+              "fuelType": { "type": "string", "enum": ["refined", "unrefined"] },
+              "unlimited": { "type": "boolean", "default": true },
+              "hazard": { "type": "string", "description": "Danger level for fuel scooping" }
+            }
+          }
         }
       }
     },
@@ -113,7 +123,17 @@
             "items": { "type": "string" },
             "description": "Available actions at location"
           },
-          "travelTimeHours": { "type": "object", "description": "Hours to reach from other locations" }
+          "travelTimeHours": { "type": "object", "description": "Hours to reach from other locations" },
+          "fuelSource": {
+            "type": "object",
+            "description": "AR-72: Fuel availability at this location",
+            "properties": {
+              "type": { "type": "string", "enum": ["starport", "wilderness", "water"] },
+              "fuelType": { "type": "string", "enum": ["refined", "unrefined"] },
+              "cost": { "type": "number", "description": "Credits per ton" },
+              "requires": { "type": "string", "description": "Requirements for fuel access" }
+            }
+          }
         }
       }
     },

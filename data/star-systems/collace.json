@@ -140,6 +140,32 @@
       ],
       "travelTimeHours": {
         "loc-orbit-mainworld": 1
+      },
+      "fuelSource": {
+        "type": "starport",
+        "fuelType": "refined",
+        "cost": 500
+      }
+    },
+    {
+      "id": "loc-wilderness-fuel",
+      "name": "Wilderness - Water Collection",
+      "type": "land",
+      "linkedTo": "collace-mainworld",
+      "x": 470,
+      "y": 330,
+      "actions": [
+        "refuel_wilderness",
+        "scan"
+      ],
+      "travelTimeHours": {
+        "loc-orbit-mainworld": 3
+      },
+      "fuelSource": {
+        "type": "water",
+        "fuelType": "unrefined",
+        "unlimited": true,
+        "requires": "hydrographics > 0"
       }
     }
   ],

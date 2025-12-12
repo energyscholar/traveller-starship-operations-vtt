@@ -58,7 +58,12 @@
       "orbitAU": 7.409793643580308,
       "bearing": 29,
       "transponder": "NONE",
-      "gmNotes": "Gas giant suitable for fuel skimming."
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "fuelSource": {
+        "type": "gas_giant",
+        "fuelType": "unrefined",
+        "unlimited": true
+      }
     }
   ],
   "locations": [
@@ -129,7 +134,6 @@
       "x": 460,
       "y": 310,
       "actions": [
-        "refuel_refined",
         "refuel_unrefined",
         "repair",
         "trade",
@@ -137,12 +141,17 @@
       ],
       "travelTimeHours": {
         "loc-orbit-mainworld": 2
+      },
+      "fuelSource": {
+        "type": "starport",
+        "fuelType": "unrefined",
+        "cost": 100
       }
     },
     {
       "id": "loc-skim-gasgiant",
       "name": "Skim - Gas Giant",
-      "type": "skim",
+      "type": "fuel_skim",
       "linkedTo": "bowman-gasgiant",
       "x": 200,
       "y": 100,
@@ -153,6 +162,12 @@
       "travelTimeHours": {
         "loc-orbit-mainworld": 12,
         "loc-system-jump": 10
+      },
+      "fuelSource": {
+        "type": "gas_giant",
+        "fuelType": "unrefined",
+        "unlimited": true,
+        "hazard": "low"
       }
     }
   ],
