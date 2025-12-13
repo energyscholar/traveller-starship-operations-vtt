@@ -521,7 +521,46 @@ function showPlaceDetails(placeId) {
     const travelText = travelHours >= 24
       ? `${Math.floor(travelHours / 24)}d ${travelHours % 24}h`
       : `${travelHours}h`;
-    distanceInfo = `${distanceAU.toFixed(2)} AU · ${travelText} at ${thrust}G`;
+
+    // Build detailed physics tooltip for teaching moment
+    const distanceM = distanceKm * 1000;
+    const accelM = thrust * 10; // m/s² (1G = ~10 m/s²)
+    const halfDistanceM = distanceM / 2;
+    const halfDistanceKm = distanceKm / 2;
+
+    // Max velocity at turnaround = sqrt(2 * accel * halfDistance)
+    const maxVelocityMs = Math.sqrt(2 * accelM * halfDistanceM);
+    const maxVelocityKmh = maxVelocityMs * 3.6;
+    const maxVelocityKms = maxVelocityMs / 1000;
+
+    // Format large numbers
+    const formatKm = (km) => {
+      if (km >= 1e9) return `${(km / 1e9).toFixed(1)}B km`;
+      if (km >= 1e6) return `${(km / 1e6).toFixed(1)}M km`;
+      if (km >= 1e3) return `${(km / 1e3).toFixed(0)}K km`;
+      return `${km.toFixed(0)} km`;
+    };
+
+    const formatVelocity = (kms) => {
+      if (kms >= 1000) return `${(kms / 1000).toFixed(0)}K km/s`;
+      if (kms >= 100) return `${kms.toFixed(0)} km/s`;
+      return `${kms.toFixed(1)} km/s`;
+    };
+
+    // Build multiline tooltip
+    distanceInfo = [
+      `BRACHISTOCHRONE TRAJECTORY`,
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+      `Distance: ${distanceAU.toFixed(2)} AU (${formatKm(distanceKm)})`,
+      `Thrust: ${thrust}G constant acceleration`,
+      `Travel time: ${travelText}`,
+      ``,
+      `FLIGHT PROFILE:`,
+      `• Accelerate ${thrust}G for ${Math.floor(travelHours/2)}h`,
+      `• Turnaround at ${formatKm(halfDistanceKm)}`,
+      `• Max velocity: ${formatVelocity(maxVelocityKms)}`,
+      `• Decelerate ${thrust}G for ${Math.ceil(travelHours/2)}h`,
+    ].join('&#10;');
   }
 
   // Build actions list
