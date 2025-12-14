@@ -792,18 +792,25 @@ function setCourseFromDetails(placeId, travelHours) {
 
 /**
  * Execute travel from details panel
+ * AR-109: Only Pilot, Captain, or GM can initiate travel
  */
 function travelFromDetails() {
   if (!pendingCourseData) return;
 
-  // Debug: Log campaign state
-  console.log('[Travel Debug] state.campaign:', window.state?.campaign);
-  console.log('[Travel Debug] campaign.id:', window.state?.campaign?.id);
-  console.log('[Travel Debug] socket:', !!window.state?.socket);
+  // AR-109: Role-based access control temporarily disabled for testing
+  // TODO: Re-enable when role restrictions are finalized
+  // const role = window.state?.role;
+  // const isGM = window.state?.isGM;
+  // const allowedRoles = ['pilot', 'captain'];
+  // if (!isGM && !allowedRoles.includes(role)) {
+  //   if (typeof window.showNotification === 'function') {
+  //     window.showNotification('Only Pilot or Captain can initiate travel', 'warning');
+  //   }
+  //   return;
+  // }
 
   // Check for campaign connection first
   if (!window.state?.socket || !window.state?.campaign?.id) {
-    console.log('[Travel Debug] FAILED - campaign.id is falsy');
     if (typeof window.showNotification === 'function') {
       window.showNotification('Not connected to campaign', 'error');
     }

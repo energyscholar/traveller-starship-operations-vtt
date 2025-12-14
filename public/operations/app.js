@@ -1036,6 +1036,19 @@ function initSocket() {
     if (state.shipState) {
       state.shipState.positionVerified = true;
     }
+    // AR-110: Update campaign location data from verification response
+    if (data.currentSystem) {
+      state.campaign.current_system = data.currentSystem;
+    }
+    if (data.currentHex) {
+      state.campaign.current_hex = data.currentHex;
+      if (state.shipState) {
+        state.shipState.systemHex = data.currentHex;
+      }
+    }
+    if (data.currentSector) {
+      state.campaign.current_sector = data.currentSector;
+    }
     showNotification(data.message, data.success ? 'success' : 'warning');
     renderRoleDetailPanel(state.selectedRole);
     renderBridge();
@@ -1046,11 +1059,20 @@ function initSocket() {
     if (data.newDate) {
       state.campaign.current_date = data.newDate;
     }
+    // AR-110: Update hex when location changes (both campaign and shipState)
+    if (data.hex) {
+      state.campaign.current_hex = data.hex;
+      if (state.shipState) {
+        state.shipState.systemHex = data.hex;
+      }
+    }
     // Autorun 5: Update contacts if provided
     if (data.contacts) {
       state.contacts = data.contacts;
     }
     renderBridge();
+    // AR-110: Refresh role panel (especially Astrogator which shows current system)
+    renderRoleDetailPanel(state.selectedRole);
   });
 
   // Autorun 5: Handle contacts replaced on jump arrival
@@ -7111,7 +7133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // AR-108.1: Event listeners for migrated inline handlers (CSP compliance)
   document.getElementById('btn-copy-log')?.addEventListener('click', () => window.copyShipLog());
-  document.getElementById('btn-subsector-map')?.addEventListener('click', () => toggleSubsectorMap());
+  document.getElementById('btn-subsector-map')?.addEventListener('click', () => toggleSectorMap());
   document.getElementById('menu-library')?.addEventListener('click', () => showLibraryComputer());
   document.getElementById('menu-ship-config')?.addEventListener('click', () => showShipConfiguration());
   document.getElementById('menu-crew-roster')?.addEventListener('click', () => showCrewRosterMenu());
@@ -7842,14 +7864,19 @@ function showSystemMap() {
           if (matchingSystem) {
             select.value = matchingSystem.id;
             console.log(`[SystemMap] Selected current system: ${matchingSystem.name}`);
+            // Load the selected system
+            await loadSelectedSystemFromJSON(select.value);
           } else {
-            // Default to first system alphabetically (already sorted)
-            select.value = systems[0]?.id || 'flammarion';
-            console.log(`[SystemMap] No match for "${currentSystemName}", defaulting to ${select.value}`);
+            // AR-110: Don't auto-load random system when current isn't found
+            // Default to Flammarion as a known good fallback, but notify user
+            const fallbackSystem = systems.find(s => s.id === 'flammarion') || systems[0];
+            select.value = fallbackSystem?.id || 'flammarion';
+            console.log(`[SystemMap] No map data for "${currentSystemName}", showing ${fallbackSystem?.name || 'Flammarion'}`);
+            if (typeof window.showNotification === 'function') {
+              window.showNotification(`No system map data for ${currentSystemName}. Showing ${fallbackSystem?.name || 'Flammarion'}.`, 'warning');
+            }
+            await loadSelectedSystemFromJSON(select.value);
           }
-
-          // Load the selected system
-          await loadSelectedSystemFromJSON(select.value);
           const nameEl = document.getElementById('system-map-name');
           if (nameEl) {
             nameEl.textContent = systems.find(s => s.id === select.value)?.name || currentSystemName;
@@ -7891,6 +7918,9 @@ function showSystemMap() {
       resetMapTime();
       updateSimulatedDate();
       setTimeout(() => updateObjectSelector(), 100);
+
+      // AR-111: Auto-show ship at current location
+      setTimeout(() => updateShipOnSystemMap(systemData), 150);
     } catch (err) {
       console.error(`[SystemMap] Failed to load ${systemId}.json:`, err);
       // Fallback to TEST_SYSTEMS if available
@@ -8049,15 +8079,41 @@ function showSystemMap() {
   // Update selector after system loads
   setTimeout(updateObjectSelector, 200);
 
-  // AR-29.9: Show party ship
+  /**
+   * AR-111: Update ship position on system map based on current location
+   * @param {Object} systemData - Loaded system JSON data
+   */
+  function updateShipOnSystemMap(systemData) {
+    if (typeof updateShipPosition !== 'function') return;
+
+    const locationId = state.shipState?.locationId;
+    const shipName = state.ship?.name || 'Party Ship';
+    let positionAU = 5; // Default: 5 AU from star
+
+    // Try to find ship's location in system places
+    if (locationId && systemData?.places) {
+      const place = systemData.places.find(p => p.id === locationId);
+      if (place?.linkedBody) {
+        // Find the celestial body to get orbital distance
+        const body = systemData.celestialObjects?.find(o => o.id === place.linkedBody);
+        if (body?.orbitAU) {
+          positionAU = body.orbitAU;
+        }
+      }
+    }
+
+    updateShipPosition({
+      name: shipName,
+      position: { x: positionAU, y: 0, z: 0 },
+      heading: 0
+    });
+  }
+
+  // AR-29.9: Show party ship (manual toggle)
   document.getElementById('btn-show-ship')?.addEventListener('click', () => {
-    // Place a demo ship at 5 AU from star
-    if (typeof updateShipPosition === 'function') {
-      updateShipPosition({
-        name: state.ship?.name || 'Party Ship',
-        position: { x: 5, y: 0, z: 0 },
-        heading: 0
-      });
+    // Re-show ship at current location
+    if (typeof updateShipPosition === 'function' && window.systemMapState?.system) {
+      updateShipOnSystemMap(window.systemMapState.system);
       showNotification('Ship shown on system map', 'info');
     }
   });

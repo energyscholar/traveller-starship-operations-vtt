@@ -178,8 +178,20 @@ async function loadSectorData(subsectorId) {
     const titleEl = document.getElementById('sector-map-title');
     if (titleEl) titleEl.textContent = `${data.name} Subsector`;
 
+    // AR-111: Set ship hex by looking up current system name (subsector coords differ from sector coords)
+    const currentSystem = window.state?.campaign?.current_system;
+    if (currentSystem) {
+      const sys = sectorMapState.systems.find(s =>
+        s.name === currentSystem || s.name.toLowerCase() === currentSystem.toLowerCase()
+      );
+      if (sys?.hex) {
+        sectorMapState.currentShipHex = sys.hex;
+        console.log(`[SectorMap] Ship at ${sys.hex} (${currentSystem})`);
+      }
+    }
+
     renderSectorMap();
-    console.log(`[SectorMap] Loaded ${data.name}: ${data.systems.length} systems`);
+    console.log(`[SectorMap] Loaded ${data.name}: ${data.systems.length} systems, shipHex: ${sectorMapState.currentShipHex || 'none'}`);
     return data;
   } catch (err) {
     console.error('Failed to load subsector:', err);
@@ -570,10 +582,48 @@ function renderSectorMap() {
     ctx.fillText(sys.starport, pos.x, pos.y + 30 * scale);
   }
 
+  // AR-111: Draw ship indicator at current location
+  if (sectorMapState.currentShipHex) {
+    drawShipIndicator(ctx, sectorMapState.currentShipHex, scale);
+  }
+
   // Draw info panel for selected system
   if (sectorMapState.hoveredSystem) {
     drawSystemInfoPanel(ctx, sectorMapState.hoveredSystem, width, height);
   }
+}
+
+/**
+ * AR-111: Draw ship indicator (blue wedge) at hex location
+ * Size is scale-independent (always appears same size on screen)
+ */
+function drawShipIndicator(ctx, hexCoord, scale) {
+  const pos = hexToPixel(hexCoord);
+
+  // Scale-independent size: divide by scale so it stays constant
+  const size = 10 / scale;
+
+  ctx.save();
+  ctx.translate(pos.x, pos.y);
+
+  // Blue wedge pointing up
+  ctx.beginPath();
+  ctx.moveTo(0, -size * 1.2);           // Top point
+  ctx.lineTo(-size * 0.7, size * 0.8);  // Bottom left
+  ctx.lineTo(0, size * 0.4);            // Bottom center notch
+  ctx.lineTo(size * 0.7, size * 0.8);   // Bottom right
+  ctx.closePath();
+
+  // Fill with blue
+  ctx.fillStyle = '#4488ff';
+  ctx.fill();
+
+  // White outline for visibility
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 1.5 / scale;
+  ctx.stroke();
+
+  ctx.restore();
 }
 
 /**
@@ -875,6 +925,18 @@ function showSectorMap() {
     if (!sectorMapState.canvas) {
       initSectorMap(canvasContainer);
     }
+
+    // AR-111: Set ship location BEFORE loading data
+    const currentHex = window.state?.campaign?.current_hex ||
+                       window.state?.shipState?.systemHex ||
+                       window.state?.ship?.current_state?.systemHex;
+    if (currentHex) {
+      sectorMapState.currentShipHex = currentHex;
+      console.log(`[SectorMap] Ship hex from state: ${currentHex}`);
+    } else {
+      console.log(`[SectorMap] No hex in state, will lookup from system name`);
+    }
+
     loadSectorData('district268');
 
     // AR-36: Center on ship's current location after a brief delay for rendering
