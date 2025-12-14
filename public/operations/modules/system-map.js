@@ -2785,6 +2785,7 @@ function setMapDestination(bodyId) {
 
 /**
  * Draw location markers (green dots for jump points, etc.)
+ * Uses same time-based positioning as planets for consistency
  */
 function drawLocationMarkers(ctx, centerX, centerY, zoom) {
   const system = systemMapState.system;
@@ -2800,18 +2801,23 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
     if (!body) continue;
 
     const bodyOrbitAU = body.orbitAU || 0;
-    const bodyBearing = (body.bearing || 0) * Math.PI / 180;
+
+    // Use same time-based orbit animation as planets
+    const orbitSpeed = 0.1 / Math.sqrt(bodyOrbitAU || 1);
+    const angle = systemMapState.time * orbitSpeed;
+
+    // Body position (matches planet drawing in drawFullSystem)
+    const bodyX = Math.cos(angle) * bodyOrbitAU;
+    const bodyY = Math.sin(angle) * bodyOrbitAU * 0.6; // Isometric ellipse
 
     // Location offset from body (in km -> AU)
     const locationOrbitKm = loc.orbitKm || 0;
     const locationBearing = (loc.bearing || 0) * Math.PI / 180;
     const locationOrbitAU = locationOrbitKm / 149597870.7;
 
-    // Calculate position
-    const bodyX = bodyOrbitAU * Math.cos(bodyBearing);
-    const bodyY = bodyOrbitAU * Math.sin(bodyBearing);
+    // Add offset in the bearing direction
     const offsetX = locationOrbitAU * Math.cos(locationBearing);
-    const offsetY = locationOrbitAU * Math.sin(locationBearing);
+    const offsetY = locationOrbitAU * Math.sin(locationBearing) * 0.6; // Isometric
 
     const posX = bodyX + offsetX;
     const posY = bodyY + offsetY;
@@ -2835,15 +2841,39 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
 
 /**
  * Draw party ship on system map
+ * If location info is provided, uses time-based positioning to track orbiting bodies
  */
 function drawPartyShip(ctx, centerX, centerY, zoom) {
   if (!shipMapState.partyShip) return;
 
-  const pos = shipMapState.partyShip.position || { x: 5, y: 0, z: 0 };
   const auToPixels = systemMapState.AU_TO_PIXELS * zoom;
+  let screenX, screenY;
 
-  const screenX = centerX + pos.x * auToPixels + systemMapState.offsetX;
-  const screenY = centerY + pos.y * auToPixels + systemMapState.offsetY;
+  // If we have location info with a linked body, calculate position dynamically
+  const locInfo = shipMapState.partyShip.locationInfo;
+  if (locInfo?.linkedBodyOrbitAU !== undefined) {
+    const bodyOrbitAU = locInfo.linkedBodyOrbitAU;
+    const orbitSpeed = 0.1 / Math.sqrt(bodyOrbitAU || 1);
+    const angle = systemMapState.time * orbitSpeed;
+
+    // Body position (matches planet drawing)
+    const bodyX = Math.cos(angle) * bodyOrbitAU;
+    const bodyY = Math.sin(angle) * bodyOrbitAU * 0.6; // Isometric
+
+    // Location offset
+    const offsetAU = locInfo.offsetAU || 0;
+    const offsetBearing = (locInfo.offsetBearing || 0) * Math.PI / 180;
+    const offsetX = offsetAU * Math.cos(offsetBearing);
+    const offsetY = offsetAU * Math.sin(offsetBearing) * 0.6; // Isometric
+
+    screenX = centerX + (bodyX + offsetX) * auToPixels + systemMapState.offsetX;
+    screenY = centerY + (bodyY + offsetY) * auToPixels + systemMapState.offsetY;
+  } else {
+    // Fallback to static position
+    const pos = shipMapState.partyShip.position || { x: 5, y: 0, z: 0 };
+    screenX = centerX + pos.x * auToPixels + systemMapState.offsetX;
+    screenY = centerY + pos.y * auToPixels + systemMapState.offsetY;
+  }
 
   // Ship triangle (pointing in heading direction)
   const heading = shipMapState.partyShip.heading || 0;

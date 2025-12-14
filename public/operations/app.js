@@ -8098,7 +8098,11 @@ function showSystemMap() {
 
     const locationId = state.shipState?.locationId;
     const shipName = state.ship?.name || 'Party Ship';
-    let positionAU = { x: 5, y: 0 }; // Default: 5 AU from star
+    let shipData = {
+      name: shipName,
+      position: { x: 5, y: 0, z: 0 }, // Default fallback
+      heading: 0
+    };
 
     // Try to find ship's location in system locations
     if (locationId && systemData?.locations) {
@@ -8108,30 +8112,21 @@ function showSystemMap() {
         const body = systemData.celestialObjects?.find(o => o.id === location.linkedTo);
         if (body) {
           const bodyOrbitAU = body.orbitAU || 0;
-          const bodyBearing = (body.bearing || 0) * Math.PI / 180;
-
-          // Location has its own offset from the body (in km)
           const locationOrbitKm = location.orbitKm || 0;
-          const locationBearing = (location.bearing || 0) * Math.PI / 180;
           const locationOrbitAU = locationOrbitKm / 149597870.7; // km to AU
 
-          // Calculate position: body position + location offset
-          const bodyX = bodyOrbitAU * Math.cos(bodyBearing);
-          const bodyY = bodyOrbitAU * Math.sin(bodyBearing);
-          const offsetX = locationOrbitAU * Math.cos(locationBearing);
-          const offsetY = locationOrbitAU * Math.sin(locationBearing);
-
-          positionAU = { x: bodyX + offsetX, y: bodyY + offsetY };
-          console.log(`[SystemMap] Ship at ${locationId}: body(${bodyOrbitAU.toFixed(2)}AU) + offset(${locationOrbitAU.toFixed(4)}AU)`);
+          // Pass location info for dynamic time-based positioning
+          shipData.locationInfo = {
+            linkedBodyOrbitAU: bodyOrbitAU,
+            offsetAU: locationOrbitAU,
+            offsetBearing: location.bearing || 0
+          };
+          console.log(`[SystemMap] Ship at ${locationId}: tracking body at ${bodyOrbitAU.toFixed(2)}AU + offset ${locationOrbitAU.toFixed(4)}AU`);
         }
       }
     }
 
-    updateShipPosition({
-      name: shipName,
-      position: { x: positionAU.x, y: positionAU.y, z: 0 },
-      heading: 0
-    });
+    updateShipPosition(shipData);
   }
 
   // AR-29.9: Show party ship (manual toggle)
