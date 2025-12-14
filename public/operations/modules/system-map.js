@@ -2822,8 +2822,9 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
     const posX = bodyX + offsetX;
     const posY = bodyY + offsetY;
 
-    const screenX = centerX + posX * auToPixels + systemMapState.offsetX;
-    const screenY = centerY + posY * auToPixels + systemMapState.offsetY;
+    // centerX/centerY already include pan offset, don't add again
+    const screenX = centerX + posX * auToPixels;
+    const screenY = centerY + posY * auToPixels;
 
     // Draw green dot for jump points
     if (loc.type === 'jump_point') {
@@ -2866,13 +2867,14 @@ function drawPartyShip(ctx, centerX, centerY, zoom) {
     const offsetX = offsetAU * Math.cos(offsetBearing);
     const offsetY = offsetAU * Math.sin(offsetBearing) * 0.6; // Isometric
 
-    screenX = centerX + (bodyX + offsetX) * auToPixels + systemMapState.offsetX;
-    screenY = centerY + (bodyY + offsetY) * auToPixels + systemMapState.offsetY;
+    // centerX/centerY already include pan offset, don't add again
+    screenX = centerX + (bodyX + offsetX) * auToPixels;
+    screenY = centerY + (bodyY + offsetY) * auToPixels;
   } else {
-    // Fallback to static position
+    // Fallback to static position (centerX/centerY already include pan offset)
     const pos = shipMapState.partyShip.position || { x: 5, y: 0, z: 0 };
-    screenX = centerX + pos.x * auToPixels + systemMapState.offsetX;
-    screenY = centerY + pos.y * auToPixels + systemMapState.offsetY;
+    screenX = centerX + pos.x * auToPixels;
+    screenY = centerY + pos.y * auToPixels;
   }
 
   // Ship triangle (pointing in heading direction)
