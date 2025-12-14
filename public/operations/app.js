@@ -7864,7 +7864,9 @@ function showSystemMap() {
             .join('');
 
           // Select current system (must match by name, case-insensitive)
-          const currentSystemName = state.campaign?.current_system || 'Flammarion';
+          // Strip parenthetical sector info like "(Spinward Marches 0931)"
+          const rawSystemName = state.campaign?.current_system || 'Flammarion';
+          const currentSystemName = rawSystemName.replace(/\s*\([^)]*\)\s*/g, '').trim();
           const matchingSystem = systems.find(s =>
             s.name.toLowerCase() === currentSystemName.toLowerCase() ||
             s.id.toLowerCase() === currentSystemName.toLowerCase()
@@ -8209,8 +8211,11 @@ async function loadCurrentSystem(systemName) {
     return;
   }
 
-  // Convert system name to ID (lowercase, no spaces or dashes)
-  const systemId = systemName.toLowerCase().replace(/\s+/g, '').replace(/-/g, '');
+  // Convert system name to ID (lowercase, remove parenthetical sector info, no spaces or dashes)
+  const systemId = systemName.toLowerCase()
+    .replace(/\s*\([^)]*\)\s*/g, '')  // Remove "(Spinward Marches 0931)" etc
+    .replace(/\s+/g, '')
+    .replace(/-/g, '');
 
   try {
     const res = await fetch(`/data/star-systems/${systemId}.json`);
