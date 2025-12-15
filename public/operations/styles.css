@@ -21,6 +21,9 @@
   --accent-yellow: #eab308;
   --accent-red: #dc2626;
   --accent-orange: #f97316;
+  --accent-gold: #d4a84b;
+
+  --text-dim: #5a6a7a;
 
   /* Alert status colors */
   --alert-normal: var(--accent-green);
@@ -526,24 +529,6 @@ input[type="checkbox"] {
   display: flex;
   gap: var(--space-sm);
   margin-top: var(--space-md);
-}
-
-/* Legacy link - subtle link to old combat interface */
-.legacy-link {
-  margin-top: var(--space-xl);
-  text-align: center;
-  font-size: 12px;
-  opacity: 0.5;
-}
-
-.legacy-link a {
-  color: var(--text-dim);
-  text-decoration: none;
-}
-
-.legacy-link a:hover {
-  color: var(--text-secondary);
-  text-decoration: underline;
 }
 
 /* ==================== Header ==================== */

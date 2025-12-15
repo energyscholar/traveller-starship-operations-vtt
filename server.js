@@ -433,6 +433,11 @@ server.listen(config.server.port, () => {
   log.info('- Ship systems and damage tracking');
   log.info('- Real-time multi-player synchronization');
   log.info('');
+  log.info('Test Commands:');
+  log.info('- npm run test:fast       # Smoke tests (~0.6s)');
+  log.info('- npm run test            # Full suite (~3s)');
+  log.info('- npm run test:e2e <file> # E2E with cleanup');
+  log.info('');
   log.info('Instructions:');
   log.info(`1. Open http://localhost:${config.server.port}/`);
   log.info('2. GM creates campaign, players join with code');
