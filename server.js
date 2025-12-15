@@ -237,6 +237,10 @@ app.post('/api/cache/clear', (req, res) => {
 // AR-29.7: Subsector data API
 const fs = require('fs');
 const subsectorPath = path.join(__dirname, 'data', 'subsectors');
+
+// AR-120: TravellerMap API client for dynamic subsector fetching
+const travellerMapClient = require('./lib/traveller-map-client');
+
 app.get('/api/subsectors/:id', (req, res) => {
   const { id } = req.params;
   const filePath = path.join(subsectorPath, `${id}.json`);
@@ -250,6 +254,61 @@ app.get('/api/subsectors/:id', (req, res) => {
     console.error('Failed to load subsector:', err);
     res.status(500).json({ error: 'Failed to load subsector data' });
   }
+});
+
+// AR-120: Fetch subsector from TravellerMap API (with caching)
+app.get('/api/travellermap/subsector/:sector/:subsector', async (req, res) => {
+  const { sector, subsector } = req.params;
+  try {
+    const data = await travellerMapClient.getSubsector(sector, subsector);
+    res.json(data);
+  } catch (err) {
+    console.error(`[TravellerMap] Failed to fetch ${sector}/${subsector}:`, err.message);
+    res.status(500).json({ error: `Failed to fetch subsector: ${err.message}` });
+  }
+});
+
+// AR-120: Fetch full sector from TravellerMap API
+app.get('/api/travellermap/sector/:sector', async (req, res) => {
+  const { sector } = req.params;
+  try {
+    const data = await travellerMapClient.getSector(sector);
+    res.json(data);
+  } catch (err) {
+    console.error(`[TravellerMap] Failed to fetch sector ${sector}:`, err.message);
+    res.status(500).json({ error: `Failed to fetch sector: ${err.message}` });
+  }
+});
+
+// AR-120: Search for world by name
+app.get('/api/travellermap/search', async (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    return res.status(400).json({ error: 'Query parameter "q" required' });
+  }
+  try {
+    const results = await travellerMapClient.searchWorld(q);
+    res.json({ results });
+  } catch (err) {
+    console.error(`[TravellerMap] Search failed:`, err.message);
+    res.status(500).json({ error: `Search failed: ${err.message}` });
+  }
+});
+
+// AR-120: TravellerMap cache control
+app.get('/api/travellermap/cache/status', (req, res) => {
+  res.json({ enabled: travellerMapClient.isCacheEnabled() });
+});
+
+app.post('/api/travellermap/cache/toggle', (req, res) => {
+  const { enabled } = req.body;
+  travellerMapClient.setCacheEnabled(enabled !== false);
+  res.json({ enabled: travellerMapClient.isCacheEnabled() });
+});
+
+app.post('/api/travellermap/cache/clear', (req, res) => {
+  travellerMapClient.clearCache();
+  res.json({ cleared: true });
 });
 
 // Track connections and ship assignments (from lib/state)
