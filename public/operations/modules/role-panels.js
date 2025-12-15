@@ -948,6 +948,39 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
 }
 
 function getCaptainPanel(shipState, template, ship, crewOnline, contacts, rescueTargets = []) {
+  // AR-131+: Get active sub-panel for captain's role switching
+  const activePanel = window.state?.captainActivePanel || 'captain';
+
+  // AR-131+: Tab bar for role switching (always show at top)
+  const tabBar = `
+    <div class="captain-tab-bar" style="display: flex; gap: 4px; margin-bottom: 12px; padding: 4px; background: var(--bg-tertiary); border-radius: 6px;">
+      <button onclick="window.switchCaptainPanel('captain')" class="btn btn-tiny ${activePanel === 'captain' ? 'btn-primary' : 'btn-secondary'}" title="Captain orders and status">
+        Captain
+      </button>
+      <button onclick="window.switchCaptainPanel('astrogator')" class="btn btn-tiny ${activePanel === 'astrogator' ? 'btn-primary' : 'btn-secondary'}" title="Plot jumps and navigation">
+        Astrogator
+      </button>
+      <button onclick="window.switchCaptainPanel('pilot')" class="btn btn-tiny ${activePanel === 'pilot' ? 'btn-primary' : 'btn-secondary'}" title="Ship maneuvering">
+        Pilot
+      </button>
+      <button onclick="window.switchCaptainPanel('engineer')" class="btn btn-tiny ${activePanel === 'engineer' ? 'btn-primary' : 'btn-secondary'}" title="Systems and repairs">
+        Engineer
+      </button>
+    </div>
+  `;
+
+  // AR-131+: If showing a different role's panel, delegate to that panel function
+  if (activePanel === 'astrogator') {
+    return tabBar + getAstrogatorPanel(shipState, template, ship, crewOnline, contacts);
+  }
+  if (activePanel === 'pilot') {
+    return tabBar + getPilotPanel(shipState, template, ship, crewOnline, contacts);
+  }
+  if (activePanel === 'engineer') {
+    return tabBar + getEngineerPanel(shipState, template, ship, crewOnline, contacts);
+  }
+
+  // Captain panel content below
   // Filter to targetable contacts only
   const targetableContacts = contacts?.filter(c => c.is_targetable) || [];
   const authorizedTargets = targetableContacts.filter(c => c.weapons_free);
@@ -974,7 +1007,7 @@ function getCaptainPanel(shipState, template, ship, crewOnline, contacts, rescue
     ['Ship', 'Station', 'Starport', 'Base', 'Patrol', 'Free Trader', 'Far Trader', 'System Defense Boat'].includes(c.type)
   ) || [];
 
-  return `
+  return tabBar + `
     <div class="detail-section captain-alert-section">
       <h4>Alert Status</h4>
       <div class="alert-status-display" style="border-left: 4px solid ${alertColor}; padding-left: 10px;">

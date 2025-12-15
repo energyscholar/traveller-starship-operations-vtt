@@ -187,6 +187,7 @@ const state = {
   contactSort: 'range',   // AR-25: Contact sort preference
   contactFilter: 'all',   // AR-25: Contact filter preference
   sensorPanelMode: 'collapsed',  // AR-138: 'collapsed', 'expanded', 'combat'
+  captainActivePanel: 'captain', // AR-131+: 'captain', 'astrogator', 'pilot', 'engineer'
 
   // AUTORUN-8: Prep data
   prepReveals: [],
@@ -4497,6 +4498,13 @@ function renderMiniRadar(contacts, range = 50000) {
   ctx.font = '9px monospace';
   ctx.textAlign = 'center';
   ctx.fillText(`${(range / 1000).toFixed(0)}k km`, cx, h - 4);
+}
+
+// AR-131+: Captain panel switching - allows captain to access other role panels
+function switchCaptainPanel(panel) {
+  state.captainActivePanel = panel;
+  renderRoleDetailPanel('captain');
+  console.log(`[Captain] Switched to ${panel} panel`);
 }
 
 // AR-103: calculateSensorDM moved to modules/helpers.js
@@ -11133,6 +11141,8 @@ window.calculateSensorDM = calculateSensorDM;
 window.toggleSensorPanelMode = toggleSensorPanelMode;
 window.checkSensorThreats = checkSensorThreats;
 window.renderMiniRadar = renderMiniRadar;
+// AR-131+: Captain panel switching
+window.switchCaptainPanel = switchCaptainPanel;
 // AR-128: Observer role-watching
 window.observerWatchRole = 'pilot';  // Default to watching pilot
 window.setObserverWatchRole = function(role) {
