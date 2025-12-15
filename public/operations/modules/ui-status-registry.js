@@ -25,13 +25,13 @@ export const UI_STATUS = {
   // ========================================================================
 
   // --- Sensor Panel (AR-127) ---
-  'sensor-filter': {
-    status: 'yellow',
-    note: 'AR-127: Filter dropdown exists but no handlers'
+  'contact-filter': {
+    status: 'green',
+    note: 'AR-127: Filter dropdown functional'
   },
-  'sensor-sort': {
-    status: 'yellow',
-    note: 'AR-127: Sort dropdown exists but no handlers'
+  'contact-sort': {
+    status: 'green',
+    note: 'AR-127: Sort dropdown functional'
   },
   'btn-ecm': {
     status: 'yellow',

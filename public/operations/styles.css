@@ -9184,3 +9184,40 @@ body.role-engineer .role-panel .role-actions {
     min-height: 250px;
   }
 }
+
+/* ==================== AR-150: UI Status Indicators ==================== */
+/* Visual feedback for control functionality status via colored borders */
+
+/* Status indicators only visible when body has .show-ui-status class */
+body.show-ui-status [data-ui-status="yellow"] {
+  outline: 2px solid var(--accent-yellow) !important;
+  outline-offset: 2px;
+}
+
+body.show-ui-status [data-ui-status="red"] {
+  outline: 2px solid var(--accent-red) !important;
+  outline-offset: 2px;
+}
+
+/* Tooltip showing status note on hover */
+body.show-ui-status [data-status-note]:hover::after {
+  content: attr(data-status-note);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 1000;
+  border: 1px solid var(--border-color);
+  pointer-events: none;
+}
+
+/* Ensure positioned elements for tooltip */
+body.show-ui-status [data-status-note] {
+  position: relative;
+}

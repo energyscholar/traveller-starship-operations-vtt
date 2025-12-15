@@ -33,6 +33,7 @@ import {
   updateMapContacts,  // AR-71: Sync contacts to system map
   loadSystemFromJSON  // Load systems from JSON files
 } from './modules/system-map.js';
+import { applyStatusIndicators, toggleStatusIndicators } from './modules/ui-status-registry.js';
 
 // ==================== Debug Configuration ====================
 // SECURITY: Debug logging only enabled on localhost
@@ -2730,6 +2731,13 @@ function initBridgeScreen() {
     if (panelKeys[e.key]) {
       togglePanelExpand(panelKeys[e.key]);
     }
+
+    // AR-150: 'u' key toggles UI status indicators (dev mode only)
+    if ((e.key === 'u' || e.key === 'U') && DEBUG) {
+      const isVisible = document.body.classList.toggle('show-ui-status');
+      showNotification(`UI Status Indicators: ${isVisible ? 'ON' : 'OFF'}`, 'info');
+      if (isVisible) applyStatusIndicators();
+    }
   });
 
   // Panel expand button click handlers
@@ -3194,6 +3202,9 @@ function renderRoleDetailPanel(role) {
   // Role-specific content from module
   const detailContent = getRoleDetailContent(role, context);
   container.innerHTML = detailContent;
+
+  // AR-150: Apply UI status indicators after panel render
+  applyStatusIndicators();
 
   // AR-102: Show embedded map for pilot role
   if (role === 'pilot' && state.selectedRole === 'pilot') {

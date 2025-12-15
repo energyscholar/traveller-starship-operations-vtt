@@ -1446,14 +1446,14 @@ function getSensorOperatorPanel(shipState, contacts, environmentalData = null) {
       </div>
       <div class="ecm-controls" style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
         ${ships.length > 0 || threats.length > 0 ? `
-          <button onclick="window.toggleECM()" class="btn btn-small ${ecmActive ? 'btn-danger' : 'btn-secondary'}" title="ECM: Jamming gives enemies -2 DM to sensor checks against us">
+          <button id="btn-ecm" onclick="window.toggleECM()" class="btn btn-small ${ecmActive ? 'btn-danger' : 'btn-secondary'}" title="ECM: Jamming gives enemies -2 DM to sensor checks against us">
             ECM ${ecmActive ? 'ON' : 'OFF'}
           </button>
-          <button onclick="window.toggleECCM()" class="btn btn-small ${eccmActive ? 'btn-success' : 'btn-secondary'}" title="ECCM: Counter-jamming negates enemy ECM (-2 penalty)">
+          <button id="btn-eccm" onclick="window.toggleECCM()" class="btn btn-small ${eccmActive ? 'btn-success' : 'btn-secondary'}" title="ECCM: Counter-jamming negates enemy ECM (-2 penalty)">
             ECCM ${eccmActive ? 'ON' : 'OFF'}
           </button>
         ` : ''}
-        <button onclick="window.toggleStealth()" class="btn btn-small ${stealthActive ? 'btn-warning' : 'btn-secondary'}" title="Stealth: Reduce emissions to avoid detection">
+        <button id="btn-stealth" onclick="window.toggleStealth()" class="btn btn-small ${stealthActive ? 'btn-warning' : 'btn-secondary'}" title="Stealth: Reduce emissions to avoid detection">
           Stealth ${stealthActive ? 'ON' : 'OFF'}
         </button>
       </div>
@@ -1461,7 +1461,7 @@ function getSensorOperatorPanel(shipState, contacts, environmentalData = null) {
         <div class="sensor-lock-status" style="margin-top: 8px; padding: 6px; background: var(--bg-tertiary); border-left: 3px solid var(--success); border-radius: 4px;">
           <strong>LOCK:</strong> ${escapeHtml(sensorLock.targetName || sensorLock.targetId)}
           <span class="lock-bonus">(+2 Attack DM)</span>
-          <button onclick="window.breakSensorLock()" class="btn btn-tiny btn-secondary" style="margin-left: 8px;">Break</button>
+          <button id="btn-break-lock" onclick="window.breakSensorLock()" class="btn btn-tiny btn-secondary" style="margin-left: 8px;">Break</button>
         </div>
       ` : `
         <div class="sensor-lock-hint" style="margin-top: 8px; color: var(--text-muted); font-size: 0.85em;">
