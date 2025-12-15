@@ -471,6 +471,7 @@
           <button class="prep-tab" data-tab="email">Email</button>
           <button class="prep-tab" data-tab="handouts">Handouts</button>
           <button class="prep-tab" data-tab="contacts">Contacts</button>
+          <button class="prep-tab" data-tab="modules">Modules</button>
         </nav>
 
         <!-- Reveals Tab -->
@@ -547,6 +548,17 @@
           </div>
           <div id="combat-contacts-list" class="prep-list">
             <p class="placeholder">No combat contacts in sensor range</p>
+          </div>
+        </div>
+
+        <!-- Modules Tab (AR-140) -->
+        <div id="prep-tab-modules" class="prep-tab-content">
+          <div class="prep-list-header">
+            <span class="prep-count" id="modules-count">0 modules</span>
+            <button id="btn-import-module" class="btn btn-small btn-success" onclick="window.showImportModuleModal()">+ Import Module</button>
+          </div>
+          <div id="modules-list" class="prep-list">
+            <p class="placeholder">No adventure modules imported</p>
           </div>
         </div>
 

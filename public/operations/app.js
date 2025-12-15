@@ -10263,6 +10263,7 @@ function loadPrepData() {
   renderPrepEvents();
   renderPrepEmails();
   renderPrepHandouts();
+  renderPrepModules();
 }
 
 // ==================== Reveals (Stage 8.1) ====================
@@ -10925,6 +10926,170 @@ function showHandoutDetail(handoutId) {
   showModalContent(html);
 }
 
+// ==================== Adventure Modules (AR-140) ====================
+
+// State for modules
+state.adventureModules = state.adventureModules || [];
+
+function renderPrepModules() {
+  const list = document.getElementById('modules-list');
+  const count = document.getElementById('modules-count');
+  const modules = state.adventureModules || [];
+
+  if (count) count.textContent = `${modules.length} module${modules.length !== 1 ? 's' : ''}`;
+  if (!list) return;
+
+  if (modules.length === 0) {
+    list.innerHTML = '<p class="placeholder">No adventure modules imported</p>';
+    return;
+  }
+
+  list.innerHTML = modules.map(mod => `
+    <div class="prep-item" data-module-id="${mod.id}">
+      <div class="prep-item-header">
+        <span class="prep-item-title">${escapeHtml(mod.module_name)}</span>
+        <span class="prep-item-status ${mod.is_active ? 'active' : 'inactive'}">${mod.is_active ? 'Active' : 'Disabled'}</span>
+      </div>
+      <div class="prep-item-desc">
+        v${escapeHtml(mod.module_version || '1.0')} | Imported: ${new Date(mod.imported_at).toLocaleDateString()}
+      </div>
+      <div class="prep-item-actions">
+        <button class="btn btn-sm ${mod.is_active ? 'btn-warning' : 'btn-success'}" onclick="toggleModule('${mod.id}', ${!mod.is_active})">
+          ${mod.is_active ? 'Disable' : 'Enable'}
+        </button>
+        <button class="btn btn-sm" onclick="showModuleDetail('${mod.id}')">Details</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteModule('${mod.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showImportModuleModal() {
+  const html = `
+    <div class="modal-header">
+      <h2>Import Adventure Module</h2>
+      <button class="btn-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="module-name">Module Name</label>
+        <input type="text" id="module-name" class="form-input" placeholder="Name for this module">
+      </div>
+      <div class="form-group">
+        <label for="module-file">Adventure JSON File</label>
+        <input type="file" id="module-file" class="form-input" accept=".json">
+      </div>
+      <p class="text-muted">Upload a .json file exported from the Export button or another Traveller VTT campaign.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="importModuleFromFile()">Import</button>
+    </div>
+  `;
+  showModalContent(html);
+}
+
+function importModuleFromFile() {
+  const fileInput = document.getElementById('module-file');
+  const nameInput = document.getElementById('module-name');
+  const file = fileInput?.files?.[0];
+  const moduleName = nameInput?.value?.trim();
+
+  if (!file) {
+    showError('Please select a file to import');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const adventureData = JSON.parse(e.target.result);
+      state.socket.emit('ops:importModule', {
+        adventureData,
+        moduleName: moduleName || adventureData.manifest?.campaignName || file.name.replace('.json', '')
+      });
+      closeModal();
+      showNotification('Importing module...', 'info');
+    } catch (err) {
+      showError('Invalid JSON file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function toggleModule(moduleId, isActive) {
+  state.socket.emit('ops:toggleModule', { moduleId, isActive });
+}
+
+function deleteModule(moduleId) {
+  if (!confirm('Delete this module and all its content? This cannot be undone.')) return;
+  state.socket.emit('ops:deleteModule', { moduleId });
+}
+
+function showModuleDetail(moduleId) {
+  state.socket.emit('ops:getModuleSummary', { moduleId });
+}
+
+// Socket listeners for modules
+if (state.socket) {
+  state.socket.on('ops:moduleList', (data) => {
+    state.adventureModules = data.modules || [];
+    renderPrepModules();
+  });
+
+  state.socket.on('ops:moduleImported', (data) => {
+    showNotification(`Module "${data.moduleName}" imported successfully!`, 'success');
+    state.socket.emit('ops:getModules');
+    // Refresh prep data to show imported content
+    state.socket.emit('ops:getPrepData', { campaignId: state.campaign?.id });
+  });
+
+  state.socket.on('ops:moduleUpdated', (data) => {
+    const idx = state.adventureModules.findIndex(m => m.id === data.module.id);
+    if (idx >= 0) state.adventureModules[idx] = data.module;
+    renderPrepModules();
+  });
+
+  state.socket.on('ops:moduleDeleted', (data) => {
+    state.adventureModules = state.adventureModules.filter(m => m.id !== data.moduleId);
+    renderPrepModules();
+    showNotification('Module deleted', 'info');
+    // Refresh prep data
+    state.socket.emit('ops:getPrepData', { campaignId: state.campaign?.id });
+  });
+
+  state.socket.on('ops:moduleSummary', (data) => {
+    const summary = data.summary;
+    if (!summary) {
+      showError('Module not found');
+      return;
+    }
+    const counts = summary.contentCounts || {};
+    const html = `
+      <div class="modal-header">
+        <h2>${escapeHtml(summary.module_name)}</h2>
+        <button class="btn-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Version:</strong> ${escapeHtml(summary.module_version)}</p>
+        <p><strong>Status:</strong> ${summary.is_active ? 'Active' : 'Disabled'}</p>
+        <p><strong>Imported:</strong> ${new Date(summary.imported_at).toLocaleString()}</p>
+        <h4>Content Summary</h4>
+        <table class="info-table">
+          <tr><th>Type</th><th>Total</th><th>Gated</th></tr>
+          ${Object.entries(counts).map(([type, c]) =>
+            `<tr><td>${type}</td><td>${c.total}</td><td>${c.gated}</td></tr>`
+          ).join('')}
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Close</button>
+      </div>
+    `;
+    showModalContent(html);
+  });
+}
+
 // ==================== Expandable Role Panel (Stage 13.3) ====================
 
 /**
@@ -11242,6 +11407,13 @@ window.gmClearDamage = gmClearDamage;
 window.gmRestoreAllSystems = gmRestoreAllSystems;
 // AR-125L: Pirate encounter
 window.gmTriggerPirateEncounter = gmTriggerPirateEncounter;
+// AR-140: Adventure modules
+window.showImportModuleModal = showImportModuleModal;
+window.importModuleFromFile = importModuleFromFile;
+window.toggleModule = toggleModule;
+window.deleteModule = deleteModule;
+window.showModuleDetail = showModuleDetail;
+window.renderPrepModules = renderPrepModules;
 // AR-128: Observer role-watching
 window.observerWatchRole = 'pilot';  // Default to watching pilot
 window.setObserverWatchRole = function(role) {
