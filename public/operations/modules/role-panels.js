@@ -1183,10 +1183,10 @@ function getCaptainPanel(shipState, template, ship, crewOnline, contacts, rescue
         <div class="solo-group">
           <label style="font-size: 0.85em; color: var(--text-secondary);">Navigation</label>
           <div style="display: flex; gap: 5px; margin-top: 4px;">
-            <button onclick="window.captainSoloCommand('plotJump')" class="btn btn-small btn-secondary" title="Plot jump course to destination">
+            <button id="btn-captain-solo-plot" onclick="window.captainSoloCommand('plotJump')" class="btn btn-small btn-secondary" title="Plot jump course to destination">
               Plot Jump
             </button>
-            <button onclick="window.captainSoloCommand('verifyPosition')" class="btn btn-small btn-secondary" title="Verify position after jump exit">
+            <button id="btn-captain-solo-verify" onclick="window.captainSoloCommand('verifyPosition')" class="btn btn-small btn-secondary" title="Verify position after jump exit">
               Verify Position
             </button>
           </div>
@@ -1194,7 +1194,7 @@ function getCaptainPanel(shipState, template, ship, crewOnline, contacts, rescue
         <div class="solo-group">
           <label style="font-size: 0.85em; color: var(--text-secondary);">Helm</label>
           <div style="display: flex; gap: 5px; margin-top: 4px;">
-            <button onclick="window.captainSoloCommand('setCourse')" class="btn btn-small btn-secondary" title="Set course to destination">
+            <button id="btn-captain-solo-course" onclick="window.captainSoloCommand('setCourse')" class="btn btn-small btn-secondary" title="Set course to destination">
               Set Course
             </button>
           </div>
@@ -1202,10 +1202,10 @@ function getCaptainPanel(shipState, template, ship, crewOnline, contacts, rescue
         <div class="solo-group">
           <label style="font-size: 0.85em; color: var(--text-secondary);">Engineering</label>
           <div style="display: flex; gap: 5px; margin-top: 4px;">
-            <button onclick="window.captainSoloCommand('refuel')" class="btn btn-small btn-secondary" title="Begin refueling">
+            <button id="btn-captain-solo-refuel" onclick="window.captainSoloCommand('refuel')" class="btn btn-small btn-secondary" title="Begin refueling">
               Refuel
             </button>
-            <button onclick="window.captainSoloCommand('refineFuel')" class="btn btn-small btn-secondary" title="Process unrefined fuel">
+            <button id="btn-captain-solo-refine" onclick="window.captainSoloCommand('refineFuel')" class="btn btn-small btn-secondary" title="Process unrefined fuel">
               Refine Fuel
             </button>
           </div>

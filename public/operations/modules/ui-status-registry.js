@@ -72,8 +72,8 @@ export const UI_STATUS = {
 
   // --- Observer Panel (AR-128) ---
   'observer-watch-role': {
-    status: 'yellow',
-    note: 'AR-128L: Role selector added but watching not implemented'
+    status: 'green',
+    note: 'AR-128: Role selector and watching implemented'
   },
 
   // ========================================================================
