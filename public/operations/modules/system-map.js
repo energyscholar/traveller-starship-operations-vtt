@@ -18,6 +18,7 @@ const systemMapState = {
   isDragging: false,
   lastMouseX: 0,
   lastMouseY: 0,
+  viewMode: 'isometric',  // AR-133: 'isometric' or 'topdown'
 
   // System data
   system: null,
@@ -123,6 +124,14 @@ function getAuToPixels(zoom = systemMapState.zoom) {
 }
 
 /**
+ * AR-133: Get Y scale factor based on view mode
+ * @returns {number} Y scale: 0.6 for isometric, 1.0 for top-down
+ */
+function getYScale() {
+  return systemMapState.viewMode === 'topdown' ? 1.0 : 0.6;
+}
+
+/**
  * Get orbital position at time (returns world AU coords with isometric Y)
  * Uses Kepler-ish orbital speed: slower for outer orbits
  * @param {number} orbitAU - Orbit radius in AU
@@ -134,7 +143,7 @@ function getOrbitPosition(orbitAU, time = systemMapState.time) {
   const angle = time * speed;
   return {
     x: Math.cos(angle) * orbitAU,
-    y: Math.sin(angle) * orbitAU * 0.6  // Isometric Y scaling
+    y: Math.sin(angle) * orbitAU * getYScale()  // AR-133: Use dynamic Y scaling
   };
 }
 
@@ -191,7 +200,7 @@ function getBodyWorldPosition(bodyId, time = systemMapState.time) {
 
   return {
     x: parentPos.x + Math.cos(localAngle) * localOrbitAU,
-    y: parentPos.y + Math.sin(localAngle) * localOrbitAU * 0.6  // Isometric
+    y: parentPos.y + Math.sin(localAngle) * localOrbitAU * getYScale()  // AR-133: Use dynamic Y scaling
   };
 }
 
@@ -242,8 +251,23 @@ function initSystemMap(container) {
     }
   });
 
+  // AR-133: View mode toggle button
+  const btnViewToggle = document.createElement('button');
+  btnViewToggle.id = 'btn-view-toggle';
+  btnViewToggle.className = 'zoom-btn view-toggle';
+  btnViewToggle.textContent = '◐';
+  btnViewToggle.title = 'Toggle Isometric/Top-Down View';
+  btnViewToggle.addEventListener('click', () => {
+    systemMapState.viewMode = systemMapState.viewMode === 'isometric' ? 'topdown' : 'isometric';
+    btnViewToggle.textContent = systemMapState.viewMode === 'isometric' ? '◐' : '○';
+    btnViewToggle.title = systemMapState.viewMode === 'isometric'
+      ? 'View: Isometric (click for Top-Down)'
+      : 'View: Top-Down (click for Isometric)';
+  });
+
   zoomControls.appendChild(btnZoomIn);
   zoomControls.appendChild(btnZoomOut);
+  zoomControls.appendChild(btnViewToggle);
   container.appendChild(zoomControls);
 
   // Size canvas to container
@@ -395,7 +419,7 @@ function handleDoubleClick(e) {
     const orbitSpeed = 0.1 / Math.sqrt(body.orbitAU || 1);
     const angle = systemMapState.time * orbitSpeed;
     const bodyX = centerX + offsetX + Math.cos(angle) * (body.orbitAU || 0) * auToPixels;
-    const bodyY = centerY + offsetY + Math.sin(angle) * (body.orbitAU || 0) * auToPixels * 0.6;
+    const bodyY = centerY + offsetY + Math.sin(angle) * (body.orbitAU || 0) * auToPixels * getYScale();
 
     // Adjust offset to center on body
     systemMapState.offsetX += centerX - bodyX;
@@ -423,7 +447,7 @@ function findBodyAtPosition(x, y) {
     for (const contact of systemMapState.contacts) {
       if (!contact.position) continue;
       const contactX = centerX + contact.position.x * auToPixels;
-      const contactY = centerY + contact.position.y * auToPixels * 0.6;
+      const contactY = centerY + contact.position.y * auToPixels * getYScale();
       const dist = Math.sqrt((x - contactX) ** 2 + (y - contactY) ** 2);
       if (dist < 15) {  // Contact hit radius
         return { ...contact, isContact: true };
@@ -438,7 +462,7 @@ function findBodyAtPosition(x, y) {
       const orbitSpeed = 0.1 / Math.sqrt(planet.orbitAU);
       const angle = systemMapState.time * orbitSpeed;
       const planetX = centerX + Math.cos(angle) * orbitRadius;
-      const planetY = centerY + Math.sin(angle) * orbitRadius * 0.6;
+      const planetY = centerY + Math.sin(angle) * orbitRadius * getYScale();
 
       const planetSize = Math.max(10, Math.min(50, (planet.size / 5000) * zoom * 2));
       const dist = Math.sqrt((x - planetX) ** 2 + (y - planetY) ** 2);
@@ -1086,7 +1110,7 @@ function centerOnBodyWithSizeZoom(body, preset) {
   const orbitSpeed = 0.1 / Math.sqrt(body.orbitAU || 1);
   const angle = systemMapState.time * orbitSpeed;
   const bodyX = centerX + offsetX + Math.cos(angle) * (body.orbitAU || 0) * auToPixels;
-  const bodyY = centerY + offsetY + Math.sin(angle) * (body.orbitAU || 0) * auToPixels * 0.6;
+  const bodyY = centerY + offsetY + Math.sin(angle) * (body.orbitAU || 0) * auToPixels * getYScale();
 
   // Center on body
   systemMapState.offsetX += centerX - bodyX;
@@ -1145,7 +1169,7 @@ function centerOnBodyWithVariant(body, zoomMultiplier) {
   const orbitSpeed = 0.1 / Math.sqrt(body.orbitAU || 1);
   const angle = systemMapState.time * orbitSpeed;
   const bodyX = centerX + offsetX + Math.cos(angle) * (body.orbitAU || 0) * auToPixels;
-  const bodyY = centerY + offsetY + Math.sin(angle) * (body.orbitAU || 0) * auToPixels * 0.6;
+  const bodyY = centerY + offsetY + Math.sin(angle) * (body.orbitAU || 0) * auToPixels * getYScale();
 
   systemMapState.offsetX += centerX - bodyX;
   systemMapState.offsetY += centerY - bodyY;
@@ -1217,7 +1241,7 @@ function animateCameraToLocation(locationId, options = {}) {
   // Calculate target offsets (to center on body at target zoom)
   const auToPixels = systemMapState.AU_TO_PIXELS * targetZoom;
   const bodyScreenX = Math.cos(angle) * (body.orbitAU || 0) * auToPixels;
-  const bodyScreenY = Math.sin(angle) * (body.orbitAU || 0) * auToPixels * 0.6;
+  const bodyScreenY = Math.sin(angle) * (body.orbitAU || 0) * auToPixels * getYScale();
   const targetOffsetX = -bodyScreenX;
   const targetOffsetY = -bodyScreenY;
 
@@ -1650,7 +1674,7 @@ function drawOrbitPath(ctx, centerX, centerY, radius) {
   ctx.setLineDash([5, 10]);
 
   ctx.beginPath();
-  ctx.ellipse(centerX, centerY, radius, radius * 0.6, 0, 0, Math.PI * 2);
+  ctx.ellipse(centerX, centerY, radius, radius * getYScale(), 0, 0, Math.PI * 2);
   ctx.stroke();
 
   ctx.setLineDash([]);
@@ -1759,7 +1783,7 @@ function drawFullSystem(ctx, centerX, centerY, zoom, system) {
     const orbitSpeed = 0.1 / Math.sqrt(planet.orbitAU); // Slower for outer planets
     const angle = systemMapState.time * orbitSpeed;
     const planetX = centerX + Math.cos(angle) * orbitRadius;
-    const planetY = centerY + Math.sin(angle) * orbitRadius * 0.6; // Isometric ellipse
+    const planetY = centerY + Math.sin(angle) * orbitRadius * getYScale(); // Isometric ellipse
 
     // Size scales with zoom but has min/max for visibility
     // Guard against undefined size - use default 5000
@@ -1768,11 +1792,16 @@ function drawFullSystem(ctx, centerX, centerY, zoom, system) {
     drawPlanet(ctx, planetX, planetY, planetSize, planet.type);
 
     // Draw planet label at higher zoom
+    // AR-124: Celestial labels hidden until position verified (immersive)
     if (zoom > 0.5 && planetSize > 5) {
+      const isVerified = typeof window.getShipState === 'function'
+        ? window.getShipState()?.positionVerified !== false
+        : true;
+      const labelText = isVerified ? planet.name : '???';
       ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
       ctx.font = '10px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(planet.name, planetX, planetY + planetSize + 12);
+      ctx.fillText(labelText, planetX, planetY + planetSize + 12);
     }
 
     // Draw moons at high zoom
@@ -1795,7 +1824,7 @@ function drawAsteroidBelt(ctx, centerX, centerY, belt, auToPixels) {
   ctx.setLineDash([2, 4]);
 
   ctx.beginPath();
-  ctx.ellipse(centerX, centerY, (innerRadius + outerRadius) / 2, (innerRadius + outerRadius) / 2 * 0.6, 0, 0, Math.PI * 2);
+  ctx.ellipse(centerX, centerY, (innerRadius + outerRadius) / 2, (innerRadius + outerRadius) / 2 * getYScale(), 0, 0, Math.PI * 2);
   ctx.stroke();
 
   ctx.setLineDash([]);
@@ -1807,7 +1836,7 @@ function drawAsteroidBelt(ctx, centerX, centerY, belt, auToPixels) {
     const r = innerRadius + (i * 7919) % (outerRadius - innerRadius);
     const angle = (i * 104729) % 360 * Math.PI / 180 + systemMapState.time * 0.01;
     const x = centerX + Math.cos(angle) * r;
-    const y = centerY + Math.sin(angle) * r * 0.6;
+    const y = centerY + Math.sin(angle) * r * getYScale();
     const size = 1 + (i % 3);
     ctx.beginPath();
     ctx.arc(x, y, size, 0, Math.PI * 2);
@@ -1824,14 +1853,14 @@ function drawMoons(ctx, planetX, planetY, planet, zoom) {
     const moonOrbitRadius = Math.max(15, (moon.orbitRadius / 50000) * zoom);
     const moonAngle = systemMapState.time * 2 + i * Math.PI / 3;
     const moonX = planetX + Math.cos(moonAngle) * moonOrbitRadius;
-    const moonY = planetY + Math.sin(moonAngle) * moonOrbitRadius * 0.6;
+    const moonY = planetY + Math.sin(moonAngle) * moonOrbitRadius * getYScale();
     const moonSize = Math.max(2, (moon.size / 2000) * zoom);
 
     // Moon orbit path
     ctx.strokeStyle = 'rgba(100, 100, 120, 0.2)';
     ctx.lineWidth = 0.5;
     ctx.beginPath();
-    ctx.ellipse(planetX, planetY, moonOrbitRadius, moonOrbitRadius * 0.6, 0, 0, Math.PI * 2);
+    ctx.ellipse(planetX, planetY, moonOrbitRadius, moonOrbitRadius * getYScale(), 0, 0, Math.PI * 2);
     ctx.stroke();
 
     // Moon
@@ -2368,7 +2397,7 @@ function generateOrbits(rng, count, mainworldAU) {
   // Titius-Bode-like progression
   let au = 0.2;
   for (let i = 0; i < count - 1; i++) {
-    au = au * (1.4 + rng() * 0.6);
+    au = au * (1.4 + rng() * getYScale());
     if (Math.abs(au - mainworldAU) > 0.2) {
       orbits.push(au);
     }
@@ -2602,11 +2631,11 @@ function loadSystemFromJSON(jsonData) {
       const parentObj = rawObjects.find(p => p.id === obj.parent);
       const parentOrbitAU = parentObj?.orbitAU || 0;
       currentX = Math.cos(angle) * parentOrbitAU + (obj.orbitKm || 500) / 149597870.7 * Math.cos(angle * 2);
-      currentY = Math.sin(angle) * parentOrbitAU * 0.6 + (obj.orbitKm || 500) / 149597870.7 * Math.sin(angle * 2);
+      currentY = Math.sin(angle) * parentOrbitAU * getYScale() + (obj.orbitKm || 500) / 149597870.7 * Math.sin(angle * 2);
     } else {
       // Primary celestial bodies orbit the star
       currentX = Math.cos(angle) * orbitAU;
-      currentY = Math.sin(angle) * orbitAU * 0.6; // Elliptical view
+      currentY = Math.sin(angle) * orbitAU * getYScale(); // Elliptical view
     }
 
     // Color by type
@@ -2970,7 +2999,7 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
 
     // Add offset in the bearing direction (with isometric Y)
     const posX = bodyPos.x + locationOrbitAU * Math.cos(locationBearing);
-    const posY = bodyPos.y + locationOrbitAU * Math.sin(locationBearing) * 0.6;
+    const posY = bodyPos.y + locationOrbitAU * Math.sin(locationBearing) * getYScale();
 
     // AR-113: Use helper for world-to-screen conversion
     const screen = worldToScreen(posX, posY, centerX, centerY, auToPixels);
@@ -2996,13 +3025,18 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
     ctx.fill();
 
     // AR-113 Phase 4: Add label below marker (only at high zoom to avoid overlap)
+    // AR-124: Labels hidden until position verified (immersive)
     // Labels only visible when zoomed in enough to distinguish locations
     if (zoom > 5) {
+      const isVerified = typeof window.getShipState === 'function'
+        ? window.getShipState()?.positionVerified !== false
+        : true;
+      const labelText = isVerified ? loc.name : '???';
       ctx.shadowBlur = 0;
       ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
       ctx.font = `${Math.max(8, 9 * Math.sqrt(zoom))}px monospace`;
       ctx.textAlign = 'center';
-      ctx.fillText(loc.name, screen.x, screen.y + dotSize + 10);
+      ctx.fillText(labelText, screen.x, screen.y + dotSize + 10);
     }
     ctx.restore();
   }
@@ -3028,7 +3062,7 @@ function drawPartyShip(ctx, centerX, centerY, zoom) {
     const offsetAU = locInfo.offsetAU || 0;
     const offsetBearing = (locInfo.offsetBearing || 0) * Math.PI / 180;
     const posX = bodyPos.x + offsetAU * Math.cos(offsetBearing);
-    const posY = bodyPos.y + offsetAU * Math.sin(offsetBearing) * 0.6;
+    const posY = bodyPos.y + offsetAU * Math.sin(offsetBearing) * getYScale();
 
     // AR-113: Use helper for world-to-screen conversion
     const screen = worldToScreen(posX, posY, centerX, centerY, auToPixels);
@@ -3058,9 +3092,9 @@ function drawPartyShip(ctx, centerX, centerY, zoom) {
   ctx.fillStyle = '#4488ff';
   ctx.beginPath();
   ctx.moveTo(0, -size);           // Nose
-  ctx.lineTo(-size * 0.6, size * 0.6);  // Left
+  ctx.lineTo(-size * getYScale(), size * getYScale());  // Left
   ctx.lineTo(0, size * 0.3);      // Rear center
-  ctx.lineTo(size * 0.6, size * 0.6);   // Right
+  ctx.lineTo(size * getYScale(), size * getYScale());   // Right
   ctx.closePath();
   ctx.fill();
 
@@ -3160,7 +3194,7 @@ function drawMapContacts(ctx, centerX, centerY, zoom) {
   // Get ship position for relative contact positioning
   const shipPos = shipMapState.partyShip?.position || { x: 0, y: 0, z: 0 };
   const shipScreenX = centerX + shipPos.x * auToPixels;
-  const shipScreenY = centerY + shipPos.y * auToPixels * 0.6; // Isometric
+  const shipScreenY = centerY + shipPos.y * auToPixels * getYScale(); // Isometric
 
   for (const contact of shipMapState.contacts) {
     // Skip celestial contacts - they're rendered as planets/stars
@@ -3172,7 +3206,7 @@ function drawMapContacts(ctx, centerX, centerY, zoom) {
     // Note: centerX/centerY already include pan offset from render()
     if (contact.position) {
       screenX = centerX + contact.position.x * auToPixels;
-      screenY = centerY + contact.position.y * auToPixels * 0.6;
+      screenY = centerY + contact.position.y * auToPixels * getYScale();
     } else {
       // Convert bearing/range to position relative to ship
       // range_km is the actual property from database (snake_case)
@@ -3182,7 +3216,7 @@ function drawMapContacts(ctx, centerX, centerY, zoom) {
 
       // Calculate screen position relative to ship
       const offsetX = Math.cos(bearing) * rangeAU * auToPixels;
-      const offsetY = Math.sin(bearing) * rangeAU * auToPixels * 0.6; // Isometric
+      const offsetY = Math.sin(bearing) * rangeAU * auToPixels * getYScale(); // Isometric
 
       screenX = shipScreenX + offsetX;
       screenY = shipScreenY + offsetY;
