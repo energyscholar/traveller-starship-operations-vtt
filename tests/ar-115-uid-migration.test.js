@@ -1,13 +1,15 @@
 /**
  * AR-115: Database UID Normalization Tests
  *
- * Tests for migration 001: System UIDs
+ * Tests for migrations 001, 002 and runner
  */
 
 const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
-const migration = require('../lib/operations/migrations/001-system-uids');
+const migration001 = require('../lib/operations/migrations/001-system-uids');
+const migration002 = require('../lib/operations/migrations/002-populate-system-uids');
+const { runMigrations, rollbackMigrations, getMigrationStatus } = require('../lib/operations/migrations/runner');
 
 function runTests() {
   console.log('=== AR-115: UID Migration Tests ===\n');
@@ -80,19 +82,19 @@ function runTests() {
   // Setup
   setup();
 
-  test('Migration has required exports', () => {
-    assert(migration.id === '001-system-uids', 'Should have correct id');
-    assert(typeof migration.up === 'function', 'Should have up function');
-    assert(typeof migration.down === 'function', 'Should have down function');
-    assert(typeof migration.isApplied === 'function', 'Should have isApplied function');
+  test('Migration 001 has required exports', () => {
+    assert(migration001.id === '001-system-uids', 'Should have correct id');
+    assert(typeof migration001.up === 'function', 'Should have up function');
+    assert(typeof migration001.down === 'function', 'Should have down function');
+    assert(typeof migration001.isApplied === 'function', 'Should have isApplied function');
   });
 
   test('isApplied returns false before migration', () => {
-    assert(migration.isApplied(testDb) === false, 'Should not be applied yet');
+    assert(migration001.isApplied(testDb) === false, 'Should not be applied yet');
   });
 
   test('up() adds system_uid to campaigns', () => {
-    migration.up(testDb);
+    migration001.up(testDb);
 
     const cols = testDb.prepare(`PRAGMA table_info(campaigns)`).all();
     const hasUid = cols.some(c => c.name === 'system_uid');
@@ -112,16 +114,16 @@ function runTests() {
   });
 
   test('isApplied returns true after migration', () => {
-    assert(migration.isApplied(testDb) === true, 'Should be applied');
+    assert(migration001.isApplied(testDb) === true, 'Should be applied');
   });
 
   test('up() is idempotent (can run twice)', () => {
     // Should not throw
-    migration.up(testDb);
+    migration001.up(testDb);
     assert(true, 'Second run should not throw');
   });
 
-  test('Existing data preserved after migration', () => {
+  test('Existing data preserved after migration 001', () => {
     // Insert data before checking
     testDb.prepare(`INSERT INTO campaigns (id, name, gm_name, current_system) VALUES (?, ?, ?, ?)`)
       .run('test-1', 'Test Campaign', 'GM', 'Flammarion');
@@ -129,6 +131,64 @@ function runTests() {
     const campaign = testDb.prepare(`SELECT * FROM campaigns WHERE id = ?`).get('test-1');
     assert(campaign.current_system === 'Flammarion', 'Existing data should be preserved');
     assert(campaign.system_uid === null, 'New column should be null');
+  });
+
+  // Migration 002 tests
+  console.log('\n--- Migration 002: Populate UIDs ---');
+
+  test('Migration 002 has required exports', () => {
+    assert(migration002.id === '002-populate-system-uids', 'Should have correct id');
+    assert(typeof migration002.up === 'function', 'Should have up function');
+    assert(typeof migration002.down === 'function', 'Should have down function');
+  });
+
+  test('Migration 002 populates system_uid from name', () => {
+    migration002.up(testDb);
+
+    const campaign = testDb.prepare(`SELECT * FROM campaigns WHERE id = ?`).get('test-1');
+    assert(campaign.system_uid === 'flammarion', `Expected flammarion, got ${campaign.system_uid}`);
+  });
+
+  test('Migration 002 rollback clears UIDs', () => {
+    migration002.down(testDb);
+
+    const campaign = testDb.prepare(`SELECT * FROM campaigns WHERE id = ?`).get('test-1');
+    assert(campaign.system_uid === null, 'UID should be cleared after rollback');
+  });
+
+  // Runner tests
+  console.log('\n--- Migration Runner ---');
+
+  // Reset for runner tests
+  teardown();
+  setup();
+
+  test('Runner creates migrations table', () => {
+    runMigrations(testDb, { verbose: false });
+
+    const tables = testDb.prepare(`
+      SELECT name FROM sqlite_master WHERE type='table' AND name='migrations'
+    `).all();
+    assert(tables.length === 1, 'migrations table should exist');
+  });
+
+  test('Runner applies all migrations', () => {
+    const status = getMigrationStatus(testDb);
+    const allApplied = status.every(m => m.applied);
+    assert(allApplied, 'All migrations should be applied');
+  });
+
+  test('Runner skips already applied migrations', () => {
+    const result = runMigrations(testDb, { verbose: false });
+    assert(result.applied.length === 0, 'No migrations should be applied on second run');
+    assert(result.skipped.length === 2, 'Both migrations should be skipped');
+  });
+
+  test('getMigrationStatus returns correct info', () => {
+    const status = getMigrationStatus(testDb);
+    assert(status.length === 2, 'Should have 2 migrations');
+    assert(status[0].id === '001-system-uids', 'First should be 001');
+    assert(status[1].id === '002-populate-system-uids', 'Second should be 002');
   });
 
   // Teardown
