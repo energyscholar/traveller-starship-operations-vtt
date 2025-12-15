@@ -4507,6 +4507,42 @@ function switchCaptainPanel(panel) {
   console.log(`[Captain] Switched to ${panel} panel`);
 }
 
+// AR-125L: Pirate encounter lite - scripted comms encounter
+const pirateEncounterScript = [
+  { delay: 0, from: 'SENSORS', msg: '⚠ Contact detected! Unknown vessel, bearing 045, range 50,000km' },
+  { delay: 2000, from: 'PIRATE CORSAIR', msg: '🏴‍☠️ Attention merchant vessel! Heave to and prepare to be boarded. Resistance is futile.' },
+  { delay: 6000, from: 'PIRATE CORSAIR', msg: '🏴‍☠️ Don\'t try anything clever. We have you outgunned. Cut your drives NOW.' },
+  { delay: 12000, from: 'SENSORS', msg: '⚠ ALERT: Second contact detected! Military transponder - Imperial Navy patrol vessel!' },
+  { delay: 14000, from: 'PIRATE CORSAIR', msg: '🏴‍☠️ Navy patrol?! All hands, emergency jump! This isn\'t over, merchant!' },
+  { delay: 16000, from: 'SENSORS', msg: '✓ Pirate contact jumping out... Contact lost. All clear.' }
+];
+
+function gmTriggerPirateEncounter() {
+  if (!state.isGM) {
+    showNotification('Only GM can trigger encounters', 'danger');
+    return;
+  }
+
+  showNotification('Triggering pirate encounter...', 'info');
+
+  pirateEncounterScript.forEach(({ delay, from, msg }) => {
+    setTimeout(() => {
+      // Send as transmission to bridge chat
+      const transmission = {
+        fromName: from,
+        message: msg,
+        timestamp: Date.now()
+      };
+      addBridgeChatMessage(transmission);
+
+      // Also emit to server so all clients see it
+      if (state.socket) {
+        state.socket.emit('ops:bridgeTransmission', transmission);
+      }
+    }, delay);
+  });
+}
+
 // AR-139: GM damage control functions
 function gmApplyDamage(severity) {
   if (!state.isGM) {
@@ -11204,6 +11240,8 @@ window.switchCaptainPanel = switchCaptainPanel;
 window.gmApplyDamage = gmApplyDamage;
 window.gmClearDamage = gmClearDamage;
 window.gmRestoreAllSystems = gmRestoreAllSystems;
+// AR-125L: Pirate encounter
+window.gmTriggerPirateEncounter = gmTriggerPirateEncounter;
 // AR-128: Observer role-watching
 window.observerWatchRole = 'pilot';  // Default to watching pilot
 window.setObserverWatchRole = function(role) {
