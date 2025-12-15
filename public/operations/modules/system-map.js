@@ -52,6 +52,54 @@ const systemMapState = {
   }
 };
 
+// =============================================================================
+// AR-113: Coordinate Helper Functions
+// =============================================================================
+
+/**
+ * Get pixels per AU at given zoom level
+ * @param {number} [zoom=systemMapState.zoom] - Zoom level
+ * @returns {number} Pixels per AU
+ */
+function getAuToPixels(zoom = systemMapState.zoom) {
+  return systemMapState.AU_TO_PIXELS * zoom;
+}
+
+/**
+ * Get orbital position at time (returns world AU coords with isometric Y)
+ * Uses Kepler-ish orbital speed: slower for outer orbits
+ * @param {number} orbitAU - Orbit radius in AU
+ * @param {number} [time=systemMapState.time] - Simulation time
+ * @returns {{x: number, y: number}} World coordinates in AU
+ */
+function getOrbitPosition(orbitAU, time = systemMapState.time) {
+  const speed = 0.1 / Math.sqrt(orbitAU || 1);
+  const angle = time * speed;
+  return {
+    x: Math.cos(angle) * orbitAU,
+    y: Math.sin(angle) * orbitAU * 0.6  // Isometric Y scaling
+  };
+}
+
+/**
+ * Convert world AU coordinates to screen pixels
+ * IMPORTANT: centerX/centerY already include pan offset from render()
+ * @param {number} worldX - X position in AU
+ * @param {number} worldY - Y position in AU (already isometric-scaled)
+ * @param {number} centerX - Screen center X (includes offsetX)
+ * @param {number} centerY - Screen center Y (includes offsetY)
+ * @param {number} auToPixels - Scale factor from getAuToPixels()
+ * @returns {{x: number, y: number}} Screen coordinates in pixels
+ */
+function worldToScreen(worldX, worldY, centerX, centerY, auToPixels) {
+  return {
+    x: centerX + worldX * auToPixels,
+    y: centerY + worldY * auToPixels
+  };
+}
+
+// =============================================================================
+
 /**
  * Initialize the system map canvas
  * @param {HTMLElement} container - Container element for the canvas
@@ -2791,7 +2839,7 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
   const system = systemMapState.system;
   if (!system?.locations) return;
 
-  const auToPixels = systemMapState.AU_TO_PIXELS * zoom;
+  const auToPixels = getAuToPixels(zoom);
 
   for (const loc of system.locations) {
     if (!loc.linkedTo) continue;
@@ -2800,31 +2848,20 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
     const body = system.celestialObjects?.find(o => o.id === loc.linkedTo);
     if (!body) continue;
 
-    const bodyOrbitAU = body.orbitAU || 0;
-
-    // Use same time-based orbit animation as planets
-    const orbitSpeed = 0.1 / Math.sqrt(bodyOrbitAU || 1);
-    const angle = systemMapState.time * orbitSpeed;
-
-    // Body position (matches planet drawing in drawFullSystem)
-    const bodyX = Math.cos(angle) * bodyOrbitAU;
-    const bodyY = Math.sin(angle) * bodyOrbitAU * 0.6; // Isometric ellipse
+    // AR-113: Use helper for body's orbital position
+    const bodyPos = getOrbitPosition(body.orbitAU || 0);
 
     // Location offset from body (in km -> AU)
     const locationOrbitKm = loc.orbitKm || 0;
     const locationBearing = (loc.bearing || 0) * Math.PI / 180;
     const locationOrbitAU = locationOrbitKm / 149597870.7;
 
-    // Add offset in the bearing direction
-    const offsetX = locationOrbitAU * Math.cos(locationBearing);
-    const offsetY = locationOrbitAU * Math.sin(locationBearing) * 0.6; // Isometric
+    // Add offset in the bearing direction (with isometric Y)
+    const posX = bodyPos.x + locationOrbitAU * Math.cos(locationBearing);
+    const posY = bodyPos.y + locationOrbitAU * Math.sin(locationBearing) * 0.6;
 
-    const posX = bodyX + offsetX;
-    const posY = bodyY + offsetY;
-
-    // centerX/centerY already include pan offset, don't add again
-    const screenX = centerX + posX * auToPixels;
-    const screenY = centerY + posY * auToPixels;
+    // AR-113: Use helper for world-to-screen conversion
+    const screen = worldToScreen(posX, posY, centerX, centerY, auToPixels);
 
     // Draw green dot for jump points
     if (loc.type === 'jump_point') {
@@ -2833,7 +2870,7 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
       ctx.shadowColor = '#00ff00';
       ctx.shadowBlur = 6;
       ctx.beginPath();
-      ctx.arc(screenX, screenY, Math.max(3, 4 * Math.sqrt(zoom)), 0, Math.PI * 2);
+      ctx.arc(screen.x, screen.y, Math.max(3, 4 * Math.sqrt(zoom)), 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
@@ -2847,34 +2884,31 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
 function drawPartyShip(ctx, centerX, centerY, zoom) {
   if (!shipMapState.partyShip) return;
 
-  const auToPixels = systemMapState.AU_TO_PIXELS * zoom;
+  const auToPixels = getAuToPixels(zoom);
   let screenX, screenY;
 
   // If we have location info with a linked body, calculate position dynamically
   const locInfo = shipMapState.partyShip.locationInfo;
   if (locInfo?.linkedBodyOrbitAU !== undefined) {
-    const bodyOrbitAU = locInfo.linkedBodyOrbitAU;
-    const orbitSpeed = 0.1 / Math.sqrt(bodyOrbitAU || 1);
-    const angle = systemMapState.time * orbitSpeed;
+    // AR-113: Use helper for body's orbital position
+    const bodyPos = getOrbitPosition(locInfo.linkedBodyOrbitAU);
 
-    // Body position (matches planet drawing)
-    const bodyX = Math.cos(angle) * bodyOrbitAU;
-    const bodyY = Math.sin(angle) * bodyOrbitAU * 0.6; // Isometric
-
-    // Location offset
+    // Location offset from body (with isometric Y)
     const offsetAU = locInfo.offsetAU || 0;
     const offsetBearing = (locInfo.offsetBearing || 0) * Math.PI / 180;
-    const offsetX = offsetAU * Math.cos(offsetBearing);
-    const offsetY = offsetAU * Math.sin(offsetBearing) * 0.6; // Isometric
+    const posX = bodyPos.x + offsetAU * Math.cos(offsetBearing);
+    const posY = bodyPos.y + offsetAU * Math.sin(offsetBearing) * 0.6;
 
-    // centerX/centerY already include pan offset, don't add again
-    screenX = centerX + (bodyX + offsetX) * auToPixels;
-    screenY = centerY + (bodyY + offsetY) * auToPixels;
+    // AR-113: Use helper for world-to-screen conversion
+    const screen = worldToScreen(posX, posY, centerX, centerY, auToPixels);
+    screenX = screen.x;
+    screenY = screen.y;
   } else {
-    // Fallback to static position (centerX/centerY already include pan offset)
+    // Fallback to static position
     const pos = shipMapState.partyShip.position || { x: 5, y: 0, z: 0 };
-    screenX = centerX + pos.x * auToPixels;
-    screenY = centerY + pos.y * auToPixels;
+    const screen = worldToScreen(pos.x, pos.y, centerX, centerY, auToPixels);
+    screenX = screen.x;
+    screenY = screen.y;
   }
 
   // Ship triangle (pointing in heading direction)
