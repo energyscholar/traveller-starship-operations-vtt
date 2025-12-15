@@ -24,6 +24,9 @@ const sectorMapState = {
   systems: [],
   jumpRoutes: [],
 
+  // AR-117: O(1) hex-to-system lookup
+  systemsByHex: new Map(),
+
   // Selection
   hoveredSystem: null,
   selectedSystem: null,
@@ -168,6 +171,12 @@ async function loadSectorData(subsectorId) {
     sectorMapState.systems = data.systems || [];
     sectorMapState.jumpRoutes = data.jumpRoutes || [];
 
+    // AR-117: Build O(1) hex-to-system lookup map
+    sectorMapState.systemsByHex.clear();
+    for (const sys of sectorMapState.systems) {
+      sectorMapState.systemsByHex.set(sys.hex, sys);
+    }
+
     // Reset view offset for new subsector
     sectorMapState.offsetX = 0;
     sectorMapState.offsetY = 0;
@@ -197,6 +206,19 @@ async function loadSectorData(subsectorId) {
     console.error('Failed to load subsector:', err);
     return null;
   }
+}
+
+/**
+ * AR-117: Check if a canvas position is within visible viewport
+ * Used for viewport culling optimization
+ */
+function isInViewport(x, y, buffer = 50) {
+  const canvas = sectorMapState.canvas;
+  if (!canvas) return true;
+  const dpr = window.devicePixelRatio || 1;
+  const width = canvas.width / dpr;
+  const height = canvas.height / dpr;
+  return x >= -buffer && x <= width + buffer && y >= -buffer && y <= height + buffer;
 }
 
 /**
@@ -476,11 +498,14 @@ function renderSectorMap() {
   const scale = sectorMapState.scale;
   const scaledHexSize = sectorMapState.HEX_SIZE * scale;
 
-  // Draw hex grid
+  // Draw hex grid (AR-117: with viewport culling)
   for (let col = 1; col <= sectorMapState.HEX_WIDTH; col++) {
     for (let row = 1; row <= sectorMapState.HEX_HEIGHT; row++) {
       const hexCoord = `${String(col).padStart(2, '0')}${String(row).padStart(2, '0')}`;
       const pos = hexToPixel(hexCoord);
+
+      // AR-117: Skip hexes outside viewport (with buffer for edge visibility)
+      if (!isInViewport(pos.x, pos.y, scaledHexSize * 2)) continue;
 
       // Highlight hovered hex
       const isHovered = sectorMapState.hoveredSystem?.hex === hexCoord;
@@ -521,9 +546,13 @@ function renderSectorMap() {
     drawDistanceLine(ctx, sectorMapState.measureFromSystem, sectorMapState.hoveredSystem, scale);
   }
 
-  // Draw systems
+  // Draw systems (AR-117: with viewport culling)
   for (const sys of sectorMapState.systems) {
     const pos = hexToPixel(sys.hex);
+
+    // AR-117: Skip systems outside viewport
+    if (!isInViewport(pos.x, pos.y, scaledHexSize)) continue;
+
     const isHovered = sectorMapState.hoveredSystem === sys;
     const isSelected = sectorMapState.selectedSystem === sys;
 
