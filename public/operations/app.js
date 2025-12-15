@@ -193,7 +193,10 @@ const state = {
   prepLocations: [],
   prepEvents: [],
   prepEmails: [],
-  prepHandouts: []
+  prepHandouts: [],
+
+  // AR-130: AI NPC pending responses
+  aiPendingResponses: []
 };
 
 // Expose state globally for cross-module access (system-map.js, etc.)
@@ -305,6 +308,8 @@ function initSocket() {
       saveSession();
       // AR-27: Request shared map state
       state.socket.emit('ops:getMapState');
+      // AR-130: Load pending AI responses
+      loadAIPendingResponses();
     }
   });
 
@@ -1716,6 +1721,112 @@ function initSocket() {
       state.socket.emit('puppetry:result', { requestId, success: true, result });
     } catch (error) {
       state.socket.emit('puppetry:result', { requestId, success: false, error: error.message });
+    }
+  });
+
+  // AR-130: AI NPC Pending Response Events
+  state.socket.on('ai:pendingResponse', (data) => {
+    if (!state.isGM) return;
+    state.aiPendingResponses.push(data);
+    updateAIQueueBadge();
+    showNotification(`AI response pending from ${data.npcName}`, 'info');
+  });
+}
+
+// ==================== AR-130: AI NPC Queue Functions ====================
+
+function updateAIQueueBadge() {
+  const badge = document.getElementById('ai-queue-badge');
+  if (badge) {
+    badge.textContent = state.aiPendingResponses.length;
+    badge.style.display = state.aiPendingResponses.length > 0 ? 'inline' : 'none';
+  }
+}
+
+function loadAIPendingResponses() {
+  if (!state.isGM || !state.campaign) return;
+  state.socket.emit('ai:getPending', { campaignId: state.campaign.id }, (response) => {
+    if (response.pending) {
+      state.aiPendingResponses = response.pending;
+      updateAIQueueBadge();
+    }
+  });
+}
+
+function showAIApprovalQueue() {
+  if (!state.isGM) return;
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.id = 'ai-queue-modal';
+
+  const queue = state.aiPendingResponses;
+
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3>AI Response Queue (${queue.length})</h3>
+        <button class="btn-close" onclick="closeAIQueueModal()">×</button>
+      </div>
+      <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+        ${queue.length === 0 ? '<p class="text-muted">No pending AI responses</p>' : queue.map(item => `
+          <div class="ai-queue-item" data-id="${item.id}" style="border: 1px solid #333; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+              <strong>${item.npc_name || item.npcName}</strong>
+              <small class="text-muted">${new Date(item.created_at || item.generatedAt).toLocaleString()}</small>
+            </div>
+            <textarea class="ai-response-text" style="width: 100%; height: 80px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 5px;">${item.response_text || item.response}</textarea>
+            <div style="margin-top: 8px; display: flex; gap: 8px;">
+              <button class="btn btn-success btn-sm" onclick="approveAIResponse('${item.id}')">Approve & Send</button>
+              <button class="btn btn-danger btn-sm" onclick="rejectAIResponse('${item.id}')">Reject</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+function closeAIQueueModal() {
+  const modal = document.getElementById('ai-queue-modal');
+  if (modal) modal.remove();
+}
+
+function approveAIResponse(responseId) {
+  const item = document.querySelector(`.ai-queue-item[data-id="${responseId}"]`);
+  const editedText = item?.querySelector('.ai-response-text')?.value;
+
+  state.socket.emit('ai:approve', {
+    responseId,
+    edits: editedText,
+    campaignId: state.campaign.id
+  }, (response) => {
+    if (response.success) {
+      state.aiPendingResponses = state.aiPendingResponses.filter(r => r.id !== responseId);
+      updateAIQueueBadge();
+      item?.remove();
+      showNotification('AI response approved and sent', 'success');
+      if (state.aiPendingResponses.length === 0) {
+        closeAIQueueModal();
+      }
+    } else {
+      showNotification('Failed to approve: ' + response.error, 'error');
+    }
+  });
+}
+
+function rejectAIResponse(responseId) {
+  state.socket.emit('ai:reject', { responseId }, (response) => {
+    if (response.success) {
+      state.aiPendingResponses = state.aiPendingResponses.filter(r => r.id !== responseId);
+      updateAIQueueBadge();
+      document.querySelector(`.ai-queue-item[data-id="${responseId}"]`)?.remove();
+      showNotification('AI response rejected', 'info');
+      if (state.aiPendingResponses.length === 0) {
+        closeAIQueueModal();
+      }
     }
   });
 }

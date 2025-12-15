@@ -84,6 +84,7 @@
         <span class="screen-label">GM Campaign Setup</span>
         <h1 id="gm-campaign-name">Campaign Setup</h1>
         <div class="header-actions">
+          <button id="btn-ai-queue" class="btn btn-icon" title="AI Response Queue" onclick="showAIApprovalQueue()">🤖<span id="ai-queue-badge" class="badge" style="display:none;">0</span></button>
           <button id="btn-gm-settings" class="btn btn-icon" title="Settings">⚙</button>
           <button id="btn-gm-logout" class="btn btn-link">Logout</button>
         </div>
@@ -148,6 +149,13 @@
                 <label>
                   <input type="checkbox" id="god-mode-toggle">
                   God Mode
+                </label>
+              </div>
+              <!-- AR-124: Position verification toggle -->
+              <div class="form-group form-group-compact" title="Require Astrogator to verify position after jump">
+                <label>
+                  <input type="checkbox" id="position-verify-toggle" checked>
+                  Require Position Verify
                 </label>
               </div>
             </section>
