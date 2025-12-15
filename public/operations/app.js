@@ -514,6 +514,25 @@ function initSocket() {
     renderPlayerSetup();
   });
 
+  // AR-135: Handle being bumped from a role
+  state.socket.on('ops:roleBumped', (data) => {
+    const { oldRole, newRole, message } = data;
+    debugLog('[OPS] Role bumped:', data);
+
+    // Update local state
+    state.selectedRole = newRole;
+
+    // Show toast notification
+    showNotification(message || `You have been moved to ${newRole} role`, 'warning', 5000);
+
+    // Re-render if on bridge
+    if (state.currentScreen === 'bridge') {
+      renderBridge();
+    } else if (state.currentScreen === 'player-setup') {
+      renderPlayerSetup();
+    }
+  });
+
   state.socket.on('ops:crewUpdate', (data) => {
     // Another player changed their role
     debugLog('[OPS] Crew update received:', data);
@@ -10843,6 +10862,17 @@ window.setSensorLock = setSensorLock;
 window.acquireSensorLock = acquireSensorLock;
 window.breakSensorLock = breakSensorLock;
 window.calculateSensorDM = calculateSensorDM;
+// AR-128: Observer role-watching
+window.observerWatchRole = 'pilot';  // Default to watching pilot
+window.setObserverWatchRole = function(role) {
+  window.observerWatchRole = role;
+  localStorage.setItem('observerWatchRole', role);
+  renderRoleDetailPanel('observer');
+};
+// Load saved preference
+if (localStorage.getItem('observerWatchRole')) {
+  window.observerWatchRole = localStorage.getItem('observerWatchRole');
+}
 window.authorizeWeapons = authorizeWeapons;
 window.fireAtTarget = fireAtTarget;
 window.fireWeapon = fireWeapon;
