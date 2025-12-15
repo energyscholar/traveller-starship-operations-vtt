@@ -53,6 +53,63 @@ const systemMapState = {
 };
 
 // =============================================================================
+// AR-118: Event System
+// =============================================================================
+
+/**
+ * Simple event emitter for system map events
+ * Events: bodySelected, destinationSet, shipPositionUpdated, cameraAnimationComplete
+ */
+const systemMapEvents = {
+  listeners: {},
+
+  /**
+   * Subscribe to an event
+   * @param {string} event - Event name
+   * @param {Function} callback - Event handler
+   */
+  on(event, callback) {
+    if (!this.listeners[event]) {
+      this.listeners[event] = [];
+    }
+    this.listeners[event].push(callback);
+  },
+
+  /**
+   * Unsubscribe from an event
+   * @param {string} event - Event name
+   * @param {Function} callback - Handler to remove
+   */
+  off(event, callback) {
+    if (!this.listeners[event]) return;
+    this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
+  },
+
+  /**
+   * Emit an event
+   * @param {string} event - Event name
+   * @param {*} data - Event payload
+   */
+  emit(event, data) {
+    if (!this.listeners[event]) return;
+    this.listeners[event].forEach(cb => {
+      try {
+        cb(data);
+      } catch (err) {
+        console.error(`[SystemMap] Event handler error for ${event}:`, err);
+      }
+    });
+  },
+
+  /**
+   * Clear all listeners (for cleanup/testing)
+   */
+  clear() {
+    this.listeners = {};
+  }
+};
+
+// =============================================================================
 // AR-113: Coordinate Helper Functions
 // =============================================================================
 
@@ -306,6 +363,9 @@ function handleClick(e) {
 
   const body = findBodyAtPosition(x, y);
   systemMapState.selectedBody = body;
+
+  // AR-118: Emit bodySelected event
+  systemMapEvents.emit('bodySelected', body);
 
   if (body) {
     console.log('[SystemMap] Selected:', body.name, body);
@@ -1183,6 +1243,13 @@ function animateCameraToLocation(locationId, options = {}) {
       requestAnimationFrame(animate);
     } else {
       console.log('[SystemMap] Camera animation complete to:', place.name);
+      // AR-118: Emit cameraAnimationComplete event
+      systemMapEvents.emit('cameraAnimationComplete', {
+        placeId: locationId,
+        place,
+        body,
+        zoom: systemMapState.zoom
+      });
     }
   }
 
@@ -1221,6 +1288,14 @@ function setDestination(locationId) {
   const etaText = travelHours >= 24
     ? `${Math.floor(travelHours / 24)}d ${travelHours % 24}h`
     : `${travelHours}h`;
+
+  // AR-118: Emit destinationSet event
+  systemMapEvents.emit('destinationSet', {
+    locationId: location.id,
+    location,
+    travelHours,
+    etaText
+  });
 
   // Call setCourse via global function (defined in app.js)
   if (typeof window.setCourse === 'function') {
@@ -3809,6 +3884,8 @@ window.embeddedMapState = embeddedMapState;
 // AR-102: Expose loadSystemFromJSON for early loading at bridge join
 window.loadSystemFromJSON = loadSystemFromJSON;
 window.systemMapState = systemMapState;
+// AR-118: Event system
+window.systemMapEvents = systemMapEvents;
 
 // Export for ES modules (app.js imports these)
 export {
@@ -3845,5 +3922,7 @@ export {
   zoomEmbeddedMap,
   getEmbeddedDestinations,
   selectEmbeddedDestinationById,
-  embeddedMapState
+  embeddedMapState,
+  // AR-118: Event system
+  systemMapEvents
 };
