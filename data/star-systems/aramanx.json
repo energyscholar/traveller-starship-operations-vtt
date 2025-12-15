@@ -1,0 +1,109 @@
+{
+  "id": "aramanx",
+  "name": "Aramanx",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3005",
+  "uwp": "B657974-7",
+  "tradeCodes": [
+    "Hi",
+    "Ga",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Aramanx_(world)",
+  "celestialObjects": [
+    {
+      "id": "aramanx-star",
+      "name": "Aramanx Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "aramanx-mainworld",
+      "name": "Aramanx",
+      "type": "Planet",
+      "orbitAU": 1.142638795660654,
+      "bearing": 230,
+      "radiusKm": 5600,
+      "uwp": "B657974-7",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ARAMANX CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "aramanx-highport",
+      "name": "Aramanx Highport",
+      "type": "Highport",
+      "parent": "aramanx-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ARAMANX HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "aramanx-gasgiant",
+      "name": "Aramanx Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.830341156411694,
+      "bearing": 314,
+      "radiusKm": 69310.19474187403,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "aramanx-mainworld",
+    "starport": "aramanx-highport",
+    "orbit": "aramanx-mainworld"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "id": "zaibon",
+  "name": "Zaibon",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "1825",
+  "uwp": "B000544-B",
+  "tradeCodes": [
+    "As",
+    "Ni",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Zaibon_(world)",
+  "celestialObjects": [
+    {
+      "id": "zaibon-star",
+      "name": "Zaibon Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "zaibon-mainworld",
+      "name": "Zaibon",
+      "type": "Planet",
+      "orbitAU": 0.5410930978851655,
+      "bearing": 304,
+      "radiusKm": 800,
+      "uwp": "B000544-B",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ZAIBON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "zaibon-highport",
+      "name": "Zaibon Highport",
+      "type": "Highport",
+      "parent": "zaibon-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ZAIBON HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "zaibon-mainworld",
+    "starport": "zaibon-highport",
+    "orbit": "zaibon-mainworld"
+  }
+}

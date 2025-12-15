@@ -1,0 +1,90 @@
+{
+  "id": "wurzburg",
+  "name": "Wurzburg",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2237",
+  "uwp": "C795300-A",
+  "tradeCodes": [
+    "Lo",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Wurzburg_(world)",
+  "celestialObjects": [
+    {
+      "id": "wurzburg-star",
+      "name": "Wurzburg Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "wurzburg-mainworld",
+      "name": "Wurzburg",
+      "type": "Planet",
+      "orbitAU": 1.9926274978440146,
+      "bearing": 102,
+      "radiusKm": 6400,
+      "uwp": "C795300-A",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "WURZBURG CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "wurzburg-gasgiant",
+      "name": "Wurzburg Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.641256094501613,
+      "bearing": 83,
+      "radiusKm": 67569.76349119324,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "wurzburg-mainworld",
+    "starport": "wurzburg-mainworld",
+    "orbit": "wurzburg-mainworld"
+  }
+}

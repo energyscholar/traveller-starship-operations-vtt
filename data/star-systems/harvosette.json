@@ -1,0 +1,91 @@
+{
+  "id": "harvosette",
+  "name": "Harvosette",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "2129",
+  "uwp": "C430737-9",
+  "tradeCodes": [
+    "De",
+    "Na",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Harvosette_(world)",
+  "celestialObjects": [
+    {
+      "id": "harvosette-star",
+      "name": "Harvosette Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "harvosette-mainworld",
+      "name": "Harvosette",
+      "type": "Planet",
+      "orbitAU": 1.2556995859300175,
+      "bearing": 203,
+      "radiusKm": 4000,
+      "uwp": "C430737-9",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "HARVOSETTE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "harvosette-gasgiant",
+      "name": "Harvosette Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.172751362424366,
+      "bearing": 208,
+      "radiusKm": 62626.453754651906,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "harvosette-mainworld",
+    "starport": "harvosette-mainworld",
+    "orbit": "harvosette-mainworld"
+  }
+}

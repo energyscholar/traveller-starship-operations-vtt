@@ -1,0 +1,91 @@
+{
+  "id": "treece",
+  "name": "Treece",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2311",
+  "uwp": "D432866-8",
+  "tradeCodes": [
+    "Na",
+    "Po",
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Poor starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Treece_(world)",
+  "celestialObjects": [
+    {
+      "id": "treece-star",
+      "name": "Treece Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "treece-mainworld",
+      "name": "Treece",
+      "type": "Planet",
+      "orbitAU": 1.2721640858847416,
+      "bearing": 294,
+      "radiusKm": 4000,
+      "uwp": "D432866-8",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "TREECE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "treece-gasgiant",
+      "name": "Treece Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.994933875243062,
+      "bearing": 47,
+      "radiusKm": 54990.892129390384,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "treece-mainworld",
+    "starport": "treece-mainworld",
+    "orbit": "treece-mainworld"
+  }
+}

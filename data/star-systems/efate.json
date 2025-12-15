@@ -1,0 +1,110 @@
+{
+  "id": "efate",
+  "name": "Efate",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1705",
+  "uwp": "A646930-D",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "An",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL13.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Efate_(world)",
+  "celestialObjects": [
+    {
+      "id": "efate-star",
+      "name": "Efate Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "efate-mainworld",
+      "name": "Efate",
+      "type": "Planet",
+      "orbitAU": 1.2028675863831793,
+      "bearing": 137,
+      "radiusKm": 5600,
+      "uwp": "A646930-D",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "EFATE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL13.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "efate-highport",
+      "name": "Efate Highport",
+      "type": "Highport",
+      "parent": "efate-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "EFATE HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "efate-gasgiant",
+      "name": "Efate Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.201459587296897,
+      "bearing": 321,
+      "radiusKm": 63379.18320405263,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "efate-mainworld",
+    "starport": "efate-highport",
+    "orbit": "efate-mainworld"
+  }
+}

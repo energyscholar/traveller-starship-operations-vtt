@@ -1,0 +1,109 @@
+{
+  "id": "egypt",
+  "name": "Egypt",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "1737",
+  "uwp": "BAC6567-9",
+  "tradeCodes": [
+    "Fl",
+    "Ni",
+    "Mr"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Egypt_(world)",
+  "celestialObjects": [
+    {
+      "id": "egypt-star",
+      "name": "Egypt Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "egypt-mainworld",
+      "name": "Egypt",
+      "type": "Planet",
+      "orbitAU": 1.9576408782719312,
+      "bearing": 334,
+      "radiusKm": 8800,
+      "uwp": "BAC6567-9",
+      "atmosphere": "Insidious",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "EGYPT CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "egypt-highport",
+      "name": "Egypt Highport",
+      "type": "Highport",
+      "parent": "egypt-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "EGYPT HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "egypt-gasgiant",
+      "name": "Egypt Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.884708959975037,
+      "bearing": 76,
+      "radiusKm": 69581.18777857281,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "egypt-mainworld",
+    "starport": "egypt-highport",
+    "orbit": "egypt-mainworld"
+  }
+}

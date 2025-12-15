@@ -1,0 +1,93 @@
+{
+  "id": "byret",
+  "name": "Byret",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "2523",
+  "uwp": "B585697-6",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Ri"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Byret_(world)",
+  "celestialObjects": [
+    {
+      "id": "byret-star",
+      "name": "Byret Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "byret-mainworld",
+      "name": "Byret",
+      "type": "Planet",
+      "orbitAU": 1.2161795147166319,
+      "bearing": 355,
+      "radiusKm": 4800,
+      "uwp": "B585697-6",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "BYRET CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "byret-highport",
+      "name": "Byret Highport",
+      "type": "Highport",
+      "parent": "byret-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "BYRET HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "byret-mainworld",
+    "starport": "byret-highport",
+    "orbit": "byret-mainworld"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "id": "torment",
+  "name": "Torment",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0721",
+  "uwp": "X433268-6",
+  "tradeCodes": [
+    "Lo",
+    "Po",
+    "Fo",
+    "Px"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "None starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Torment_(world)",
+  "celestialObjects": [
+    {
+      "id": "torment-star",
+      "name": "Torment Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "torment-mainworld",
+      "name": "Torment",
+      "type": "Planet",
+      "orbitAU": 1.3230120608201963,
+      "bearing": 53,
+      "radiusKm": 4000,
+      "uwp": "X433268-6",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "TORMENT CONTROL",
+      "gmNotes": "Mainworld. Pop 10^2. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "torment-gasgiant",
+      "name": "Torment Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.201357475069377,
+      "bearing": 266,
+      "radiusKm": 56081.14620691835,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "torment-mainworld",
+    "starport": "torment-mainworld",
+    "orbit": "torment-mainworld"
+  }
+}

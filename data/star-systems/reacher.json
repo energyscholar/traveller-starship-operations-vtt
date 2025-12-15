@@ -1,0 +1,91 @@
+{
+  "id": "reacher",
+  "name": "Reacher",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3210",
+  "uwp": "C9A8542-8",
+  "tradeCodes": [
+    "Fl",
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Reacher_(world)",
+  "celestialObjects": [
+    {
+      "id": "reacher-star",
+      "name": "Reacher Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "reacher-mainworld",
+      "name": "Reacher",
+      "type": "Planet",
+      "orbitAU": 1.5683900003217592,
+      "bearing": 64,
+      "radiusKm": 8000,
+      "uwp": "C9A8542-8",
+      "atmosphere": "Exotic",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "REACHER CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "reacher-gasgiant",
+      "name": "Reacher Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.8100966737767585,
+      "bearing": 202,
+      "radiusKm": 56241.24889687712,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "reacher-mainworld",
+    "starport": "reacher-mainworld",
+    "orbit": "reacher-mainworld"
+  }
+}

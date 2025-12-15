@@ -1,0 +1,91 @@
+{
+  "id": "nonym",
+  "name": "Nonym",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0321",
+  "uwp": "C433898-A",
+  "tradeCodes": [
+    "Na",
+    "Po",
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Nonym_(world)",
+  "celestialObjects": [
+    {
+      "id": "nonym-star",
+      "name": "Nonym Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "nonym-mainworld",
+      "name": "Nonym",
+      "type": "Planet",
+      "orbitAU": 1.2979061604340907,
+      "bearing": 155,
+      "radiusKm": 4000,
+      "uwp": "C433898-A",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "NONYM CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "nonym-gasgiant",
+      "name": "Nonym Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.450714267648513,
+      "bearing": 352,
+      "radiusKm": 62979.80202012411,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "nonym-mainworld",
+    "starport": "nonym-mainworld",
+    "orbit": "nonym-mainworld"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "id": "ylaven",
+  "name": "Ylaven",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "1916",
+  "uwp": "X587552-4",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Pr",
+    "Fo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "None starport. TL4.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ylaven_(world)",
+  "celestialObjects": [
+    {
+      "id": "ylaven-star",
+      "name": "Ylaven Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ylaven-mainworld",
+      "name": "Ylaven",
+      "type": "Planet",
+      "orbitAU": 1.2393018140396979,
+      "bearing": 353,
+      "radiusKm": 4800,
+      "uwp": "X587552-4",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "YLAVEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL4.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ylaven-gasgiant",
+      "name": "Ylaven Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.993141726168498,
+      "bearing": 219,
+      "radiusKm": 56814.81410269969,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ylaven-mainworld",
+    "starport": "ylaven-mainworld",
+    "orbit": "ylaven-mainworld"
+  }
+}

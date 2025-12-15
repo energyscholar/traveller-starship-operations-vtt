@@ -1,0 +1,108 @@
+{
+  "id": "henoz",
+  "name": "Henoz",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2912",
+  "uwp": "A545543-B",
+  "tradeCodes": [
+    "Ag",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Henoz_(world)",
+  "celestialObjects": [
+    {
+      "id": "henoz-star",
+      "name": "Henoz Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "henoz-mainworld",
+      "name": "Henoz",
+      "type": "Planet",
+      "orbitAU": 1.1571775141433192,
+      "bearing": 103,
+      "radiusKm": 4800,
+      "uwp": "A545543-B",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "HENOZ CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "henoz-highport",
+      "name": "Henoz Highport",
+      "type": "Highport",
+      "parent": "henoz-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "HENOZ HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "henoz-gasgiant",
+      "name": "Henoz Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.947343365289069,
+      "bearing": 276,
+      "radiusKm": 64394.80108088326,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "henoz-mainworld",
+    "starport": "henoz-highport",
+    "orbit": "henoz-mainworld"
+  }
+}

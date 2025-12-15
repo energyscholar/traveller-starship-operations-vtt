@@ -1,0 +1,91 @@
+{
+  "id": "pagaton",
+  "name": "Pagaton",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1634",
+  "uwp": "C769873-4",
+  "tradeCodes": [
+    "Ri",
+    "Ph",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL4.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pagaton_(world)",
+  "celestialObjects": [
+    {
+      "id": "pagaton-star",
+      "name": "Pagaton Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pagaton-mainworld",
+      "name": "Pagaton",
+      "type": "Planet",
+      "orbitAU": 0.9720492915398853,
+      "bearing": 225,
+      "radiusKm": 6400,
+      "uwp": "C769873-4",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "PAGATON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL4.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "pagaton-gasgiant",
+      "name": "Pagaton Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.446560887879982,
+      "bearing": 336,
+      "radiusKm": 67366.66224381156,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pagaton-mainworld",
+    "starport": "pagaton-mainworld",
+    "orbit": "pagaton-mainworld"
+  }
+}

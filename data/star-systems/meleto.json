@@ -1,0 +1,90 @@
+{
+  "id": "meleto",
+  "name": "Meleto",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "2827",
+  "uwp": "C675100-5",
+  "tradeCodes": [
+    "Lo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Meleto_(world)",
+  "celestialObjects": [
+    {
+      "id": "meleto-star",
+      "name": "Meleto Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "meleto-mainworld",
+      "name": "Meleto",
+      "type": "Planet",
+      "orbitAU": 1.0582962817186496,
+      "bearing": 201,
+      "radiusKm": 5600,
+      "uwp": "C675100-5",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "MELETO CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "meleto-gasgiant",
+      "name": "Meleto Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.413217548204519,
+      "bearing": 56,
+      "radiusKm": 63579.02901717089,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "meleto-mainworld",
+    "starport": "meleto-mainworld",
+    "orbit": "meleto-mainworld"
+  }
+}

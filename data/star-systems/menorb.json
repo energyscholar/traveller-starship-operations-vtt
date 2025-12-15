@@ -1,0 +1,90 @@
+{
+  "id": "menorb",
+  "name": "Menorb",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1803",
+  "uwp": "C652998-7",
+  "tradeCodes": [
+    "Hi",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Menorb_(world)",
+  "celestialObjects": [
+    {
+      "id": "menorb-star",
+      "name": "Menorb Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "menorb-mainworld",
+      "name": "Menorb",
+      "type": "Planet",
+      "orbitAU": 1.1278256396599726,
+      "bearing": 144,
+      "radiusKm": 5600,
+      "uwp": "C652998-7",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "MENORB CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "menorb-gasgiant",
+      "name": "Menorb Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.754157973985307,
+      "bearing": 20,
+      "radiusKm": 57260.18615063816,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "menorb-mainworld",
+    "starport": "menorb-mainworld",
+    "orbit": "menorb-mainworld"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "id": "886-945",
+  "name": "886-945",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0230",
+  "uwp": "E833000-0",
+  "tradeCodes": [
+    "Ba",
+    "Po",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL0.",
+  "wikiUrl": "https://wiki.travellerrpg.com/886-945_(world)",
+  "celestialObjects": [
+    {
+      "id": "886-945-star",
+      "name": "886-945 Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "886-945-mainworld",
+      "name": "886-945",
+      "type": "Planet",
+      "orbitAU": 1.2624254410983322,
+      "bearing": 156,
+      "radiusKm": 7200,
+      "uwp": "E833000-0",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "886-945 CONTROL",
+      "gmNotes": "Mainworld. Pop 0. TL0.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "886-945-mainworld",
+    "starport": "886-945-mainworld",
+    "orbit": "886-945-mainworld"
+  }
+}

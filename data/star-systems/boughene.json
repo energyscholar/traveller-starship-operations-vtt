@@ -1,0 +1,110 @@
+{
+  "id": "boughene",
+  "name": "Boughene",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1904",
+  "uwp": "A8B3531-D",
+  "tradeCodes": [
+    "Fl",
+    "Ni",
+    "An",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL13.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Boughene_(world)",
+  "celestialObjects": [
+    {
+      "id": "boughene-star",
+      "name": "Boughene Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "boughene-mainworld",
+      "name": "Boughene",
+      "type": "Planet",
+      "orbitAU": 1.8318418128346612,
+      "bearing": 28,
+      "radiusKm": 7200,
+      "uwp": "A8B3531-D",
+      "atmosphere": "Corrosive",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "BOUGHENE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL13.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "boughene-highport",
+      "name": "Boughene Highport",
+      "type": "Highport",
+      "parent": "boughene-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "BOUGHENE HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "boughene-gasgiant",
+      "name": "Boughene Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.026025089277203,
+      "bearing": 73,
+      "radiusKm": 51129.83328863406,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "boughene-mainworld",
+    "starport": "boughene-highport",
+    "orbit": "boughene-mainworld"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "id": "lunion",
+  "name": "Lunion",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "2124",
+  "uwp": "A995984-D",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Cp",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL13.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Lunion_(world)",
+  "celestialObjects": [
+    {
+      "id": "lunion-star",
+      "name": "Lunion Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "lunion-mainworld",
+      "name": "Lunion",
+      "type": "Planet",
+      "orbitAU": 2.225390549615266,
+      "bearing": 139,
+      "radiusKm": 8000,
+      "uwp": "A995984-D",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "LUNION CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL13.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "lunion-highport",
+      "name": "Lunion Highport",
+      "type": "Highport",
+      "parent": "lunion-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "LUNION HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "lunion-gasgiant",
+      "name": "Lunion Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.96690864590294,
+      "bearing": 123,
+      "radiusKm": 61301.123105836894,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "lunion-mainworld",
+    "starport": "lunion-highport",
+    "orbit": "lunion-mainworld"
+  }
+}

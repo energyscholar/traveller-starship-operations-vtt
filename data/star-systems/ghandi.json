@@ -1,0 +1,92 @@
+{
+  "id": "ghandi",
+  "name": "Ghandi",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "1815",
+  "uwp": "B311455-A",
+  "tradeCodes": [
+    "Ic",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ghandi_(world)",
+  "celestialObjects": [
+    {
+      "id": "ghandi-star",
+      "name": "Ghandi Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ghandi-mainworld",
+      "name": "Ghandi",
+      "type": "Planet",
+      "orbitAU": 0.7832749188066269,
+      "bearing": 91,
+      "radiusKm": 3200,
+      "uwp": "B311455-A",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "GHANDI CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ghandi-highport",
+      "name": "Ghandi Highport",
+      "type": "Highport",
+      "parent": "ghandi-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "GHANDI HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ghandi-mainworld",
+    "starport": "ghandi-highport",
+    "orbit": "ghandi-mainworld"
+  }
+}

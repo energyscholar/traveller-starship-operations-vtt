@@ -1,0 +1,90 @@
+{
+  "id": "nexine",
+  "name": "Nexine",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "3030",
+  "uwp": "C97A443-8",
+  "tradeCodes": [
+    "Ni",
+    "Wa"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Nexine_(world)",
+  "celestialObjects": [
+    {
+      "id": "nexine-star",
+      "name": "Nexine Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "nexine-mainworld",
+      "name": "Nexine",
+      "type": "Planet",
+      "orbitAU": 1.119741305671696,
+      "bearing": 340,
+      "radiusKm": 8000,
+      "uwp": "C97A443-8",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "NEXINE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "nexine-gasgiant",
+      "name": "Nexine Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.658503162110952,
+      "bearing": 328,
+      "radiusKm": 67585.57537722777,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "nexine-mainworld",
+    "starport": "nexine-mainworld",
+    "orbit": "nexine-mainworld"
+  }
+}

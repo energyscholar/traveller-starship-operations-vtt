@@ -1,0 +1,109 @@
+{
+  "id": "belizo",
+  "name": "Belizo",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "3015",
+  "uwp": "B895646-5",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Belizo_(world)",
+  "celestialObjects": [
+    {
+      "id": "belizo-star",
+      "name": "Belizo Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "belizo-mainworld",
+      "name": "Belizo",
+      "type": "Planet",
+      "orbitAU": 1.5882249329739513,
+      "bearing": 165,
+      "radiusKm": 7200,
+      "uwp": "B895646-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "BELIZO CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "belizo-highport",
+      "name": "Belizo Highport",
+      "type": "Highport",
+      "parent": "belizo-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "BELIZO HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "belizo-gasgiant",
+      "name": "Belizo Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.123579530496171,
+      "bearing": 14,
+      "radiusKm": 56990.85795872108,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "belizo-mainworld",
+    "starport": "belizo-highport",
+    "orbit": "belizo-mainworld"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "id": "kardin",
+  "name": "Kardin",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0429",
+  "uwp": "E553123-6",
+  "tradeCodes": [
+    "Lo",
+    "Po",
+    "An"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Kardin_(world)",
+  "celestialObjects": [
+    {
+      "id": "kardin-star",
+      "name": "Kardin Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "kardin-mainworld",
+      "name": "Kardin",
+      "type": "Planet",
+      "orbitAU": 1.1300833276347506,
+      "bearing": 103,
+      "radiusKm": 4800,
+      "uwp": "E553123-6",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "KARDIN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "kardin-gasgiant",
+      "name": "Kardin Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.530593035942803,
+      "bearing": 147,
+      "radiusKm": 67749.3158601548,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "kardin-mainworld",
+    "starport": "kardin-mainworld",
+    "orbit": "kardin-mainworld"
+  }
+}

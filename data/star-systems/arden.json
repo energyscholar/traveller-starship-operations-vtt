@@ -1,0 +1,92 @@
+{
+  "id": "arden",
+  "name": "Arden",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1011",
+  "uwp": "B5549CB-9",
+  "tradeCodes": [
+    "Hi",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Arden_(world)",
+  "celestialObjects": [
+    {
+      "id": "arden-star",
+      "name": "Arden Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "arden-mainworld",
+      "name": "Arden",
+      "type": "Planet",
+      "orbitAU": 1.106383846080385,
+      "bearing": 163,
+      "radiusKm": 4800,
+      "uwp": "B5549CB-9",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ARDEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "arden-highport",
+      "name": "Arden Highport",
+      "type": "Highport",
+      "parent": "arden-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ARDEN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "arden-mainworld",
+    "starport": "arden-highport",
+    "orbit": "arden-mainworld"
+  }
+}

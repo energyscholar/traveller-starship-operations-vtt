@@ -1,0 +1,107 @@
+{
+  "id": "atson",
+  "name": "Atson",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0111",
+  "uwp": "B310598-8",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Atson_(world)",
+  "celestialObjects": [
+    {
+      "id": "atson-star",
+      "name": "Atson Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "atson-mainworld",
+      "name": "Atson",
+      "type": "Planet",
+      "orbitAU": 0.6386929107584948,
+      "bearing": 241,
+      "radiusKm": 3200,
+      "uwp": "B310598-8",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ATSON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "atson-highport",
+      "name": "Atson Highport",
+      "type": "Highport",
+      "parent": "atson-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ATSON HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "atson-gasgiant",
+      "name": "Atson Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.657032863225723,
+      "bearing": 247,
+      "radiusKm": 56816.0480333589,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "atson-mainworld",
+    "starport": "atson-highport",
+    "orbit": "atson-mainworld"
+  }
+}

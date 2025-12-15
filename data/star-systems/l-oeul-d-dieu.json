@@ -1,0 +1,93 @@
+{
+  "id": "l-oeul-d-dieu",
+  "name": "L'oeul d'Dieu",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3010",
+  "uwp": "B98A510-B",
+  "tradeCodes": [
+    "Ni",
+    "Wa",
+    "Pr"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/L'oeul%20d'Dieu_(world)",
+  "celestialObjects": [
+    {
+      "id": "l-oeul-d-dieu-star",
+      "name": "L'oeul d'Dieu Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "l-oeul-d-dieu-mainworld",
+      "name": "L'oeul d'Dieu",
+      "type": "Planet",
+      "orbitAU": 1.1967858566901668,
+      "bearing": 66,
+      "radiusKm": 8000,
+      "uwp": "B98A510-B",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "L'OEUL D'DIEU CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "l-oeul-d-dieu-highport",
+      "name": "L'oeul d'Dieu Highport",
+      "type": "Highport",
+      "parent": "l-oeul-d-dieu-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "L'OEUL D'DIEU HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "l-oeul-d-dieu-mainworld",
+    "starport": "l-oeul-d-dieu-highport",
+    "orbit": "l-oeul-d-dieu-mainworld"
+  }
+}

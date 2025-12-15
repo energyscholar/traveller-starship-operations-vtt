@@ -1,0 +1,90 @@
+{
+  "id": "windsor",
+  "name": "Windsor",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "1935",
+  "uwp": "C783511-9",
+  "tradeCodes": [
+    "Ni",
+    "Pr"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Windsor_(world)",
+  "celestialObjects": [
+    {
+      "id": "windsor-star",
+      "name": "Windsor Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "windsor-mainworld",
+      "name": "Windsor",
+      "type": "Planet",
+      "orbitAU": 1.1771982734888917,
+      "bearing": 234,
+      "radiusKm": 6400,
+      "uwp": "C783511-9",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "WINDSOR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "windsor-gasgiant",
+      "name": "Windsor Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.159308886060802,
+      "bearing": 307,
+      "radiusKm": 66585.08542012138,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "windsor-mainworld",
+    "starport": "windsor-mainworld",
+    "orbit": "windsor-mainworld"
+  }
+}

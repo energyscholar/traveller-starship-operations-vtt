@@ -1,0 +1,75 @@
+{
+  "id": "876-574",
+  "name": "876-574",
+  "sector": "Spinward Marches",
+  "subsector": "M",
+  "hex": "0140",
+  "uwp": "E687200-3",
+  "tradeCodes": [
+    "Lo",
+    "Ga",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL3.",
+  "wikiUrl": "https://wiki.travellerrpg.com/876-574_(world)",
+  "celestialObjects": [
+    {
+      "id": "876-574-star",
+      "name": "876-574 Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "876-574-mainworld",
+      "name": "876-574",
+      "type": "Planet",
+      "orbitAU": 1.2166618683749577,
+      "bearing": 155,
+      "radiusKm": 5600,
+      "uwp": "E687200-3",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "876-574 CONTROL",
+      "gmNotes": "Mainworld. Pop 10^2. TL3.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "876-574-mainworld",
+    "starport": "876-574-mainworld",
+    "orbit": "876-574-mainworld"
+  }
+}

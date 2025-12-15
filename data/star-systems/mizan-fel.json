@@ -1,0 +1,108 @@
+{
+  "id": "mizan-fel",
+  "name": "Mizan-fel",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0311",
+  "uwp": "B56258A-8",
+  "tradeCodes": [
+    "Ni",
+    "Pr"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Mizan-fel_(world)",
+  "celestialObjects": [
+    {
+      "id": "mizan-fel-star",
+      "name": "Mizan-fel Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "mizan-fel-mainworld",
+      "name": "Mizan-fel",
+      "type": "Planet",
+      "orbitAU": 0.9773171281183376,
+      "bearing": 81,
+      "radiusKm": 4800,
+      "uwp": "B56258A-8",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "MIZAN-FEL CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "mizan-fel-highport",
+      "name": "Mizan-fel Highport",
+      "type": "Highport",
+      "parent": "mizan-fel-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "MIZAN-FEL HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "mizan-fel-gasgiant",
+      "name": "Mizan-fel Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.956955731612251,
+      "bearing": 242,
+      "radiusKm": 61442.043206912786,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "mizan-fel-mainworld",
+    "starport": "mizan-fel-highport",
+    "orbit": "mizan-fel-mainworld"
+  }
+}

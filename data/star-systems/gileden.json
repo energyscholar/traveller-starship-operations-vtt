@@ -1,0 +1,89 @@
+{
+  "id": "gileden",
+  "name": "Gileden",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2514",
+  "uwp": "C583103-6",
+  "tradeCodes": [
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Gileden_(world)",
+  "celestialObjects": [
+    {
+      "id": "gileden-star",
+      "name": "Gileden Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "gileden-mainworld",
+      "name": "Gileden",
+      "type": "Planet",
+      "orbitAU": 1.2141141078388566,
+      "bearing": 112,
+      "radiusKm": 4800,
+      "uwp": "C583103-6",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "GILEDEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "gileden-gasgiant",
+      "name": "Gileden Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.176309104512803,
+      "bearing": 87,
+      "radiusKm": 55427.94408919339,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "gileden-mainworld",
+    "starport": "gileden-mainworld",
+    "orbit": "gileden-mainworld"
+  }
+}

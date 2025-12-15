@@ -1,0 +1,91 @@
+{
+  "id": "resten",
+  "name": "Resten",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "2323",
+  "uwp": "B310100-B",
+  "tradeCodes": [
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Resten_(world)",
+  "celestialObjects": [
+    {
+      "id": "resten-star",
+      "name": "Resten Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "resten-mainworld",
+      "name": "Resten",
+      "type": "Planet",
+      "orbitAU": 0.5581189407651839,
+      "bearing": 250,
+      "radiusKm": 3200,
+      "uwp": "B310100-B",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "RESTEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "resten-highport",
+      "name": "Resten Highport",
+      "type": "Highport",
+      "parent": "resten-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "RESTEN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "resten-mainworld",
+    "starport": "resten-highport",
+    "orbit": "resten-mainworld"
+  }
+}

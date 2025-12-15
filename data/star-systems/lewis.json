@@ -1,0 +1,90 @@
+{
+  "id": "lewis",
+  "name": "Lewis",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3107",
+  "uwp": "D427402-7",
+  "tradeCodes": [
+    "Ni",
+    "Fo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Poor starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Lewis_(world)",
+  "celestialObjects": [
+    {
+      "id": "lewis-star",
+      "name": "Lewis Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "lewis-mainworld",
+      "name": "Lewis",
+      "type": "Planet",
+      "orbitAU": 0.6833176801028531,
+      "bearing": 281,
+      "radiusKm": 4000,
+      "uwp": "D427402-7",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "LEWIS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "lewis-gasgiant",
+      "name": "Lewis Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.1014617152850725,
+      "bearing": 77,
+      "radiusKm": 63313.536054010896,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "lewis-mainworld",
+    "starport": "lewis-mainworld",
+    "orbit": "lewis-mainworld"
+  }
+}

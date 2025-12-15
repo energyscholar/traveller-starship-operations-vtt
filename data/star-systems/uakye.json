@@ -1,0 +1,108 @@
+{
+  "id": "uakye",
+  "name": "Uakye",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1805",
+  "uwp": "B439598-D",
+  "tradeCodes": [
+    "Ni",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL13.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Uakye_(world)",
+  "celestialObjects": [
+    {
+      "id": "uakye-star",
+      "name": "Uakye Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "uakye-mainworld",
+      "name": "Uakye",
+      "type": "Planet",
+      "orbitAU": 1.339800411754281,
+      "bearing": 47,
+      "radiusKm": 4000,
+      "uwp": "B439598-D",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "UAKYE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL13.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "uakye-highport",
+      "name": "Uakye Highport",
+      "type": "Highport",
+      "parent": "uakye-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "UAKYE HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "uakye-gasgiant",
+      "name": "Uakye Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.529301312997752,
+      "bearing": 319,
+      "radiusKm": 57876.95720816984,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "uakye-mainworld",
+    "starport": "uakye-highport",
+    "orbit": "uakye-mainworld"
+  }
+}

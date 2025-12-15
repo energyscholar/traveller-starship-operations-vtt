@@ -1,0 +1,91 @@
+{
+  "id": "wonderay",
+  "name": "Wonderay",
+  "sector": "Spinward Marches",
+  "subsector": "M",
+  "hex": "0340",
+  "uwp": "E88A47A-4",
+  "tradeCodes": [
+    "Ni",
+    "Wa",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL4.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Wonderay_(world)",
+  "celestialObjects": [
+    {
+      "id": "wonderay-star",
+      "name": "Wonderay Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "wonderay-mainworld",
+      "name": "Wonderay",
+      "type": "Planet",
+      "orbitAU": 1.2022168655349332,
+      "bearing": 230,
+      "radiusKm": 7200,
+      "uwp": "E88A47A-4",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "WONDERAY CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL4.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "wonderay-gasgiant",
+      "name": "Wonderay Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.740452778040813,
+      "bearing": 259,
+      "radiusKm": 69772.81118572864,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "wonderay-mainworld",
+    "starport": "wonderay-mainworld",
+    "orbit": "wonderay-mainworld"
+  }
+}

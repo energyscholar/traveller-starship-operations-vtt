@@ -1,0 +1,74 @@
+{
+  "id": "craw",
+  "name": "Craw",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "1939",
+  "uwp": "C573645-5",
+  "tradeCodes": [
+    "Ni",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Craw_(world)",
+  "celestialObjects": [
+    {
+      "id": "craw-star",
+      "name": "Craw Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "craw-mainworld",
+      "name": "Craw",
+      "type": "Planet",
+      "orbitAU": 1.1436521911841353,
+      "bearing": 213,
+      "radiusKm": 4800,
+      "uwp": "C573645-5",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "CRAW CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "craw-mainworld",
+    "starport": "craw-mainworld",
+    "orbit": "craw-mainworld"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "id": "roup",
+  "name": "Roup",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "2007",
+  "uwp": "C77A9A9-7",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Wa",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Roup_(world)",
+  "celestialObjects": [
+    {
+      "id": "roup-star",
+      "name": "Roup Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "roup-mainworld",
+      "name": "Roup",
+      "type": "Planet",
+      "orbitAU": 1.0834728214298592,
+      "bearing": 154,
+      "radiusKm": 6400,
+      "uwp": "C77A9A9-7",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ROUP CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "roup-gasgiant",
+      "name": "Roup Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.822284087634638,
+      "bearing": 258,
+      "radiusKm": 58290.37016476767,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "roup-mainworld",
+    "starport": "roup-mainworld",
+    "orbit": "roup-mainworld"
+  }
+}

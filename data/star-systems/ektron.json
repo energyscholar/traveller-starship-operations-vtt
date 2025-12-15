@@ -1,0 +1,91 @@
+{
+  "id": "ektron",
+  "name": "Ektron",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0326",
+  "uwp": "C432652-9",
+  "tradeCodes": [
+    "Na",
+    "Ni",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ektron_(world)",
+  "celestialObjects": [
+    {
+      "id": "ektron-star",
+      "name": "Ektron Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ektron-mainworld",
+      "name": "Ektron",
+      "type": "Planet",
+      "orbitAU": 1.2703824036520077,
+      "bearing": 65,
+      "radiusKm": 4000,
+      "uwp": "C432652-9",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "EKTRON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ektron-gasgiant",
+      "name": "Ektron Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.872072451094519,
+      "bearing": 348,
+      "radiusKm": 64355.216080127284,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ektron-mainworld",
+    "starport": "ektron-mainworld",
+    "orbit": "ektron-mainworld"
+  }
+}

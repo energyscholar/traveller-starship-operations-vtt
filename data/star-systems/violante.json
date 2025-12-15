@@ -1,0 +1,73 @@
+{
+  "id": "violante",
+  "name": "Violante",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "2708",
+  "uwp": "C669452-A",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Violante_(world)",
+  "celestialObjects": [
+    {
+      "id": "violante-star",
+      "name": "Violante Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "violante-mainworld",
+      "name": "Violante",
+      "type": "Planet",
+      "orbitAU": 0.976860509260177,
+      "bearing": 256,
+      "radiusKm": 5600,
+      "uwp": "C669452-A",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "VIOLANTE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "violante-mainworld",
+    "starport": "violante-mainworld",
+    "orbit": "violante-mainworld"
+  }
+}

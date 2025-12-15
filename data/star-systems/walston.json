@@ -1,0 +1,89 @@
+{
+  "id": "walston",
+  "name": "Walston",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1232",
+  "uwp": "C544338-8",
+  "tradeCodes": [
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Walston_(world)",
+  "celestialObjects": [
+    {
+      "id": "walston-star",
+      "name": "Walston Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "walston-mainworld",
+      "name": "Walston",
+      "type": "Planet",
+      "orbitAU": 1.1513465007341697,
+      "bearing": 77,
+      "radiusKm": 4800,
+      "uwp": "C544338-8",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "WALSTON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "walston-gasgiant",
+      "name": "Walston Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.994278923584414,
+      "bearing": 33,
+      "radiusKm": 58369.33173095389,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "walston-mainworld",
+    "starport": "walston-mainworld",
+    "orbit": "walston-mainworld"
+  }
+}

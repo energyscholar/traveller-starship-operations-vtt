@@ -1,0 +1,74 @@
+{
+  "id": "attica",
+  "name": "Attica",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0414",
+  "uwp": "C400546-8",
+  "tradeCodes": [
+    "Ni",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Attica_(world)",
+  "celestialObjects": [
+    {
+      "id": "attica-star",
+      "name": "Attica Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "attica-mainworld",
+      "name": "Attica",
+      "type": "Planet",
+      "orbitAU": 0.6685479108613719,
+      "bearing": 145,
+      "radiusKm": 4000,
+      "uwp": "C400546-8",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ATTICA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "attica-mainworld",
+    "starport": "attica-mainworld",
+    "orbit": "attica-mainworld"
+  }
+}

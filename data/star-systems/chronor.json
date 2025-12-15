@@ -1,0 +1,93 @@
+{
+  "id": "chronor",
+  "name": "Chronor",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0304",
+  "uwp": "A6369A5-D",
+  "tradeCodes": [
+    "Hi",
+    "Cp",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL13.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Chronor_(world)",
+  "celestialObjects": [
+    {
+      "id": "chronor-star",
+      "name": "Chronor Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "chronor-mainworld",
+      "name": "Chronor",
+      "type": "Planet",
+      "orbitAU": 1.3439060514360466,
+      "bearing": 325,
+      "radiusKm": 5600,
+      "uwp": "A6369A5-D",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "CHRONOR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL13.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "chronor-highport",
+      "name": "Chronor Highport",
+      "type": "Highport",
+      "parent": "chronor-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "CHRONOR HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "chronor-mainworld",
+    "starport": "chronor-highport",
+    "orbit": "chronor-mainworld"
+  }
+}

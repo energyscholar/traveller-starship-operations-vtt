@@ -1,0 +1,108 @@
+{
+  "id": "binges",
+  "name": "Binges",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1635",
+  "uwp": "A500231-A",
+  "tradeCodes": [
+    "Lo",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Binges_(world)",
+  "celestialObjects": [
+    {
+      "id": "binges-star",
+      "name": "Binges Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "binges-mainworld",
+      "name": "Binges",
+      "type": "Planet",
+      "orbitAU": 0.4424785427535736,
+      "bearing": 268,
+      "radiusKm": 4800,
+      "uwp": "A500231-A",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "BINGES CONTROL",
+      "gmNotes": "Mainworld. Pop 10^2. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "binges-highport",
+      "name": "Binges Highport",
+      "type": "Highport",
+      "parent": "binges-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "BINGES HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "binges-gasgiant",
+      "name": "Binges Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.48924357511093,
+      "bearing": 209,
+      "radiusKm": 63460.63679335951,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "binges-mainworld",
+    "starport": "binges-highport",
+    "orbit": "binges-mainworld"
+  }
+}

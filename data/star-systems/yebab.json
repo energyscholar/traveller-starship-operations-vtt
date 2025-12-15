@@ -1,0 +1,90 @@
+{
+  "id": "yebab",
+  "name": "Yebab",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3002",
+  "uwp": "C9A489A-8",
+  "tradeCodes": [
+    "Fl",
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Yebab_(world)",
+  "celestialObjects": [
+    {
+      "id": "yebab-star",
+      "name": "Yebab Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "yebab-mainworld",
+      "name": "Yebab",
+      "type": "Planet",
+      "orbitAU": 2.1166695375208127,
+      "bearing": 219,
+      "radiusKm": 8000,
+      "uwp": "C9A489A-8",
+      "atmosphere": "Exotic",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "YEBAB CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "yebab-gasgiant",
+      "name": "Yebab Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.767922253113624,
+      "bearing": 314,
+      "radiusKm": 69032.85367223948,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "yebab-mainworld",
+    "starport": "yebab-mainworld",
+    "orbit": "yebab-mainworld"
+  }
+}

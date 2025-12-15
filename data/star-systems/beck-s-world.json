@@ -1,0 +1,92 @@
+{
+  "id": "beck-s-world",
+  "name": "Beck's World",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "2204",
+  "uwp": "D88349D-4",
+  "tradeCodes": [
+    "Ni",
+    "An",
+    "Da",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL4.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Beck's%20World_(world)",
+  "celestialObjects": [
+    {
+      "id": "beck-s-world-star",
+      "name": "Beck's World Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "beck-s-world-mainworld",
+      "name": "Beck's World",
+      "type": "Planet",
+      "orbitAU": 1.2322021075541456,
+      "bearing": 305,
+      "radiusKm": 7200,
+      "uwp": "D88349D-4",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "BECK'S WORLD CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL4.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "beck-s-world-gasgiant",
+      "name": "Beck's World Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.902616975932096,
+      "bearing": 280,
+      "radiusKm": 63171.82493955173,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "beck-s-world-mainworld",
+    "starport": "beck-s-world-mainworld",
+    "orbit": "beck-s-world-mainworld"
+  }
+}

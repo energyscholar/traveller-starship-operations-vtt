@@ -1,0 +1,110 @@
+{
+  "id": "traltha",
+  "name": "Traltha",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2834",
+  "uwp": "B590630-6",
+  "tradeCodes": [
+    "De",
+    "He",
+    "Ni",
+    "An"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Traltha_(world)",
+  "celestialObjects": [
+    {
+      "id": "traltha-star",
+      "name": "Traltha Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "traltha-mainworld",
+      "name": "Traltha",
+      "type": "Planet",
+      "orbitAU": 2.4437287924316426,
+      "bearing": 230,
+      "radiusKm": 4800,
+      "uwp": "B590630-6",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "TRALTHA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "traltha-highport",
+      "name": "Traltha Highport",
+      "type": "Highport",
+      "parent": "traltha-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "TRALTHA HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "traltha-gasgiant",
+      "name": "Traltha Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.171511233545457,
+      "bearing": 208,
+      "radiusKm": 62073.22291401222,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "traltha-mainworld",
+    "starport": "traltha-highport",
+    "orbit": "traltha-mainworld"
+  }
+}

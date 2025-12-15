@@ -1,0 +1,109 @@
+{
+  "id": "strouden",
+  "name": "Strouden",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "2327",
+  "uwp": "A745988-D",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL13.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Strouden_(world)",
+  "celestialObjects": [
+    {
+      "id": "strouden-star",
+      "name": "Strouden Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "strouden-mainworld",
+      "name": "Strouden",
+      "type": "Planet",
+      "orbitAU": 1.208849145025458,
+      "bearing": 203,
+      "radiusKm": 6400,
+      "uwp": "A745988-D",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "STROUDEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL13.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "strouden-highport",
+      "name": "Strouden Highport",
+      "type": "Highport",
+      "parent": "strouden-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "STROUDEN HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "strouden-gasgiant",
+      "name": "Strouden Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.027381293503465,
+      "bearing": 93,
+      "radiusKm": 63419.985157238465,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "strouden-mainworld",
+    "starport": "strouden-highport",
+    "orbit": "strouden-mainworld"
+  }
+}

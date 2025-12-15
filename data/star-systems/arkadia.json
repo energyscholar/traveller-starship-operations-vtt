@@ -1,0 +1,91 @@
+{
+  "id": "arkadia",
+  "name": "Arkadia",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1217",
+  "uwp": "E546845-6",
+  "tradeCodes": [
+    "Pa",
+    "Ph",
+    "Pi"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Arkadia_(world)",
+  "celestialObjects": [
+    {
+      "id": "arkadia-star",
+      "name": "Arkadia Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "arkadia-mainworld",
+      "name": "Arkadia",
+      "type": "Planet",
+      "orbitAU": 1.2330430335785851,
+      "bearing": 76,
+      "radiusKm": 4800,
+      "uwp": "E546845-6",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "ARKADIA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "arkadia-gasgiant",
+      "name": "Arkadia Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.801781588847847,
+      "bearing": 162,
+      "radiusKm": 58005.327105419594,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "arkadia-mainworld",
+    "starport": "arkadia-mainworld",
+    "orbit": "arkadia-mainworld"
+  }
+}

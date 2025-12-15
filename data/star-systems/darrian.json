@@ -1,0 +1,94 @@
+{
+  "id": "darrian",
+  "name": "Darrian",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0627",
+  "uwp": "A463955-G",
+  "tradeCodes": [
+    "Hi",
+    "An",
+    "Pr",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL16.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Darrian_(world)",
+  "celestialObjects": [
+    {
+      "id": "darrian-star",
+      "name": "Darrian Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "darrian-mainworld",
+      "name": "Darrian",
+      "type": "Planet",
+      "orbitAU": 1.0181250215122903,
+      "bearing": 225,
+      "radiusKm": 4000,
+      "uwp": "A463955-G",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "DARRIAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL16.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "darrian-highport",
+      "name": "Darrian Highport",
+      "type": "Highport",
+      "parent": "darrian-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "DARRIAN HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "darrian-mainworld",
+    "starport": "darrian-highport",
+    "orbit": "darrian-mainworld"
+  }
+}

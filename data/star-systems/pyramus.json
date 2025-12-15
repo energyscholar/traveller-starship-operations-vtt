@@ -1,0 +1,90 @@
+{
+  "id": "pyramus",
+  "name": "Pyramus",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2538",
+  "uwp": "E566335-2",
+  "tradeCodes": [
+    "Lo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL2.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pyramus_(world)",
+  "celestialObjects": [
+    {
+      "id": "pyramus-star",
+      "name": "Pyramus Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pyramus-mainworld",
+      "name": "Pyramus",
+      "type": "Planet",
+      "orbitAU": 1.0381788285748235,
+      "bearing": 10,
+      "radiusKm": 4800,
+      "uwp": "E566335-2",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "PYRAMUS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL2.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "pyramus-gasgiant",
+      "name": "Pyramus Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.986419830583607,
+      "bearing": 344,
+      "radiusKm": 52760.84461372044,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pyramus-mainworld",
+    "starport": "pyramus-mainworld",
+    "orbit": "pyramus-mainworld"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "id": "saurus",
+  "name": "Saurus",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1320",
+  "uwp": "D888588-7",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Pr"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Poor starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Saurus_(world)",
+  "celestialObjects": [
+    {
+      "id": "saurus-star",
+      "name": "Saurus Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "saurus-mainworld",
+      "name": "Saurus",
+      "type": "Planet",
+      "orbitAU": 1.15017164173752,
+      "bearing": 294,
+      "radiusKm": 7200,
+      "uwp": "D888588-7",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "SAURUS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "saurus-gasgiant",
+      "name": "Saurus Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.684972701046522,
+      "bearing": 290,
+      "radiusKm": 50043.6381563682,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "saurus-mainworld",
+    "starport": "saurus-mainworld",
+    "orbit": "saurus-mainworld"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "id": "foelen",
+  "name": "Foelen",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "1401",
+  "uwp": "B638665-8",
+  "tradeCodes": [
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Foelen_(world)",
+  "celestialObjects": [
+    {
+      "id": "foelen-star",
+      "name": "Foelen Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "foelen-mainworld",
+      "name": "Foelen",
+      "type": "Planet",
+      "orbitAU": 1.2590947764958242,
+      "bearing": 38,
+      "radiusKm": 5600,
+      "uwp": "B638665-8",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "FOELEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "foelen-highport",
+      "name": "Foelen Highport",
+      "type": "Highport",
+      "parent": "foelen-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "FOELEN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "foelen-mainworld",
+    "starport": "foelen-highport",
+    "orbit": "foelen-mainworld"
+  }
+}

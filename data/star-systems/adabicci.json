@@ -1,0 +1,110 @@
+{
+  "id": "adabicci",
+  "name": "Adabicci",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "1824",
+  "uwp": "A57189B-B",
+  "tradeCodes": [
+    "He",
+    "Ph",
+    "Pi",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Adabicci_(world)",
+  "celestialObjects": [
+    {
+      "id": "adabicci-star",
+      "name": "Adabicci Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "adabicci-mainworld",
+      "name": "Adabicci",
+      "type": "Planet",
+      "orbitAU": 1.1262405425419086,
+      "bearing": 127,
+      "radiusKm": 4800,
+      "uwp": "A57189B-B",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ADABICCI CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "adabicci-highport",
+      "name": "Adabicci Highport",
+      "type": "Highport",
+      "parent": "adabicci-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ADABICCI HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "adabicci-gasgiant",
+      "name": "Adabicci Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.921490274417171,
+      "bearing": 331,
+      "radiusKm": 53299.82849226305,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "adabicci-mainworld",
+    "starport": "adabicci-highport",
+    "orbit": "adabicci-mainworld"
+  }
+}

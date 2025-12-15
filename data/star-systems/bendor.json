@@ -1,0 +1,110 @@
+{
+  "id": "bendor",
+  "name": "Bendor",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2336",
+  "uwp": "A756656-C",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Ga",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Bendor_(world)",
+  "celestialObjects": [
+    {
+      "id": "bendor-star",
+      "name": "Bendor Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "bendor-mainworld",
+      "name": "Bendor",
+      "type": "Planet",
+      "orbitAU": 1.0819231116493475,
+      "bearing": 185,
+      "radiusKm": 6400,
+      "uwp": "A756656-C",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "BENDOR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "bendor-highport",
+      "name": "Bendor Highport",
+      "type": "Highport",
+      "parent": "bendor-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "BENDOR HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "bendor-gasgiant",
+      "name": "Bendor Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.56926119665235,
+      "bearing": 244,
+      "radiusKm": 55097.135095579564,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "bendor-mainworld",
+    "starport": "bendor-highport",
+    "orbit": "bendor-mainworld"
+  }
+}

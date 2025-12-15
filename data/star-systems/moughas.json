@@ -1,0 +1,90 @@
+{
+  "id": "moughas",
+  "name": "Moughas",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "2406",
+  "uwp": "CA5A588-B",
+  "tradeCodes": [
+    "Ni",
+    "Oc"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Moughas_(world)",
+  "celestialObjects": [
+    {
+      "id": "moughas-star",
+      "name": "Moughas Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "moughas-mainworld",
+      "name": "Moughas",
+      "type": "Planet",
+      "orbitAU": 1.0897452379480743,
+      "bearing": 117,
+      "radiusKm": 8800,
+      "uwp": "CA5A588-B",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "MOUGHAS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "moughas-gasgiant",
+      "name": "Moughas Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.2454792356125,
+      "bearing": 157,
+      "radiusKm": 62115.711258315394,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "moughas-mainworld",
+    "starport": "moughas-mainworld",
+    "orbit": "moughas-mainworld"
+  }
+}

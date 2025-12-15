@@ -1,0 +1,90 @@
+{
+  "id": "heroni",
+  "name": "Heroni",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "3017",
+  "uwp": "E7A0614-8",
+  "tradeCodes": [
+    "He",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Heroni_(world)",
+  "celestialObjects": [
+    {
+      "id": "heroni-star",
+      "name": "Heroni Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "heroni-mainworld",
+      "name": "Heroni",
+      "type": "Planet",
+      "orbitAU": 1.5882846825956882,
+      "bearing": 160,
+      "radiusKm": 6400,
+      "uwp": "E7A0614-8",
+      "atmosphere": "Exotic",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "HERONI CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "heroni-gasgiant",
+      "name": "Heroni Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.489191421230185,
+      "bearing": 228,
+      "radiusKm": 58992.76499973757,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "heroni-mainworld",
+    "starport": "heroni-mainworld",
+    "orbit": "heroni-mainworld"
+  }
+}

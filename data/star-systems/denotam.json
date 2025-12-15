@@ -1,0 +1,91 @@
+{
+  "id": "denotam",
+  "name": "Denotam",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1413",
+  "uwp": "B739573-A",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Denotam_(world)",
+  "celestialObjects": [
+    {
+      "id": "denotam-star",
+      "name": "Denotam Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "denotam-mainworld",
+      "name": "Denotam",
+      "type": "Planet",
+      "orbitAU": 1.3223174463028695,
+      "bearing": 262,
+      "radiusKm": 6400,
+      "uwp": "B739573-A",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "DENOTAM CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "denotam-highport",
+      "name": "Denotam Highport",
+      "type": "Highport",
+      "parent": "denotam-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "DENOTAM HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "denotam-mainworld",
+    "starport": "denotam-highport",
+    "orbit": "denotam-mainworld"
+  }
+}

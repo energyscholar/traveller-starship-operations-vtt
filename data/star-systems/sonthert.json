@@ -1,0 +1,74 @@
+{
+  "id": "sonthert",
+  "name": "Sonthert",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "1918",
+  "uwp": "D6266AB-7",
+  "tradeCodes": [
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Sonthert_(world)",
+  "celestialObjects": [
+    {
+      "id": "sonthert-star",
+      "name": "Sonthert Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "sonthert-mainworld",
+      "name": "Sonthert",
+      "type": "Planet",
+      "orbitAU": 0.4008838605641365,
+      "bearing": 337,
+      "radiusKm": 5600,
+      "uwp": "D6266AB-7",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "SONTHERT CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "sonthert-mainworld",
+    "starport": "sonthert-mainworld",
+    "orbit": "sonthert-mainworld"
+  }
+}

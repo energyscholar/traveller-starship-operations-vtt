@@ -1,0 +1,92 @@
+{
+  "id": "inchin",
+  "name": "Inchin",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "0938",
+  "uwp": "D42035A-A",
+  "tradeCodes": [
+    "De",
+    "He",
+    "Lo",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Inchin_(world)",
+  "celestialObjects": [
+    {
+      "id": "inchin-star",
+      "name": "Inchin Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "inchin-mainworld",
+      "name": "Inchin",
+      "type": "Planet",
+      "orbitAU": 0.541323417411848,
+      "bearing": 184,
+      "radiusKm": 4000,
+      "uwp": "D42035A-A",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "INCHIN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "inchin-gasgiant",
+      "name": "Inchin Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.7535403846201705,
+      "bearing": 219,
+      "radiusKm": 69052.95128090253,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "inchin-mainworld",
+    "starport": "inchin-mainworld",
+    "orbit": "inchin-mainworld"
+  }
+}

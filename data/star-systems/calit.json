@@ -1,0 +1,89 @@
+{
+  "id": "calit",
+  "name": "Calit",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1515",
+  "uwp": "C434887-7",
+  "tradeCodes": [
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Calit_(world)",
+  "celestialObjects": [
+    {
+      "id": "calit-star",
+      "name": "Calit Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "calit-mainworld",
+      "name": "Calit",
+      "type": "Planet",
+      "orbitAU": 1.2881615093065342,
+      "bearing": 200,
+      "radiusKm": 4000,
+      "uwp": "C434887-7",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "CALIT CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "calit-gasgiant",
+      "name": "Calit Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.471235480959052,
+      "bearing": 61,
+      "radiusKm": 65524.34496897001,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "calit-mainworld",
+    "starport": "calit-mainworld",
+    "orbit": "calit-mainworld"
+  }
+}

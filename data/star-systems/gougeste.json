@@ -1,0 +1,91 @@
+{
+  "id": "gougeste",
+  "name": "Gougeste",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "0909",
+  "uwp": "C572510-A",
+  "tradeCodes": [
+    "He",
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Gougeste_(world)",
+  "celestialObjects": [
+    {
+      "id": "gougeste-star",
+      "name": "Gougeste Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "gougeste-mainworld",
+      "name": "Gougeste",
+      "type": "Planet",
+      "orbitAU": 1.1450740031338018,
+      "bearing": 53,
+      "radiusKm": 4800,
+      "uwp": "C572510-A",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "GOUGESTE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "gougeste-gasgiant",
+      "name": "Gougeste Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.104533508905268,
+      "bearing": 332,
+      "radiusKm": 63848.9771236501,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "gougeste-mainworld",
+    "starport": "gougeste-mainworld",
+    "orbit": "gougeste-mainworld"
+  }
+}

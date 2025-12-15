@@ -1,0 +1,91 @@
+{
+  "id": "victoria",
+  "name": "Victoria",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "1817",
+  "uwp": "D6D7772-2",
+  "tradeCodes": [
+    "An",
+    "Fo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Poor starport. TL2.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Victoria_(world)",
+  "celestialObjects": [
+    {
+      "id": "victoria-star",
+      "name": "Victoria Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "victoria-mainworld",
+      "name": "Victoria",
+      "type": "Planet",
+      "orbitAU": 2.043914328612664,
+      "bearing": 18,
+      "radiusKm": 5600,
+      "uwp": "D6D7772-2",
+      "atmosphere": "Dense High",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "VICTORIA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL2.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "victoria-gasgiant",
+      "name": "Victoria Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.202753150983721,
+      "bearing": 118,
+      "radiusKm": 69426.3222020482,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "victoria-mainworld",
+    "starport": "victoria-mainworld",
+    "orbit": "victoria-mainworld"
+  }
+}

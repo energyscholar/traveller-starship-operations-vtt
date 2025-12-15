@@ -1,0 +1,110 @@
+{
+  "id": "jae-tellona",
+  "name": "Jae Tellona",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2814",
+  "uwp": "A560565-8",
+  "tradeCodes": [
+    "De",
+    "Ni",
+    "Pr",
+    "Mr"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Jae%20Tellona_(world)",
+  "celestialObjects": [
+    {
+      "id": "jae-tellona-star",
+      "name": "Jae Tellona Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "jae-tellona-mainworld",
+      "name": "Jae Tellona",
+      "type": "Planet",
+      "orbitAU": 0.974871053143892,
+      "bearing": 288,
+      "radiusKm": 4800,
+      "uwp": "A560565-8",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "JAE TELLONA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "jae-tellona-highport",
+      "name": "Jae Tellona Highport",
+      "type": "Highport",
+      "parent": "jae-tellona-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "JAE TELLONA HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "jae-tellona-gasgiant",
+      "name": "Jae Tellona Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.172380896071768,
+      "bearing": 157,
+      "radiusKm": 68516.61914253177,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "jae-tellona-mainworld",
+    "starport": "jae-tellona-highport",
+    "orbit": "jae-tellona-mainworld"
+  }
+}

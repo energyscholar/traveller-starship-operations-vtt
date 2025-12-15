@@ -152,20 +152,3324 @@
       "file": "anduril.json"
     },
     {
+      "id": "zeycude",
+      "name": "Zeycude",
+      "hex": "0101",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "zeycude.json"
+    },
+    {
+      "id": "reno",
+      "name": "Reno",
+      "hex": "0102",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "reno.json"
+    },
+    {
+      "id": "errere",
+      "name": "Errere",
+      "hex": "0103",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "errere.json"
+    },
+    {
+      "id": "cantrel",
+      "name": "Cantrel",
+      "hex": "0104",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "cantrel.json"
+    },
+    {
+      "id": "gyomar",
+      "name": "Gyomar",
+      "hex": "0108",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "gyomar.json"
+    },
+    {
+      "id": "thengo",
+      "name": "Thengo",
+      "hex": "0202",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "thengo.json"
+    },
+    {
+      "id": "rio",
+      "name": "Rio",
+      "hex": "0301",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "rio.json"
+    },
+    {
+      "id": "gesentown",
+      "name": "Gesentown",
+      "hex": "0303",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "gesentown.json"
+    },
+    {
+      "id": "chronor",
+      "name": "Chronor",
+      "hex": "0304",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "chronor.json"
+    },
+    {
+      "id": "atsa",
+      "name": "Atsa",
+      "hex": "0307",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "atsa.json"
+    },
+    {
+      "id": "whenge",
+      "name": "Whenge",
+      "hex": "0503",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "whenge.json"
+    },
+    {
+      "id": "enlas-du",
+      "name": "Enlas-du",
+      "hex": "0601",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "enlas-du.json"
+    },
+    {
+      "id": "algebaster",
+      "name": "Algebaster",
+      "hex": "0605",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "algebaster.json"
+    },
+    {
+      "id": "rasatt",
+      "name": "Rasatt",
+      "hex": "0607",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "rasatt.json"
+    },
+    {
+      "id": "ninjar",
+      "name": "Ninjar",
+      "hex": "0608",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "ninjar.json"
+    },
+    {
+      "id": "sheyou",
+      "name": "Sheyou",
+      "hex": "0610",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "sheyou.json"
+    },
+    {
+      "id": "indo",
+      "name": "Indo",
+      "hex": "0703",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "indo.json"
+    },
+    {
+      "id": "nerewhon",
+      "name": "Nerewhon",
+      "hex": "0704",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "nerewhon.json"
+    },
+    {
+      "id": "cipango",
+      "name": "Cipango",
+      "hex": "0705",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "cipango.json"
+    },
+    {
+      "id": "stave",
+      "name": "Stave",
+      "hex": "0710",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "stave.json"
+    },
+    {
+      "id": "narval",
+      "name": "Narval",
+      "hex": "0805",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "narval.json"
+    },
+    {
+      "id": "plaven",
+      "name": "Plaven",
+      "hex": "0807",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "plaven.json"
+    },
+    {
+      "id": "quar",
+      "name": "Quar",
+      "hex": "0808",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "quar.json"
+    },
+    {
+      "id": "frond",
+      "name": "Frond",
+      "hex": "0810",
+      "sector": "Spinward Marches",
+      "subsector": "A",
+      "file": "frond.json"
+    },
+    {
+      "id": "condyole",
+      "name": "Condyole",
+      "hex": "0901",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "condyole.json"
+    },
+    {
+      "id": "puparkin",
+      "name": "Puparkin",
+      "hex": "0902",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "puparkin.json"
+    },
+    {
+      "id": "chwistyoch",
+      "name": "Chwistyoch",
+      "hex": "0904",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "chwistyoch.json"
+    },
+    {
+      "id": "gougeste",
+      "name": "Gougeste",
+      "hex": "0909",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "gougeste.json"
+    },
+    {
+      "id": "esalin",
+      "name": "Esalin",
+      "hex": "1004",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "esalin.json"
+    },
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "hex": "1005",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "ruby.json"
+    },
+    {
+      "id": "emerald",
+      "name": "Emerald",
+      "hex": "1006",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "emerald.json"
+    },
+    {
+      "id": "zenopit",
+      "name": "Zenopit",
+      "hex": "1010",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "zenopit.json"
+    },
+    {
+      "id": "riverland",
+      "name": "Riverland",
+      "hex": "1102",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "riverland.json"
+    },
+    {
+      "id": "clan",
+      "name": "Clan",
+      "hex": "1103",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "clan.json"
+    },
+    {
+      "id": "jewell",
+      "name": "Jewell",
+      "hex": "1106",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "jewell.json"
+    },
+    {
+      "id": "zircon",
+      "name": "Zircon",
+      "hex": "1110",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "zircon.json"
+    },
+    {
+      "id": "ao-dai",
+      "name": "Ao-dai",
+      "hex": "1201",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "ao-dai.json"
+    },
+    {
+      "id": "mongo",
+      "name": "Mongo",
+      "hex": "1204",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "mongo.json"
+    },
+    {
+      "id": "utoland",
+      "name": "Utoland",
+      "hex": "1209",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "utoland.json"
+    },
+    {
+      "id": "pequan",
+      "name": "Pequan",
+      "hex": "1210",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "pequan.json"
+    },
+    {
+      "id": "nakege",
+      "name": "Nakege",
+      "hex": "1305",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "nakege.json"
+    },
+    {
+      "id": "lysen",
+      "name": "Lysen",
+      "hex": "1307",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "lysen.json"
+    },
+    {
+      "id": "foelen",
+      "name": "Foelen",
+      "hex": "1401",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "foelen.json"
+    },
+    {
+      "id": "farreach",
+      "name": "Farreach",
+      "hex": "1402",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "farreach.json"
+    },
+    {
+      "id": "871-438",
+      "name": "871-438",
+      "hex": "1510",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "871-438.json"
+    },
+    {
+      "id": "louzy",
+      "name": "Louzy",
+      "hex": "1604",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "louzy.json"
+    },
+    {
+      "id": "grant",
+      "name": "Grant",
+      "hex": "1607",
+      "sector": "Spinward Marches",
+      "subsector": "B",
+      "file": "grant.json"
+    },
+    {
+      "id": "efate",
+      "name": "Efate",
+      "hex": "1705",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "efate.json"
+    },
+    {
+      "id": "alell",
+      "name": "Alell",
+      "hex": "1706",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "alell.json"
+    },
+    {
+      "id": "yres",
+      "name": "Yres",
+      "hex": "1802",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "yres.json"
+    },
+    {
+      "id": "menorb",
+      "name": "Menorb",
+      "hex": "1803",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "menorb.json"
+    },
+    {
+      "id": "uakye",
+      "name": "Uakye",
+      "hex": "1805",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "uakye.json"
+    },
+    {
+      "id": "whanga",
+      "name": "Whanga",
+      "hex": "1806",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "whanga.json"
+    },
+    {
+      "id": "knorbes",
+      "name": "Knorbes",
+      "hex": "1807",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "knorbes.json"
+    },
+    {
+      "id": "forboldn",
+      "name": "Forboldn",
+      "hex": "1808",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "forboldn.json"
+    },
+    {
+      "id": "ruie",
+      "name": "Ruie",
+      "hex": "1809",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "ruie.json"
+    },
+    {
+      "id": "jenghe",
+      "name": "Jenghe",
+      "hex": "1810",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "jenghe.json"
+    },
+    {
+      "id": "pixie",
+      "name": "Pixie",
+      "hex": "1903",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "pixie.json"
+    },
+    {
+      "id": "boughene",
+      "name": "Boughene",
+      "hex": "1904",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "boughene.json"
+    },
+    {
+      "id": "hefry",
+      "name": "Hefry",
+      "hex": "1909",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "hefry.json"
+    },
+    {
+      "id": "regina",
+      "name": "Regina",
+      "hex": "1910",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "regina.json"
+    },
+    {
+      "id": "feri",
+      "name": "Feri",
+      "hex": "2005",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "feri.json"
+    },
+    {
+      "id": "roup",
+      "name": "Roup",
+      "hex": "2007",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "roup.json"
+    },
+    {
+      "id": "pscias",
+      "name": "Pscias",
+      "hex": "2106",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "pscias.json"
+    },
+    {
+      "id": "yori",
+      "name": "Yori",
+      "hex": "2110",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "yori.json"
+    },
+    {
+      "id": "dentus",
+      "name": "Dentus",
+      "hex": "2201",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "dentus.json"
+    },
+    {
+      "id": "kinorb",
+      "name": "Kinorb",
+      "hex": "2202",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "kinorb.json"
+    },
+    {
+      "id": "beck-s-world",
+      "name": "Beck's World",
+      "hex": "2204",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "beck-s-world.json"
+    },
+    {
+      "id": "enope",
+      "name": "Enope",
+      "hex": "2205",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "enope.json"
+    },
+    {
+      "id": "wochiers",
+      "name": "Wochiers",
+      "hex": "2207",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "wochiers.json"
+    },
+    {
+      "id": "yorbund",
+      "name": "Yorbund",
+      "hex": "2303",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "yorbund.json"
+    },
+    {
+      "id": "shionthy",
+      "name": "Shionthy",
+      "hex": "2306",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "shionthy.json"
+    },
+    {
+      "id": "algine",
+      "name": "Algine",
+      "hex": "2308",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "algine.json"
+    },
+    {
+      "id": "yurst",
+      "name": "Yurst",
+      "hex": "2309",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "yurst.json"
+    },
+    {
+      "id": "heya",
+      "name": "Heya",
+      "hex": "2402",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "heya.json"
+    },
+    {
+      "id": "keng",
+      "name": "Keng",
+      "hex": "2405",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "keng.json"
+    },
+    {
+      "id": "moughas",
+      "name": "Moughas",
+      "hex": "2406",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "moughas.json"
+    },
+    {
+      "id": "rethe",
+      "name": "Rethe",
+      "hex": "2408",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "rethe.json"
+    },
+    {
+      "id": "inthe",
+      "name": "Inthe",
+      "hex": "2410",
+      "sector": "Spinward Marches",
+      "subsector": "C",
+      "file": "inthe.json"
+    },
+    {
+      "id": "paya",
+      "name": "Paya",
+      "hex": "2509",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "paya.json"
+    },
+    {
+      "id": "dhian",
+      "name": "Dhian",
+      "hex": "2510",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "dhian.json"
+    },
+    {
+      "id": "corfu",
+      "name": "Corfu",
+      "hex": "2602",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "corfu.json"
+    },
+    {
+      "id": "focaline",
+      "name": "Focaline",
+      "hex": "2607",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "focaline.json"
+    },
+    {
+      "id": "lablon",
+      "name": "Lablon",
+      "hex": "2701",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "lablon.json"
+    },
+    {
+      "id": "heguz",
+      "name": "Heguz",
+      "hex": "2706",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "heguz.json"
+    },
+    {
+      "id": "violante",
+      "name": "Violante",
+      "hex": "2708",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "violante.json"
+    },
+    {
+      "id": "pavanne",
+      "name": "Pavanne",
+      "hex": "2905",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "pavanne.json"
+    },
+    {
+      "id": "carsten",
+      "name": "Carsten",
+      "hex": "2906",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "carsten.json"
+    },
+    {
+      "id": "zila",
+      "name": "Zila",
+      "hex": "2908",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "zila.json"
+    },
+    {
+      "id": "jesedipere",
+      "name": "Jesedipere",
+      "hex": "3001",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "jesedipere.json"
+    },
+    {
+      "id": "yebab",
+      "name": "Yebab",
+      "hex": "3002",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "yebab.json"
+    },
+    {
+      "id": "nasemin",
+      "name": "Nasemin",
+      "hex": "3003",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "nasemin.json"
+    },
+    {
+      "id": "zykoca",
+      "name": "Zykoca",
+      "hex": "3004",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "zykoca.json"
+    },
+    {
+      "id": "aramanx",
+      "name": "Aramanx",
+      "hex": "3005",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "aramanx.json"
+    },
+    {
+      "id": "pysadi",
+      "name": "Pysadi",
+      "hex": "3008",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "pysadi.json"
+    },
+    {
+      "id": "l-oeul-d-dieu",
+      "name": "L'oeul d'Dieu",
+      "hex": "3010",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "l-oeul-d-dieu.json"
+    },
+    {
+      "id": "rugbird",
+      "name": "Rugbird",
+      "hex": "3102",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "rugbird.json"
+    },
+    {
+      "id": "towers",
+      "name": "Towers",
+      "hex": "3103",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "towers.json"
+    },
+    {
+      "id": "feneteman",
+      "name": "Feneteman",
+      "hex": "3104",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "feneteman.json"
+    },
+    {
+      "id": "lewis",
+      "name": "Lewis",
+      "hex": "3107",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "lewis.json"
+    },
+    {
+      "id": "aramis",
+      "name": "Aramis",
+      "hex": "3110",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "aramis.json"
+    },
+    {
+      "id": "junidy",
+      "name": "Junidy",
+      "hex": "3202",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "junidy.json"
+    },
+    {
+      "id": "patinir",
+      "name": "Patinir",
+      "hex": "3207",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "patinir.json"
+    },
+    {
+      "id": "natoko",
+      "name": "Natoko",
+      "hex": "3209",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "natoko.json"
+    },
+    {
+      "id": "reacher",
+      "name": "Reacher",
+      "hex": "3210",
+      "sector": "Spinward Marches",
+      "subsector": "D",
+      "file": "reacher.json"
+    },
+    {
+      "id": "atson",
+      "name": "Atson",
+      "hex": "0111",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "atson.json"
+    },
+    {
+      "id": "yiktor",
+      "name": "Yiktor",
+      "hex": "0114",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "yiktor.json"
+    },
+    {
+      "id": "xhosa",
+      "name": "Xhosa",
+      "hex": "0115",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "xhosa.json"
+    },
+    {
+      "id": "prinx",
+      "name": "Prinx",
+      "hex": "0212",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "prinx.json"
+    },
+    {
+      "id": "rushu",
+      "name": "Rushu",
+      "hex": "0215",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "rushu.json"
+    },
+    {
+      "id": "bael",
+      "name": "Bael",
+      "hex": "0218",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "bael.json"
+    },
+    {
+      "id": "mizan-fel",
+      "name": "Mizan-fel",
+      "hex": "0311",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "mizan-fel.json"
+    },
+    {
+      "id": "sansibar",
+      "name": "Sansibar",
+      "hex": "0412",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "sansibar.json"
+    },
+    {
+      "id": "attica",
+      "name": "Attica",
+      "hex": "0414",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "attica.json"
+    },
+    {
+      "id": "retinae",
+      "name": "Retinae",
+      "hex": "0416",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "retinae.json"
+    },
+    {
+      "id": "terra-nova",
+      "name": "Terra Nova",
+      "hex": "0511",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "terra-nova.json"
+    },
+    {
+      "id": "asmodeus",
+      "name": "Asmodeus",
+      "hex": "0512",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "asmodeus.json"
+    },
+    {
+      "id": "faisal",
+      "name": "Faisal",
+      "hex": "0518",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "faisal.json"
+    },
+    {
+      "id": "lebeau",
+      "name": "Lebeau",
+      "hex": "0613",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "lebeau.json"
+    },
+    {
+      "id": "querion",
+      "name": "Querion",
+      "hex": "0614",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "querion.json"
+    },
+    {
+      "id": "dekalb",
+      "name": "Dekalb",
+      "hex": "0618",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "dekalb.json"
+    },
+    {
+      "id": "winston",
+      "name": "Winston",
+      "hex": "0620",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "winston.json"
+    },
+    {
+      "id": "rapp-s-world",
+      "name": "Rapp's World",
+      "hex": "0712",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "rapp-s-world.json"
+    },
+    {
+      "id": "thanber",
+      "name": "Thanber",
+      "hex": "0717",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "thanber.json"
+    },
+    {
+      "id": "entrope",
+      "name": "Entrope",
+      "hex": "0720",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "entrope.json"
+    },
+    {
+      "id": "anselhome",
+      "name": "Anselhome",
+      "hex": "0820",
+      "sector": "Spinward Marches",
+      "subsector": "E",
+      "file": "anselhome.json"
+    },
+    {
+      "id": "caloran",
+      "name": "Caloran",
+      "hex": "0911",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "caloran.json"
+    },
+    {
+      "id": "899-076",
+      "name": "899-076",
+      "hex": "0912",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "899-076.json"
+    },
+    {
+      "id": "quare",
+      "name": "Quare",
+      "hex": "0915",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "quare.json"
+    },
+    {
+      "id": "zeta-2",
+      "name": "Zeta 2",
+      "hex": "0919",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "zeta-2.json"
+    },
+    {
+      "id": "arden",
+      "name": "Arden",
+      "hex": "1011",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "arden.json"
+    },
+    {
+      "id": "choleosti",
+      "name": "Choleosti",
+      "hex": "1018",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "choleosti.json"
+    },
+    {
+      "id": "margesi",
+      "name": "Margesi",
+      "hex": "1020",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "margesi.json"
+    },
+    {
+      "id": "frenzie",
+      "name": "Frenzie",
+      "hex": "1116",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "frenzie.json"
+    },
+    {
+      "id": "garda-vilis",
+      "name": "Garda-Vilis",
+      "hex": "1118",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "garda-vilis.json"
+    },
+    {
+      "id": "vilis",
+      "name": "Vilis",
+      "hex": "1119",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "vilis.json"
+    },
+    {
+      "id": "digitis",
+      "name": "Digitis",
+      "hex": "1212",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "digitis.json"
+    },
+    {
+      "id": "edinina",
+      "name": "Edinina",
+      "hex": "1213",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "edinina.json"
+    },
+    {
+      "id": "728-907",
+      "name": "728-907",
+      "hex": "1214",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "728-907.json"
+    },
+    {
+      "id": "stellatio",
+      "name": "Stellatio",
+      "hex": "1216",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "stellatio.json"
+    },
+    {
+      "id": "arkadia",
+      "name": "Arkadia",
+      "hex": "1217",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "arkadia.json"
+    },
+    {
+      "id": "tremous-dex",
+      "name": "Tremous Dex",
+      "hex": "1311",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "tremous-dex.json"
+    },
+    {
+      "id": "saurus",
+      "name": "Saurus",
+      "hex": "1320",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "saurus.json"
+    },
+    {
+      "id": "rangent",
+      "name": "Rangent",
+      "hex": "1411",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "rangent.json"
+    },
+    {
+      "id": "denotam",
+      "name": "Denotam",
+      "hex": "1413",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "denotam.json"
+    },
+    {
+      "id": "ficant",
+      "name": "Ficant",
+      "hex": "1417",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "ficant.json"
+    },
+    {
+      "id": "tionale",
+      "name": "Tionale",
+      "hex": "1511",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "tionale.json"
+    },
+    {
+      "id": "calit",
+      "name": "Calit",
+      "hex": "1515",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "calit.json"
+    },
+    {
+      "id": "asgard",
+      "name": "Asgard",
+      "hex": "1519",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "asgard.json"
+    },
+    {
+      "id": "tavonni",
+      "name": "Tavonni",
+      "hex": "1520",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "tavonni.json"
+    },
+    {
+      "id": "phlume",
+      "name": "Phlume",
+      "hex": "1611",
+      "sector": "Spinward Marches",
+      "subsector": "F",
+      "file": "phlume.json"
+    },
+    {
+      "id": "extolay",
+      "name": "Extolay",
+      "hex": "1711",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "extolay.json"
+    },
+    {
+      "id": "lanth",
+      "name": "Lanth",
+      "hex": "1719",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "lanth.json"
+    },
+    {
+      "id": "dinom",
+      "name": "Dinom",
+      "hex": "1811",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "dinom.json"
+    },
+    {
+      "id": "ghandi",
+      "name": "Ghandi",
+      "hex": "1815",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "ghandi.json"
+    },
+    {
+      "id": "victoria",
+      "name": "Victoria",
+      "hex": "1817",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "victoria.json"
+    },
+    {
+      "id": "dinomn",
+      "name": "Dinomn",
+      "hex": "1912",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "dinomn.json"
+    },
+    {
+      "id": "ylaven",
+      "name": "Ylaven",
+      "hex": "1916",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "ylaven.json"
+    },
+    {
+      "id": "sonthert",
+      "name": "Sonthert",
+      "hex": "1918",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "sonthert.json"
+    },
+    {
+      "id": "d-ganzio",
+      "name": "D'Ganzio",
+      "hex": "1920",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "d-ganzio.json"
+    },
+    {
+      "id": "wypoc",
+      "name": "Wypoc",
+      "hex": "2011",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "wypoc.json"
+    },
+    {
+      "id": "djinni",
+      "name": "Djinni",
+      "hex": "2111",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "djinni.json"
+    },
+    {
+      "id": "rech",
+      "name": "Rech",
+      "hex": "2112",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "rech.json"
+    },
+    {
+      "id": "k-kirka",
+      "name": "K'Kirka",
+      "hex": "2212",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "k-kirka.json"
+    },
+    {
+      "id": "quopist",
+      "name": "Quopist",
+      "hex": "2215",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "quopist.json"
+    },
+    {
+      "id": "treece",
+      "name": "Treece",
+      "hex": "2311",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "treece.json"
+    },
+    {
+      "id": "echiste",
+      "name": "Echiste",
+      "hex": "2313",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "echiste.json"
+    },
+    {
+      "id": "pirema",
+      "name": "Pirema",
+      "hex": "2314",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "pirema.json"
+    },
+    {
+      "id": "rhise",
+      "name": "Rhise",
+      "hex": "2317",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "rhise.json"
+    },
+    {
+      "id": "ivendo",
+      "name": "Ivendo",
+      "hex": "2319",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "ivendo.json"
+    },
+    {
+      "id": "keanou",
+      "name": "Keanou",
+      "hex": "2411",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "keanou.json"
+    },
+    {
+      "id": "tureded",
+      "name": "Tureded",
+      "hex": "2414",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "tureded.json"
+    },
+    {
+      "id": "vreibefger",
+      "name": "Vreibefger",
+      "hex": "2415",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "vreibefger.json"
+    },
+    {
+      "id": "la-belle",
+      "name": "La'Belle",
+      "hex": "2416",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "la-belle.json"
+    },
+    {
+      "id": "equus",
+      "name": "Equus",
+      "hex": "2417",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "equus.json"
+    },
+    {
+      "id": "icetina",
+      "name": "Icetina",
+      "hex": "2418",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "icetina.json"
+    },
+    {
+      "id": "cogri",
+      "name": "Cogri",
+      "hex": "2419",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "cogri.json"
+    },
+    {
+      "id": "skull",
+      "name": "Skull",
+      "hex": "2420",
+      "sector": "Spinward Marches",
+      "subsector": "G",
+      "file": "skull.json"
+    },
+    {
+      "id": "gileden",
+      "name": "Gileden",
+      "hex": "2514",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "gileden.json"
+    },
+    {
+      "id": "pannet",
+      "name": "Pannet",
+      "hex": "2519",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "pannet.json"
+    },
+    {
+      "id": "garrincski",
+      "name": "Garrincski",
+      "hex": "2520",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "garrincski.json"
+    },
+    {
+      "id": "macene",
+      "name": "Macene",
+      "hex": "2612",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "macene.json"
+    },
+    {
+      "id": "fulacin",
+      "name": "Fulacin",
+      "hex": "2613",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "fulacin.json"
+    },
+    {
+      "id": "risek",
+      "name": "Risek",
+      "hex": "2712",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "risek.json"
+    },
+    {
+      "id": "porozlo",
+      "name": "Porozlo",
+      "hex": "2715",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "porozlo.json"
+    },
+    {
+      "id": "rhylanor",
+      "name": "Rhylanor",
+      "hex": "2716",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "rhylanor.json"
+    },
+    {
+      "id": "loneseda",
+      "name": "Loneseda",
+      "hex": "2720",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "loneseda.json"
+    },
+    {
+      "id": "valhalla",
+      "name": "Valhalla",
+      "hex": "2811",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "valhalla.json"
+    },
+    {
+      "id": "zivije",
+      "name": "Zivije",
+      "hex": "2812",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "zivije.json"
+    },
+    {
+      "id": "jae-tellona",
+      "name": "Jae Tellona",
+      "hex": "2814",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "jae-tellona.json"
+    },
+    {
+      "id": "gerome",
+      "name": "Gerome",
+      "hex": "2818",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "gerome.json"
+    },
+    {
+      "id": "henoz",
+      "name": "Henoz",
+      "hex": "2912",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "henoz.json"
+    },
+    {
+      "id": "celepina",
+      "name": "Celepina",
+      "hex": "2913",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "celepina.json"
+    },
+    {
+      "id": "gitosy",
+      "name": "Gitosy",
+      "hex": "2918",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "gitosy.json"
+    },
+    {
+      "id": "belizo",
+      "name": "Belizo",
+      "hex": "3015",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "belizo.json"
+    },
+    {
+      "id": "kegena",
+      "name": "Kegena",
+      "hex": "3016",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "kegena.json"
+    },
+    {
+      "id": "heroni",
+      "name": "Heroni",
+      "hex": "3017",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "heroni.json"
+    },
+    {
+      "id": "457-973",
+      "name": "457-973",
+      "hex": "3019",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "457-973.json"
+    },
+    {
+      "id": "somem",
+      "name": "Somem",
+      "hex": "3020",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "somem.json"
+    },
+    {
+      "id": "vinorian",
+      "name": "Vinorian",
+      "hex": "3111",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "vinorian.json"
+    },
+    {
+      "id": "nutema",
+      "name": "Nutema",
+      "hex": "3112",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "nutema.json"
+    },
+    {
+      "id": "huderu",
+      "name": "Huderu",
+      "hex": "3114",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "huderu.json"
+    },
+    {
+      "id": "cipatwe",
+      "name": "Cipatwe",
+      "hex": "3118",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "cipatwe.json"
+    },
+    {
+      "id": "vanejen",
+      "name": "Vanejen",
+      "hex": "3119",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "vanejen.json"
+    },
+    {
+      "id": "bevey",
+      "name": "Bevey",
+      "hex": "3216",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "bevey.json"
+    },
+    {
+      "id": "tacaxeb",
+      "name": "Tacaxeb",
+      "hex": "3218",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "tacaxeb.json"
+    },
+    {
+      "id": "powaza",
+      "name": "Powaza",
+      "hex": "3220",
+      "sector": "Spinward Marches",
+      "subsector": "H",
+      "file": "powaza.json"
+    },
+    {
+      "id": "junction",
+      "name": "Junction",
+      "hex": "0122",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "junction.json"
+    },
+    {
+      "id": "uniqua",
+      "name": "Uniqua",
+      "hex": "0129",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "uniqua.json"
+    },
+    {
+      "id": "garoo",
+      "name": "Garoo",
+      "hex": "0130",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "garoo.json"
+    },
+    {
+      "id": "stern-stern",
+      "name": "Stern-Stern",
+      "hex": "0223",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "stern-stern.json"
+    },
+    {
+      "id": "886-945",
+      "name": "886-945",
+      "hex": "0230",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "886-945.json"
+    },
+    {
+      "id": "nonym",
+      "name": "Nonym",
+      "hex": "0321",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "nonym.json"
+    },
+    {
+      "id": "laberv",
+      "name": "Laberv",
+      "hex": "0325",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "laberv.json"
+    },
+    {
+      "id": "ektron",
+      "name": "Ektron",
+      "hex": "0326",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "ektron.json"
+    },
+    {
+      "id": "zamine",
+      "name": "Zamine",
+      "hex": "0421",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "zamine.json"
+    },
+    {
+      "id": "engrange",
+      "name": "Engrange",
+      "hex": "0425",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "engrange.json"
+    },
+    {
+      "id": "kardin",
+      "name": "Kardin",
+      "hex": "0429",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "kardin.json"
+    },
+    {
+      "id": "rorre",
+      "name": "Rorre",
+      "hex": "0526",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "rorre.json"
+    },
+    {
+      "id": "condaria",
+      "name": "Condaria",
+      "hex": "0528",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "condaria.json"
+    },
+    {
+      "id": "terant-340",
+      "name": "Terant 340",
+      "hex": "0622",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "terant-340.json"
+    },
+    {
+      "id": "jacent",
+      "name": "Jacent",
+      "hex": "0624",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "jacent.json"
+    },
+    {
+      "id": "494-908",
+      "name": "494-908",
+      "hex": "0625",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "494-908.json"
+    },
+    {
+      "id": "darrian",
+      "name": "Darrian",
+      "hex": "0627",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "darrian.json"
+    },
+    {
+      "id": "torment",
+      "name": "Torment",
+      "hex": "0721",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "torment.json"
+    },
+    {
+      "id": "trifuge",
+      "name": "Trifuge",
+      "hex": "0723",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "trifuge.json"
+    },
+    {
+      "id": "nosea",
+      "name": "Nosea",
+      "hex": "0724",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "nosea.json"
+    },
+    {
+      "id": "spume",
+      "name": "Spume",
+      "hex": "0727",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "spume.json"
+    },
+    {
+      "id": "cunnonic",
+      "name": "Cunnonic",
+      "hex": "0822",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "cunnonic.json"
+    },
+    {
+      "id": "debarre",
+      "name": "Debarre",
+      "hex": "0830",
+      "sector": "Spinward Marches",
+      "subsector": "I",
+      "file": "debarre.json"
+    },
+    {
+      "id": "hrunting",
+      "name": "Hrunting",
+      "hex": "0921",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "hrunting.json"
+    },
+    {
+      "id": "mjolnir",
+      "name": "Mjolnir",
+      "hex": "1121",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "mjolnir.json"
+    },
+    {
+      "id": "joyeuse",
+      "name": "Joyeuse",
+      "hex": "1123",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "joyeuse.json"
+    },
+    {
+      "id": "orcrist",
+      "name": "Orcrist",
+      "hex": "1126",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "orcrist.json"
+    },
+    {
+      "id": "enos",
+      "name": "Enos",
+      "hex": "1130",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "enos.json"
+    },
+    {
+      "id": "gungnir",
+      "name": "Gungnir",
+      "hex": "1221",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "gungnir.json"
+    },
+    {
+      "id": "gram",
+      "name": "Gram",
+      "hex": "1223",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "gram.json"
+    },
+    {
+      "id": "excalibur",
+      "name": "Excalibur",
+      "hex": "1225",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "excalibur.json"
+    },
+    {
+      "id": "tyrfing",
+      "name": "Tyrfing",
+      "hex": "1324",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "tyrfing.json"
+    },
+    {
+      "id": "sacnoth",
+      "name": "Sacnoth",
+      "hex": "1325",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "sacnoth.json"
+    },
+    {
+      "id": "caladbolg",
+      "name": "Caladbolg",
+      "hex": "1329",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "caladbolg.json"
+    },
+    {
+      "id": "beater",
+      "name": "Beater",
+      "hex": "1424",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "beater.json"
+    },
+    {
+      "id": "gunn",
+      "name": "Gunn",
+      "hex": "1429",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "gunn.json"
+    },
+    {
+      "id": "caliburn",
+      "name": "Caliburn",
+      "hex": "1430",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "caliburn.json"
+    },
+    {
+      "id": "dyrnwyn",
+      "name": "Dyrnwyn",
+      "hex": "1522",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "dyrnwyn.json"
+    },
+    {
+      "id": "durendal",
+      "name": "Durendal",
+      "hex": "1523",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "durendal.json"
+    },
+    {
+      "id": "hofud",
+      "name": "Hofud",
+      "hex": "1524",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "hofud.json"
+    },
+    {
+      "id": "sting",
+      "name": "Sting",
+      "hex": "1525",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "sting.json"
+    },
+    {
+      "id": "biter",
+      "name": "Biter",
+      "hex": "1526",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "biter.json"
+    },
+    {
+      "id": "steel",
+      "name": "Steel",
+      "hex": "1529",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "steel.json"
+    },
+    {
+      "id": "iron",
+      "name": "Iron",
+      "hex": "1626",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "iron.json"
+    },
+    {
+      "id": "bronze",
+      "name": "Bronze",
+      "hex": "1627",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "bronze.json"
+    },
+    {
+      "id": "mithril",
+      "name": "Mithril",
+      "hex": "1628",
+      "sector": "Spinward Marches",
+      "subsector": "J",
+      "file": "mithril.json"
+    },
+    {
+      "id": "arba",
+      "name": "Arba",
+      "hex": "1721",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "arba.json"
+    },
+    {
+      "id": "wardn",
+      "name": "Wardn",
+      "hex": "1727",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "wardn.json"
+    },
+    {
+      "id": "olympia",
+      "name": "Olympia",
+      "hex": "1728",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "olympia.json"
+    },
+    {
+      "id": "smoug",
+      "name": "Smoug",
+      "hex": "1729",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "smoug.json"
+    },
+    {
+      "id": "rabwhar",
+      "name": "Rabwhar",
+      "hex": "1822",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "rabwhar.json"
+    },
+    {
+      "id": "adabicci",
+      "name": "Adabicci",
+      "hex": "1824",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "adabicci.json"
+    },
+    {
+      "id": "zaibon",
+      "name": "Zaibon",
+      "hex": "1825",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "zaibon.json"
+    },
+    {
+      "id": "tenalphi",
+      "name": "Tenalphi",
+      "hex": "1826",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "tenalphi.json"
+    },
+    {
+      "id": "ianic",
+      "name": "Ianic",
+      "hex": "1924",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "ianic.json"
+    },
+    {
+      "id": "spirelle",
+      "name": "Spirelle",
+      "hex": "1927",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "spirelle.json"
+    },
+    {
+      "id": "derchon",
+      "name": "Derchon",
+      "hex": "2024",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "derchon.json"
+    },
+    {
+      "id": "lunion",
+      "name": "Lunion",
+      "hex": "2124",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "lunion.json"
+    },
+    {
+      "id": "shirene",
+      "name": "Shirene",
+      "hex": "2125",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "shirene.json"
+    },
+    {
+      "id": "penkwhar",
+      "name": "Penkwhar",
+      "hex": "2128",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "penkwhar.json"
+    },
+    {
+      "id": "harvosette",
+      "name": "Harvosette",
+      "hex": "2129",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "harvosette.json"
+    },
+    {
+      "id": "carse",
+      "name": "Carse",
+      "hex": "2224",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "carse.json"
+    },
+    {
+      "id": "persephone",
+      "name": "Persephone",
+      "hex": "2228",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "persephone.json"
+    },
+    {
+      "id": "quiru",
+      "name": "Quiru",
+      "hex": "2321",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "quiru.json"
+    },
+    {
+      "id": "gorram",
+      "name": "Gorram",
+      "hex": "2322",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "gorram.json"
+    },
+    {
+      "id": "resten",
+      "name": "Resten",
+      "hex": "2323",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "resten.json"
+    },
+    {
+      "id": "capon",
+      "name": "Capon",
+      "hex": "2324",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "capon.json"
+    },
+    {
+      "id": "sharrip",
+      "name": "Sharrip",
+      "hex": "2325",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "sharrip.json"
+    },
+    {
+      "id": "strouden",
+      "name": "Strouden",
+      "hex": "2327",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "strouden.json"
+    },
+    {
+      "id": "gandr",
+      "name": "Gandr",
+      "hex": "2425",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "gandr.json"
+    },
+    {
+      "id": "drolraw",
+      "name": "Drolraw",
+      "hex": "2426",
+      "sector": "Spinward Marches",
+      "subsector": "K",
+      "file": "drolraw.json"
+    },
+    {
+      "id": "byret",
+      "name": "Byret",
+      "hex": "2523",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "byret.json"
+    },
+    {
+      "id": "pimane",
+      "name": "Pimane",
+      "hex": "2527",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "pimane.json"
+    },
+    {
+      "id": "fosey",
+      "name": "Fosey",
+      "hex": "2621",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "fosey.json"
+    },
+    {
+      "id": "mercury",
+      "name": "Mercury",
+      "hex": "2624",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "mercury.json"
+    },
+    {
+      "id": "tivid",
+      "name": "Tivid",
+      "hex": "2627",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "tivid.json"
+    },
+    {
+      "id": "carey",
+      "name": "Carey",
+      "hex": "2726",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "carey.json"
+    },
+    {
+      "id": "duale",
+      "name": "Duale",
+      "hex": "2728",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "duale.json"
+    },
+    {
+      "id": "catuz",
+      "name": "Catuz",
+      "hex": "2824",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "catuz.json"
+    },
+    {
+      "id": "meleto",
+      "name": "Meleto",
+      "hex": "2827",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "meleto.json"
+    },
+    {
+      "id": "hexos",
+      "name": "Hexos",
+      "hex": "2828",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "hexos.json"
+    },
+    {
+      "id": "pedase",
+      "name": "Pedase",
+      "hex": "2830",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "pedase.json"
+    },
+    {
+      "id": "moran",
+      "name": "Moran",
+      "hex": "2924",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "moran.json"
+    },
+    {
+      "id": "maitz",
+      "name": "Maitz",
+      "hex": "2927",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "maitz.json"
+    },
+    {
+      "id": "mainz",
+      "name": "Mainz",
+      "hex": "2930",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "mainz.json"
+    },
+    {
+      "id": "brodie",
+      "name": "Brodie",
+      "hex": "3021",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "brodie.json"
+    },
+    {
+      "id": "rorise",
+      "name": "Rorise",
+      "hex": "3022",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "rorise.json"
+    },
+    {
+      "id": "jokotre",
+      "name": "Jokotre",
+      "hex": "3024",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "jokotre.json"
+    },
+    {
+      "id": "fornice",
+      "name": "Fornice",
+      "hex": "3025",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "fornice.json"
+    },
+    {
+      "id": "grille",
+      "name": "Grille",
+      "hex": "3026",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "grille.json"
+    },
+    {
+      "id": "palique",
+      "name": "Palique",
+      "hex": "3029",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "palique.json"
+    },
+    {
+      "id": "nexine",
+      "name": "Nexine",
+      "hex": "3030",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "nexine.json"
+    },
+    {
+      "id": "nadrin",
+      "name": "Nadrin",
+      "hex": "3123",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "nadrin.json"
+    },
+    {
+      "id": "dojodo",
+      "name": "Dojodo",
+      "hex": "3223",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "dojodo.json"
+    },
+    {
+      "id": "fenl-s-gren",
+      "name": "Fenl's Gren",
+      "hex": "3228",
+      "sector": "Spinward Marches",
+      "subsector": "L",
+      "file": "fenl-s-gren.json"
+    },
+    {
+      "id": "876-574",
+      "name": "876-574",
+      "hex": "0140",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "876-574.json"
+    },
+    {
+      "id": "saxe",
+      "name": "Saxe",
+      "hex": "0231",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "saxe.json"
+    },
+    {
+      "id": "andor",
+      "name": "Andor",
+      "hex": "0236",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "andor.json"
+    },
+    {
+      "id": "769-422",
+      "name": "769-422",
+      "hex": "0240",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "769-422.json"
+    },
+    {
+      "id": "gothe",
+      "name": "Gothe",
+      "hex": "0332",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "gothe.json"
+    },
+    {
+      "id": "candory",
+      "name": "Candory",
+      "hex": "0336",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "candory.json"
+    },
+    {
+      "id": "wonderay",
+      "name": "Wonderay",
+      "hex": "0340",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "wonderay.json"
+    },
+    {
+      "id": "jone",
+      "name": "Jone",
+      "hex": "0433",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "jone.json"
+    },
+    {
+      "id": "jinx",
+      "name": "Jinx",
+      "hex": "0440",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "jinx.json"
+    },
+    {
+      "id": "ucella",
+      "name": "Ucella",
+      "hex": "0532",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "ucella.json"
+    },
+    {
+      "id": "penelope",
+      "name": "Penelope",
+      "hex": "0533",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "penelope.json"
+    },
+    {
+      "id": "froin",
+      "name": "Froin",
+      "hex": "0539",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "froin.json"
+    },
+    {
+      "id": "gohature",
+      "name": "Gohature",
+      "hex": "0632",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "gohature.json"
+    },
+    {
+      "id": "quhaiathat",
+      "name": "Quhaiathat",
+      "hex": "0637",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "quhaiathat.json"
+    },
+    {
+      "id": "lakou",
+      "name": "Lakou",
+      "hex": "0638",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "lakou.json"
+    },
+    {
+      "id": "ralhe",
+      "name": "Ralhe",
+      "hex": "0731",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "ralhe.json"
+    },
+    {
+      "id": "iderati",
+      "name": "Iderati",
+      "hex": "0732",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "iderati.json"
+    },
+    {
+      "id": "tondoul",
+      "name": "Tondoul",
+      "hex": "0739",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "tondoul.json"
+    },
+    {
+      "id": "875-496",
+      "name": "875-496",
+      "hex": "0834",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "875-496.json"
+    },
+    {
+      "id": "ochecate",
+      "name": "Ochecate",
+      "hex": "0837",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "ochecate.json"
+    },
+    {
+      "id": "mewey",
+      "name": "Mewey",
+      "hex": "0838",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "mewey.json"
+    },
+    {
+      "id": "975-452",
+      "name": "975-452",
+      "hex": "0840",
+      "sector": "Spinward Marches",
+      "subsector": "M",
+      "file": "975-452.json"
+    },
+    {
       "id": "mora",
       "name": "Mora",
       "hex": "3124",
       "sector": "Spinward Marches",
       "subsector": "Mora",
       "file": "mora.json"
+    },
+    {
+      "id": "inchin",
+      "name": "Inchin",
+      "hex": "0938",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "inchin.json"
+    },
+    {
+      "id": "singer",
+      "name": "Singer",
+      "hex": "0940",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "singer.json"
+    },
+    {
+      "id": "avastan",
+      "name": "Avastan",
+      "hex": "1037",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "avastan.json"
+    },
+    {
+      "id": "kuai-qing",
+      "name": "Kuai Qing",
+      "hex": "1040",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "kuai-qing.json"
+    },
+    {
+      "id": "faldor",
+      "name": "Faldor",
+      "hex": "1131",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "faldor.json"
+    },
+    {
+      "id": "squallia",
+      "name": "Squallia",
+      "hex": "1133",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "squallia.json"
+    },
+    {
+      "id": "tarsus",
+      "name": "Tarsus",
+      "hex": "1138",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "tarsus.json"
+    },
+    {
+      "id": "walston",
+      "name": "Walston",
+      "hex": "1232",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "walston.json"
+    },
+    {
+      "id": "flexos",
+      "name": "Flexos",
+      "hex": "1233",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "flexos.json"
+    },
+    {
+      "id": "pavabid",
+      "name": "Pavabid",
+      "hex": "1238",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "pavabid.json"
+    },
+    {
+      "id": "datrillian",
+      "name": "Datrillian",
+      "hex": "1331",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "datrillian.json"
+    },
+    {
+      "id": "nirton",
+      "name": "Nirton",
+      "hex": "1332",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "nirton.json"
+    },
+    {
+      "id": "judice",
+      "name": "Judice",
+      "hex": "1337",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "judice.json"
+    },
+    {
+      "id": "trexalon",
+      "name": "Trexalon",
+      "hex": "1339",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "trexalon.json"
+    },
+    {
+      "id": "motmos",
+      "name": "Motmos",
+      "hex": "1340",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "motmos.json"
+    },
+    {
+      "id": "noctocol",
+      "name": "Noctocol",
+      "hex": "1433",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "noctocol.json"
+    },
+    {
+      "id": "tarkine",
+      "name": "Tarkine",
+      "hex": "1434",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "tarkine.json"
+    },
+    {
+      "id": "dallia",
+      "name": "Dallia",
+      "hex": "1435",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "dallia.json"
+    },
+    {
+      "id": "talos",
+      "name": "Talos",
+      "hex": "1436",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "talos.json"
+    },
+    {
+      "id": "dawnworld",
+      "name": "Dawnworld",
+      "hex": "1531",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "dawnworld.json"
+    },
+    {
+      "id": "elixabeth",
+      "name": "Elixabeth",
+      "hex": "1532",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "elixabeth.json"
+    },
+    {
+      "id": "forine",
+      "name": "Forine",
+      "hex": "1533",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "forine.json"
+    },
+    {
+      "id": "mertactor",
+      "name": "Mertactor",
+      "hex": "1537",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "mertactor.json"
+    },
+    {
+      "id": "talchek",
+      "name": "Talchek",
+      "hex": "1631",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "talchek.json"
+    },
+    {
+      "id": "milagro",
+      "name": "Milagro",
+      "hex": "1632",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "milagro.json"
+    },
+    {
+      "id": "pagaton",
+      "name": "Pagaton",
+      "hex": "1634",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "pagaton.json"
+    },
+    {
+      "id": "binges",
+      "name": "Binges",
+      "hex": "1635",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "binges.json"
+    },
+    {
+      "id": "mille-falcs",
+      "name": "Mille Falcs",
+      "hex": "1637",
+      "sector": "Spinward Marches",
+      "subsector": "N",
+      "file": "mille-falcs.json"
+    },
+    {
+      "id": "grote",
+      "name": "Grote",
+      "hex": "1731",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "grote.json"
+    },
+    {
+      "id": "lydia",
+      "name": "Lydia",
+      "hex": "1733",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "lydia.json"
+    },
+    {
+      "id": "melior",
+      "name": "Melior",
+      "hex": "1736",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "melior.json"
+    },
+    {
+      "id": "egypt",
+      "name": "Egypt",
+      "hex": "1737",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "egypt.json"
+    },
+    {
+      "id": "aster",
+      "name": "Aster",
+      "hex": "1739",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "aster.json"
+    },
+    {
+      "id": "callia",
+      "name": "Callia",
+      "hex": "1836",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "callia.json"
+    },
+    {
+      "id": "mithras",
+      "name": "Mithras",
+      "hex": "1932",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "mithras.json"
+    },
+    {
+      "id": "weiss",
+      "name": "Weiss",
+      "hex": "1934",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "weiss.json"
+    },
+    {
+      "id": "windsor",
+      "name": "Windsor",
+      "hex": "1935",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "windsor.json"
+    },
+    {
+      "id": "overnale",
+      "name": "Overnale",
+      "hex": "1937",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "overnale.json"
+    },
+    {
+      "id": "new-rome",
+      "name": "New Rome",
+      "hex": "1938",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "new-rome.json"
+    },
+    {
+      "id": "craw",
+      "name": "Craw",
+      "hex": "1939",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "craw.json"
+    },
+    {
+      "id": "aki",
+      "name": "Aki",
+      "hex": "2035",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "aki.json"
+    },
+    {
+      "id": "glisten",
+      "name": "Glisten",
+      "hex": "2036",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "glisten.json"
+    },
+    {
+      "id": "trane",
+      "name": "Trane",
+      "hex": "2038",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "trane.json"
+    },
+    {
+      "id": "centry",
+      "name": "Centry",
+      "hex": "2132",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "centry.json"
+    },
+    {
+      "id": "caledonia",
+      "name": "Caledonia",
+      "hex": "2134",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "caledonia.json"
+    },
+    {
+      "id": "sorel",
+      "name": "Sorel",
+      "hex": "2137",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "sorel.json"
+    },
+    {
+      "id": "horosho",
+      "name": "Horosho",
+      "hex": "2138",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "horosho.json"
+    },
+    {
+      "id": "romar",
+      "name": "Romar",
+      "hex": "2140",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "romar.json"
+    },
+    {
+      "id": "marastan",
+      "name": "Marastan",
+      "hex": "2231",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "marastan.json"
+    },
+    {
+      "id": "crout",
+      "name": "Crout",
+      "hex": "2232",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "crout.json"
+    },
+    {
+      "id": "tirem",
+      "name": "Tirem",
+      "hex": "2233",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "tirem.json"
+    },
+    {
+      "id": "tsarina",
+      "name": "Tsarina",
+      "hex": "2236",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "tsarina.json"
+    },
+    {
+      "id": "wurzburg",
+      "name": "Wurzburg",
+      "hex": "2237",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "wurzburg.json"
+    },
+    {
+      "id": "bicornn",
+      "name": "Bicornn",
+      "hex": "2331",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "bicornn.json"
+    },
+    {
+      "id": "ffudn",
+      "name": "Ffudn",
+      "hex": "2334",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "ffudn.json"
+    },
+    {
+      "id": "bendor",
+      "name": "Bendor",
+      "hex": "2336",
+      "sector": "Spinward Marches",
+      "subsector": "O",
+      "file": "bendor.json"
+    },
+    {
+      "id": "burtson",
+      "name": "Burtson",
+      "hex": "2534",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "burtson.json"
+    },
+    {
+      "id": "squanine",
+      "name": "Squanine",
+      "hex": "2536",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "squanine.json"
+    },
+    {
+      "id": "dobham",
+      "name": "Dobham",
+      "hex": "2537",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "dobham.json"
+    },
+    {
+      "id": "pyramus",
+      "name": "Pyramus",
+      "hex": "2538",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "pyramus.json"
+    },
+    {
+      "id": "thisbe",
+      "name": "Thisbe",
+      "hex": "2539",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "thisbe.json"
+    },
+    {
+      "id": "robin",
+      "name": "Robin",
+      "hex": "2637",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "robin.json"
+    },
+    {
+      "id": "d-mara",
+      "name": "D'Mara",
+      "hex": "2638",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "d-mara.json"
+    },
+    {
+      "id": "keltchner",
+      "name": "Keltchner",
+      "hex": "2639",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "keltchner.json"
+    },
+    {
+      "id": "tussinian",
+      "name": "Tussinian",
+      "hex": "2731",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "tussinian.json"
+    },
+    {
+      "id": "edenelt",
+      "name": "Edenelt",
+      "hex": "2733",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "edenelt.json"
+    },
+    {
+      "id": "conway",
+      "name": "Conway",
+      "hex": "2735",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "conway.json"
+    },
+    {
+      "id": "dodds",
+      "name": "Dodds",
+      "hex": "2739",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "dodds.json"
+    },
+    {
+      "id": "leander",
+      "name": "Leander",
+      "hex": "2832",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "leander.json"
+    },
+    {
+      "id": "pepernium",
+      "name": "Pepernium",
+      "hex": "2833",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "pepernium.json"
+    },
+    {
+      "id": "traltha",
+      "name": "Traltha",
+      "hex": "2834",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "traltha.json"
+    },
+    {
+      "id": "farquahar",
+      "name": "Farquahar",
+      "hex": "2839",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "farquahar.json"
+    },
+    {
+      "id": "raydrad",
+      "name": "Raydrad",
+      "hex": "2933",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "raydrad.json"
+    },
+    {
+      "id": "zyra",
+      "name": "Zyra",
+      "hex": "2934",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "zyra.json"
+    },
+    {
+      "id": "murchison",
+      "name": "Murchison",
+      "hex": "2935",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "murchison.json"
+    },
+    {
+      "id": "hammermium",
+      "name": "Hammermium",
+      "hex": "2936",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "hammermium.json"
+    },
+    {
+      "id": "thornnastor",
+      "name": "Thornnastor",
+      "hex": "2940",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "thornnastor.json"
+    },
+    {
+      "id": "katarulu",
+      "name": "Katarulu",
+      "hex": "3032",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "katarulu.json"
+    },
+    {
+      "id": "prilissa",
+      "name": "Prilissa",
+      "hex": "3035",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "prilissa.json"
+    },
+    {
+      "id": "tee-tee-tee",
+      "name": "Tee-Tee-Tee",
+      "hex": "3038",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "tee-tee-tee.json"
+    },
+    {
+      "id": "youghal",
+      "name": "Youghal",
+      "hex": "3039",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "youghal.json"
+    },
+    {
+      "id": "tenelphi",
+      "name": "Tenelphi",
+      "hex": "3040",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "tenelphi.json"
+    },
+    {
+      "id": "zephyr",
+      "name": "Zephyr",
+      "hex": "3138",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "zephyr.json"
+    },
+    {
+      "id": "chamois",
+      "name": "Chamois",
+      "hex": "3139",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "chamois.json"
+    },
+    {
+      "id": "ramiva",
+      "name": "Ramiva",
+      "hex": "3233",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "ramiva.json"
+    },
+    {
+      "id": "trin",
+      "name": "Trin",
+      "hex": "3235",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "trin.json"
+    },
+    {
+      "id": "hazel",
+      "name": "Hazel",
+      "hex": "3236",
+      "sector": "Spinward Marches",
+      "subsector": "P",
+      "file": "hazel.json"
     }
   ],
   "subsectors": [
+    "A",
+    "B",
+    "C",
+    "D",
     "Darrian",
     "District 268",
+    "E",
+    "F",
     "Five Sisters",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
     "Mora",
+    "N",
     "N/A",
+    "O",
+    "P",
     "Sword Worlds"
   ]
 }

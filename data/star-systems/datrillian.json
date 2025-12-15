@@ -1,0 +1,89 @@
+{
+  "id": "datrillian",
+  "name": "Datrillian",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1331",
+  "uwp": "E427633-8",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Datrillian_(world)",
+  "celestialObjects": [
+    {
+      "id": "datrillian-star",
+      "name": "Datrillian Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "datrillian-mainworld",
+      "name": "Datrillian",
+      "type": "Planet",
+      "orbitAU": 0.6494722082524891,
+      "bearing": 174,
+      "radiusKm": 4000,
+      "uwp": "E427633-8",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "DATRILLIAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "datrillian-gasgiant",
+      "name": "Datrillian Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.980261486680649,
+      "bearing": 214,
+      "radiusKm": 52986.59146529444,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "datrillian-mainworld",
+    "starport": "datrillian-mainworld",
+    "orbit": "datrillian-mainworld"
+  }
+}

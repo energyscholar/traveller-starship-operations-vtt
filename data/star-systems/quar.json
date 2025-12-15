@@ -1,0 +1,93 @@
+{
+  "id": "quar",
+  "name": "Quar",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0808",
+  "uwp": "B532720-B",
+  "tradeCodes": [
+    "Na",
+    "Po",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Quar_(world)",
+  "celestialObjects": [
+    {
+      "id": "quar-star",
+      "name": "Quar Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "quar-mainworld",
+      "name": "Quar",
+      "type": "Planet",
+      "orbitAU": 1.3229605157478224,
+      "bearing": 50,
+      "radiusKm": 4800,
+      "uwp": "B532720-B",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "QUAR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "quar-highport",
+      "name": "Quar Highport",
+      "type": "Highport",
+      "parent": "quar-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "QUAR HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "quar-mainworld",
+    "starport": "quar-highport",
+    "orbit": "quar-mainworld"
+  }
+}

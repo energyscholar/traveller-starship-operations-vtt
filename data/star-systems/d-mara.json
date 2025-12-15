@@ -1,0 +1,74 @@
+{
+  "id": "d-mara",
+  "name": "D'Mara",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2638",
+  "uwp": "E75A798-5",
+  "tradeCodes": [
+    "Wa",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/D'Mara_(world)",
+  "celestialObjects": [
+    {
+      "id": "d-mara-star",
+      "name": "D'Mara Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "d-mara-mainworld",
+      "name": "D'Mara",
+      "type": "Planet",
+      "orbitAU": 1.1029605748254598,
+      "bearing": 208,
+      "radiusKm": 6400,
+      "uwp": "E75A798-5",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "D'MARA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "d-mara-mainworld",
+    "starport": "d-mara-mainworld",
+    "orbit": "d-mara-mainworld"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "dojodo",
+  "name": "Dojodo",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "3223",
+  "uwp": "C512311-7",
+  "tradeCodes": [
+    "Ic",
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Dojodo_(world)",
+  "celestialObjects": [
+    {
+      "id": "dojodo-star",
+      "name": "Dojodo Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "dojodo-mainworld",
+      "name": "Dojodo",
+      "type": "Planet",
+      "orbitAU": 0.7665415407749367,
+      "bearing": 291,
+      "radiusKm": 4800,
+      "uwp": "C512311-7",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "DOJODO CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "dojodo-gasgiant",
+      "name": "Dojodo Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.884531910880518,
+      "bearing": 106,
+      "radiusKm": 50753.41631633145,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "dojodo-mainworld",
+    "starport": "dojodo-mainworld",
+    "orbit": "dojodo-mainworld"
+  }
+}

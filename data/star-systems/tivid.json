@@ -1,0 +1,73 @@
+{
+  "id": "tivid",
+  "name": "Tivid",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "2627",
+  "uwp": "C534477-8",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Tivid_(world)",
+  "celestialObjects": [
+    {
+      "id": "tivid-star",
+      "name": "Tivid Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "tivid-mainworld",
+      "name": "Tivid",
+      "type": "Planet",
+      "orbitAU": 1.2700474139519051,
+      "bearing": 275,
+      "radiusKm": 4800,
+      "uwp": "C534477-8",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "TIVID CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "tivid-mainworld",
+    "starport": "tivid-mainworld",
+    "orbit": "tivid-mainworld"
+  }
+}

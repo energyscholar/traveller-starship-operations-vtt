@@ -1,0 +1,89 @@
+{
+  "id": "jenghe",
+  "name": "Jenghe",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1810",
+  "uwp": "C799663-9",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Jenghe_(world)",
+  "celestialObjects": [
+    {
+      "id": "jenghe-star",
+      "name": "Jenghe Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "jenghe-mainworld",
+      "name": "Jenghe",
+      "type": "Planet",
+      "orbitAU": 2.431276832107848,
+      "bearing": 222,
+      "radiusKm": 6400,
+      "uwp": "C799663-9",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "JENGHE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "jenghe-gasgiant",
+      "name": "Jenghe Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.833350273376985,
+      "bearing": 212,
+      "radiusKm": 51116.71213774593,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "jenghe-mainworld",
+    "starport": "jenghe-mainworld",
+    "orbit": "jenghe-mainworld"
+  }
+}

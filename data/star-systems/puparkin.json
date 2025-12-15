@@ -1,0 +1,90 @@
+{
+  "id": "puparkin",
+  "name": "Puparkin",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "0902",
+  "uwp": "C7B3386-9",
+  "tradeCodes": [
+    "Fl",
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Puparkin_(world)",
+  "celestialObjects": [
+    {
+      "id": "puparkin-star",
+      "name": "Puparkin Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "puparkin-mainworld",
+      "name": "Puparkin",
+      "type": "Planet",
+      "orbitAU": 1.8990775483915048,
+      "bearing": 196,
+      "radiusKm": 6400,
+      "uwp": "C7B3386-9",
+      "atmosphere": "Corrosive",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "PUPARKIN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "puparkin-gasgiant",
+      "name": "Puparkin Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.544071390631976,
+      "bearing": 52,
+      "radiusKm": 50141.17000534659,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "puparkin-mainworld",
+    "starport": "puparkin-mainworld",
+    "orbit": "puparkin-mainworld"
+  }
+}

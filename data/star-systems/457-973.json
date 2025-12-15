@@ -1,0 +1,76 @@
+{
+  "id": "457-973",
+  "name": "457-973",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "3019",
+  "uwp": "X572776-5",
+  "tradeCodes": [
+    "He",
+    "Pi",
+    "Fo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "None starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/457-973_(world)",
+  "celestialObjects": [
+    {
+      "id": "457-973-star",
+      "name": "457-973 Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "457-973-mainworld",
+      "name": "457-973",
+      "type": "Planet",
+      "orbitAU": 1.0795655033428526,
+      "bearing": 112,
+      "radiusKm": 4800,
+      "uwp": "X572776-5",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "457-973 CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "457-973-mainworld",
+    "starport": "457-973-mainworld",
+    "orbit": "457-973-mainworld"
+  }
+}

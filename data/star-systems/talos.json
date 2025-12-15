@@ -1,0 +1,90 @@
+{
+  "id": "talos",
+  "name": "Talos",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1436",
+  "uwp": "E433532-9",
+  "tradeCodes": [
+    "Ni",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Talos_(world)",
+  "celestialObjects": [
+    {
+      "id": "talos-star",
+      "name": "Talos Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "talos-mainworld",
+      "name": "Talos",
+      "type": "Planet",
+      "orbitAU": 1.3127649748731418,
+      "bearing": 71,
+      "radiusKm": 4000,
+      "uwp": "E433532-9",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "TALOS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "talos-gasgiant",
+      "name": "Talos Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.7381733002306365,
+      "bearing": 79,
+      "radiusKm": 53466.55843358067,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "talos-mainworld",
+    "starport": "talos-mainworld",
+    "orbit": "talos-mainworld"
+  }
+}

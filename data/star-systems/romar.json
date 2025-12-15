@@ -1,0 +1,109 @@
+{
+  "id": "romar",
+  "name": "Romar",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2140",
+  "uwp": "B550456-8",
+  "tradeCodes": [
+    "De",
+    "Ni",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Romar_(world)",
+  "celestialObjects": [
+    {
+      "id": "romar-star",
+      "name": "Romar Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "romar-mainworld",
+      "name": "Romar",
+      "type": "Planet",
+      "orbitAU": 1.1278978315161698,
+      "bearing": 140,
+      "radiusKm": 4800,
+      "uwp": "B550456-8",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ROMAR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "romar-highport",
+      "name": "Romar Highport",
+      "type": "Highport",
+      "parent": "romar-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ROMAR HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "romar-gasgiant",
+      "name": "Romar Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.081684102105745,
+      "bearing": 209,
+      "radiusKm": 52184.924657130345,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "romar-mainworld",
+    "starport": "romar-highport",
+    "orbit": "romar-mainworld"
+  }
+}

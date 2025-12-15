@@ -1,0 +1,92 @@
+{
+  "id": "dodds",
+  "name": "Dodds",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2739",
+  "uwp": "C5439DF-7",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Po",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Dodds_(world)",
+  "celestialObjects": [
+    {
+      "id": "dodds-star",
+      "name": "Dodds Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "dodds-mainworld",
+      "name": "Dodds",
+      "type": "Planet",
+      "orbitAU": 1.1892602037786995,
+      "bearing": 83,
+      "radiusKm": 4800,
+      "uwp": "C5439DF-7",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "DODDS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "dodds-gasgiant",
+      "name": "Dodds Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.355358185731205,
+      "bearing": 11,
+      "radiusKm": 62076.03664368673,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "dodds-mainworld",
+    "starport": "dodds-mainworld",
+    "orbit": "dodds-mainworld"
+  }
+}

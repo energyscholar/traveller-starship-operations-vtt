@@ -1,0 +1,90 @@
+{
+  "id": "pannet",
+  "name": "Pannet",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2519",
+  "uwp": "E9C5677-9",
+  "tradeCodes": [
+    "Fl",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pannet_(world)",
+  "celestialObjects": [
+    {
+      "id": "pannet-star",
+      "name": "Pannet Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pannet-mainworld",
+      "name": "Pannet",
+      "type": "Planet",
+      "orbitAU": 2.042107996902921,
+      "bearing": 233,
+      "radiusKm": 8000,
+      "uwp": "E9C5677-9",
+      "atmosphere": "Insidious",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "PANNET CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "pannet-gasgiant",
+      "name": "Pannet Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.802361161651466,
+      "bearing": 238,
+      "radiusKm": 51318.671679955136,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pannet-mainworld",
+    "starport": "pannet-mainworld",
+    "orbit": "pannet-mainworld"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "id": "ninjar",
+  "name": "Ninjar",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0608",
+  "uwp": "A311666-C",
+  "tradeCodes": [
+    "Ic",
+    "Na",
+    "Ni",
+    "Mr",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ninjar_(world)",
+  "celestialObjects": [
+    {
+      "id": "ninjar-star",
+      "name": "Ninjar Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ninjar-mainworld",
+      "name": "Ninjar",
+      "type": "Planet",
+      "orbitAU": 0.7487573196427847,
+      "bearing": 64,
+      "radiusKm": 3200,
+      "uwp": "A311666-C",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "NINJAR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ninjar-highport",
+      "name": "Ninjar Highport",
+      "type": "Highport",
+      "parent": "ninjar-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "NINJAR HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "ninjar-gasgiant",
+      "name": "Ninjar Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.7628387588552545,
+      "bearing": 210,
+      "radiusKm": 51162.58248920488,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ninjar-mainworld",
+    "starport": "ninjar-highport",
+    "orbit": "ninjar-mainworld"
+  }
+}

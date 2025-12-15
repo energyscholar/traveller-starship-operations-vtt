@@ -1,0 +1,110 @@
+{
+  "id": "alell",
+  "name": "Alell",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1706",
+  "uwp": "B56789C-A",
+  "tradeCodes": [
+    "Ri",
+    "Pa",
+    "Ph",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Alell_(world)",
+  "celestialObjects": [
+    {
+      "id": "alell-star",
+      "name": "Alell Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "alell-mainworld",
+      "name": "Alell",
+      "type": "Planet",
+      "orbitAU": 0.972243933615445,
+      "bearing": 182,
+      "radiusKm": 4800,
+      "uwp": "B56789C-A",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ALELL CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "alell-highport",
+      "name": "Alell Highport",
+      "type": "Highport",
+      "parent": "alell-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ALELL HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "alell-gasgiant",
+      "name": "Alell Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.392450139360449,
+      "bearing": 170,
+      "radiusKm": 53828.09524739048,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "alell-mainworld",
+    "starport": "alell-highport",
+    "orbit": "alell-mainworld"
+  }
+}

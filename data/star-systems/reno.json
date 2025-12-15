@@ -1,0 +1,94 @@
+{
+  "id": "reno",
+  "name": "Reno",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0102",
+  "uwp": "C4207B9-A",
+  "tradeCodes": [
+    "De",
+    "He",
+    "Na",
+    "Po",
+    "Pi",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Reno_(world)",
+  "celestialObjects": [
+    {
+      "id": "reno-star",
+      "name": "Reno Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "reno-mainworld",
+      "name": "Reno",
+      "type": "Planet",
+      "orbitAU": 0.4050484399262357,
+      "bearing": 5,
+      "radiusKm": 4000,
+      "uwp": "C4207B9-A",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "RENO CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "reno-gasgiant",
+      "name": "Reno Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.1255196441026145,
+      "bearing": 285,
+      "radiusKm": 64900.490646839615,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "reno-mainworld",
+    "starport": "reno-mainworld",
+    "orbit": "reno-mainworld"
+  }
+}

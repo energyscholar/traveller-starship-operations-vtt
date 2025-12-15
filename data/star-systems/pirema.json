@@ -1,0 +1,75 @@
+{
+  "id": "pirema",
+  "name": "Pirema",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2314",
+  "uwp": "D691142-5",
+  "tradeCodes": [
+    "He",
+    "Lo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pirema_(world)",
+  "celestialObjects": [
+    {
+      "id": "pirema-star",
+      "name": "Pirema Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pirema-mainworld",
+      "name": "Pirema",
+      "type": "Planet",
+      "orbitAU": 1.9962315269726942,
+      "bearing": 209,
+      "radiusKm": 5600,
+      "uwp": "D691142-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "PIREMA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pirema-mainworld",
+    "starport": "pirema-mainworld",
+    "orbit": "pirema-mainworld"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "id": "cogri",
+  "name": "Cogri",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2419",
+  "uwp": "CA6A643-9",
+  "tradeCodes": [
+    "Ni",
+    "Oc",
+    "Ri"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Cogri_(world)",
+  "celestialObjects": [
+    {
+      "id": "cogri-star",
+      "name": "Cogri Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "cogri-mainworld",
+      "name": "Cogri",
+      "type": "Planet",
+      "orbitAU": 0.9989292385825354,
+      "bearing": 199,
+      "radiusKm": 8800,
+      "uwp": "CA6A643-9",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "COGRI CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "cogri-gasgiant",
+      "name": "Cogri Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.559430420732175,
+      "bearing": 32,
+      "radiusKm": 69367.78600111668,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "cogri-mainworld",
+    "starport": "cogri-mainworld",
+    "orbit": "cogri-mainworld"
+  }
+}

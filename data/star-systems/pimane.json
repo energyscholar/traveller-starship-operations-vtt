@@ -1,0 +1,90 @@
+{
+  "id": "pimane",
+  "name": "Pimane",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "2527",
+  "uwp": "E500343-7",
+  "tradeCodes": [
+    "Lo",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pimane_(world)",
+  "celestialObjects": [
+    {
+      "id": "pimane-star",
+      "name": "Pimane Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pimane-mainworld",
+      "name": "Pimane",
+      "type": "Planet",
+      "orbitAU": 0.7906098698468981,
+      "bearing": 309,
+      "radiusKm": 4800,
+      "uwp": "E500343-7",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "PIMANE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "pimane-gasgiant",
+      "name": "Pimane Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.906627724898029,
+      "bearing": 1,
+      "radiusKm": 54717.99282564943,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pimane-mainworld",
+    "starport": "pimane-mainworld",
+    "orbit": "pimane-mainworld"
+  }
+}

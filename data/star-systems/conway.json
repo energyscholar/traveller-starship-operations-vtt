@@ -1,0 +1,90 @@
+{
+  "id": "conway",
+  "name": "Conway",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2735",
+  "uwp": "D894586-7",
+  "tradeCodes": [
+    "Ag",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Poor starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Conway_(world)",
+  "celestialObjects": [
+    {
+      "id": "conway-star",
+      "name": "Conway Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "conway-mainworld",
+      "name": "Conway",
+      "type": "Planet",
+      "orbitAU": 2.1998148228121455,
+      "bearing": 26,
+      "radiusKm": 7200,
+      "uwp": "D894586-7",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "CONWAY CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "conway-gasgiant",
+      "name": "Conway Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.132194312435882,
+      "bearing": 205,
+      "radiusKm": 67475.59350945655,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "conway-mainworld",
+    "starport": "conway-mainworld",
+    "orbit": "conway-mainworld"
+  }
+}

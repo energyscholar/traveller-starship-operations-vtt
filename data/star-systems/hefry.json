@@ -1,0 +1,90 @@
+{
+  "id": "hefry",
+  "name": "Hefry",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1909",
+  "uwp": "C200423-7",
+  "tradeCodes": [
+    "Ni",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Hefry_(world)",
+  "celestialObjects": [
+    {
+      "id": "hefry-star",
+      "name": "Hefry Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "hefry-mainworld",
+      "name": "Hefry",
+      "type": "Planet",
+      "orbitAU": 0.5619507190549491,
+      "bearing": 61,
+      "radiusKm": 2400,
+      "uwp": "C200423-7",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "HEFRY CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "hefry-gasgiant",
+      "name": "Hefry Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.238243594724756,
+      "bearing": 302,
+      "radiusKm": 67176.7380149957,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "hefry-mainworld",
+    "starport": "hefry-mainworld",
+    "orbit": "hefry-mainworld"
+  }
+}

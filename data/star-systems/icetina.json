@@ -1,0 +1,107 @@
+{
+  "id": "icetina",
+  "name": "Icetina",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2418",
+  "uwp": "B5245A9-7",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Icetina_(world)",
+  "celestialObjects": [
+    {
+      "id": "icetina-star",
+      "name": "Icetina Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "icetina-mainworld",
+      "name": "Icetina",
+      "type": "Planet",
+      "orbitAU": 0.6231954760538506,
+      "bearing": 9,
+      "radiusKm": 4800,
+      "uwp": "B5245A9-7",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ICETINA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "icetina-highport",
+      "name": "Icetina Highport",
+      "type": "Highport",
+      "parent": "icetina-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ICETINA HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "icetina-gasgiant",
+      "name": "Icetina Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.5487072412542044,
+      "bearing": 173,
+      "radiusKm": 51806.45050738688,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "icetina-mainworld",
+    "starport": "icetina-highport",
+    "orbit": "icetina-mainworld"
+  }
+}

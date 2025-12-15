@@ -1,0 +1,109 @@
+{
+  "id": "aramis",
+  "name": "Aramis",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3110",
+  "uwp": "A5A0556-B",
+  "tradeCodes": [
+    "He",
+    "Ni",
+    "Cp"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Aramis_(world)",
+  "celestialObjects": [
+    {
+      "id": "aramis-star",
+      "name": "Aramis Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "aramis-mainworld",
+      "name": "Aramis",
+      "type": "Planet",
+      "orbitAU": 2.42368615389978,
+      "bearing": 295,
+      "radiusKm": 4800,
+      "uwp": "A5A0556-B",
+      "atmosphere": "Exotic",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ARAMIS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "aramis-highport",
+      "name": "Aramis Highport",
+      "type": "Highport",
+      "parent": "aramis-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ARAMIS HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "aramis-gasgiant",
+      "name": "Aramis Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.816521817647139,
+      "bearing": 245,
+      "radiusKm": 64898.88509436746,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "aramis-mainworld",
+    "starport": "aramis-highport",
+    "orbit": "aramis-mainworld"
+  }
+}

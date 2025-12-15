@@ -1,0 +1,90 @@
+{
+  "id": "faldor",
+  "name": "Faldor",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1131",
+  "uwp": "E5936A7-5",
+  "tradeCodes": [
+    "Ni",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Faldor_(world)",
+  "celestialObjects": [
+    {
+      "id": "faldor-star",
+      "name": "Faldor Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "faldor-mainworld",
+      "name": "Faldor",
+      "type": "Planet",
+      "orbitAU": 1.6923861702966483,
+      "bearing": 189,
+      "radiusKm": 4800,
+      "uwp": "E5936A7-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "FALDOR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "faldor-gasgiant",
+      "name": "Faldor Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.0669914592871965,
+      "bearing": 49,
+      "radiusKm": 68138.01481361038,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "faldor-mainworld",
+    "starport": "faldor-mainworld",
+    "orbit": "faldor-mainworld"
+  }
+}

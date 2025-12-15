@@ -1,0 +1,76 @@
+{
+  "id": "871-438",
+  "name": "871-438",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "1510",
+  "uwp": "E722000-0",
+  "tradeCodes": [
+    "Ba",
+    "He",
+    "Po",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL0.",
+  "wikiUrl": "https://wiki.travellerrpg.com/871-438_(world)",
+  "celestialObjects": [
+    {
+      "id": "871-438-star",
+      "name": "871-438 Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "871-438-mainworld",
+      "name": "871-438",
+      "type": "Planet",
+      "orbitAU": 0.4104603289908034,
+      "bearing": 163,
+      "radiusKm": 6400,
+      "uwp": "E722000-0",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "871-438 CONTROL",
+      "gmNotes": "Mainworld. Pop 0. TL0.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "871-438-mainworld",
+    "starport": "871-438-mainworld",
+    "orbit": "871-438-mainworld"
+  }
+}

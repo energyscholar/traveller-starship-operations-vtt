@@ -1,0 +1,91 @@
+{
+  "id": "margesi",
+  "name": "Margesi",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1020",
+  "uwp": "C575677-6",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Margesi_(world)",
+  "celestialObjects": [
+    {
+      "id": "margesi-star",
+      "name": "Margesi Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "margesi-mainworld",
+      "name": "Margesi",
+      "type": "Planet",
+      "orbitAU": 1.0763979153512784,
+      "bearing": 48,
+      "radiusKm": 4800,
+      "uwp": "C575677-6",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "MARGESI CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "margesi-gasgiant",
+      "name": "Margesi Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.282826532785311,
+      "bearing": 256,
+      "radiusKm": 59183.00868098719,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "margesi-mainworld",
+    "starport": "margesi-mainworld",
+    "orbit": "margesi-mainworld"
+  }
+}

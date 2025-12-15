@@ -1,0 +1,74 @@
+{
+  "id": "pavanne",
+  "name": "Pavanne",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "2905",
+  "uwp": "E310000-0",
+  "tradeCodes": [
+    "Ba",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL0.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pavanne_(world)",
+  "celestialObjects": [
+    {
+      "id": "pavanne-star",
+      "name": "Pavanne Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pavanne-mainworld",
+      "name": "Pavanne",
+      "type": "Planet",
+      "orbitAU": 0.7902480821777683,
+      "bearing": 338,
+      "radiusKm": 3200,
+      "uwp": "E310000-0",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "PAVANNE CONTROL",
+      "gmNotes": "Mainworld. Pop 0. TL0.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pavanne-mainworld",
+    "starport": "pavanne-mainworld",
+    "orbit": "pavanne-mainworld"
+  }
+}

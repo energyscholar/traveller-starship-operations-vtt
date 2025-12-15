@@ -1,0 +1,89 @@
+{
+  "id": "jesedipere",
+  "name": "Jesedipere",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3001",
+  "uwp": "C775300-7",
+  "tradeCodes": [
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Jesedipere_(world)",
+  "celestialObjects": [
+    {
+      "id": "jesedipere-star",
+      "name": "Jesedipere Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "jesedipere-mainworld",
+      "name": "Jesedipere",
+      "type": "Planet",
+      "orbitAU": 1.0700787750139453,
+      "bearing": 356,
+      "radiusKm": 6400,
+      "uwp": "C775300-7",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "JESEDIPERE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "jesedipere-gasgiant",
+      "name": "Jesedipere Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.523137204301337,
+      "bearing": 248,
+      "radiusKm": 69065.48445391536,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "jesedipere-mainworld",
+    "starport": "jesedipere-mainworld",
+    "orbit": "jesedipere-mainworld"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "caledonia",
+  "name": "Caledonia",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2134",
+  "uwp": "C541636-5",
+  "tradeCodes": [
+    "He",
+    "Ni",
+    "Po",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Caledonia_(world)",
+  "celestialObjects": [
+    {
+      "id": "caledonia-star",
+      "name": "Caledonia Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "caledonia-mainworld",
+      "name": "Caledonia",
+      "type": "Planet",
+      "orbitAU": 1.2439756016884442,
+      "bearing": 70,
+      "radiusKm": 4800,
+      "uwp": "C541636-5",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "CALEDONIA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "caledonia-mainworld",
+    "starport": "caledonia-mainworld",
+    "orbit": "caledonia-mainworld"
+  }
+}

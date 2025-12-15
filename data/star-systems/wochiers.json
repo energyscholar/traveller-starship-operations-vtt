@@ -1,0 +1,92 @@
+{
+  "id": "wochiers",
+  "name": "Wochiers",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "2207",
+  "uwp": "EAC28CC-9",
+  "tradeCodes": [
+    "Fl",
+    "He",
+    "Ph",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Wochiers_(world)",
+  "celestialObjects": [
+    {
+      "id": "wochiers-star",
+      "name": "Wochiers Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "wochiers-mainworld",
+      "name": "Wochiers",
+      "type": "Planet",
+      "orbitAU": 1.823313391024374,
+      "bearing": 47,
+      "radiusKm": 8800,
+      "uwp": "EAC28CC-9",
+      "atmosphere": "Insidious",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "WOCHIERS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "wochiers-gasgiant",
+      "name": "Wochiers Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.664843421198952,
+      "bearing": 245,
+      "radiusKm": 62939.947131823574,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "wochiers-mainworld",
+    "starport": "wochiers-mainworld",
+    "orbit": "wochiers-mainworld"
+  }
+}

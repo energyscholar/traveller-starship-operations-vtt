@@ -1,0 +1,89 @@
+{
+  "id": "tee-tee-tee",
+  "name": "Tee-Tee-Tee",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "3038",
+  "uwp": "C310530-9",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Tee-Tee-Tee_(world)",
+  "celestialObjects": [
+    {
+      "id": "tee-tee-tee-star",
+      "name": "Tee-Tee-Tee Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "tee-tee-tee-mainworld",
+      "name": "Tee-Tee-Tee",
+      "type": "Planet",
+      "orbitAU": 0.7437317924143292,
+      "bearing": 226,
+      "radiusKm": 3200,
+      "uwp": "C310530-9",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "TEE-TEE-TEE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "tee-tee-tee-gasgiant",
+      "name": "Tee-Tee-Tee Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.841896858138699,
+      "bearing": 276,
+      "radiusKm": 69179.10447345908,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "tee-tee-tee-mainworld",
+    "starport": "tee-tee-tee-mainworld",
+    "orbit": "tee-tee-tee-mainworld"
+  }
+}

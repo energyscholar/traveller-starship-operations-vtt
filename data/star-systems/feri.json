@@ -1,0 +1,109 @@
+{
+  "id": "feri",
+  "name": "Feri",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "2005",
+  "uwp": "B584879-B",
+  "tradeCodes": [
+    "Ri",
+    "Pa",
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Feri_(world)",
+  "celestialObjects": [
+    {
+      "id": "feri-star",
+      "name": "Feri Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "feri-mainworld",
+      "name": "Feri",
+      "type": "Planet",
+      "orbitAU": 1.1769752192403047,
+      "bearing": 348,
+      "radiusKm": 4800,
+      "uwp": "B584879-B",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "FERI CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "feri-highport",
+      "name": "Feri Highport",
+      "type": "Highport",
+      "parent": "feri-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "FERI HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "feri-gasgiant",
+      "name": "Feri Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.497008507261084,
+      "bearing": 45,
+      "radiusKm": 69871.86204153064,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "feri-mainworld",
+    "starport": "feri-highport",
+    "orbit": "feri-mainworld"
+  }
+}

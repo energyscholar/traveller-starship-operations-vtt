@@ -1,0 +1,74 @@
+{
+  "id": "raydrad",
+  "name": "Raydrad",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2933",
+  "uwp": "E99467A-6",
+  "tradeCodes": [
+    "Ag",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Raydrad_(world)",
+  "celestialObjects": [
+    {
+      "id": "raydrad-star",
+      "name": "Raydrad Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "raydrad-mainworld",
+      "name": "Raydrad",
+      "type": "Planet",
+      "orbitAU": 1.850707978661133,
+      "bearing": 121,
+      "radiusKm": 8000,
+      "uwp": "E99467A-6",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "RAYDRAD CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "raydrad-mainworld",
+    "starport": "raydrad-mainworld",
+    "orbit": "raydrad-mainworld"
+  }
+}

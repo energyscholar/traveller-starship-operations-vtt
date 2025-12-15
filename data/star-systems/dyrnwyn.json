@@ -1,0 +1,108 @@
+{
+  "id": "dyrnwyn",
+  "name": "Dyrnwyn",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1522",
+  "uwp": "B958812-A",
+  "tradeCodes": [
+    "Pa",
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Dyrnwyn_(world)",
+  "celestialObjects": [
+    {
+      "id": "dyrnwyn-star",
+      "name": "Dyrnwyn Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "dyrnwyn-mainworld",
+      "name": "Dyrnwyn",
+      "type": "Planet",
+      "orbitAU": 1.0935186444578566,
+      "bearing": 340,
+      "radiusKm": 8000,
+      "uwp": "B958812-A",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "DYRNWYN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "dyrnwyn-highport",
+      "name": "Dyrnwyn Highport",
+      "type": "Highport",
+      "parent": "dyrnwyn-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "DYRNWYN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "dyrnwyn-gasgiant",
+      "name": "Dyrnwyn Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.755220697638343,
+      "bearing": 72,
+      "radiusKm": 64329.04586061287,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "dyrnwyn-mainworld",
+    "starport": "dyrnwyn-highport",
+    "orbit": "dyrnwyn-mainworld"
+  }
+}

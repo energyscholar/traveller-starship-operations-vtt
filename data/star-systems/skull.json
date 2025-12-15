@@ -1,0 +1,91 @@
+{
+  "id": "skull",
+  "name": "Skull",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2420",
+  "uwp": "C4237C7-9",
+  "tradeCodes": [
+    "Na",
+    "Po",
+    "Pi"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Skull_(world)",
+  "celestialObjects": [
+    {
+      "id": "skull-star",
+      "name": "Skull Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "skull-mainworld",
+      "name": "Skull",
+      "type": "Planet",
+      "orbitAU": 0.5775071927015866,
+      "bearing": 347,
+      "radiusKm": 4000,
+      "uwp": "C4237C7-9",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "SKULL CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "skull-gasgiant",
+      "name": "Skull Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.130921793285204,
+      "bearing": 118,
+      "radiusKm": 50830.21622100164,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "skull-mainworld",
+    "starport": "skull-mainworld",
+    "orbit": "skull-mainworld"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "mainz",
+  "name": "Mainz",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "2930",
+  "uwp": "C553352-A",
+  "tradeCodes": [
+    "Lo",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Mainz_(world)",
+  "celestialObjects": [
+    {
+      "id": "mainz-star",
+      "name": "Mainz Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "mainz-mainworld",
+      "name": "Mainz",
+      "type": "Planet",
+      "orbitAU": 1.059668685699336,
+      "bearing": 320,
+      "radiusKm": 4800,
+      "uwp": "C553352-A",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "MAINZ CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "mainz-gasgiant",
+      "name": "Mainz Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.720309295808839,
+      "bearing": 26,
+      "radiusKm": 58440.07078161772,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "mainz-mainworld",
+    "starport": "mainz-mainworld",
+    "orbit": "mainz-mainworld"
+  }
+}

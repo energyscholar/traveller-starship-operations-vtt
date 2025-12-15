@@ -1,0 +1,91 @@
+{
+  "id": "quhaiathat",
+  "name": "Quhaiathat",
+  "sector": "Spinward Marches",
+  "subsector": "M",
+  "hex": "0637",
+  "uwp": "C31479B-9",
+  "tradeCodes": [
+    "Ic",
+    "Pi",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Quhaiathat_(world)",
+  "celestialObjects": [
+    {
+      "id": "quhaiathat-star",
+      "name": "Quhaiathat Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "quhaiathat-mainworld",
+      "name": "Quhaiathat",
+      "type": "Planet",
+      "orbitAU": 0.42291136318829925,
+      "bearing": 24,
+      "radiusKm": 3200,
+      "uwp": "C31479B-9",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "QUHAIATHAT CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "quhaiathat-gasgiant",
+      "name": "Quhaiathat Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.425174648122672,
+      "bearing": 6,
+      "radiusKm": 51908.6714289717,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "quhaiathat-mainworld",
+    "starport": "quhaiathat-mainworld",
+    "orbit": "quhaiathat-mainworld"
+  }
+}

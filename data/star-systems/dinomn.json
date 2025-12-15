@@ -1,0 +1,108 @@
+{
+  "id": "dinomn",
+  "name": "Dinomn",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "1912",
+  "uwp": "B674632-9",
+  "tradeCodes": [
+    "Ag",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Dinomn_(world)",
+  "celestialObjects": [
+    {
+      "id": "dinomn-star",
+      "name": "Dinomn Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "dinomn-mainworld",
+      "name": "Dinomn",
+      "type": "Planet",
+      "orbitAU": 1.1311674173197046,
+      "bearing": 341,
+      "radiusKm": 5600,
+      "uwp": "B674632-9",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "DINOMN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "dinomn-highport",
+      "name": "Dinomn Highport",
+      "type": "Highport",
+      "parent": "dinomn-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "DINOMN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "dinomn-gasgiant",
+      "name": "Dinomn Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.818493240931886,
+      "bearing": 271,
+      "radiusKm": 68615.17121571931,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "dinomn-mainworld",
+    "starport": "dinomn-highport",
+    "orbit": "dinomn-mainworld"
+  }
+}

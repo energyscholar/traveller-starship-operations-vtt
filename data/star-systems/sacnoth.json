@@ -1,0 +1,109 @@
+{
+  "id": "sacnoth",
+  "name": "Sacnoth",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1325",
+  "uwp": "A775956-C",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Sacnoth_(world)",
+  "celestialObjects": [
+    {
+      "id": "sacnoth-star",
+      "name": "Sacnoth Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "sacnoth-mainworld",
+      "name": "Sacnoth",
+      "type": "Planet",
+      "orbitAU": 1.112883420953219,
+      "bearing": 184,
+      "radiusKm": 6400,
+      "uwp": "A775956-C",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "SACNOTH CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "sacnoth-highport",
+      "name": "Sacnoth Highport",
+      "type": "Highport",
+      "parent": "sacnoth-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "SACNOTH HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "sacnoth-gasgiant",
+      "name": "Sacnoth Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.01115055133277,
+      "bearing": 64,
+      "radiusKm": 57347.38554504083,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "sacnoth-mainworld",
+    "starport": "sacnoth-highport",
+    "orbit": "sacnoth-mainworld"
+  }
+}

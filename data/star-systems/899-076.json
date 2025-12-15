@@ -1,0 +1,91 @@
+{
+  "id": "899-076",
+  "name": "899-076",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "0912",
+  "uwp": "E201300-8",
+  "tradeCodes": [
+    "Ic",
+    "Lo",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/899-076_(world)",
+  "celestialObjects": [
+    {
+      "id": "899-076-star",
+      "name": "899-076 Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "899-076-mainworld",
+      "name": "899-076",
+      "type": "Planet",
+      "orbitAU": 0.5964686530748844,
+      "bearing": 210,
+      "radiusKm": 2400,
+      "uwp": "E201300-8",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "899-076 CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "899-076-gasgiant",
+      "name": "899-076 Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.861282216468757,
+      "bearing": 291,
+      "radiusKm": 57317.18504934735,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "899-076-mainworld",
+    "starport": "899-076-mainworld",
+    "orbit": "899-076-mainworld"
+  }
+}

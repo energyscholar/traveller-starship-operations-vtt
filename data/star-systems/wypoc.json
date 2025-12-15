@@ -1,0 +1,91 @@
+{
+  "id": "wypoc",
+  "name": "Wypoc",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2011",
+  "uwp": "E9C4547-9",
+  "tradeCodes": [
+    "Fl",
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Wypoc_(world)",
+  "celestialObjects": [
+    {
+      "id": "wypoc-star",
+      "name": "Wypoc Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "wypoc-mainworld",
+      "name": "Wypoc",
+      "type": "Planet",
+      "orbitAU": 1.556153391123957,
+      "bearing": 163,
+      "radiusKm": 8000,
+      "uwp": "E9C4547-9",
+      "atmosphere": "Insidious",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "WYPOC CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "wypoc-gasgiant",
+      "name": "Wypoc Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.931814149784234,
+      "bearing": 23,
+      "radiusKm": 59880.814863896885,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "wypoc-mainworld",
+    "starport": "wypoc-mainworld",
+    "orbit": "wypoc-mainworld"
+  }
+}

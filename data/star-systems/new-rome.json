@@ -1,0 +1,107 @@
+{
+  "id": "new-rome",
+  "name": "New Rome",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "1938",
+  "uwp": "B837866-B",
+  "tradeCodes": [
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/New%20Rome_(world)",
+  "celestialObjects": [
+    {
+      "id": "new-rome-star",
+      "name": "New Rome Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "new-rome-mainworld",
+      "name": "New Rome",
+      "type": "Planet",
+      "orbitAU": 1.2702827477335905,
+      "bearing": 23,
+      "radiusKm": 7200,
+      "uwp": "B837866-B",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "NEW ROME CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "new-rome-highport",
+      "name": "New Rome Highport",
+      "type": "Highport",
+      "parent": "new-rome-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "NEW ROME HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "new-rome-gasgiant",
+      "name": "New Rome Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.689238345208997,
+      "bearing": 299,
+      "radiusKm": 52957.26249004552,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "new-rome-mainworld",
+    "starport": "new-rome-highport",
+    "orbit": "new-rome-mainworld"
+  }
+}

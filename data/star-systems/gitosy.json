@@ -1,0 +1,110 @@
+{
+  "id": "gitosy",
+  "name": "Gitosy",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2918",
+  "uwp": "B000676-9",
+  "tradeCodes": [
+    "As",
+    "Na",
+    "Ni",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Gitosy_(world)",
+  "celestialObjects": [
+    {
+      "id": "gitosy-star",
+      "name": "Gitosy Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "gitosy-mainworld",
+      "name": "Gitosy",
+      "type": "Planet",
+      "orbitAU": 0.5235247814964135,
+      "bearing": 157,
+      "radiusKm": 800,
+      "uwp": "B000676-9",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "GITOSY CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "gitosy-highport",
+      "name": "Gitosy Highport",
+      "type": "Highport",
+      "parent": "gitosy-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "GITOSY HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "gitosy-gasgiant",
+      "name": "Gitosy Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.0275476249501265,
+      "bearing": 123,
+      "radiusKm": 67194.28982681785,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "gitosy-mainworld",
+    "starport": "gitosy-highport",
+    "orbit": "gitosy-mainworld"
+  }
+}

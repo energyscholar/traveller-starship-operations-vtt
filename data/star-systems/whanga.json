@@ -1,0 +1,73 @@
+{
+  "id": "whanga",
+  "name": "Whanga",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1806",
+  "uwp": "E676126-7",
+  "tradeCodes": [
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Whanga_(world)",
+  "celestialObjects": [
+    {
+      "id": "whanga-star",
+      "name": "Whanga Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "whanga-mainworld",
+      "name": "Whanga",
+      "type": "Planet",
+      "orbitAU": 1.114033875976915,
+      "bearing": 46,
+      "radiusKm": 5600,
+      "uwp": "E676126-7",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "WHANGA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "whanga-mainworld",
+    "starport": "whanga-mainworld",
+    "orbit": "whanga-mainworld"
+  }
+}

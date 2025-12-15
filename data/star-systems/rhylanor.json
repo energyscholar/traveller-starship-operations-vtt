@@ -1,0 +1,109 @@
+{
+  "id": "rhylanor",
+  "name": "Rhylanor",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2716",
+  "uwp": "A434934-F",
+  "tradeCodes": [
+    "Hi",
+    "Cp",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL15.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Rhylanor_(world)",
+  "celestialObjects": [
+    {
+      "id": "rhylanor-star",
+      "name": "Rhylanor Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "rhylanor-mainworld",
+      "name": "Rhylanor",
+      "type": "Planet",
+      "orbitAU": 1.2614919668110087,
+      "bearing": 225,
+      "radiusKm": 4000,
+      "uwp": "A434934-F",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "RHYLANOR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL15.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "rhylanor-highport",
+      "name": "Rhylanor Highport",
+      "type": "Highport",
+      "parent": "rhylanor-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "RHYLANOR HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "rhylanor-gasgiant",
+      "name": "Rhylanor Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.465588605591702,
+      "bearing": 66,
+      "radiusKm": 63830.49559309203,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "rhylanor-mainworld",
+    "starport": "rhylanor-highport",
+    "orbit": "rhylanor-mainworld"
+  }
+}

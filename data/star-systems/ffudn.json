@@ -1,0 +1,111 @@
+{
+  "id": "ffudn",
+  "name": "Ffudn",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2334",
+  "uwp": "A41489D-C",
+  "tradeCodes": [
+    "Ic",
+    "Ph",
+    "Pi",
+    "Pz",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ffudn_(world)",
+  "celestialObjects": [
+    {
+      "id": "ffudn-star",
+      "name": "Ffudn Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ffudn-mainworld",
+      "name": "Ffudn",
+      "type": "Planet",
+      "orbitAU": 0.7039333069148279,
+      "bearing": 36,
+      "radiusKm": 4000,
+      "uwp": "A41489D-C",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "FFUDN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ffudn-highport",
+      "name": "Ffudn Highport",
+      "type": "Highport",
+      "parent": "ffudn-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "FFUDN HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "ffudn-gasgiant",
+      "name": "Ffudn Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.305213853512908,
+      "bearing": 63,
+      "radiusKm": 61927.775005617594,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ffudn-mainworld",
+    "starport": "ffudn-highport",
+    "orbit": "ffudn-mainworld"
+  }
+}

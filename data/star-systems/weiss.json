@@ -1,0 +1,108 @@
+{
+  "id": "weiss",
+  "name": "Weiss",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "1934",
+  "uwp": "A626464-B",
+  "tradeCodes": [
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Weiss_(world)",
+  "celestialObjects": [
+    {
+      "id": "weiss-star",
+      "name": "Weiss Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "weiss-mainworld",
+      "name": "Weiss",
+      "type": "Planet",
+      "orbitAU": 0.6657210248823728,
+      "bearing": 59,
+      "radiusKm": 5600,
+      "uwp": "A626464-B",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "WEISS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "weiss-highport",
+      "name": "Weiss Highport",
+      "type": "Highport",
+      "parent": "weiss-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "WEISS HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "weiss-gasgiant",
+      "name": "Weiss Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.255364114716187,
+      "bearing": 202,
+      "radiusKm": 55367.547572578005,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "weiss-mainworld",
+    "starport": "weiss-highport",
+    "orbit": "weiss-mainworld"
+  }
+}

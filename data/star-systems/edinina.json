@@ -1,0 +1,75 @@
+{
+  "id": "edinina",
+  "name": "Edinina",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1213",
+  "uwp": "E400220-7",
+  "tradeCodes": [
+    "Lo",
+    "Va",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Edinina_(world)",
+  "celestialObjects": [
+    {
+      "id": "edinina-star",
+      "name": "Edinina Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "edinina-mainworld",
+      "name": "Edinina",
+      "type": "Planet",
+      "orbitAU": 0.6490366769349268,
+      "bearing": 315,
+      "radiusKm": 4000,
+      "uwp": "E400220-7",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "EDININA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^2. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "edinina-mainworld",
+    "starport": "edinina-mainworld",
+    "orbit": "edinina-mainworld"
+  }
+}

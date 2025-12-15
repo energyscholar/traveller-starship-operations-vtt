@@ -1,0 +1,93 @@
+{
+  "id": "durendal",
+  "name": "Durendal",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1523",
+  "uwp": "B687734-B",
+  "tradeCodes": [
+    "Ag",
+    "Ga",
+    "Ri"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Durendal_(world)",
+  "celestialObjects": [
+    {
+      "id": "durendal-star",
+      "name": "Durendal Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "durendal-mainworld",
+      "name": "Durendal",
+      "type": "Planet",
+      "orbitAU": 1.1519537583409913,
+      "bearing": 135,
+      "radiusKm": 5600,
+      "uwp": "B687734-B",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "DURENDAL CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "durendal-highport",
+      "name": "Durendal Highport",
+      "type": "Highport",
+      "parent": "durendal-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "DURENDAL HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "durendal-mainworld",
+    "starport": "durendal-highport",
+    "orbit": "durendal-mainworld"
+  }
+}

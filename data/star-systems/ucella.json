@@ -1,0 +1,90 @@
+{
+  "id": "ucella",
+  "name": "Ucella",
+  "sector": "Spinward Marches",
+  "subsector": "M",
+  "hex": "0532",
+  "uwp": "D574654-7",
+  "tradeCodes": [
+    "Ag",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ucella_(world)",
+  "celestialObjects": [
+    {
+      "id": "ucella-star",
+      "name": "Ucella Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ucella-mainworld",
+      "name": "Ucella",
+      "type": "Planet",
+      "orbitAU": 1.0785218237191654,
+      "bearing": 15,
+      "radiusKm": 4800,
+      "uwp": "D574654-7",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "UCELLA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ucella-gasgiant",
+      "name": "Ucella Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.042648643328397,
+      "bearing": 357,
+      "radiusKm": 56192.344898695235,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ucella-mainworld",
+    "starport": "ucella-mainworld",
+    "orbit": "ucella-mainworld"
+  }
+}

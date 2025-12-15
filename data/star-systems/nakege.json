@@ -1,0 +1,76 @@
+{
+  "id": "nakege",
+  "name": "Nakege",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "1305",
+  "uwp": "D591314-5",
+  "tradeCodes": [
+    "He",
+    "Lo",
+    "Da",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Nakege_(world)",
+  "celestialObjects": [
+    {
+      "id": "nakege-star",
+      "name": "Nakege Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "nakege-mainworld",
+      "name": "Nakege",
+      "type": "Planet",
+      "orbitAU": 2.4346857194149116,
+      "bearing": 285,
+      "radiusKm": 4800,
+      "uwp": "D591314-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "NAKEGE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "nakege-mainworld",
+    "starport": "nakege-mainworld",
+    "orbit": "nakege-mainworld"
+  }
+}

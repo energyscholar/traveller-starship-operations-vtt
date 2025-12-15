@@ -1,0 +1,109 @@
+{
+  "id": "tremous-dex",
+  "name": "Tremous Dex",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1311",
+  "uwp": "B511411-C",
+  "tradeCodes": [
+    "Ic",
+    "Ni",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Tremous%20Dex_(world)",
+  "celestialObjects": [
+    {
+      "id": "tremous-dex-star",
+      "name": "Tremous Dex Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "tremous-dex-mainworld",
+      "name": "Tremous Dex",
+      "type": "Planet",
+      "orbitAU": 0.4619318524075227,
+      "bearing": 357,
+      "radiusKm": 4800,
+      "uwp": "B511411-C",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "TREMOUS DEX CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "tremous-dex-highport",
+      "name": "Tremous Dex Highport",
+      "type": "Highport",
+      "parent": "tremous-dex-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "TREMOUS DEX HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "tremous-dex-gasgiant",
+      "name": "Tremous Dex Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.274200811695801,
+      "bearing": 212,
+      "radiusKm": 53685.59081907834,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "tremous-dex-mainworld",
+    "starport": "tremous-dex-highport",
+    "orbit": "tremous-dex-mainworld"
+  }
+}

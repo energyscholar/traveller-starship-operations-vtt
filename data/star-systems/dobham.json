@@ -1,0 +1,109 @@
+{
+  "id": "dobham",
+  "name": "Dobham",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2537",
+  "uwp": "A550457-A",
+  "tradeCodes": [
+    "De",
+    "Ni",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Dobham_(world)",
+  "celestialObjects": [
+    {
+      "id": "dobham-star",
+      "name": "Dobham Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "dobham-mainworld",
+      "name": "Dobham",
+      "type": "Planet",
+      "orbitAU": 1.0543299604223266,
+      "bearing": 114,
+      "radiusKm": 4800,
+      "uwp": "A550457-A",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "DOBHAM CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "dobham-highport",
+      "name": "Dobham Highport",
+      "type": "Highport",
+      "parent": "dobham-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "DOBHAM HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "dobham-gasgiant",
+      "name": "Dobham Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.021523613500056,
+      "bearing": 204,
+      "radiusKm": 67584.70810562046,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "dobham-mainworld",
+    "starport": "dobham-highport",
+    "orbit": "dobham-mainworld"
+  }
+}

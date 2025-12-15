@@ -1,0 +1,76 @@
+{
+  "id": "rio",
+  "name": "Rio",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0301",
+  "uwp": "C686648-8",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Ga",
+    "Ri"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Rio_(world)",
+  "celestialObjects": [
+    {
+      "id": "rio-star",
+      "name": "Rio Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "rio-mainworld",
+      "name": "Rio",
+      "type": "Planet",
+      "orbitAU": 1.235699732949128,
+      "bearing": 282,
+      "radiusKm": 5600,
+      "uwp": "C686648-8",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "RIO CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "rio-mainworld",
+    "starport": "rio-mainworld",
+    "orbit": "rio-mainworld"
+  }
+}

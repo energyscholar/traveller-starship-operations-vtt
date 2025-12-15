@@ -1,0 +1,91 @@
+{
+  "id": "condyole",
+  "name": "Condyole",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "0901",
+  "uwp": "E7A1522-8",
+  "tradeCodes": [
+    "Fl",
+    "He",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Condyole_(world)",
+  "celestialObjects": [
+    {
+      "id": "condyole-star",
+      "name": "Condyole Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "condyole-mainworld",
+      "name": "Condyole",
+      "type": "Planet",
+      "orbitAU": 1.9011579406961365,
+      "bearing": 118,
+      "radiusKm": 6400,
+      "uwp": "E7A1522-8",
+      "atmosphere": "Exotic",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "CONDYOLE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "condyole-gasgiant",
+      "name": "Condyole Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.2836948036669895,
+      "bearing": 43,
+      "radiusKm": 69932.16508892692,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "condyole-mainworld",
+    "starport": "condyole-mainworld",
+    "orbit": "condyole-mainworld"
+  }
+}

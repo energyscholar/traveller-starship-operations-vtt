@@ -1,0 +1,92 @@
+{
+  "id": "thisbe",
+  "name": "Thisbe",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2539",
+  "uwp": "E4305AD-6",
+  "tradeCodes": [
+    "De",
+    "Ni",
+    "Po",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Thisbe_(world)",
+  "celestialObjects": [
+    {
+      "id": "thisbe-star",
+      "name": "Thisbe Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "thisbe-mainworld",
+      "name": "Thisbe",
+      "type": "Planet",
+      "orbitAU": 1.285391554356218,
+      "bearing": 131,
+      "radiusKm": 4000,
+      "uwp": "E4305AD-6",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "THISBE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "thisbe-gasgiant",
+      "name": "Thisbe Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.591282546792904,
+      "bearing": 39,
+      "radiusKm": 58733.808883683385,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "thisbe-mainworld",
+    "starport": "thisbe-mainworld",
+    "orbit": "thisbe-mainworld"
+  }
+}

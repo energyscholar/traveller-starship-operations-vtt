@@ -1,0 +1,90 @@
+{
+  "id": "forboldn",
+  "name": "Forboldn",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1808",
+  "uwp": "D893614-5",
+  "tradeCodes": [
+    "Ni",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Forboldn_(world)",
+  "celestialObjects": [
+    {
+      "id": "forboldn-star",
+      "name": "Forboldn Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "forboldn-mainworld",
+      "name": "Forboldn",
+      "type": "Planet",
+      "orbitAU": 2.423112405258024,
+      "bearing": 19,
+      "radiusKm": 7200,
+      "uwp": "D893614-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "FORBOLDN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "forboldn-gasgiant",
+      "name": "Forboldn Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.415247320523012,
+      "bearing": 6,
+      "radiusKm": 56527.5315920704,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "forboldn-mainworld",
+    "starport": "forboldn-mainworld",
+    "orbit": "forboldn-mainworld"
+  }
+}

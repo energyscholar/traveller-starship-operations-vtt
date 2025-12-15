@@ -1,0 +1,92 @@
+{
+  "id": "zephyr",
+  "name": "Zephyr",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "3138",
+  "uwp": "C89556A-5",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Da",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Zephyr_(world)",
+  "celestialObjects": [
+    {
+      "id": "zephyr-star",
+      "name": "Zephyr Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "zephyr-mainworld",
+      "name": "Zephyr",
+      "type": "Planet",
+      "orbitAU": 1.6355489349575187,
+      "bearing": 187,
+      "radiusKm": 7200,
+      "uwp": "C89556A-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ZEPHYR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "zephyr-gasgiant",
+      "name": "Zephyr Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.581631110661776,
+      "bearing": 270,
+      "radiusKm": 62075.22120667948,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "zephyr-mainworld",
+    "starport": "zephyr-mainworld",
+    "orbit": "zephyr-mainworld"
+  }
+}

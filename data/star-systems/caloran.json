@@ -1,0 +1,91 @@
+{
+  "id": "caloran",
+  "name": "Caloran",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "0911",
+  "uwp": "C796746-5",
+  "tradeCodes": [
+    "Ag",
+    "Pi",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Caloran_(world)",
+  "celestialObjects": [
+    {
+      "id": "caloran-star",
+      "name": "Caloran Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "caloran-mainworld",
+      "name": "Caloran",
+      "type": "Planet",
+      "orbitAU": 2.3859795307522367,
+      "bearing": 122,
+      "radiusKm": 6400,
+      "uwp": "C796746-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "CALORAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "caloran-gasgiant",
+      "name": "Caloran Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.727931692485493,
+      "bearing": 170,
+      "radiusKm": 61257.71245902285,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "caloran-mainworld",
+    "starport": "caloran-mainworld",
+    "orbit": "caloran-mainworld"
+  }
+}

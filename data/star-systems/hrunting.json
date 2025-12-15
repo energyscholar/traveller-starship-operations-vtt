@@ -1,0 +1,91 @@
+{
+  "id": "hrunting",
+  "name": "Hrunting",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "0921",
+  "uwp": "B563747-9",
+  "tradeCodes": [
+    "Ri"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Hrunting_(world)",
+  "celestialObjects": [
+    {
+      "id": "hrunting-star",
+      "name": "Hrunting Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "hrunting-mainworld",
+      "name": "Hrunting",
+      "type": "Planet",
+      "orbitAU": 1.012928071379389,
+      "bearing": 90,
+      "radiusKm": 4800,
+      "uwp": "B563747-9",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "HRUNTING CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "hrunting-highport",
+      "name": "Hrunting Highport",
+      "type": "Highport",
+      "parent": "hrunting-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "HRUNTING HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "hrunting-mainworld",
+    "starport": "hrunting-highport",
+    "orbit": "hrunting-mainworld"
+  }
+}

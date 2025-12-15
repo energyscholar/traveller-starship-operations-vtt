@@ -1,0 +1,92 @@
+{
+  "id": "sting",
+  "name": "Sting",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1525",
+  "uwp": "B645796-A",
+  "tradeCodes": [
+    "Ag",
+    "Pi"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Sting_(world)",
+  "celestialObjects": [
+    {
+      "id": "sting-star",
+      "name": "Sting Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "sting-mainworld",
+      "name": "Sting",
+      "type": "Planet",
+      "orbitAU": 1.2306993994844828,
+      "bearing": 260,
+      "radiusKm": 5600,
+      "uwp": "B645796-A",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "STING CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "sting-highport",
+      "name": "Sting Highport",
+      "type": "Highport",
+      "parent": "sting-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "STING HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "sting-mainworld",
+    "starport": "sting-highport",
+    "orbit": "sting-mainworld"
+  }
+}

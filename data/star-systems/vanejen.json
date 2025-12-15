@@ -1,0 +1,93 @@
+{
+  "id": "vanejen",
+  "name": "Vanejen",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "3119",
+  "uwp": "C686854-5",
+  "tradeCodes": [
+    "Ga",
+    "Ri",
+    "Pa",
+    "Ph",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Vanejen_(world)",
+  "celestialObjects": [
+    {
+      "id": "vanejen-star",
+      "name": "Vanejen Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "vanejen-mainworld",
+      "name": "Vanejen",
+      "type": "Planet",
+      "orbitAU": 1.2310785353009166,
+      "bearing": 143,
+      "radiusKm": 5600,
+      "uwp": "C686854-5",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "VANEJEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "vanejen-gasgiant",
+      "name": "Vanejen Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.9038798921629985,
+      "bearing": 131,
+      "radiusKm": 68165.87708305333,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "vanejen-mainworld",
+    "starport": "vanejen-mainworld",
+    "orbit": "vanejen-mainworld"
+  }
+}

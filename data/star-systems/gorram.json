@@ -1,0 +1,91 @@
+{
+  "id": "gorram",
+  "name": "Gorram",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "2322",
+  "uwp": "X554220-2",
+  "tradeCodes": [
+    "Lo",
+    "Fo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "None starport. TL2.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Gorram_(world)",
+  "celestialObjects": [
+    {
+      "id": "gorram-star",
+      "name": "Gorram Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "gorram-mainworld",
+      "name": "Gorram",
+      "type": "Planet",
+      "orbitAU": 1.0705874035847203,
+      "bearing": 352,
+      "radiusKm": 4800,
+      "uwp": "X554220-2",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "GORRAM CONTROL",
+      "gmNotes": "Mainworld. Pop 10^2. TL2.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "gorram-gasgiant",
+      "name": "Gorram Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.136050857535771,
+      "bearing": 287,
+      "radiusKm": 66683.75509337129,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "gorram-mainworld",
+    "starport": "gorram-mainworld",
+    "orbit": "gorram-mainworld"
+  }
+}

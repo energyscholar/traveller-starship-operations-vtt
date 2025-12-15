@@ -1,0 +1,108 @@
+{
+  "id": "murchison",
+  "name": "Murchison",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2935",
+  "uwp": "B544433-6",
+  "tradeCodes": [
+    "Ni",
+    "Pa"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Murchison_(world)",
+  "celestialObjects": [
+    {
+      "id": "murchison-star",
+      "name": "Murchison Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "murchison-mainworld",
+      "name": "Murchison",
+      "type": "Planet",
+      "orbitAU": 1.229979865302667,
+      "bearing": 112,
+      "radiusKm": 4800,
+      "uwp": "B544433-6",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "MURCHISON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "murchison-highport",
+      "name": "Murchison Highport",
+      "type": "Highport",
+      "parent": "murchison-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "MURCHISON HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "murchison-gasgiant",
+      "name": "Murchison Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.15023404489093,
+      "bearing": 28,
+      "radiusKm": 66591.1399548447,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "murchison-mainworld",
+    "starport": "murchison-highport",
+    "orbit": "murchison-mainworld"
+  }
+}

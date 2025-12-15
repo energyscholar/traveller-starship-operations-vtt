@@ -1,0 +1,108 @@
+{
+  "id": "paya",
+  "name": "Paya",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "2509",
+  "uwp": "A655241-9",
+  "tradeCodes": [
+    "Lo",
+    "Ga"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Paya_(world)",
+  "celestialObjects": [
+    {
+      "id": "paya-star",
+      "name": "Paya Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "paya-mainworld",
+      "name": "Paya",
+      "type": "Planet",
+      "orbitAU": 1.116628311495624,
+      "bearing": 317,
+      "radiusKm": 5600,
+      "uwp": "A655241-9",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "PAYA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^2. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "paya-highport",
+      "name": "Paya Highport",
+      "type": "Highport",
+      "parent": "paya-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "PAYA HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "paya-gasgiant",
+      "name": "Paya Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.199941017623903,
+      "bearing": 277,
+      "radiusKm": 56614.525711507034,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "paya-mainworld",
+    "starport": "paya-highport",
+    "orbit": "paya-mainworld"
+  }
+}

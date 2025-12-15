@@ -1,0 +1,109 @@
+{
+  "id": "persephone",
+  "name": "Persephone",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "2228",
+  "uwp": "B775833-A",
+  "tradeCodes": [
+    "Pa",
+    "Ph",
+    "Pi"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Persephone_(world)",
+  "celestialObjects": [
+    {
+      "id": "persephone-star",
+      "name": "Persephone Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "persephone-mainworld",
+      "name": "Persephone",
+      "type": "Planet",
+      "orbitAU": 1.1260639422623477,
+      "bearing": 166,
+      "radiusKm": 6400,
+      "uwp": "B775833-A",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "PERSEPHONE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "persephone-highport",
+      "name": "Persephone Highport",
+      "type": "Highport",
+      "parent": "persephone-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "PERSEPHONE HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "persephone-gasgiant",
+      "name": "Persephone Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.352714460067192,
+      "bearing": 19,
+      "radiusKm": 57808.20636618487,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "persephone-mainworld",
+    "starport": "persephone-highport",
+    "orbit": "persephone-mainworld"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "id": "carsten",
+  "name": "Carsten",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "2906",
+  "uwp": "C427402-B",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Carsten_(world)",
+  "celestialObjects": [
+    {
+      "id": "carsten-star",
+      "name": "Carsten Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "carsten-mainworld",
+      "name": "Carsten",
+      "type": "Planet",
+      "orbitAU": 0.6359139871179307,
+      "bearing": 287,
+      "radiusKm": 4000,
+      "uwp": "C427402-B",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "CARSTEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "carsten-gasgiant",
+      "name": "Carsten Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.07423164512971,
+      "bearing": 89,
+      "radiusKm": 58617.060284246065,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "carsten-mainworld",
+    "starport": "carsten-mainworld",
+    "orbit": "carsten-mainworld"
+  }
+}

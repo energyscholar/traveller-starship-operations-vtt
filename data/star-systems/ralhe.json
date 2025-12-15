@@ -1,0 +1,89 @@
+{
+  "id": "ralhe",
+  "name": "Ralhe",
+  "sector": "Spinward Marches",
+  "subsector": "M",
+  "hex": "0731",
+  "uwp": "E424574-8",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ralhe_(world)",
+  "celestialObjects": [
+    {
+      "id": "ralhe-star",
+      "name": "Ralhe Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ralhe-mainworld",
+      "name": "Ralhe",
+      "type": "Planet",
+      "orbitAU": 0.41311594361561177,
+      "bearing": 41,
+      "radiusKm": 4000,
+      "uwp": "E424574-8",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "RALHE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ralhe-gasgiant",
+      "name": "Ralhe Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.853971493200173,
+      "bearing": 347,
+      "radiusKm": 62437.043495723745,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ralhe-mainworld",
+    "starport": "ralhe-mainworld",
+    "orbit": "ralhe-mainworld"
+  }
+}

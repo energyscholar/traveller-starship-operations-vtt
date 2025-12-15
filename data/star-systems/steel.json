@@ -1,0 +1,76 @@
+{
+  "id": "steel",
+  "name": "Steel",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1529",
+  "uwp": "E655000-0",
+  "tradeCodes": [
+    "Ba",
+    "Ga",
+    "Re",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL0.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Steel_(world)",
+  "celestialObjects": [
+    {
+      "id": "steel-star",
+      "name": "Steel Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "steel-mainworld",
+      "name": "Steel",
+      "type": "Planet",
+      "orbitAU": 1.0835099562037216,
+      "bearing": 11,
+      "radiusKm": 5600,
+      "uwp": "E655000-0",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "STEEL CONTROL",
+      "gmNotes": "Mainworld. Pop 0. TL0.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "steel-mainworld",
+    "starport": "steel-mainworld",
+    "orbit": "steel-mainworld"
+  }
+}

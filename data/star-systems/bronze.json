@@ -1,0 +1,77 @@
+{
+  "id": "bronze",
+  "name": "Bronze",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1627",
+  "uwp": "E201000-0",
+  "tradeCodes": [
+    "Ba",
+    "Ic",
+    "Va",
+    "Re",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL0.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Bronze_(world)",
+  "celestialObjects": [
+    {
+      "id": "bronze-star",
+      "name": "Bronze Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "bronze-mainworld",
+      "name": "Bronze",
+      "type": "Planet",
+      "orbitAU": 0.5118206684009221,
+      "bearing": 43,
+      "radiusKm": 2400,
+      "uwp": "E201000-0",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "BRONZE CONTROL",
+      "gmNotes": "Mainworld. Pop 0. TL0.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "bronze-mainworld",
+    "starport": "bronze-mainworld",
+    "orbit": "bronze-mainworld"
+  }
+}

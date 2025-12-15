@@ -1,0 +1,109 @@
+{
+  "id": "hammermium",
+  "name": "Hammermium",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2936",
+  "uwp": "A5525AB-B",
+  "tradeCodes": [
+    "Ni",
+    "Po",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Hammermium_(world)",
+  "celestialObjects": [
+    {
+      "id": "hammermium-star",
+      "name": "Hammermium Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "hammermium-mainworld",
+      "name": "Hammermium",
+      "type": "Planet",
+      "orbitAU": 1.0616060282376394,
+      "bearing": 133,
+      "radiusKm": 4800,
+      "uwp": "A5525AB-B",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "HAMMERMIUM CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "hammermium-highport",
+      "name": "Hammermium Highport",
+      "type": "Highport",
+      "parent": "hammermium-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "HAMMERMIUM HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "hammermium-gasgiant",
+      "name": "Hammermium Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.194467479278627,
+      "bearing": 328,
+      "radiusKm": 50065.23025122516,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "hammermium-mainworld",
+    "starport": "hammermium-highport",
+    "orbit": "hammermium-mainworld"
+  }
+}

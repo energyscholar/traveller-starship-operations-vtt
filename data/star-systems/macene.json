@@ -1,0 +1,94 @@
+{
+  "id": "macene",
+  "name": "Macene",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2612",
+  "uwp": "B000453-E",
+  "tradeCodes": [
+    "As",
+    "Ni",
+    "Va",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL14.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Macene_(world)",
+  "celestialObjects": [
+    {
+      "id": "macene-star",
+      "name": "Macene Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "macene-mainworld",
+      "name": "Macene",
+      "type": "Planet",
+      "orbitAU": 0.4205893970417981,
+      "bearing": 149,
+      "radiusKm": 800,
+      "uwp": "B000453-E",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "MACENE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL14.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "macene-highport",
+      "name": "Macene Highport",
+      "type": "Highport",
+      "parent": "macene-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "MACENE HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "macene-mainworld",
+    "starport": "macene-highport",
+    "orbit": "macene-mainworld"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "id": "capon",
+  "name": "Capon",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "2324",
+  "uwp": "B747748-A",
+  "tradeCodes": [
+    "Ag",
+    "Pi"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Capon_(world)",
+  "celestialObjects": [
+    {
+      "id": "capon-star",
+      "name": "Capon Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "capon-mainworld",
+      "name": "Capon",
+      "type": "Planet",
+      "orbitAU": 1.1785901228774593,
+      "bearing": 283,
+      "radiusKm": 6400,
+      "uwp": "B747748-A",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "CAPON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "capon-highport",
+      "name": "Capon Highport",
+      "type": "Highport",
+      "parent": "capon-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "CAPON HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "capon-mainworld",
+    "starport": "capon-highport",
+    "orbit": "capon-mainworld"
+  }
+}

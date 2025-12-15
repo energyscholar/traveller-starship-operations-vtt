@@ -1,0 +1,75 @@
+{
+  "id": "gerome",
+  "name": "Gerome",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2818",
+  "uwp": "X573000-0",
+  "tradeCodes": [
+    "Ba",
+    "Fo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "None starport. TL0.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Gerome_(world)",
+  "celestialObjects": [
+    {
+      "id": "gerome-star",
+      "name": "Gerome Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "gerome-mainworld",
+      "name": "Gerome",
+      "type": "Planet",
+      "orbitAU": 1.0598806243516592,
+      "bearing": 122,
+      "radiusKm": 4800,
+      "uwp": "X573000-0",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "GEROME CONTROL",
+      "gmNotes": "Mainworld. Pop 0. TL0.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "gerome-mainworld",
+    "starport": "gerome-mainworld",
+    "orbit": "gerome-mainworld"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "id": "aki",
+  "name": "Aki",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2035",
+  "uwp": "B543987-9",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Po",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Aki_(world)",
+  "celestialObjects": [
+    {
+      "id": "aki-star",
+      "name": "Aki Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "aki-mainworld",
+      "name": "Aki",
+      "type": "Planet",
+      "orbitAU": 1.2288302544671206,
+      "bearing": 326,
+      "radiusKm": 4800,
+      "uwp": "B543987-9",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "AKI CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "aki-highport",
+      "name": "Aki Highport",
+      "type": "Highport",
+      "parent": "aki-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "AKI HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "aki-gasgiant",
+      "name": "Aki Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.568276787704808,
+      "bearing": 116,
+      "radiusKm": 59156.53727641942,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "aki-mainworld",
+    "starport": "aki-highport",
+    "orbit": "aki-mainworld"
+  }
+}

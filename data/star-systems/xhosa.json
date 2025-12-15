@@ -1,0 +1,90 @@
+{
+  "id": "xhosa",
+  "name": "Xhosa",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0115",
+  "uwp": "EA95124-5",
+  "tradeCodes": [
+    "Lo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Xhosa_(world)",
+  "celestialObjects": [
+    {
+      "id": "xhosa-star",
+      "name": "Xhosa Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "xhosa-mainworld",
+      "name": "Xhosa",
+      "type": "Planet",
+      "orbitAU": 1.7927525591069973,
+      "bearing": 160,
+      "radiusKm": 8800,
+      "uwp": "EA95124-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "XHOSA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "xhosa-gasgiant",
+      "name": "Xhosa Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.100391940916693,
+      "bearing": 205,
+      "radiusKm": 69607.97991546069,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "xhosa-mainworld",
+    "starport": "xhosa-mainworld",
+    "orbit": "xhosa-mainworld"
+  }
+}

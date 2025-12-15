@@ -1,0 +1,109 @@
+{
+  "id": "chamois",
+  "name": "Chamois",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "3139",
+  "uwp": "B544642-5",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Chamois_(world)",
+  "celestialObjects": [
+    {
+      "id": "chamois-star",
+      "name": "Chamois Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "chamois-mainworld",
+      "name": "Chamois",
+      "type": "Planet",
+      "orbitAU": 1.249501455674391,
+      "bearing": 283,
+      "radiusKm": 4800,
+      "uwp": "B544642-5",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "CHAMOIS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "chamois-highport",
+      "name": "Chamois Highport",
+      "type": "Highport",
+      "parent": "chamois-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "CHAMOIS HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "chamois-gasgiant",
+      "name": "Chamois Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.729446402229697,
+      "bearing": 204,
+      "radiusKm": 51277.5494386315,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "chamois-mainworld",
+    "starport": "chamois-highport",
+    "orbit": "chamois-mainworld"
+  }
+}

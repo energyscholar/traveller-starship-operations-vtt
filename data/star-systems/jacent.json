@@ -1,0 +1,109 @@
+{
+  "id": "jacent",
+  "name": "Jacent",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0624",
+  "uwp": "A433744-D",
+  "tradeCodes": [
+    "Na",
+    "Po",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL13.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Jacent_(world)",
+  "celestialObjects": [
+    {
+      "id": "jacent-star",
+      "name": "Jacent Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "jacent-mainworld",
+      "name": "Jacent",
+      "type": "Planet",
+      "orbitAU": 1.312780921136695,
+      "bearing": 105,
+      "radiusKm": 4000,
+      "uwp": "A433744-D",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "JACENT CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL13.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "jacent-highport",
+      "name": "Jacent Highport",
+      "type": "Highport",
+      "parent": "jacent-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "JACENT HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "jacent-gasgiant",
+      "name": "Jacent Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.610833360815467,
+      "bearing": 117,
+      "radiusKm": 63762.79649794858,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "jacent-mainworld",
+    "starport": "jacent-highport",
+    "orbit": "jacent-mainworld"
+  }
+}

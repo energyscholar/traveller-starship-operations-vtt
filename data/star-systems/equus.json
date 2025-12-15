@@ -1,0 +1,108 @@
+{
+  "id": "equus",
+  "name": "Equus",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2417",
+  "uwp": "B55A858-B",
+  "tradeCodes": [
+    "Wa",
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Equus_(world)",
+  "celestialObjects": [
+    {
+      "id": "equus-star",
+      "name": "Equus Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "equus-mainworld",
+      "name": "Equus",
+      "type": "Planet",
+      "orbitAU": 1.112585660975525,
+      "bearing": 133,
+      "radiusKm": 4800,
+      "uwp": "B55A858-B",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "EQUUS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "equus-highport",
+      "name": "Equus Highport",
+      "type": "Highport",
+      "parent": "equus-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "EQUUS HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "equus-gasgiant",
+      "name": "Equus Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.1358224003804445,
+      "bearing": 235,
+      "radiusKm": 68490.98008037286,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "equus-mainworld",
+    "starport": "equus-highport",
+    "orbit": "equus-mainworld"
+  }
+}

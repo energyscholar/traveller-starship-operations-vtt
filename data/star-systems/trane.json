@@ -1,0 +1,90 @@
+{
+  "id": "trane",
+  "name": "Trane",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2038",
+  "uwp": "C639422-B",
+  "tradeCodes": [
+    "Ni",
+    "An"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Trane_(world)",
+  "celestialObjects": [
+    {
+      "id": "trane-star",
+      "name": "Trane Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "trane-mainworld",
+      "name": "Trane",
+      "type": "Planet",
+      "orbitAU": 1.295578065548494,
+      "bearing": 199,
+      "radiusKm": 5600,
+      "uwp": "C639422-B",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "TRANE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "trane-gasgiant",
+      "name": "Trane Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.9350680160260545,
+      "bearing": 70,
+      "radiusKm": 61676.83688182878,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "trane-mainworld",
+    "starport": "trane-mainworld",
+    "orbit": "trane-mainworld"
+  }
+}

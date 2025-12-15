@@ -1,0 +1,108 @@
+{
+  "id": "vilis",
+  "name": "Vilis",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1119",
+  "uwp": "A593943-A",
+  "tradeCodes": [
+    "Hi",
+    "In"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Vilis_(world)",
+  "celestialObjects": [
+    {
+      "id": "vilis-star",
+      "name": "Vilis Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "vilis-mainworld",
+      "name": "Vilis",
+      "type": "Planet",
+      "orbitAU": 2.0508902210444546,
+      "bearing": 141,
+      "radiusKm": 4800,
+      "uwp": "A593943-A",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "VILIS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "vilis-highport",
+      "name": "Vilis Highport",
+      "type": "Highport",
+      "parent": "vilis-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "VILIS HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "vilis-gasgiant",
+      "name": "Vilis Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.657331759643158,
+      "bearing": 21,
+      "radiusKm": 52007.561163693594,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "vilis-mainworld",
+    "starport": "vilis-highport",
+    "orbit": "vilis-mainworld"
+  }
+}

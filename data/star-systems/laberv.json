@@ -1,0 +1,92 @@
+{
+  "id": "laberv",
+  "name": "Laberv",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0325",
+  "uwp": "B554443-7",
+  "tradeCodes": [
+    "Ni",
+    "Pa"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Laberv_(world)",
+  "celestialObjects": [
+    {
+      "id": "laberv-star",
+      "name": "Laberv Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "laberv-mainworld",
+      "name": "Laberv",
+      "type": "Planet",
+      "orbitAU": 1.1416689376323244,
+      "bearing": 328,
+      "radiusKm": 4800,
+      "uwp": "B554443-7",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "LABERV CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "laberv-highport",
+      "name": "Laberv Highport",
+      "type": "Highport",
+      "parent": "laberv-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "LABERV HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "laberv-mainworld",
+    "starport": "laberv-highport",
+    "orbit": "laberv-mainworld"
+  }
+}

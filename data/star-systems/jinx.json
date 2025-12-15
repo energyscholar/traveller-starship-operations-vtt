@@ -1,0 +1,91 @@
+{
+  "id": "jinx",
+  "name": "Jinx",
+  "sector": "Spinward Marches",
+  "subsector": "M",
+  "hex": "0440",
+  "uwp": "D100133-7",
+  "tradeCodes": [
+    "Lo",
+    "Va",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Poor starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Jinx_(world)",
+  "celestialObjects": [
+    {
+      "id": "jinx-star",
+      "name": "Jinx Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "jinx-mainworld",
+      "name": "Jinx",
+      "type": "Planet",
+      "orbitAU": 0.49671725940970385,
+      "bearing": 86,
+      "radiusKm": 1600,
+      "uwp": "D100133-7",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "JINX CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "jinx-gasgiant",
+      "name": "Jinx Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.378495857914374,
+      "bearing": 10,
+      "radiusKm": 56973.265394506016,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "jinx-mainworld",
+    "starport": "jinx-mainworld",
+    "orbit": "jinx-mainworld"
+  }
+}

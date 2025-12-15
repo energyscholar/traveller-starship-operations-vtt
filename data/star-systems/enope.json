@@ -1,0 +1,92 @@
+{
+  "id": "enope",
+  "name": "Enope",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "2205",
+  "uwp": "C411988-7",
+  "tradeCodes": [
+    "Hi",
+    "Ic",
+    "In",
+    "Na"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Enope_(world)",
+  "celestialObjects": [
+    {
+      "id": "enope-star",
+      "name": "Enope Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "enope-mainworld",
+      "name": "Enope",
+      "type": "Planet",
+      "orbitAU": 0.455984584985634,
+      "bearing": 173,
+      "radiusKm": 4000,
+      "uwp": "C411988-7",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ENOPE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "enope-gasgiant",
+      "name": "Enope Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.76667659457588,
+      "bearing": 13,
+      "radiusKm": 67206.73624004448,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "enope-mainworld",
+    "starport": "enope-mainworld",
+    "orbit": "enope-mainworld"
+  }
+}

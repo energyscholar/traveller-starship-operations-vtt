@@ -1,0 +1,107 @@
+{
+  "id": "vinorian",
+  "name": "Vinorian",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "3111",
+  "uwp": "B879610-9",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Vinorian_(world)",
+  "celestialObjects": [
+    {
+      "id": "vinorian-star",
+      "name": "Vinorian Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "vinorian-mainworld",
+      "name": "Vinorian",
+      "type": "Planet",
+      "orbitAU": 1.0721504539929279,
+      "bearing": 304,
+      "radiusKm": 7200,
+      "uwp": "B879610-9",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "VINORIAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "vinorian-highport",
+      "name": "Vinorian Highport",
+      "type": "Highport",
+      "parent": "vinorian-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "VINORIAN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "vinorian-gasgiant",
+      "name": "Vinorian Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.6265803843475535,
+      "bearing": 288,
+      "radiusKm": 67153.43382573155,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "vinorian-mainworld",
+    "starport": "vinorian-highport",
+    "orbit": "vinorian-mainworld"
+  }
+}

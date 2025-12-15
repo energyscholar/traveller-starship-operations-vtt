@@ -1,0 +1,75 @@
+{
+  "id": "zykoca",
+  "name": "Zykoca",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3004",
+  "uwp": "D994542-6",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Zykoca_(world)",
+  "celestialObjects": [
+    {
+      "id": "zykoca-star",
+      "name": "Zykoca Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "zykoca-mainworld",
+      "name": "Zykoca",
+      "type": "Planet",
+      "orbitAU": 2.159646829081466,
+      "bearing": 229,
+      "radiusKm": 8000,
+      "uwp": "D994542-6",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ZYKOCA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "zykoca-mainworld",
+    "starport": "zykoca-mainworld",
+    "orbit": "zykoca-mainworld"
+  }
+}

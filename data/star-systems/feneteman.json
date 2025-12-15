@@ -1,0 +1,92 @@
+{
+  "id": "feneteman",
+  "name": "Feneteman",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3104",
+  "uwp": "C422200-C",
+  "tradeCodes": [
+    "He",
+    "Lo",
+    "Po",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Feneteman_(world)",
+  "celestialObjects": [
+    {
+      "id": "feneteman-star",
+      "name": "Feneteman Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "feneteman-mainworld",
+      "name": "Feneteman",
+      "type": "Planet",
+      "orbitAU": 0.45545234099910137,
+      "bearing": 107,
+      "radiusKm": 4000,
+      "uwp": "C422200-C",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "FENETEMAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^2. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "feneteman-gasgiant",
+      "name": "Feneteman Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.066734268860153,
+      "bearing": 31,
+      "radiusKm": 51245.77918242896,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "feneteman-mainworld",
+    "starport": "feneteman-mainworld",
+    "orbit": "feneteman-mainworld"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "id": "singer",
+  "name": "Singer",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "0940",
+  "uwp": "D553774-6",
+  "tradeCodes": [
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Singer_(world)",
+  "celestialObjects": [
+    {
+      "id": "singer-star",
+      "name": "Singer Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "singer-mainworld",
+      "name": "Singer",
+      "type": "Planet",
+      "orbitAU": 1.1078624028595214,
+      "bearing": 97,
+      "radiusKm": 4800,
+      "uwp": "D553774-6",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "SINGER CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "singer-gasgiant",
+      "name": "Singer Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.571812513517074,
+      "bearing": 159,
+      "radiusKm": 58903.77169788863,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "singer-mainworld",
+    "starport": "singer-mainworld",
+    "orbit": "singer-mainworld"
+  }
+}

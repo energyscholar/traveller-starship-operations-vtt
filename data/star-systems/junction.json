@@ -1,0 +1,76 @@
+{
+  "id": "junction",
+  "name": "Junction",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0122",
+  "uwp": "D550441-4",
+  "tradeCodes": [
+    "De",
+    "Ni",
+    "Po",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL4.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Junction_(world)",
+  "celestialObjects": [
+    {
+      "id": "junction-star",
+      "name": "Junction Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "junction-mainworld",
+      "name": "Junction",
+      "type": "Planet",
+      "orbitAU": 1.0555026616237881,
+      "bearing": 132,
+      "radiusKm": 4800,
+      "uwp": "D550441-4",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "JUNCTION CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL4.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "junction-mainworld",
+    "starport": "junction-mainworld",
+    "orbit": "junction-mainworld"
+  }
+}

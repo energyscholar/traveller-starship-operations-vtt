@@ -1,0 +1,74 @@
+{
+  "id": "728-907",
+  "name": "728-907",
+  "sector": "Spinward Marches",
+  "subsector": "F",
+  "hex": "1214",
+  "uwp": "E955000-0",
+  "tradeCodes": [
+    "Ba",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL0.",
+  "wikiUrl": "https://wiki.travellerrpg.com/728-907_(world)",
+  "celestialObjects": [
+    {
+      "id": "728-907-star",
+      "name": "728-907 Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "728-907-mainworld",
+      "name": "728-907",
+      "type": "Planet",
+      "orbitAU": 1.1192755497172493,
+      "bearing": 100,
+      "radiusKm": 8000,
+      "uwp": "E955000-0",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "728-907 CONTROL",
+      "gmNotes": "Mainworld. Pop 0. TL0.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "728-907-mainworld",
+    "starport": "728-907-mainworld",
+    "orbit": "728-907-mainworld"
+  }
+}

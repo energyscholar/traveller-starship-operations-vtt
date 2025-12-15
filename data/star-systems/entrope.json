@@ -1,0 +1,90 @@
+{
+  "id": "entrope",
+  "name": "Entrope",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0720",
+  "uwp": "E436AAA-B",
+  "tradeCodes": [
+    "Hi",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Entrope_(world)",
+  "celestialObjects": [
+    {
+      "id": "entrope-star",
+      "name": "Entrope Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "entrope-mainworld",
+      "name": "Entrope",
+      "type": "Planet",
+      "orbitAU": 1.2511761796458163,
+      "bearing": 21,
+      "radiusKm": 4000,
+      "uwp": "E436AAA-B",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "ENTROPE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^10. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "entrope-gasgiant",
+      "name": "Entrope Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.471923866814433,
+      "bearing": 350,
+      "radiusKm": 57058.65113545003,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "entrope-mainworld",
+    "starport": "entrope-mainworld",
+    "orbit": "entrope-mainworld"
+  }
+}

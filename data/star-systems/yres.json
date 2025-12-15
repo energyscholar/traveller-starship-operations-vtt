@@ -1,0 +1,107 @@
+{
+  "id": "yres",
+  "name": "Yres",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1802",
+  "uwp": "BAC6773-9",
+  "tradeCodes": [
+    "Fl"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Yres_(world)",
+  "celestialObjects": [
+    {
+      "id": "yres-star",
+      "name": "Yres Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "yres-mainworld",
+      "name": "Yres",
+      "type": "Planet",
+      "orbitAU": 2.242402699522264,
+      "bearing": 307,
+      "radiusKm": 8800,
+      "uwp": "BAC6773-9",
+      "atmosphere": "Insidious",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "YRES CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "yres-highport",
+      "name": "Yres Highport",
+      "type": "Highport",
+      "parent": "yres-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "YRES HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "yres-gasgiant",
+      "name": "Yres Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.182980091170878,
+      "bearing": 58,
+      "radiusKm": 51518.99626200733,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "yres-mainworld",
+    "starport": "yres-highport",
+    "orbit": "yres-mainworld"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "id": "brodie",
+  "name": "Brodie",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "3021",
+  "uwp": "C410468-7",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Brodie_(world)",
+  "celestialObjects": [
+    {
+      "id": "brodie-star",
+      "name": "Brodie Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "brodie-mainworld",
+      "name": "Brodie",
+      "type": "Planet",
+      "orbitAU": 0.6201715474245195,
+      "bearing": 309,
+      "radiusKm": 4000,
+      "uwp": "C410468-7",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "BRODIE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "brodie-gasgiant",
+      "name": "Brodie Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.6663874650846315,
+      "bearing": 176,
+      "radiusKm": 67295.51457714451,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "brodie-mainworld",
+    "starport": "brodie-mainworld",
+    "orbit": "brodie-mainworld"
+  }
+}

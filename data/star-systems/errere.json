@@ -1,0 +1,108 @@
+{
+  "id": "errere",
+  "name": "Errere",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0103",
+  "uwp": "B563664-B",
+  "tradeCodes": [
+    "Ni",
+    "Ri"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Errere_(world)",
+  "celestialObjects": [
+    {
+      "id": "errere-star",
+      "name": "Errere Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "errere-mainworld",
+      "name": "Errere",
+      "type": "Planet",
+      "orbitAU": 0.99135075704366,
+      "bearing": 76,
+      "radiusKm": 4800,
+      "uwp": "B563664-B",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ERRERE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "errere-highport",
+      "name": "Errere Highport",
+      "type": "Highport",
+      "parent": "errere-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ERRERE HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "errere-gasgiant",
+      "name": "Errere Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.745127097993982,
+      "bearing": 54,
+      "radiusKm": 60596.07176943743,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "errere-mainworld",
+    "starport": "errere-highport",
+    "orbit": "errere-mainworld"
+  }
+}

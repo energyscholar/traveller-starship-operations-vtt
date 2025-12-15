@@ -1,0 +1,107 @@
+{
+  "id": "youghal",
+  "name": "Youghal",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "3039",
+  "uwp": "AA95345-B",
+  "tradeCodes": [
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Youghal_(world)",
+  "celestialObjects": [
+    {
+      "id": "youghal-star",
+      "name": "Youghal Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "youghal-mainworld",
+      "name": "Youghal",
+      "type": "Planet",
+      "orbitAU": 1.732766258071094,
+      "bearing": 49,
+      "radiusKm": 8800,
+      "uwp": "AA95345-B",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "YOUGHAL CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "youghal-highport",
+      "name": "Youghal Highport",
+      "type": "Highport",
+      "parent": "youghal-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "YOUGHAL HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "youghal-gasgiant",
+      "name": "Youghal Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.809560191556045,
+      "bearing": 96,
+      "radiusKm": 69040.37701080425,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "youghal-mainworld",
+    "starport": "youghal-highport",
+    "orbit": "youghal-mainworld"
+  }
+}

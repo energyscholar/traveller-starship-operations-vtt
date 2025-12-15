@@ -1,0 +1,90 @@
+{
+  "id": "yorbund",
+  "name": "Yorbund",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "2303",
+  "uwp": "C7C6503-9",
+  "tradeCodes": [
+    "Fl",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Yorbund_(world)",
+  "celestialObjects": [
+    {
+      "id": "yorbund-star",
+      "name": "Yorbund Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "yorbund-mainworld",
+      "name": "Yorbund",
+      "type": "Planet",
+      "orbitAU": 1.7619461513280827,
+      "bearing": 57,
+      "radiusKm": 6400,
+      "uwp": "C7C6503-9",
+      "atmosphere": "Insidious",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "YORBUND CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "yorbund-gasgiant",
+      "name": "Yorbund Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.699694712209219,
+      "bearing": 177,
+      "radiusKm": 58170.42815704558,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "yorbund-mainworld",
+    "starport": "yorbund-mainworld",
+    "orbit": "yorbund-mainworld"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "zamine",
+  "name": "Zamine",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0421",
+  "uwp": "C897977-A",
+  "tradeCodes": [
+    "Hi",
+    "In"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Zamine_(world)",
+  "celestialObjects": [
+    {
+      "id": "zamine-star",
+      "name": "Zamine Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "zamine-mainworld",
+      "name": "Zamine",
+      "type": "Planet",
+      "orbitAU": 2.012027391300062,
+      "bearing": 281,
+      "radiusKm": 7200,
+      "uwp": "C897977-A",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ZAMINE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "zamine-gasgiant",
+      "name": "Zamine Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.1598239881209125,
+      "bearing": 94,
+      "radiusKm": 69226.17846122102,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "zamine-mainworld",
+    "starport": "zamine-mainworld",
+    "orbit": "zamine-mainworld"
+  }
+}

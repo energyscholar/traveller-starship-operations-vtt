@@ -1,0 +1,93 @@
+{
+  "id": "knorbes",
+  "name": "Knorbes",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1807",
+  "uwp": "E888765-2",
+  "tradeCodes": [
+    "Ag",
+    "Ri",
+    "An",
+    "Re",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL2.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Knorbes_(world)",
+  "celestialObjects": [
+    {
+      "id": "knorbes-star",
+      "name": "Knorbes Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "knorbes-mainworld",
+      "name": "Knorbes",
+      "type": "Planet",
+      "orbitAU": 1.2155748529369361,
+      "bearing": 335,
+      "radiusKm": 7200,
+      "uwp": "E888765-2",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "KNORBES CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL2.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "knorbes-gasgiant",
+      "name": "Knorbes Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.207731131738145,
+      "bearing": 190,
+      "radiusKm": 67360.63071177565,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "knorbes-mainworld",
+    "starport": "knorbes-mainworld",
+    "orbit": "knorbes-mainworld"
+  }
+}

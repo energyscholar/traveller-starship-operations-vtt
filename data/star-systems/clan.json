@@ -1,0 +1,110 @@
+{
+  "id": "clan",
+  "name": "Clan",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "1103",
+  "uwp": "B672899-A",
+  "tradeCodes": [
+    "He",
+    "Ph",
+    "Pi",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Clan_(world)",
+  "celestialObjects": [
+    {
+      "id": "clan-star",
+      "name": "Clan Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "clan-mainworld",
+      "name": "Clan",
+      "type": "Planet",
+      "orbitAU": 1.0651687117597692,
+      "bearing": 345,
+      "radiusKm": 5600,
+      "uwp": "B672899-A",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "CLAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "clan-highport",
+      "name": "Clan Highport",
+      "type": "Highport",
+      "parent": "clan-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "CLAN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "clan-gasgiant",
+      "name": "Clan Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.574462610616911,
+      "bearing": 305,
+      "radiusKm": 62352.32941753563,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "clan-mainworld",
+    "starport": "clan-highport",
+    "orbit": "clan-mainworld"
+  }
+}

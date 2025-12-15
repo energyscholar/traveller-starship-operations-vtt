@@ -1,0 +1,92 @@
+{
+  "id": "sheyou",
+  "name": "Sheyou",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0610",
+  "uwp": "B756779-A",
+  "tradeCodes": [
+    "Ag",
+    "Ga"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Sheyou_(world)",
+  "celestialObjects": [
+    {
+      "id": "sheyou-star",
+      "name": "Sheyou Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "sheyou-mainworld",
+      "name": "Sheyou",
+      "type": "Planet",
+      "orbitAU": 1.087713630826005,
+      "bearing": 122,
+      "radiusKm": 6400,
+      "uwp": "B756779-A",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "SHEYOU CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "sheyou-highport",
+      "name": "Sheyou Highport",
+      "type": "Highport",
+      "parent": "sheyou-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "SHEYOU HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "sheyou-mainworld",
+    "starport": "sheyou-highport",
+    "orbit": "sheyou-mainworld"
+  }
+}

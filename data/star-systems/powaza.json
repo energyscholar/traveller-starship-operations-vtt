@@ -1,0 +1,93 @@
+{
+  "id": "powaza",
+  "name": "Powaza",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "3220",
+  "uwp": "C787566-5",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Ga",
+    "Pr",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Powaza_(world)",
+  "celestialObjects": [
+    {
+      "id": "powaza-star",
+      "name": "Powaza Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "powaza-mainworld",
+      "name": "Powaza",
+      "type": "Planet",
+      "orbitAU": 1.2204853653148813,
+      "bearing": 340,
+      "radiusKm": 6400,
+      "uwp": "C787566-5",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "POWAZA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "powaza-gasgiant",
+      "name": "Powaza Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.784904909562568,
+      "bearing": 162,
+      "radiusKm": 53794.946334142194,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "powaza-mainworld",
+    "starport": "powaza-mainworld",
+    "orbit": "powaza-mainworld"
+  }
+}

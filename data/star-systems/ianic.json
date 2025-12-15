@@ -1,0 +1,92 @@
+{
+  "id": "ianic",
+  "name": "Ianic",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "1924",
+  "uwp": "E560697-5",
+  "tradeCodes": [
+    "De",
+    "Ni",
+    "Ri",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ianic_(world)",
+  "celestialObjects": [
+    {
+      "id": "ianic-star",
+      "name": "Ianic Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ianic-mainworld",
+      "name": "Ianic",
+      "type": "Planet",
+      "orbitAU": 0.9657759371703805,
+      "bearing": 221,
+      "radiusKm": 4800,
+      "uwp": "E560697-5",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "IANIC CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ianic-gasgiant",
+      "name": "Ianic Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.612406457753755,
+      "bearing": 271,
+      "radiusKm": 62127.07955296113,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ianic-mainworld",
+    "starport": "ianic-mainworld",
+    "orbit": "ianic-mainworld"
+  }
+}

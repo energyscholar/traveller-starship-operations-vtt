@@ -1,0 +1,109 @@
+{
+  "id": "prilissa",
+  "name": "Prilissa",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "3035",
+  "uwp": "B985588-6",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Pr"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Prilissa_(world)",
+  "celestialObjects": [
+    {
+      "id": "prilissa-star",
+      "name": "Prilissa Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "prilissa-mainworld",
+      "name": "Prilissa",
+      "type": "Planet",
+      "orbitAU": 1.1546704396999405,
+      "bearing": 54,
+      "radiusKm": 8000,
+      "uwp": "B985588-6",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "PRILISSA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "prilissa-highport",
+      "name": "Prilissa Highport",
+      "type": "Highport",
+      "parent": "prilissa-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "PRILISSA HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "prilissa-gasgiant",
+      "name": "Prilissa Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.787300021607422,
+      "bearing": 278,
+      "radiusKm": 63896.297459352165,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "prilissa-mainworld",
+    "starport": "prilissa-highport",
+    "orbit": "prilissa-mainworld"
+  }
+}

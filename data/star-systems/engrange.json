@@ -1,0 +1,89 @@
+{
+  "id": "engrange",
+  "name": "Engrange",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0425",
+  "uwp": "C554769-8",
+  "tradeCodes": [
+    "Ag"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Engrange_(world)",
+  "celestialObjects": [
+    {
+      "id": "engrange-star",
+      "name": "Engrange Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "engrange-mainworld",
+      "name": "Engrange",
+      "type": "Planet",
+      "orbitAU": 1.147626564167432,
+      "bearing": 347,
+      "radiusKm": 4800,
+      "uwp": "C554769-8",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ENGRANGE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "engrange-gasgiant",
+      "name": "Engrange Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.688098176055043,
+      "bearing": 340,
+      "radiusKm": 64243.63575561578,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "engrange-mainworld",
+    "starport": "engrange-mainworld",
+    "orbit": "engrange-mainworld"
+  }
+}

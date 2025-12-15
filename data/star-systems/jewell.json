@@ -1,0 +1,109 @@
+{
+  "id": "jewell",
+  "name": "Jewell",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "1106",
+  "uwp": "A777999-C",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Jewell_(world)",
+  "celestialObjects": [
+    {
+      "id": "jewell-star",
+      "name": "Jewell Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "jewell-mainworld",
+      "name": "Jewell",
+      "type": "Planet",
+      "orbitAU": 1.1102780803248042,
+      "bearing": 301,
+      "radiusKm": 6400,
+      "uwp": "A777999-C",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "JEWELL CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "jewell-highport",
+      "name": "Jewell Highport",
+      "type": "Highport",
+      "parent": "jewell-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "JEWELL HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "jewell-gasgiant",
+      "name": "Jewell Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.856701190715149,
+      "bearing": 17,
+      "radiusKm": 63067.214986988394,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "jewell-mainworld",
+    "starport": "jewell-highport",
+    "orbit": "jewell-mainworld"
+  }
+}

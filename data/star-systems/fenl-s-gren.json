@@ -1,0 +1,90 @@
+{
+  "id": "fenl-s-gren",
+  "name": "Fenl's Gren",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "3228",
+  "uwp": "C647346-9",
+  "tradeCodes": [
+    "Lo",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Fenl's%20Gren_(world)",
+  "celestialObjects": [
+    {
+      "id": "fenl-s-gren-star",
+      "name": "Fenl's Gren Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "fenl-s-gren-mainworld",
+      "name": "Fenl's Gren",
+      "type": "Planet",
+      "orbitAU": 1.245595701177067,
+      "bearing": 184,
+      "radiusKm": 5600,
+      "uwp": "C647346-9",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "FENL'S GREN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "fenl-s-gren-gasgiant",
+      "name": "Fenl's Gren Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.036464280729508,
+      "bearing": 307,
+      "radiusKm": 53067.57286548125,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "fenl-s-gren-mainworld",
+    "starport": "fenl-s-gren-mainworld",
+    "orbit": "fenl-s-gren-mainworld"
+  }
+}

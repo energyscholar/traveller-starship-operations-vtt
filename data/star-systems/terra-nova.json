@@ -1,0 +1,90 @@
+{
+  "id": "terra-nova",
+  "name": "Terra Nova",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0511",
+  "uwp": "C786342-9",
+  "tradeCodes": [
+    "Lo",
+    "Ga"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Terra%20Nova_(world)",
+  "celestialObjects": [
+    {
+      "id": "terra-nova-star",
+      "name": "Terra Nova Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "terra-nova-mainworld",
+      "name": "Terra Nova",
+      "type": "Planet",
+      "orbitAU": 1.2143726195353057,
+      "bearing": 263,
+      "radiusKm": 6400,
+      "uwp": "C786342-9",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "TERRA NOVA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "terra-nova-gasgiant",
+      "name": "Terra Nova Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.192692778669836,
+      "bearing": 39,
+      "radiusKm": 61002.90424526089,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "terra-nova-mainworld",
+    "starport": "terra-nova-mainworld",
+    "orbit": "terra-nova-mainworld"
+  }
+}

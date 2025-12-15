@@ -1,0 +1,74 @@
+{
+  "id": "pedase",
+  "name": "Pedase",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "2830",
+  "uwp": "C415346-7",
+  "tradeCodes": [
+    "Ic",
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pedase_(world)",
+  "celestialObjects": [
+    {
+      "id": "pedase-star",
+      "name": "Pedase Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pedase-mainworld",
+      "name": "Pedase",
+      "type": "Planet",
+      "orbitAU": 0.4292383441549348,
+      "bearing": 255,
+      "radiusKm": 4000,
+      "uwp": "C415346-7",
+      "atmosphere": "Trace",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "PEDASE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pedase-mainworld",
+    "starport": "pedase-mainworld",
+    "orbit": "pedase-mainworld"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "id": "flexos",
+  "name": "Flexos",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1233",
+  "uwp": "E5A1422-8",
+  "tradeCodes": [
+    "Fl",
+    "He",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Flexos_(world)",
+  "celestialObjects": [
+    {
+      "id": "flexos-star",
+      "name": "Flexos Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "flexos-mainworld",
+      "name": "Flexos",
+      "type": "Planet",
+      "orbitAU": 1.6359423504110016,
+      "bearing": 41,
+      "radiusKm": 4800,
+      "uwp": "E5A1422-8",
+      "atmosphere": "Exotic",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "FLEXOS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "flexos-mainworld",
+    "starport": "flexos-mainworld",
+    "orbit": "flexos-mainworld"
+  }
+}

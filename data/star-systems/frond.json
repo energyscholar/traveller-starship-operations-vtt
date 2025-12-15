@@ -1,0 +1,90 @@
+{
+  "id": "frond",
+  "name": "Frond",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0810",
+  "uwp": "E9C3300-9",
+  "tradeCodes": [
+    "Fl",
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Frond_(world)",
+  "celestialObjects": [
+    {
+      "id": "frond-star",
+      "name": "Frond Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "frond-mainworld",
+      "name": "Frond",
+      "type": "Planet",
+      "orbitAU": 2.3543532379244354,
+      "bearing": 287,
+      "radiusKm": 8000,
+      "uwp": "E9C3300-9",
+      "atmosphere": "Insidious",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "FROND CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "frond-gasgiant",
+      "name": "Frond Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.995386211984557,
+      "bearing": 202,
+      "radiusKm": 51036.77603217757,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "frond-mainworld",
+    "starport": "frond-mainworld",
+    "orbit": "frond-mainworld"
+  }
+}

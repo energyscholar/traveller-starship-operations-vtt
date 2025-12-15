@@ -1,0 +1,90 @@
+{
+  "id": "saxe",
+  "name": "Saxe",
+  "sector": "Spinward Marches",
+  "subsector": "M",
+  "hex": "0231",
+  "uwp": "EAA5543-8",
+  "tradeCodes": [
+    "Fl",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Saxe_(world)",
+  "celestialObjects": [
+    {
+      "id": "saxe-star",
+      "name": "Saxe Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "saxe-mainworld",
+      "name": "Saxe",
+      "type": "Planet",
+      "orbitAU": 1.7135866052071551,
+      "bearing": 110,
+      "radiusKm": 8800,
+      "uwp": "EAA5543-8",
+      "atmosphere": "Exotic",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "SAXE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "saxe-gasgiant",
+      "name": "Saxe Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.750340554729881,
+      "bearing": 70,
+      "radiusKm": 61496.167667608,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "saxe-mainworld",
+    "starport": "saxe-mainworld",
+    "orbit": "saxe-mainworld"
+  }
+}

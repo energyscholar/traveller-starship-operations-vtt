@@ -1,0 +1,93 @@
+{
+  "id": "wardn",
+  "name": "Wardn",
+  "sector": "Spinward Marches",
+  "subsector": "K",
+  "hex": "1727",
+  "uwp": "B756486-B",
+  "tradeCodes": [
+    "Ni",
+    "Ga",
+    "Pa"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Wardn_(world)",
+  "celestialObjects": [
+    {
+      "id": "wardn-star",
+      "name": "Wardn Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "wardn-mainworld",
+      "name": "Wardn",
+      "type": "Planet",
+      "orbitAU": 1.051795301897393,
+      "bearing": 44,
+      "radiusKm": 6400,
+      "uwp": "B756486-B",
+      "atmosphere": "Thin",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "WARDN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "wardn-highport",
+      "name": "Wardn Highport",
+      "type": "Highport",
+      "parent": "wardn-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "WARDN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "wardn-mainworld",
+    "starport": "wardn-highport",
+    "orbit": "wardn-mainworld"
+  }
+}

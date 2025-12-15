@@ -1,0 +1,76 @@
+{
+  "id": "kuai-qing",
+  "name": "Kuai Qing",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1040",
+  "uwp": "C503758-A",
+  "tradeCodes": [
+    "Ic",
+    "Na",
+    "Va",
+    "Pi"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Kuai%20Qing_(world)",
+  "celestialObjects": [
+    {
+      "id": "kuai-qing-star",
+      "name": "Kuai Qing Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "kuai-qing-mainworld",
+      "name": "Kuai Qing",
+      "type": "Planet",
+      "orbitAU": 0.56398561599708,
+      "bearing": 29,
+      "radiusKm": 4800,
+      "uwp": "C503758-A",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "KUAI QING CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "kuai-qing-mainworld",
+    "starport": "kuai-qing-mainworld",
+    "orbit": "kuai-qing-mainworld"
+  }
+}

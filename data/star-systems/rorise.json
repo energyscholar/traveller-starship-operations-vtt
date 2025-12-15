@@ -1,0 +1,73 @@
+{
+  "id": "rorise",
+  "name": "Rorise",
+  "sector": "Spinward Marches",
+  "subsector": "L",
+  "hex": "3022",
+  "uwp": "C994100-A",
+  "tradeCodes": [
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Rorise_(world)",
+  "celestialObjects": [
+    {
+      "id": "rorise-star",
+      "name": "Rorise Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "rorise-mainworld",
+      "name": "Rorise",
+      "type": "Planet",
+      "orbitAU": 2.1320994854025526,
+      "bearing": 335,
+      "radiusKm": 8000,
+      "uwp": "C994100-A",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "RORISE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "rorise-mainworld",
+    "starport": "rorise-mainworld",
+    "orbit": "rorise-mainworld"
+  }
+}

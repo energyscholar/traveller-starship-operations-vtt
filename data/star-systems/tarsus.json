@@ -1,0 +1,109 @@
+{
+  "id": "tarsus",
+  "name": "Tarsus",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1138",
+  "uwp": "B584620-A",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Ri"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Tarsus_(world)",
+  "celestialObjects": [
+    {
+      "id": "tarsus-star",
+      "name": "Tarsus Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "tarsus-mainworld",
+      "name": "Tarsus",
+      "type": "Planet",
+      "orbitAU": 1.163377829798562,
+      "bearing": 183,
+      "radiusKm": 4800,
+      "uwp": "B584620-A",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "TARSUS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "tarsus-highport",
+      "name": "Tarsus Highport",
+      "type": "Highport",
+      "parent": "tarsus-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "TARSUS HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "tarsus-gasgiant",
+      "name": "Tarsus Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.505639509165193,
+      "bearing": 309,
+      "radiusKm": 53516.471068486455,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "tarsus-mainworld",
+    "starport": "tarsus-highport",
+    "orbit": "tarsus-mainworld"
+  }
+}

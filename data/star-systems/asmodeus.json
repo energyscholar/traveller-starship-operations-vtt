@@ -1,0 +1,91 @@
+{
+  "id": "asmodeus",
+  "name": "Asmodeus",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0512",
+  "uwp": "E596400-5",
+  "tradeCodes": [
+    "Ni",
+    "Pa",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL5.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Asmodeus_(world)",
+  "celestialObjects": [
+    {
+      "id": "asmodeus-star",
+      "name": "Asmodeus Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "asmodeus-mainworld",
+      "name": "Asmodeus",
+      "type": "Planet",
+      "orbitAU": 1.7263454626890904,
+      "bearing": 236,
+      "radiusKm": 4800,
+      "uwp": "E596400-5",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ASMODEUS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL5.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "asmodeus-gasgiant",
+      "name": "Asmodeus Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.2079165623102455,
+      "bearing": 83,
+      "radiusKm": 65474.250926088935,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "asmodeus-mainworld",
+    "starport": "asmodeus-mainworld",
+    "orbit": "asmodeus-mainworld"
+  }
+}

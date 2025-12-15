@@ -1,0 +1,90 @@
+{
+  "id": "trifuge",
+  "name": "Trifuge",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0723",
+  "uwp": "C546556-9",
+  "tradeCodes": [
+    "Ag",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Trifuge_(world)",
+  "celestialObjects": [
+    {
+      "id": "trifuge-star",
+      "name": "Trifuge Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "trifuge-mainworld",
+      "name": "Trifuge",
+      "type": "Planet",
+      "orbitAU": 1.2037346882814466,
+      "bearing": 86,
+      "radiusKm": 4800,
+      "uwp": "C546556-9",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "TRIFUGE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "trifuge-gasgiant",
+      "name": "Trifuge Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.3913881479594785,
+      "bearing": 143,
+      "radiusKm": 68833.73668174655,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "trifuge-mainworld",
+    "starport": "trifuge-mainworld",
+    "orbit": "trifuge-mainworld"
+  }
+}

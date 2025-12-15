@@ -1,0 +1,90 @@
+{
+  "id": "yiktor",
+  "name": "Yiktor",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0114",
+  "uwp": "C6B6431-A",
+  "tradeCodes": [
+    "Fl",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Yiktor_(world)",
+  "celestialObjects": [
+    {
+      "id": "yiktor-star",
+      "name": "Yiktor Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "yiktor-mainworld",
+      "name": "Yiktor",
+      "type": "Planet",
+      "orbitAU": 1.753708488835812,
+      "bearing": 231,
+      "radiusKm": 5600,
+      "uwp": "C6B6431-A",
+      "atmosphere": "Corrosive",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "YIKTOR CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "yiktor-gasgiant",
+      "name": "Yiktor Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.8465458178239755,
+      "bearing": 210,
+      "radiusKm": 61890.58607311665,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "yiktor-mainworld",
+    "starport": "yiktor-mainworld",
+    "orbit": "yiktor-mainworld"
+  }
+}

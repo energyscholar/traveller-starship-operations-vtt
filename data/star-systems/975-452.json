@@ -1,0 +1,90 @@
+{
+  "id": "975-452",
+  "name": "975-452",
+  "sector": "Spinward Marches",
+  "subsector": "M",
+  "hex": "0840",
+  "uwp": "E100316-9",
+  "tradeCodes": [
+    "Lo",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/975-452_(world)",
+  "celestialObjects": [
+    {
+      "id": "975-452-star",
+      "name": "975-452 Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "975-452-mainworld",
+      "name": "975-452",
+      "type": "Planet",
+      "orbitAU": 0.4004724883041191,
+      "bearing": 301,
+      "radiusKm": 1600,
+      "uwp": "E100316-9",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "975-452 CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "975-452-gasgiant",
+      "name": "975-452 Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.337657138714148,
+      "bearing": 312,
+      "radiusKm": 62808.49785746173,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "975-452-mainworld",
+    "starport": "975-452-mainworld",
+    "orbit": "975-452-mainworld"
+  }
+}

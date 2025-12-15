@@ -1,0 +1,107 @@
+{
+  "id": "ivendo",
+  "name": "Ivendo",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2319",
+  "uwp": "B424659-A",
+  "tradeCodes": [
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ivendo_(world)",
+  "celestialObjects": [
+    {
+      "id": "ivendo-star",
+      "name": "Ivendo Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ivendo-mainworld",
+      "name": "Ivendo",
+      "type": "Planet",
+      "orbitAU": 0.423134315093187,
+      "bearing": 329,
+      "radiusKm": 4000,
+      "uwp": "B424659-A",
+      "atmosphere": "Very Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "IVENDO CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ivendo-highport",
+      "name": "Ivendo Highport",
+      "type": "Highport",
+      "parent": "ivendo-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "IVENDO HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "ivendo-gasgiant",
+      "name": "Ivendo Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.022491536978418,
+      "bearing": 112,
+      "radiusKm": 68894.54066753089,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ivendo-mainworld",
+    "starport": "ivendo-highport",
+    "orbit": "ivendo-mainworld"
+  }
+}

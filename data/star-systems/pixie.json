@@ -1,0 +1,111 @@
+{
+  "id": "pixie",
+  "name": "Pixie",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1903",
+  "uwp": "A100103-D",
+  "tradeCodes": [
+    "Lo",
+    "Va",
+    "An",
+    "Px",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL13.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pixie_(world)",
+  "celestialObjects": [
+    {
+      "id": "pixie-star",
+      "name": "Pixie Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pixie-mainworld",
+      "name": "Pixie",
+      "type": "Planet",
+      "orbitAU": 0.5780676707210742,
+      "bearing": 11,
+      "radiusKm": 1600,
+      "uwp": "A100103-D",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "PIXIE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL13.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "pixie-highport",
+      "name": "Pixie Highport",
+      "type": "Highport",
+      "parent": "pixie-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "PIXIE HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "pixie-gasgiant",
+      "name": "Pixie Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.007391618385779,
+      "bearing": 193,
+      "radiusKm": 52810.25330422438,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pixie-mainworld",
+    "starport": "pixie-highport",
+    "orbit": "pixie-mainworld"
+  }
+}

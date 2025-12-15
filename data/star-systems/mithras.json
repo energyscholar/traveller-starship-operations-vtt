@@ -1,0 +1,91 @@
+{
+  "id": "mithras",
+  "name": "Mithras",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "1932",
+  "uwp": "C8B5568-8",
+  "tradeCodes": [
+    "Fl",
+    "Ni",
+    "Px"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 3,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Mithras_(world)",
+  "celestialObjects": [
+    {
+      "id": "mithras-star",
+      "name": "Mithras Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "mithras-mainworld",
+      "name": "Mithras",
+      "type": "Planet",
+      "orbitAU": 2.305065912261736,
+      "bearing": 329,
+      "radiusKm": 7200,
+      "uwp": "C8B5568-8",
+      "atmosphere": "Corrosive",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "MITHRAS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "mithras-gasgiant",
+      "name": "Mithras Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.0346119947001435,
+      "bearing": 318,
+      "radiusKm": 61162.28206654121,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "mithras-mainworld",
+    "starport": "mithras-mainworld",
+    "orbit": "mithras-mainworld"
+  }
+}

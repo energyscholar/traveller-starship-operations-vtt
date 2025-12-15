@@ -1,0 +1,90 @@
+{
+  "id": "riverland",
+  "name": "Riverland",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "1102",
+  "uwp": "C566A99-9",
+  "tradeCodes": [
+    "Hi",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Riverland_(world)",
+  "celestialObjects": [
+    {
+      "id": "riverland-star",
+      "name": "Riverland Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "riverland-mainworld",
+      "name": "Riverland",
+      "type": "Planet",
+      "orbitAU": 1.0009570835364703,
+      "bearing": 289,
+      "radiusKm": 4800,
+      "uwp": "C566A99-9",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "RIVERLAND CONTROL",
+      "gmNotes": "Mainworld. Pop 10^10. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "riverland-gasgiant",
+      "name": "Riverland Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.23373895105337,
+      "bearing": 231,
+      "radiusKm": 57916.98047417646,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "riverland-mainworld",
+    "starport": "riverland-mainworld",
+    "orbit": "riverland-mainworld"
+  }
+}

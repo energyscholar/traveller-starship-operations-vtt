@@ -1,0 +1,109 @@
+{
+  "id": "joyeuse",
+  "name": "Joyeuse",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1123",
+  "uwp": "B564778-A",
+  "tradeCodes": [
+    "Ag",
+    "Ri",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 13,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Joyeuse_(world)",
+  "celestialObjects": [
+    {
+      "id": "joyeuse-star",
+      "name": "Joyeuse Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "joyeuse-mainworld",
+      "name": "Joyeuse",
+      "type": "Planet",
+      "orbitAU": 0.9707451669512479,
+      "bearing": 160,
+      "radiusKm": 4800,
+      "uwp": "B564778-A",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "JOYEUSE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "joyeuse-highport",
+      "name": "Joyeuse Highport",
+      "type": "Highport",
+      "parent": "joyeuse-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "JOYEUSE HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "joyeuse-gasgiant",
+      "name": "Joyeuse Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.431433033225694,
+      "bearing": 175,
+      "radiusKm": 67183.83410525907,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "joyeuse-mainworld",
+    "starport": "joyeuse-highport",
+    "orbit": "joyeuse-mainworld"
+  }
+}

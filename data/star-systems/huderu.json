@@ -1,0 +1,75 @@
+{
+  "id": "huderu",
+  "name": "Huderu",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "3114",
+  "uwp": "X575000-0",
+  "tradeCodes": [
+    "Ba",
+    "Fo",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "None starport. TL0.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Huderu_(world)",
+  "celestialObjects": [
+    {
+      "id": "huderu-star",
+      "name": "Huderu Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "huderu-mainworld",
+      "name": "Huderu",
+      "type": "Planet",
+      "orbitAU": 1.1284351960973396,
+      "bearing": 90,
+      "radiusKm": 4800,
+      "uwp": "X575000-0",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "HUDERU CONTROL",
+      "gmNotes": "Mainworld. Pop 0. TL0.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "huderu-mainworld",
+    "starport": "huderu-mainworld",
+    "orbit": "huderu-mainworld"
+  }
+}

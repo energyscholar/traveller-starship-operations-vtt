@@ -1,0 +1,92 @@
+{
+  "id": "terant-340",
+  "name": "Terant 340",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0622",
+  "uwp": "D5405A7-9",
+  "tradeCodes": [
+    "De",
+    "He",
+    "Ni",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Poor starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Terant%20340_(world)",
+  "celestialObjects": [
+    {
+      "id": "terant-340-star",
+      "name": "Terant 340 Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "terant-340-mainworld",
+      "name": "Terant 340",
+      "type": "Planet",
+      "orbitAU": 1.1806992248903154,
+      "bearing": 274,
+      "radiusKm": 4800,
+      "uwp": "D5405A7-9",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "TERANT 340 CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "terant-340-gasgiant",
+      "name": "Terant 340 Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.082550222566539,
+      "bearing": 42,
+      "radiusKm": 67950.1191480325,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "terant-340-mainworld",
+    "starport": "terant-340-mainworld",
+    "orbit": "terant-340-mainworld"
+  }
+}

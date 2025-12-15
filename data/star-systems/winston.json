@@ -1,0 +1,92 @@
+{
+  "id": "winston",
+  "name": "Winston",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0620",
+  "uwp": "E887573-6",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Ga",
+    "Pr"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Winston_(world)",
+  "celestialObjects": [
+    {
+      "id": "winston-star",
+      "name": "Winston Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "winston-mainworld",
+      "name": "Winston",
+      "type": "Planet",
+      "orbitAU": 1.1853386966848098,
+      "bearing": 259,
+      "radiusKm": 7200,
+      "uwp": "E887573-6",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "WINSTON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "winston-gasgiant",
+      "name": "Winston Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.123551491386742,
+      "bearing": 229,
+      "radiusKm": 67415.36327546972,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "winston-mainworld",
+    "starport": "winston-mainworld",
+    "orbit": "winston-mainworld"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "burtson",
+  "name": "Burtson",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2534",
+  "uwp": "C562667-8",
+  "tradeCodes": [
+    "Ni",
+    "Ri"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Burtson_(world)",
+  "celestialObjects": [
+    {
+      "id": "burtson-star",
+      "name": "Burtson Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "burtson-mainworld",
+      "name": "Burtson",
+      "type": "Planet",
+      "orbitAU": 1.0162845877332842,
+      "bearing": 138,
+      "radiusKm": 4800,
+      "uwp": "C562667-8",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "BURTSON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "burtson-gasgiant",
+      "name": "Burtson Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.06088178361442,
+      "bearing": 262,
+      "radiusKm": 61609.61191304004,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "burtson-mainworld",
+    "starport": "burtson-mainworld",
+    "orbit": "burtson-mainworld"
+  }
+}

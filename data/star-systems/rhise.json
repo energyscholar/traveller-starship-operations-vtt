@@ -1,0 +1,75 @@
+{
+  "id": "rhise",
+  "name": "Rhise",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "2317",
+  "uwp": "C100576-A",
+  "tradeCodes": [
+    "Ni",
+    "Va",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Rhise_(world)",
+  "celestialObjects": [
+    {
+      "id": "rhise-star",
+      "name": "Rhise Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "rhise-mainworld",
+      "name": "Rhise",
+      "type": "Planet",
+      "orbitAU": 0.7610516600821069,
+      "bearing": 245,
+      "radiusKm": 1600,
+      "uwp": "C100576-A",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "RHISE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "rhise-mainworld",
+    "starport": "rhise-mainworld",
+    "orbit": "rhise-mainworld"
+  }
+}

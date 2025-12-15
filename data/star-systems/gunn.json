@@ -1,0 +1,90 @@
+{
+  "id": "gunn",
+  "name": "Gunn",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1429",
+  "uwp": "E544110-8",
+  "tradeCodes": [
+    "Lo",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Gunn_(world)",
+  "celestialObjects": [
+    {
+      "id": "gunn-star",
+      "name": "Gunn Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "gunn-mainworld",
+      "name": "Gunn",
+      "type": "Planet",
+      "orbitAU": 1.1947236814423217,
+      "bearing": 327,
+      "radiusKm": 4800,
+      "uwp": "E544110-8",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "GUNN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^1. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "gunn-gasgiant",
+      "name": "Gunn Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.547963394504868,
+      "bearing": 129,
+      "radiusKm": 50797.50173632843,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "gunn-mainworld",
+    "starport": "gunn-mainworld",
+    "orbit": "gunn-mainworld"
+  }
+}

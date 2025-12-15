@@ -1,0 +1,93 @@
+{
+  "id": "rorre",
+  "name": "Rorre",
+  "sector": "Spinward Marches",
+  "subsector": "I",
+  "hex": "0526",
+  "uwp": "D765657-3",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Ga",
+    "Ri",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Poor starport. TL3.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Rorre_(world)",
+  "celestialObjects": [
+    {
+      "id": "rorre-star",
+      "name": "Rorre Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "rorre-mainworld",
+      "name": "Rorre",
+      "type": "Planet",
+      "orbitAU": 0.9894084838513053,
+      "bearing": 72,
+      "radiusKm": 6400,
+      "uwp": "D765657-3",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "RORRE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL3.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "rorre-gasgiant",
+      "name": "Rorre Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.218873470822588,
+      "bearing": 126,
+      "radiusKm": 64913.60509751208,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "rorre-mainworld",
+    "starport": "rorre-mainworld",
+    "orbit": "rorre-mainworld"
+  }
+}

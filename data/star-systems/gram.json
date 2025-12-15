@@ -1,0 +1,110 @@
+{
+  "id": "gram",
+  "name": "Gram",
+  "sector": "Spinward Marches",
+  "subsector": "J",
+  "hex": "1223",
+  "uwp": "A895957-C",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Cx",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Gram_(world)",
+  "celestialObjects": [
+    {
+      "id": "gram-star",
+      "name": "Gram Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "gram-mainworld",
+      "name": "Gram",
+      "type": "Planet",
+      "orbitAU": 1.6768478089391807,
+      "bearing": 328,
+      "radiusKm": 7200,
+      "uwp": "A895957-C",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "GRAM CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "gram-highport",
+      "name": "Gram Highport",
+      "type": "Highport",
+      "parent": "gram-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "GRAM HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "gram-gasgiant",
+      "name": "Gram Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.181224403953198,
+      "bearing": 305,
+      "radiusKm": 52880.9792509223,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "gram-mainworld",
+    "starport": "gram-highport",
+    "orbit": "gram-mainworld"
+  }
+}

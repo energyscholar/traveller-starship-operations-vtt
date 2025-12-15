@@ -1,0 +1,97 @@
+{
+  "id": "glisten",
+  "name": "Glisten",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2036",
+  "uwp": "A000986-F",
+  "tradeCodes": [
+    "As",
+    "Hi",
+    "In",
+    "Na",
+    "Va",
+    "Cp",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL15.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Glisten_(world)",
+  "celestialObjects": [
+    {
+      "id": "glisten-star",
+      "name": "Glisten Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "glisten-mainworld",
+      "name": "Glisten",
+      "type": "Planet",
+      "orbitAU": 0.43340321705598234,
+      "bearing": 62,
+      "radiusKm": 800,
+      "uwp": "A000986-F",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "GLISTEN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL15.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "glisten-highport",
+      "name": "Glisten Highport",
+      "type": "Highport",
+      "parent": "glisten-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "GLISTEN HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "glisten-mainworld",
+    "starport": "glisten-highport",
+    "orbit": "glisten-mainworld"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "id": "yurst",
+  "name": "Yurst",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "2309",
+  "uwp": "E7B4643-8",
+  "tradeCodes": [
+    "Fl",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Yurst_(world)",
+  "celestialObjects": [
+    {
+      "id": "yurst-star",
+      "name": "Yurst Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "yurst-mainworld",
+      "name": "Yurst",
+      "type": "Planet",
+      "orbitAU": 1.772150128603092,
+      "bearing": 280,
+      "radiusKm": 6400,
+      "uwp": "E7B4643-8",
+      "atmosphere": "Corrosive",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "YURST CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "yurst-mainworld",
+    "starport": "yurst-mainworld",
+    "orbit": "yurst-mainworld"
+  }
+}

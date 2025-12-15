@@ -1,0 +1,113 @@
+{
+  "id": "regina",
+  "name": "Regina",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1910",
+  "uwp": "A788899-C",
+  "tradeCodes": [
+    "Ri",
+    "Pa",
+    "Ph",
+    "An",
+    "Cp",
+    "Sa",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Excellent starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Regina_(world)",
+  "celestialObjects": [
+    {
+      "id": "regina-star",
+      "name": "Regina Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "regina-mainworld",
+      "name": "Regina",
+      "type": "Planet",
+      "orbitAU": 1.1827422350881438,
+      "bearing": 168,
+      "radiusKm": 6400,
+      "uwp": "A788899-C",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "REGINA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "regina-highport",
+      "name": "Regina Highport",
+      "type": "Highport",
+      "parent": "regina-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "REGINA HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "regina-gasgiant",
+      "name": "Regina Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.966214125542798,
+      "bearing": 56,
+      "radiusKm": 53073.3059556274,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "regina-mainworld",
+    "starport": "regina-highport",
+    "orbit": "regina-mainworld"
+  }
+}

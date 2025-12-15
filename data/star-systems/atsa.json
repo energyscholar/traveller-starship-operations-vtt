@@ -1,0 +1,110 @@
+{
+  "id": "atsa",
+  "name": "Atsa",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0307",
+  "uwp": "B4337CA-A",
+  "tradeCodes": [
+    "Na",
+    "Po",
+    "An",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 10,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Atsa_(world)",
+  "celestialObjects": [
+    {
+      "id": "atsa-star",
+      "name": "Atsa Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "atsa-mainworld",
+      "name": "Atsa",
+      "type": "Planet",
+      "orbitAU": 1.2804128762503868,
+      "bearing": 323,
+      "radiusKm": 4000,
+      "uwp": "B4337CA-A",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "ATSA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "atsa-highport",
+      "name": "Atsa Highport",
+      "type": "Highport",
+      "parent": "atsa-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "ATSA HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "atsa-gasgiant",
+      "name": "Atsa Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.886281622102895,
+      "bearing": 170,
+      "radiusKm": 52920.986807265326,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "atsa-mainworld",
+    "starport": "atsa-highport",
+    "orbit": "atsa-mainworld"
+  }
+}

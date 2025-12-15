@@ -1,0 +1,93 @@
+{
+  "id": "towers",
+  "name": "Towers",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3103",
+  "uwp": "B544448-A",
+  "tradeCodes": [
+    "Ni",
+    "Pa",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Towers_(world)",
+  "celestialObjects": [
+    {
+      "id": "towers-star",
+      "name": "Towers Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "towers-mainworld",
+      "name": "Towers",
+      "type": "Planet",
+      "orbitAU": 1.1974119418342484,
+      "bearing": 232,
+      "radiusKm": 4800,
+      "uwp": "B544448-A",
+      "atmosphere": "Thin Tainted",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "TOWERS CONTROL",
+      "gmNotes": "Mainworld. Pop 10^4. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "towers-highport",
+      "name": "Towers Highport",
+      "type": "Highport",
+      "parent": "towers-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "TOWERS HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "towers-mainworld",
+    "starport": "towers-highport",
+    "orbit": "towers-mainworld"
+  }
+}

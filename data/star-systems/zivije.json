@@ -1,0 +1,77 @@
+{
+  "id": "zivije",
+  "name": "Zivije",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "2812",
+  "uwp": "C6B199C-B",
+  "tradeCodes": [
+    "Fl",
+    "He",
+    "Hi",
+    "In",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Zivije_(world)",
+  "celestialObjects": [
+    {
+      "id": "zivije-star",
+      "name": "Zivije Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "zivije-mainworld",
+      "name": "Zivije",
+      "type": "Planet",
+      "orbitAU": 2.076342706404958,
+      "bearing": 324,
+      "radiusKm": 5600,
+      "uwp": "C6B199C-B",
+      "atmosphere": "Corrosive",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ZIVIJE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "zivije-mainworld",
+    "starport": "zivije-mainworld",
+    "orbit": "zivije-mainworld"
+  }
+}

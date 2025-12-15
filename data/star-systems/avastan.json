@@ -1,0 +1,90 @@
+{
+  "id": "avastan",
+  "name": "Avastan",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1037",
+  "uwp": "C433520-A",
+  "tradeCodes": [
+    "Ni",
+    "Po"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 1,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Avastan_(world)",
+  "celestialObjects": [
+    {
+      "id": "avastan-star",
+      "name": "Avastan Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "avastan-mainworld",
+      "name": "Avastan",
+      "type": "Planet",
+      "orbitAU": 1.3124433932120536,
+      "bearing": 239,
+      "radiusKm": 4000,
+      "uwp": "C433520-A",
+      "atmosphere": "Very Thin",
+      "breathable": false,
+      "inGoldilocks": true,
+      "transponder": "AVASTAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "avastan-gasgiant",
+      "name": "Avastan Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.941071597230756,
+      "bearing": 235,
+      "radiusKm": 53762.145513754454,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "avastan-mainworld",
+    "starport": "avastan-mainworld",
+    "orbit": "avastan-mainworld"
+  }
+}

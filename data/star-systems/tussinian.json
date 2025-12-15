@@ -1,0 +1,107 @@
+{
+  "id": "tussinian",
+  "name": "Tussinian",
+  "sector": "Spinward Marches",
+  "subsector": "P",
+  "hex": "2731",
+  "uwp": "B678324-7",
+  "tradeCodes": [
+    "Lo"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Good starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Tussinian_(world)",
+  "celestialObjects": [
+    {
+      "id": "tussinian-star",
+      "name": "Tussinian Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "tussinian-mainworld",
+      "name": "Tussinian",
+      "type": "Planet",
+      "orbitAU": 1.1371218966131766,
+      "bearing": 96,
+      "radiusKm": 5600,
+      "uwp": "B678324-7",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "TUSSINIAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "tussinian-highport",
+      "name": "Tussinian Highport",
+      "type": "Highport",
+      "parent": "tussinian-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "TUSSINIAN HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "tussinian-gasgiant",
+      "name": "Tussinian Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.371757740933042,
+      "bearing": 171,
+      "radiusKm": 69475.18656740442,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "tussinian-mainworld",
+    "starport": "tussinian-highport",
+    "orbit": "tussinian-mainworld"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "enlas-du",
+  "name": "Enlas-du",
+  "sector": "Spinward Marches",
+  "subsector": "A",
+  "hex": "0601",
+  "uwp": "E975776-6",
+  "tradeCodes": [
+    "Ag",
+    "Pi"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Frontier starport. TL6.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Enlas-du_(world)",
+  "celestialObjects": [
+    {
+      "id": "enlas-du-star",
+      "name": "Enlas-du Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "enlas-du-mainworld",
+      "name": "Enlas-du",
+      "type": "Planet",
+      "orbitAU": 1.080627093757924,
+      "bearing": 164,
+      "radiusKm": 8000,
+      "uwp": "E975776-6",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "ENLAS-DU CONTROL",
+      "gmNotes": "Mainworld. Pop 10^7. TL6.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "enlas-du-gasgiant",
+      "name": "Enlas-du Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.0849152471836065,
+      "bearing": 22,
+      "radiusKm": 63574.806998544555,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "enlas-du-mainworld",
+    "starport": "enlas-du-mainworld",
+    "orbit": "enlas-du-mainworld"
+  }
+}

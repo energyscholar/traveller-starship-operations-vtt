@@ -1,0 +1,109 @@
+{
+  "id": "rugbird",
+  "name": "Rugbird",
+  "sector": "Spinward Marches",
+  "subsector": "D",
+  "hex": "3102",
+  "uwp": "BAC5634-A",
+  "tradeCodes": [
+    "Fl",
+    "Ni",
+    "Da"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 2,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL10.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Rugbird_(world)",
+  "celestialObjects": [
+    {
+      "id": "rugbird-star",
+      "name": "Rugbird Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "rugbird-mainworld",
+      "name": "Rugbird",
+      "type": "Planet",
+      "orbitAU": 2.3008706381618755,
+      "bearing": 339,
+      "radiusKm": 8800,
+      "uwp": "BAC5634-A",
+      "atmosphere": "Insidious",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "RUGBIRD CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL10.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "rugbird-highport",
+      "name": "Rugbird Highport",
+      "type": "Highport",
+      "parent": "rugbird-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "RUGBIRD HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "rugbird-gasgiant",
+      "name": "Rugbird Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.774383784732102,
+      "bearing": 39,
+      "radiusKm": 64008.100628504326,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "rugbird-mainworld",
+    "starport": "rugbird-highport",
+    "orbit": "rugbird-mainworld"
+  }
+}

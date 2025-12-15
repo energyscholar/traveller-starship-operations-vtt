@@ -1,0 +1,91 @@
+{
+  "id": "tirem",
+  "name": "Tirem",
+  "sector": "Spinward Marches",
+  "subsector": "O",
+  "hex": "2233",
+  "uwp": "C7B5975-B",
+  "tradeCodes": [
+    "Fl",
+    "Hi",
+    "In"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Tirem_(world)",
+  "celestialObjects": [
+    {
+      "id": "tirem-star",
+      "name": "Tirem Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "tirem-mainworld",
+      "name": "Tirem",
+      "type": "Planet",
+      "orbitAU": 2.152419949148433,
+      "bearing": 246,
+      "radiusKm": 6400,
+      "uwp": "C7B5975-B",
+      "atmosphere": "Corrosive",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "TIREM CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "tirem-gasgiant",
+      "name": "Tirem Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.744066219310623,
+      "bearing": 163,
+      "radiusKm": 51454.11001704901,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "tirem-mainworld",
+    "starport": "tirem-mainworld",
+    "orbit": "tirem-mainworld"
+  }
+}

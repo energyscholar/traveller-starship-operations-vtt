@@ -1,0 +1,74 @@
+{
+  "id": "zircon",
+  "name": "Zircon",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "1110",
+  "uwp": "C792668-8",
+  "tradeCodes": [
+    "He",
+    "Ni"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 11,
+  "gasGiants": 0,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL8.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Zircon_(world)",
+  "celestialObjects": [
+    {
+      "id": "zircon-star",
+      "name": "Zircon Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "zircon-mainworld",
+      "name": "Zircon",
+      "type": "Planet",
+      "orbitAU": 1.8748629360329956,
+      "bearing": 260,
+      "radiusKm": 6400,
+      "uwp": "C792668-8",
+      "atmosphere": "Dense Tainted",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "ZIRCON CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL8.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "zircon-mainworld",
+    "starport": "zircon-mainworld",
+    "orbit": "zircon-mainworld"
+  }
+}

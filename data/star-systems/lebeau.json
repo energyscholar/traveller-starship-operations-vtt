@@ -1,0 +1,109 @@
+{
+  "id": "lebeau",
+  "name": "Lebeau",
+  "sector": "Spinward Marches",
+  "subsector": "E",
+  "hex": "0613",
+  "uwp": "B869554-C",
+  "tradeCodes": [
+    "Ni",
+    "Pr",
+    "Ht"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 12,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL12.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Lebeau_(world)",
+  "celestialObjects": [
+    {
+      "id": "lebeau-star",
+      "name": "Lebeau Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "lebeau-mainworld",
+      "name": "Lebeau",
+      "type": "Planet",
+      "orbitAU": 1.0272370474759736,
+      "bearing": 66,
+      "radiusKm": 7200,
+      "uwp": "B869554-C",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "LEBEAU CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL12.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "lebeau-highport",
+      "name": "Lebeau Highport",
+      "type": "Highport",
+      "parent": "lebeau-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "LEBEAU HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "lebeau-gasgiant",
+      "name": "Lebeau Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 5.867861137864802,
+      "bearing": 262,
+      "radiusKm": 66096.6378339698,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "lebeau-mainworld",
+    "starport": "lebeau-highport",
+    "orbit": "lebeau-mainworld"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "dallia",
+  "name": "Dallia",
+  "sector": "Spinward Marches",
+  "subsector": "N",
+  "hex": "1435",
+  "uwp": "B885883-9",
+  "tradeCodes": [
+    "Ga",
+    "Ri",
+    "Pa",
+    "Ph"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 6,
+  "gasGiants": 0,
+  "planetoidBelts": 0,
+  "notes": "Good starport. TL9.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Dallia_(world)",
+  "celestialObjects": [
+    {
+      "id": "dallia-star",
+      "name": "Dallia Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "dallia-mainworld",
+      "name": "Dallia",
+      "type": "Planet",
+      "orbitAU": 1.1513561869366846,
+      "bearing": 84,
+      "radiusKm": 7200,
+      "uwp": "B885883-9",
+      "atmosphere": "Dense",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "DALLIA CONTROL",
+      "gmNotes": "Mainworld. Pop 10^8. TL9.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "dallia-highport",
+      "name": "Dallia Highport",
+      "type": "Highport",
+      "parent": "dallia-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "DALLIA HIGHPORT",
+      "gmNotes": "Class B Good starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    }
+  ],
+  "locations": {
+    "default": "dallia-mainworld",
+    "starport": "dallia-highport",
+    "orbit": "dallia-mainworld"
+  }
+}

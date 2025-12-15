@@ -1,0 +1,91 @@
+{
+  "id": "somem",
+  "name": "Somem",
+  "sector": "Spinward Marches",
+  "subsector": "H",
+  "hex": "3020",
+  "uwp": "C301340-B",
+  "tradeCodes": [
+    "Ic",
+    "Lo",
+    "Va"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 3,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Somem_(world)",
+  "celestialObjects": [
+    {
+      "id": "somem-star",
+      "name": "Somem Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "somem-mainworld",
+      "name": "Somem",
+      "type": "Planet",
+      "orbitAU": 0.4700167066085453,
+      "bearing": 149,
+      "radiusKm": 3200,
+      "uwp": "C301340-B",
+      "atmosphere": "None",
+      "breathable": false,
+      "inGoldilocks": false,
+      "transponder": "SOMEM CONTROL",
+      "gmNotes": "Mainworld. Pop 10^3. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "somem-gasgiant",
+      "name": "Somem Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.700536236321984,
+      "bearing": 321,
+      "radiusKm": 68410.28430695689,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "somem-mainworld",
+    "starport": "somem-mainworld",
+    "orbit": "somem-mainworld"
+  }
+}

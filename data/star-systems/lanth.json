@@ -1,0 +1,108 @@
+{
+  "id": "lanth",
+  "name": "Lanth",
+  "sector": "Spinward Marches",
+  "subsector": "G",
+  "hex": "1719",
+  "uwp": "A879533-B",
+  "tradeCodes": [
+    "Ni",
+    "Cp"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 9,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Excellent starport. TL11.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Lanth_(world)",
+  "celestialObjects": [
+    {
+      "id": "lanth-star",
+      "name": "Lanth Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "lanth-mainworld",
+      "name": "Lanth",
+      "type": "Planet",
+      "orbitAU": 1.0718397087016798,
+      "bearing": 209,
+      "radiusKm": 7200,
+      "uwp": "A879533-B",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "LANTH CONTROL",
+      "gmNotes": "Mainworld. Pop 10^5. TL11.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "lanth-highport",
+      "name": "Lanth Highport",
+      "type": "Highport",
+      "parent": "lanth-mainworld",
+      "orbitKm": 400,
+      "bearing": 268,
+      "radiusKm": 2,
+      "transponder": "LANTH HIGHPORT",
+      "gmNotes": "Class A Excellent starport orbital facility.",
+      "celestial": false,
+      "cameraSettings": {
+        "zoomMultiplier": 1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Station approach"
+      }
+    },
+    {
+      "id": "lanth-gasgiant",
+      "name": "Lanth Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.71656734691037,
+      "bearing": 81,
+      "radiusKm": 69157.50830432917,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "lanth-mainworld",
+    "starport": "lanth-highport",
+    "orbit": "lanth-mainworld"
+  }
+}

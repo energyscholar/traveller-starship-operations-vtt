@@ -1,0 +1,93 @@
+{
+  "id": "pequan",
+  "name": "Pequan",
+  "sector": "Spinward Marches",
+  "subsector": "B",
+  "hex": "1210",
+  "uwp": "E5656B9-4",
+  "tradeCodes": [
+    "Ag",
+    "Ni",
+    "Ri",
+    "Da",
+    "Lt"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 7,
+  "gasGiants": 1,
+  "planetoidBelts": 0,
+  "notes": "Frontier starport. TL4.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Pequan_(world)",
+  "celestialObjects": [
+    {
+      "id": "pequan-star",
+      "name": "Pequan Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "pequan-mainworld",
+      "name": "Pequan",
+      "type": "Planet",
+      "orbitAU": 1.0183760107162345,
+      "bearing": 20,
+      "radiusKm": 4800,
+      "uwp": "E5656B9-4",
+      "atmosphere": "Standard",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "PEQUAN CONTROL",
+      "gmNotes": "Mainworld. Pop 10^6. TL4.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "pequan-gasgiant",
+      "name": "Pequan Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 6.873676863862234,
+      "bearing": 243,
+      "radiusKm": 65380.11541595561,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "pequan-mainworld",
+    "starport": "pequan-mainworld",
+    "orbit": "pequan-mainworld"
+  }
+}

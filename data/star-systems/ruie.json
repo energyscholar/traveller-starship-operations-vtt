@@ -1,0 +1,91 @@
+{
+  "id": "ruie",
+  "name": "Ruie",
+  "sector": "Spinward Marches",
+  "subsector": "C",
+  "hex": "1809",
+  "uwp": "C776977-7",
+  "tradeCodes": [
+    "Hi",
+    "In",
+    "Pz"
+  ],
+  "allegiance": "Im",
+  "bases": [],
+  "stellar": {
+    "primary": "G2 V",
+    "type": "Single"
+  },
+  "worlds": 8,
+  "gasGiants": 2,
+  "planetoidBelts": 1,
+  "notes": "Routine starport. TL7.",
+  "wikiUrl": "https://wiki.travellerrpg.com/Ruie_(world)",
+  "celestialObjects": [
+    {
+      "id": "ruie-star",
+      "name": "Ruie Primary",
+      "type": "Star",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 696340,
+      "stellarClass": "G2 V",
+      "stellarInfo": {
+        "temperature": "5,200-6,000 K",
+        "luminosity": "0.6-1.5 Solar",
+        "mass": "0.8-1.04 Solar",
+        "habitableZone": "0.8-1.2 AU",
+        "description": "Yellow main sequence (Sol-like)"
+      },
+      "transponder": "NONE",
+      "gmNotes": "G2 V primary.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.15,
+        "offsetX": 0.25,
+        "offsetY": 0.1,
+        "description": "Wide corona view with inner system visible"
+      }
+    },
+    {
+      "id": "ruie-mainworld",
+      "name": "Ruie",
+      "type": "Planet",
+      "orbitAU": 1.0913185803255445,
+      "bearing": 249,
+      "radiusKm": 6400,
+      "uwp": "C776977-7",
+      "atmosphere": "Standard Tainted",
+      "breathable": true,
+      "inGoldilocks": true,
+      "transponder": "RUIE CONTROL",
+      "gmNotes": "Mainworld. Pop 10^9. TL7.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.8,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Standard world view"
+      }
+    },
+    {
+      "id": "ruie-gasgiant",
+      "name": "Ruie Gas Giant",
+      "type": "Gas Giant",
+      "orbitAU": 7.414536388417652,
+      "bearing": 152,
+      "radiusKm": 61717.722934021614,
+      "transponder": "NONE",
+      "gmNotes": "Gas giant suitable for fuel skimming.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Gas giant view"
+      }
+    }
+  ],
+  "locations": {
+    "default": "ruie-mainworld",
+    "starport": "ruie-mainworld",
+    "orbit": "ruie-mainworld"
+  }
+}
