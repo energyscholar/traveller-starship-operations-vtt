@@ -11331,6 +11331,12 @@ window.queueEmail = queueEmail;
 window.shareHandout = shareHandout;
 window.hideHandout = hideHandout;
 window.showHandoutDetail = showHandoutDetail;
+// AR-141: Full Email App
+window.openEmailApp = openEmailApp;
+window.closeEmailApp = closeEmailApp;
+window.showEmailCompose = showEmailCompose;
+window.sendEmail = sendEmail;
+window.cancelEmailCompose = cancelEmailCompose;
 // Stage 13.3: Expandable Role Panel
 window.expandRolePanel = expandRolePanel;
 window.collapseRolePanel = collapseRolePanel;
