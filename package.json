@@ -31,7 +31,10 @@
     "db:reset": "node lib/operations/reset-db.js",
     "db:reset:full": "node lib/operations/reset-db.js --full",
     "db:seed": "node lib/operations/seed-dorannia.js",
-    "validate-adventure": "node scripts/validate-adventure.js"
+    "validate-adventure": "node scripts/validate-adventure.js",
+    "validate:systems": "node scripts/generate-star-systems-v2.js --validate",
+    "generate:system": "node scripts/generate-star-systems-v2.js --system",
+    "generate:subsector": "node scripts/generate-star-systems-v2.js --subsector"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",

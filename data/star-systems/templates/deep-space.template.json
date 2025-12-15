@@ -1,0 +1,33 @@
+{
+  "id": "{{ID}}",
+  "name": "Deep Space ({{HEX}})",
+  "sector": "{{SECTOR}}",
+  "subsector": "{{SUBSECTOR}}",
+  "hex": "{{HEX}}",
+  "isDeepSpace": true,
+  "special": true,
+  "notes": "Empty hex - no star system present. Used for jump transit or emergency dropout.",
+
+  "celestialObjects": [
+    {
+      "id": "{{ID}}-void",
+      "name": "Deep Space",
+      "type": "Deep Space",
+      "orbitAU": 0,
+      "bearing": 0,
+      "radiusKm": 0,
+      "transponder": "NONE",
+      "gmNotes": "Empty space between stars. No natural gravity wells. Drifting ships may encounter debris, derelicts, or the vast emptiness.",
+      "cameraSettings": {
+        "zoomMultiplier": 0.1,
+        "offsetX": 0,
+        "offsetY": 0,
+        "description": "Starfield view - distant galaxies and nebulae"
+      }
+    }
+  ],
+
+  "locations": {
+    "default": "{{ID}}-void"
+  }
+}

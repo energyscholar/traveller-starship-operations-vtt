@@ -1,0 +1,214 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "star-system.schema.json",
+  "title": "Star System",
+  "description": "Schema for star system data in Operations VTT",
+  "type": "object",
+  "required": ["id", "name", "sector", "hex", "celestialObjects"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique system ID (lowercase, hyphenated)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Display name of the system"
+    },
+    "sector": {
+      "type": "string",
+      "description": "Sector name (e.g., 'Spinward Marches')"
+    },
+    "subsector": {
+      "type": "string",
+      "description": "Subsector name (e.g., 'Mora', 'Regina')"
+    },
+    "hex": {
+      "type": "string",
+      "pattern": "^[0-9]{4}$",
+      "description": "4-digit hex coordinate"
+    },
+    "uwp": {
+      "type": "string",
+      "pattern": "^[A-EX][0-9A-Z]{6,7}-[0-9A-Z]$",
+      "description": "Universal World Profile"
+    },
+    "tradeCodes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Trade classification codes"
+    },
+    "allegiance": {
+      "type": "string",
+      "description": "Political allegiance code"
+    },
+    "bases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Base codes (N=Naval, S=Scout, etc.)"
+    },
+    "stellar": {
+      "type": "object",
+      "properties": {
+        "primary": { "type": "string", "description": "Primary star classification" },
+        "type": { "type": "string", "enum": ["Single", "Binary", "Trinary", "None"] }
+      }
+    },
+    "worlds": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of worlds in system"
+    },
+    "gasGiants": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of gas giants"
+    },
+    "planetoidBelts": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of planetoid belts"
+    },
+    "notes": {
+      "type": "string",
+      "description": "GM notes about the system"
+    },
+    "wikiUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Link to wiki entry"
+    },
+    "celestialObjects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/celestialObject"
+      },
+      "description": "All objects in the system"
+    },
+    "locations": {
+      "type": "object",
+      "description": "Default spawn locations for ship/crew",
+      "properties": {
+        "default": { "type": "string" },
+        "starport": { "type": "string" },
+        "orbit": { "type": "string" }
+      }
+    },
+    "special": {
+      "type": "boolean",
+      "description": "True for special systems (jump space, deep space)"
+    },
+    "isDeepSpace": {
+      "type": "boolean",
+      "description": "True for empty hex deep space"
+    }
+  },
+  "definitions": {
+    "celestialObject": {
+      "type": "object",
+      "required": ["id", "name", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["Star", "Planet", "Moon", "Gas Giant", "Asteroid Belt", "Station", "Naval Base", "Scout Base", "Starport", "Highport", "Downport", "Deep Space"]
+        },
+        "parent": {
+          "type": "string",
+          "description": "ID of parent object for moons/stations"
+        },
+        "orbitAU": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Orbital distance in AU (for planets)"
+        },
+        "orbitKm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Orbital distance in km (for moons/stations)"
+        },
+        "bearing": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 360,
+          "description": "Orbital bearing in degrees"
+        },
+        "radiusKm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Radius in kilometers"
+        },
+        "uwp": {
+          "type": "string",
+          "description": "UWP for worlds"
+        },
+        "atmosphere": {
+          "type": "string",
+          "description": "Atmosphere type"
+        },
+        "breathable": {
+          "type": "boolean"
+        },
+        "inGoldilocks": {
+          "type": "boolean",
+          "description": "In habitable zone"
+        },
+        "transponder": {
+          "type": "string",
+          "description": "Radio transponder ID"
+        },
+        "gmNotes": {
+          "type": "string"
+        },
+        "stellarClass": {
+          "type": "string",
+          "description": "For stars: spectral class"
+        },
+        "stellarInfo": {
+          "type": "object",
+          "properties": {
+            "temperature": { "type": "string" },
+            "luminosity": { "type": "string" },
+            "mass": { "type": "string" },
+            "habitableZone": { "type": "string" },
+            "description": { "type": "string" }
+          }
+        },
+        "celestial": {
+          "type": "boolean",
+          "description": "False for artificial objects"
+        },
+        "cameraSettings": {
+          "type": "object",
+          "properties": {
+            "zoomMultiplier": { "type": "number" },
+            "offsetX": { "type": "number" },
+            "offsetY": { "type": "number" },
+            "description": { "type": "string" }
+          }
+        },
+        "places": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "type"],
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "description": { "type": "string" },
+              "gmNotes": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

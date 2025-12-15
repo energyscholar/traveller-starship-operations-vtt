@@ -4,39 +4,32 @@
   "schemaVersion": "1.0",
   "systems": [
     {
-      "id": "flammarion",
-      "name": "Flammarion",
-      "hex": "0930",
-      "subsector": "Sword Worlds",
-      "file": "flammarion.json"
+      "id": "ilium",
+      "name": "Ilium",
+      "hex": "0426",
+      "subsector": "Darrian",
+      "file": "ilium.json"
     },
     {
-      "id": "narsil",
-      "name": "Narsil",
-      "hex": "0927",
-      "subsector": "Sword Worlds",
-      "file": "narsil.json"
+      "id": "roget",
+      "name": "Roget",
+      "hex": "0427",
+      "subsector": "Darrian",
+      "file": "roget.json"
     },
     {
-      "id": "tizon",
-      "name": "Tizon",
-      "hex": "0922",
-      "subsector": "Sword Worlds",
-      "file": "tizon.json"
+      "id": "bularia",
+      "name": "Bularia",
+      "hex": "0430",
+      "subsector": "Darrian",
+      "file": "bularia.json"
     },
     {
-      "id": "colada",
-      "name": "Colada",
-      "hex": "1022",
-      "subsector": "Sword Worlds",
-      "file": "colada.json"
-    },
-    {
-      "id": "anduril",
-      "name": "Anduril",
-      "hex": "1026",
-      "subsector": "Sword Worlds",
-      "file": "anduril.json"
+      "id": "mire",
+      "name": "Mire",
+      "hex": "0527",
+      "subsector": "Darrian",
+      "file": "mire.json"
     },
     {
       "id": "dorannia",
@@ -44,6 +37,13 @@
       "hex": "0530",
       "subsector": "Darrian",
       "file": "dorannia.json"
+    },
+    {
+      "id": "ator",
+      "name": "Ator",
+      "hex": "0729",
+      "subsector": "Darrian",
+      "file": "ator.json"
     },
     {
       "id": "asteltine",
@@ -74,39 +74,18 @@
       "file": "collace.json"
     },
     {
-      "id": "ator",
-      "name": "Ator",
-      "hex": "0729",
-      "subsector": "Darrian",
-      "file": "ator.json"
+      "id": "emape",
+      "name": "Emape",
+      "hex": "0133",
+      "subsector": "Five Sisters",
+      "file": "emape.json"
     },
     {
-      "id": "mire",
-      "name": "Mire",
-      "hex": "0527",
-      "subsector": "Darrian",
-      "file": "mire.json"
-    },
-    {
-      "id": "roget",
-      "name": "Roget",
-      "hex": "0427",
-      "subsector": "Darrian",
-      "file": "roget.json"
-    },
-    {
-      "id": "bularia",
-      "name": "Bularia",
-      "hex": "0430",
-      "subsector": "Darrian",
-      "file": "bularia.json"
-    },
-    {
-      "id": "ilium",
-      "name": "Ilium",
-      "hex": "0426",
-      "subsector": "Darrian",
-      "file": "ilium.json"
+      "id": "raweh",
+      "name": "Raweh",
+      "hex": "0139",
+      "subsector": "Five Sisters",
+      "file": "raweh.json"
     },
     {
       "id": "mirriam",
@@ -123,20 +102,6 @@
       "file": "karin.json"
     },
     {
-      "id": "emape",
-      "name": "Emape",
-      "hex": "0133",
-      "subsector": "Five Sisters",
-      "file": "emape.json"
-    },
-    {
-      "id": "raweh",
-      "name": "Raweh",
-      "hex": "0139",
-      "subsector": "Five Sisters",
-      "file": "raweh.json"
-    },
-    {
       "id": "wonstar",
       "name": "Wonstar",
       "hex": "0538",
@@ -150,7 +115,57 @@
       "subsector": "N/A",
       "file": "jumpspace.json",
       "special": true
+    },
+    {
+      "id": "tizon",
+      "name": "Tizon",
+      "hex": "0922",
+      "subsector": "Sword Worlds",
+      "file": "tizon.json"
+    },
+    {
+      "id": "narsil",
+      "name": "Narsil",
+      "hex": "0927",
+      "subsector": "Sword Worlds",
+      "file": "narsil.json"
+    },
+    {
+      "id": "flammarion",
+      "name": "Flammarion",
+      "hex": "0930",
+      "subsector": "Sword Worlds",
+      "file": "flammarion.json"
+    },
+    {
+      "id": "colada",
+      "name": "Colada",
+      "hex": "1022",
+      "subsector": "Sword Worlds",
+      "file": "colada.json"
+    },
+    {
+      "id": "anduril",
+      "name": "Anduril",
+      "hex": "1026",
+      "subsector": "Sword Worlds",
+      "file": "anduril.json"
+    },
+    {
+      "id": "mora",
+      "name": "Mora",
+      "hex": "3124",
+      "sector": "Spinward Marches",
+      "subsector": "Mora",
+      "file": "mora.json"
     }
   ],
-  "subsectors": ["Darrian", "District 268", "Five Sisters", "Sword Worlds"]
+  "subsectors": [
+    "Darrian",
+    "District 268",
+    "Five Sisters",
+    "Mora",
+    "N/A",
+    "Sword Worlds"
+  ]
 }
