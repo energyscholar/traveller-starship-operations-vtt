@@ -98,6 +98,46 @@ function worldToScreen(worldX, worldY, centerX, centerY, auToPixels) {
   };
 }
 
+/**
+ * Get absolute world position of a celestial body, following parent chain
+ * Handles stations orbiting moons orbiting planets orbiting stars
+ * @param {string} bodyId - ID of the celestial body
+ * @param {number} [time=systemMapState.time] - Simulation time
+ * @returns {{x: number, y: number}} World coordinates in AU with isometric Y
+ */
+function getBodyWorldPosition(bodyId, time = systemMapState.time) {
+  const system = systemMapState.system;
+  const celestialObjects = system?.celestialObjects || [];
+  const body = celestialObjects.find(o => o.id === bodyId);
+
+  if (!body) return { x: 0, y: 0 };
+
+  // Star = center of system
+  if (body.type === 'Star') {
+    return { x: 0, y: 0 };
+  }
+
+  // No parent = orbits the star directly
+  if (!body.parent) {
+    return getOrbitPosition(body.orbitAU || 0, time);
+  }
+
+  // Has parent: recursively get parent position, then add local orbit
+  const parentPos = getBodyWorldPosition(body.parent, time);
+
+  // Stations/bases use orbitKm (relative to parent), planets use orbitAU
+  const localOrbitAU = body.orbitAU || (body.orbitKm || 0) / 149597870.7;
+
+  // Local orbit is faster than system orbit (stations orbit planets faster)
+  const localSpeed = 0.2 / Math.sqrt(localOrbitAU || 0.001);
+  const localAngle = time * localSpeed;
+
+  return {
+    x: parentPos.x + Math.cos(localAngle) * localOrbitAU,
+    y: parentPos.y + Math.sin(localAngle) * localOrbitAU * 0.6  // Isometric
+  };
+}
+
 // =============================================================================
 
 /**
@@ -2844,12 +2884,9 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
   for (const loc of system.locations) {
     if (!loc.linkedTo) continue;
 
-    // Find the linked celestial body
-    const body = system.celestialObjects?.find(o => o.id === loc.linkedTo);
-    if (!body) continue;
-
-    // AR-113: Use helper for body's orbital position
-    const bodyPos = getOrbitPosition(body.orbitAU || 0);
+    // AR-113 Phase 3: Use getBodyWorldPosition to follow parent chains
+    // This handles stations orbiting planets correctly
+    const bodyPos = getBodyWorldPosition(loc.linkedTo);
 
     // Location offset from body (in km -> AU)
     const locationOrbitKm = loc.orbitKm || 0;
