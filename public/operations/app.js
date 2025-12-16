@@ -73,6 +73,8 @@ import { renderPrepEvents as _renderPrepEvents, triggerEvent as _triggerEvent, s
 import { renderPrepEmails as _renderPrepEmails, sendEmailNow as _sendEmailNow, queueEmail as _queueEmail } from './modules/gm-prep-emails.js';
 import { renderPrepHandouts as _renderPrepHandouts, shareHandout as _shareHandout, hideHandout as _hideHandout, showHandoutDetail as _showHandoutDetail } from './modules/gm-prep-handouts.js';
 import { showCrewRoster as _showCrewRoster, showAddCrewModal as _showAddCrewModal, showEditCrewModal as _showEditCrewModal } from './modules/crew-roster-full.js';
+import { openHamburgerMenu, closeHamburgerMenu, handleMenuFeature as _handleMenuFeature, showLogModal as _showLogModal } from './modules/hamburger-menu.js';
+import { openEmailApp as _openEmailApp, closeEmailApp, renderEmailInbox as _renderEmailInbox, showEmailCompose, sendEmail as _sendEmail, cancelEmailCompose as _cancelEmailCompose, initEmailAppHandlers as _initEmailAppHandlers } from './modules/email-app.js';
 
 // Wrappers to inject state into module functions
 const showNewsMailModal = (systemName) => _showNewsMailModal(state, systemName);
@@ -134,6 +136,17 @@ const showHandoutDetail = (handoutId) => _showHandoutDetail(state, showModalCont
 const showCrewRoster = () => _showCrewRoster(state, showModalContent, showNotification);
 const showAddCrewModal = () => _showAddCrewModal(state, showModalContent, showNotification);
 const showEditCrewModal = (crew) => _showEditCrewModal(state, showModalContent, showNotification, crew);
+// AR-151-8: Hamburger Menu + Email App wrappers
+const showLogModal = () => _showLogModal(state);
+const handleMenuFeature = (feature) => _handleMenuFeature(state, {
+  showLogModal, showNotification, showCrewRoster, showMedicalRecords,
+  showFeedbackForm, showFeedbackReview, showSharedMap, showSystemMap
+}, feature);
+const openEmailApp = (mailList, unread) => _openEmailApp(state, updateMailBadge, mailList, unread);
+const renderEmailInbox = (mailList) => _renderEmailInbox(state, updateMailBadge, mailList);
+const sendEmail = () => _sendEmail(state, showError, showNotification);
+const cancelEmailCompose = () => _cancelEmailCompose(state, updateMailBadge);
+const initEmailAppHandlers = () => _initEmailAppHandlers(state, updateMailBadge, showError, showNotification);
 
 // ==================== State ====================
 const state = {
@@ -7368,156 +7381,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ==================== Hamburger Menu (Autorun 6) ====================
-
-function openHamburgerMenu() {
-  const menu = document.getElementById('hamburger-menu');
-  const overlay = document.getElementById('hamburger-menu-overlay');
-  if (menu) {
-    menu.classList.add('open');
-    overlay?.classList.remove('hidden');
-    overlay?.classList.add('visible');
-
-    // Initialize settings from localStorage
-    const animateCameraCheckbox = document.getElementById('setting-animate-camera');
-    if (animateCameraCheckbox) {
-      animateCameraCheckbox.checked = localStorage.getItem('ops-setting-animate-camera') !== 'false';
-      animateCameraCheckbox.onchange = (e) => {
-        localStorage.setItem('ops-setting-animate-camera', e.target.checked ? 'true' : 'false');
-      };
-    }
-  }
-}
-
-function closeHamburgerMenu() {
-  const menu = document.getElementById('hamburger-menu');
-  const overlay = document.getElementById('hamburger-menu-overlay');
-  if (menu) {
-    menu.classList.remove('open');
-    overlay?.classList.add('hidden');
-    overlay?.classList.remove('visible');
-  }
-}
-
-function handleMenuFeature(feature) {
-  closeHamburgerMenu();
-
-  switch (feature) {
-    case 'ship-log':
-      // Ship log is already implemented - show it in a modal
-      if (state.logs && state.logs.length > 0) {
-        showLogModal();
-      } else {
-        showNotification('No log entries yet', 'info');
-      }
-      break;
-
-    case 'mail':
-      // Request mail from server
-      state.socket.emit('ops:getMail');
-      showNotification('Loading mail...', 'info');
-      break;
-
-    case 'contacts':
-      // Request NPC contacts from server
-      state.socket.emit('ops:getNPCContacts');
-      showNotification('Loading contacts...', 'info');
-      break;
-
-    case 'ship-config':
-      showNotification('Ship Configuration - Planned for Autorun 7', 'info');
-      break;
-
-    case 'cargo':
-      showNotification('Cargo Manifest - Planned feature', 'info');
-      break;
-
-    case 'finances':
-      showNotification('Ship Finances - Planned feature', 'info');
-      break;
-
-    case 'crew-roster':
-      showCrewRoster();
-      break;
-
-    case 'medical':
-      showMedicalRecords();
-      break;
-
-    case 'library':
-      showNotification('Ship\'s Library - Planned feature', 'info');
-      break;
-
-    case 'feedback':
-      if (state.isGM) {
-        showFeedbackReview();
-      } else {
-        showFeedbackForm();
-      }
-      break;
-
-    case 'shared-map':
-      showSharedMap();
-      break;
-
-    case 'system-map':
-      showSystemMap();
-      break;
-
-    default:
-      showNotification(`Feature "${feature}" not yet implemented`, 'info');
-  }
-}
-
-function showLogModal() {
-  const logs = state.logs || [];
-  const recentLogs = logs.slice(-50); // Show last 50 entries
-
-  let html = `
-    <div class="modal-header">
-      <h2>Ship Log</h2>
-      <button class="btn-close" data-close-modal>×</button>
-    </div>
-    <div class="modal-body log-modal-body">
-      <div class="log-entries">
-  `;
-
-  if (recentLogs.length === 0) {
-    html += '<p class="text-muted">No log entries recorded.</p>';
-  } else {
-    for (const log of recentLogs.reverse()) {
-      const typeClass = log.entry_type === 'sensor' ? 'sensor' :
-                       log.entry_type === 'combat' ? 'combat' :
-                       log.entry_type === 'navigation' ? 'navigation' : '';
-      html += `
-        <div class="log-entry ${typeClass}">
-          <span class="log-timestamp">${log.game_date || ''} ${log.timestamp ? new Date(log.timestamp).toLocaleTimeString() : ''}</span>
-          <span class="log-type">[${log.entry_type || 'system'}]</span>
-          <span class="log-message">${log.message}</span>
-          ${log.actor ? `<span class="log-actor">- ${log.actor}</span>` : ''}
-        </div>
-      `;
-    }
-  }
-
-  html += `
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-close-modal>Close</button>
-    </div>
-  `;
-
-  const modalContent = document.getElementById('modal-content');
-  const modalOverlay = document.getElementById('modal-overlay');
-  modalContent.innerHTML = html;
-  modalOverlay.classList.remove('hidden');
-
-  // Setup close handlers
-  modalContent.querySelectorAll('[data-close-modal]').forEach(btn => {
-    btn.addEventListener('click', () => modalOverlay.classList.add('hidden'));
-  });
-}
+// AR-151-8a: Hamburger Menu moved to modules/hamburger-menu.js
 
 // AR-151-2c: Mail Modal moved to modules/mail-modal.js
 
@@ -8470,304 +8334,7 @@ if (DEBUG) {
   window.mapDebugMessage = mapDebugMessage;
 }
 
-// ==================== Full-Screen Email App (Stage 13.4) ====================
-
-// Store current mail list for reference
-let currentMailList = [];
-let selectedMailId = null;
-
-function openEmailApp(mailList, unreadCount) {
-  currentMailList = mailList || [];
-  selectedMailId = null;
-
-  const emailApp = document.getElementById('email-app');
-  if (!emailApp) return;
-
-  // Update unread badge
-  const badge = document.getElementById('email-unread-count');
-  if (badge) {
-    if (unreadCount > 0) {
-      badge.textContent = `${unreadCount} unread`;
-      badge.classList.remove('hidden');
-    } else {
-      badge.textContent = '';
-      badge.classList.add('hidden');
-    }
-  }
-
-  // Render inbox list
-  renderEmailInbox(mailList);
-
-  // Clear message view
-  const messageView = document.getElementById('email-message-view');
-  if (messageView) {
-    messageView.innerHTML = `
-      <div class="email-no-selection">
-        <p>Select a message to read</p>
-      </div>
-    `;
-  }
-
-  // Hide compose view
-  const composeView = document.getElementById('email-compose-view');
-  if (composeView) {
-    composeView.classList.add('hidden');
-  }
-
-  // Show email app
-  emailApp.classList.remove('hidden');
-
-  // Add keyboard listener for escape
-  document.addEventListener('keydown', emailAppKeyHandler);
-}
-
-function closeEmailApp() {
-  const emailApp = document.getElementById('email-app');
-  if (emailApp) {
-    emailApp.classList.add('hidden');
-  }
-  document.removeEventListener('keydown', emailAppKeyHandler);
-  selectedMailId = null;
-}
-
-function emailAppKeyHandler(e) {
-  if (e.key === 'Escape') {
-    closeEmailApp();
-  }
-}
-
-function renderEmailInbox(mailList) {
-  const inboxList = document.getElementById('email-inbox-list');
-  if (!inboxList) return;
-
-  if (!mailList || mailList.length === 0) {
-    inboxList.innerHTML = '<p class="placeholder">No messages</p>';
-    return;
-  }
-
-  let html = '';
-  for (const mail of mailList) {
-    const isRead = mail.is_read ? 'read' : 'unread';
-    const isSelected = mail.id === selectedMailId ? 'selected' : '';
-    html += `
-      <div class="email-inbox-item ${isRead} ${isSelected}" data-mail-id="${mail.id}">
-        <div class="email-inbox-sender">${escapeHtml(mail.sender_name)}</div>
-        <div class="email-inbox-subject">${escapeHtml(mail.subject)}</div>
-        <div class="email-inbox-date">${mail.sent_date}</div>
-        <div class="email-inbox-preview">${escapeHtml(mail.body.substring(0, 60))}${mail.body.length > 60 ? '...' : ''}</div>
-      </div>
-    `;
-  }
-
-  inboxList.innerHTML = html;
-
-  // Add click handlers
-  inboxList.querySelectorAll('.email-inbox-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const mailId = item.dataset.mailId;
-      selectEmailMessage(mailId);
-    });
-  });
-}
-
-function selectEmailMessage(mailId) {
-  const mail = currentMailList.find(m => m.id === mailId);
-  if (!mail) return;
-
-  selectedMailId = mailId;
-
-  // Update selection highlight in inbox
-  document.querySelectorAll('.email-inbox-item').forEach(item => {
-    item.classList.toggle('selected', item.dataset.mailId === mailId);
-    if (item.dataset.mailId === mailId) {
-      item.classList.remove('unread');
-      item.classList.add('read');
-    }
-  });
-
-  // Mark as read on server
-  if (!mail.is_read) {
-    state.socket.emit('ops:markMailRead', { mailId });
-    mail.is_read = true;
-    state.unreadMailCount = Math.max(0, (state.unreadMailCount || 1) - 1);
-    updateMailBadge();
-    // Update email app badge too
-    const badge = document.getElementById('email-unread-count');
-    if (badge) {
-      if (state.unreadMailCount > 0) {
-        badge.textContent = `${state.unreadMailCount} unread`;
-      } else {
-        badge.textContent = '';
-        badge.classList.add('hidden');
-      }
-    }
-  }
-
-  // Show message in message view
-  const messageView = document.getElementById('email-message-view');
-  if (messageView) {
-    messageView.innerHTML = `
-      <div class="email-message-header">
-        <div class="email-message-from"><strong>From:</strong> ${escapeHtml(mail.sender_name)}</div>
-        <div class="email-message-subject"><strong>Subject:</strong> ${escapeHtml(mail.subject)}</div>
-        <div class="email-message-date"><strong>Date:</strong> ${mail.sent_date}</div>
-      </div>
-      <div class="email-message-body">
-        ${escapeHtml(mail.body).split('\n').join('<br>')}
-      </div>
-      <div class="email-message-actions">
-        <button class="btn btn-primary btn-small" id="btn-email-reply" data-mail-id="${mail.id}">Reply</button>
-        <button class="btn btn-warning btn-small" id="btn-email-archive" data-mail-id="${mail.id}">Archive</button>
-      </div>
-    `;
-
-    // Reply button handler
-    document.getElementById('btn-email-reply')?.addEventListener('click', () => {
-      showEmailCompose(mail);
-    });
-
-    // Archive button handler
-    document.getElementById('btn-email-archive')?.addEventListener('click', () => {
-      state.socket.emit('ops:archiveMail', { mailId: mail.id });
-      showNotification('Mail archived', 'success');
-      // Remove from local list and re-render
-      currentMailList = currentMailList.filter(m => m.id !== mail.id);
-      renderEmailInbox(currentMailList);
-      selectedMailId = null;
-      messageView.innerHTML = `
-        <div class="email-no-selection">
-          <p>Select a message to read</p>
-        </div>
-      `;
-    });
-  }
-
-  // Hide compose view
-  const composeView = document.getElementById('email-compose-view');
-  if (composeView) {
-    composeView.classList.add('hidden');
-  }
-}
-
-function showEmailCompose(replyTo = null) {
-  const messageView = document.getElementById('email-message-view');
-  const composeView = document.getElementById('email-compose-view');
-
-  if (!composeView) return;
-
-  // Clear and setup compose form - match HTML element IDs
-  const recipientSpan = document.getElementById('compose-recipient');
-  const subjectField = document.getElementById('compose-subject-input');
-  const bodyField = document.getElementById('compose-body-input');
-
-  if (replyTo) {
-    if (recipientSpan) recipientSpan.textContent = replyTo.sender_name;
-    if (subjectField) subjectField.value = `Re: ${replyTo.subject}`;
-    if (bodyField) {
-      bodyField.value = '';
-      bodyField.placeholder = 'Type your reply...';
-    }
-    composeView.dataset.replyToId = replyTo.id;
-    composeView.dataset.replyToSender = replyTo.sender_name;
-  } else {
-    if (recipientSpan) recipientSpan.textContent = 'GM';
-    if (subjectField) subjectField.value = '';
-    if (bodyField) {
-      bodyField.value = '';
-      bodyField.placeholder = 'Type your message...';
-    }
-    delete composeView.dataset.replyToId;
-    delete composeView.dataset.replyToSender;
-  }
-
-  // Show compose, hide message view content
-  if (messageView) {
-    messageView.innerHTML = '';
-  }
-  composeView.classList.remove('hidden');
-
-  // Focus the body field
-  if (bodyField) bodyField.focus();
-}
-
-function sendEmail() {
-  const composeView = document.getElementById('email-compose-view');
-  const subjectField = document.getElementById('compose-subject-input');
-  const bodyField = document.getElementById('compose-body-input');
-
-  const subject = subjectField?.value?.trim();
-  const body = bodyField?.value?.trim();
-
-  if (!body) {
-    showError('Please enter a message');
-    return;
-  }
-
-  const replyToId = composeView?.dataset?.replyToId;
-  const replyToSender = composeView?.dataset?.replyToSender;
-
-  if (replyToId) {
-    // Reply to existing mail
-    state.socket.emit('ops:replyToMail', {
-      originalMailId: replyToId,
-      subject: subject || 'Re: (no subject)',
-      body
-    });
-  } else {
-    // New mail to GM
-    state.socket.emit('ops:sendMail', {
-      to: 'GM',
-      subject: subject || '(no subject)',
-      body
-    });
-  }
-
-  showNotification('Message sent', 'success');
-
-  // Clear and hide compose
-  if (subjectField) subjectField.value = '';
-  if (bodyField) bodyField.value = '';
-  composeView.classList.add('hidden');
-
-  // Request updated mail list
-  state.socket.emit('ops:getMail');
-}
-
-function cancelEmailCompose() {
-  const composeView = document.getElementById('email-compose-view');
-  const messageView = document.getElementById('email-message-view');
-
-  if (composeView) {
-    composeView.classList.add('hidden');
-  }
-
-  // If we had a selected message, re-show it
-  if (selectedMailId) {
-    selectEmailMessage(selectedMailId);
-  } else if (messageView) {
-    messageView.innerHTML = `
-      <div class="email-no-selection">
-        <p>Select a message to read</p>
-      </div>
-    `;
-  }
-}
-
-function initEmailAppHandlers() {
-  // Close button
-  document.getElementById('btn-close-email-app')?.addEventListener('click', closeEmailApp);
-
-  // Compose button
-  document.getElementById('btn-compose-email')?.addEventListener('click', () => {
-    showEmailCompose(null);
-  });
-
-  // Send button in compose view
-  document.getElementById('btn-send-email')?.addEventListener('click', sendEmail);
-
-  // Cancel button in compose view
-  document.getElementById('btn-cancel-compose')?.addEventListener('click', cancelEmailCompose);
-}
+// AR-151-8b: Full-Screen Email App moved to modules/email-app.js
 
 // AR-151-7: Crew Roster moved to modules/crew-roster-full.js
 
@@ -9497,3 +9064,13 @@ window.showNotification = showNotification;
 window.escapeHtml = escapeHtml;
 window.showSharedMap = showSharedMap;
 window.showSystemMap = showSystemMap;
+// AR-151-8: Hamburger Menu + Email App exports
+window.openHamburgerMenu = openHamburgerMenu;
+window.closeHamburgerMenu = closeHamburgerMenu;
+window.handleMenuFeature = handleMenuFeature;
+window.showLogModal = showLogModal;
+window.openEmailApp = openEmailApp;
+window.closeEmailApp = closeEmailApp;
+window.showEmailCompose = showEmailCompose;
+window.sendEmail = sendEmail;
+window.cancelEmailCompose = cancelEmailCompose;
