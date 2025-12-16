@@ -69,6 +69,9 @@ import { showHandoutModal as _showHandoutModal } from './modules/handout-viewer.
 import { renderPrepReveals as _renderPrepReveals, showAddRevealModal as _showAddRevealModal, submitReveal as _submitReveal, revealToPlayers as _revealToPlayers, editReveal as _editReveal, updateReveal as _updateReveal, deleteReveal as _deleteReveal, showPlayerRevealModal as _showPlayerRevealModal } from './modules/gm-reveals.js';
 import { renderPrepNpcs as _renderPrepNpcs, revealNpc as _revealNpc, hideNpc as _hideNpc, showNpcDetail as _showNpcDetail } from './modules/gm-prep-npcs.js';
 import { renderPrepLocations as _renderPrepLocations, revealLocation as _revealLocation, hideLocation as _hideLocation } from './modules/gm-prep-locations.js';
+import { renderPrepEvents as _renderPrepEvents, triggerEvent as _triggerEvent, showEventDetail as _showEventDetail } from './modules/gm-prep-events.js';
+import { renderPrepEmails as _renderPrepEmails, sendEmailNow as _sendEmailNow, queueEmail as _queueEmail } from './modules/gm-prep-emails.js';
+import { renderPrepHandouts as _renderPrepHandouts, shareHandout as _shareHandout, hideHandout as _hideHandout, showHandoutDetail as _showHandoutDetail } from './modules/gm-prep-handouts.js';
 
 // Wrappers to inject state into module functions
 const showNewsMailModal = (systemName) => _showNewsMailModal(state, systemName);
@@ -115,6 +118,17 @@ const showNpcDetail = (npcId) => _showNpcDetail(state, showModalContent, npcId);
 const renderPrepLocations = () => _renderPrepLocations(state, showNotification);
 const revealLocation = (locationId) => _revealLocation(state, showNotification, renderPrepLocations, locationId);
 const hideLocation = (locationId) => _hideLocation(state, renderPrepLocations, locationId);
+// AR-151-6: GM Prep events, emails, handouts wrappers
+const renderPrepEvents = () => _renderPrepEvents(state);
+const triggerEvent = (eventId) => _triggerEvent(state, showNotification, renderPrepEvents, eventId);
+const showEventDetail = (eventId) => _showEventDetail(state, showModalContent, eventId);
+const renderPrepEmails = () => _renderPrepEmails(state);
+const sendEmailNow = (emailId) => _sendEmailNow(state, showNotification, loadPrepData, emailId);
+const queueEmail = (emailId) => _queueEmail(state, showNotification, loadPrepData, emailId);
+const renderPrepHandouts = () => _renderPrepHandouts(state);
+const shareHandout = (handoutId) => _shareHandout(state, showNotification, renderPrepHandouts, handoutId);
+const hideHandout = (handoutId) => _hideHandout(state, renderPrepHandouts, handoutId);
+const showHandoutDetail = (handoutId) => _showHandoutDetail(state, showModalContent, handoutId);
 
 // ==================== State ====================
 const state = {
@@ -9090,266 +9104,7 @@ function loadPrepData() {
 
 // AR-151-5: Reveals, NPCs, Locations moved to modules/gm-reveals.js, modules/gm-prep-npcs.js, modules/gm-prep-locations.js
 
-// ==================== Events (Stage 8.2) ====================
-
-function renderPrepEvents() {
-  const list = document.getElementById('events-list');
-  const count = document.getElementById('events-count');
-  const events = state.prepEvents || [];
-
-  if (count) count.textContent = `${events.length} event${events.length !== 1 ? 's' : ''}`;
-  if (!list) return;
-
-  if (events.length === 0) {
-    list.innerHTML = '<p class="placeholder">No events prepared</p>';
-    return;
-  }
-
-  // Sort by trigger_date if available
-  const sorted = [...events].sort((a, b) => {
-    if (a.trigger_date && b.trigger_date) return a.trigger_date.localeCompare(b.trigger_date);
-    if (a.trigger_date) return -1;
-    if (b.trigger_date) return 1;
-    return 0;
-  });
-
-  list.innerHTML = sorted.map(event => `
-    <div class="prep-item" data-event-id="${event.id}">
-      <div class="prep-item-header">
-        <span class="prep-item-title">${escapeHtml(event.name)}</span>
-        <span class="prep-item-status ${event.status}">${event.status}</span>
-      </div>
-      <div class="prep-item-desc">${escapeHtml(event.description || '')}</div>
-      <div class="prep-item-meta">
-        <span>Type: ${event.event_type || 'manual'}</span>
-        ${event.trigger_date ? `<span>Date: ${event.trigger_date}</span>` : ''}
-        ${event.reveals_to_trigger?.length ? `<span>Reveals: ${event.reveals_to_trigger.length}</span>` : ''}
-        ${event.npcs_to_reveal?.length ? `<span>NPCs: ${event.npcs_to_reveal.length}</span>` : ''}
-      </div>
-      <div class="prep-item-actions">
-        ${event.status === 'pending' ?
-          `<button class="btn btn-primary" onclick="triggerEvent('${event.id}')">Trigger</button>` :
-          `<span class="text-muted">Triggered</span>`
-        }
-        <button class="btn" onclick="showEventDetail('${event.id}')">Detail</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function triggerEvent(eventId) {
-  state.socket.emit('ops:triggerEvent', {
-    campaignId: state.campaign.id,
-    eventId,
-    gameDate: state.gameDate
-  });
-  const event = state.prepEvents.find(e => e.id === eventId);
-  if (event) {
-    event.status = 'triggered';
-    renderPrepEvents();
-  }
-  showNotification('Event triggered', 'success');
-}
-
-function showEventDetail(eventId) {
-  const event = state.prepEvents.find(e => e.id === eventId);
-  if (!event) return;
-
-  const html = `
-    <div class="modal-header">
-      <h2>${escapeHtml(event.name)}</h2>
-      <button class="btn-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <p><strong>Type:</strong> ${escapeHtml(event.event_type || 'manual')}</p>
-      <p><strong>Status:</strong> ${escapeHtml(event.status)}</p>
-      ${event.trigger_date ? `<p><strong>Trigger Date:</strong> ${escapeHtml(event.trigger_date)}</p>` : ''}
-      ${event.description ? `<p><strong>Description:</strong> ${escapeHtml(event.description)}</p>` : ''}
-      ${event.player_text ? `<p><strong>Player Text:</strong> ${escapeHtml(event.player_text)}</p>` : ''}
-      ${event.reveals_to_trigger?.length ? `<p><strong>Reveals:</strong> ${event.reveals_to_trigger.length} linked</p>` : ''}
-      ${event.npcs_to_reveal?.length ? `<p><strong>NPCs to reveal:</strong> ${event.npcs_to_reveal.length}</p>` : ''}
-      ${event.emails_to_send?.length ? `<p><strong>Emails to send:</strong> ${event.emails_to_send.length}</p>` : ''}
-      ${event.notes ? `<p><strong>GM Notes:</strong> ${escapeHtml(event.notes)}</p>` : ''}
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal()">Close</button>
-      ${event.status === 'pending' ?
-        `<button class="btn btn-primary" onclick="triggerEvent('${event.id}'); closeModal();">Trigger Now</button>` : ''
-      }
-    </div>
-  `;
-  showModalContent(html);
-}
-
-// ==================== Email Queue (Stage 8.3) ====================
-
-function renderPrepEmails() {
-  const list = document.getElementById('email-list');
-  const count = document.getElementById('email-count');
-  const emails = state.prepEmails || {};
-  const drafts = emails.drafts || [];
-  const queued = emails.queued || [];
-  const sent = emails.sent || [];
-  const total = drafts.length + queued.length + sent.length;
-
-  if (count) count.textContent = `${total} email${total !== 1 ? 's' : ''}`;
-  if (!list) return;
-
-  if (total === 0) {
-    list.innerHTML = '<p class="placeholder">No emails prepared</p>';
-    return;
-  }
-
-  let html = '';
-
-  // Drafts
-  if (drafts.length > 0) {
-    html += `<div class="email-section"><h4>Drafts (${drafts.length})</h4>`;
-    html += drafts.map(email => renderEmailItem(email, 'draft')).join('');
-    html += '</div>';
-  }
-
-  // Queued
-  if (queued.length > 0) {
-    html += `<div class="email-section"><h4>Queued (${queued.length})</h4>`;
-    html += queued.map(email => renderEmailItem(email, 'queued')).join('');
-    html += '</div>';
-  }
-
-  // Sent (collapsed by default)
-  if (sent.length > 0) {
-    html += `<div class="email-section"><h4>Sent (${sent.length})</h4>`;
-    html += sent.slice(0, 5).map(email => renderEmailItem(email, 'sent')).join('');
-    if (sent.length > 5) html += `<p class="text-muted">...and ${sent.length - 5} more</p>`;
-    html += '</div>';
-  }
-
-  list.innerHTML = html;
-}
-
-function renderEmailItem(email, status) {
-  return `
-    <div class="prep-item" data-email-id="${email.id}">
-      <div class="prep-item-header">
-        <span class="prep-item-title">${escapeHtml(email.subject || 'No subject')}</span>
-        <span class="prep-item-status ${status}">${status}</span>
-      </div>
-      <div class="prep-item-desc">
-        From: ${escapeHtml(email.sender_name || 'Unknown')} |
-        To: ${escapeHtml(email.recipient_type || 'player')}
-      </div>
-      <div class="prep-item-meta">
-        ${email.queued_for_date ? `<span>Scheduled: ${email.queued_for_date}</span>` : ''}
-        ${email.sent_date ? `<span>Sent: ${email.sent_date}</span>` : ''}
-      </div>
-      ${status !== 'sent' ? `
-        <div class="prep-item-actions">
-          <button class="btn btn-primary btn-sm" onclick="sendEmailNow('${email.id}')">Send Now</button>
-          ${status === 'draft' ? `<button class="btn btn-sm" onclick="queueEmail('${email.id}')">Queue</button>` : ''}
-        </div>
-      ` : ''}
-    </div>
-  `;
-}
-
-function sendEmailNow(emailId) {
-  state.socket.emit('ops:sendEmail', {
-    emailId,
-    sentDate: state.gameDate,
-    deliveryDate: state.gameDate
-  });
-  showNotification('Email sent', 'success');
-  // Reload prep data
-  loadPrepData();
-}
-
-function queueEmail(emailId) {
-  const date = prompt('Enter game date to send (e.g., 1105-042):');
-  if (!date) return;
-  state.socket.emit('ops:queueEmail', { emailId, queuedForDate: date });
-  showNotification(`Email queued for ${date}`, 'success');
-  loadPrepData();
-}
-
-// ==================== Handouts / Assets (Stage 8.3) ====================
-
-function renderPrepHandouts() {
-  const list = document.getElementById('handouts-list');
-  const count = document.getElementById('handouts-count');
-  const handouts = state.prepHandouts || [];
-
-  if (count) count.textContent = `${handouts.length} handout${handouts.length !== 1 ? 's' : ''}`;
-  if (!list) return;
-
-  if (handouts.length === 0) {
-    list.innerHTML = '<p class="placeholder">No handouts prepared</p>';
-    return;
-  }
-
-  list.innerHTML = handouts.map(handout => `
-    <div class="prep-item" data-handout-id="${handout.id}">
-      <div class="prep-item-header">
-        <span class="prep-item-title">${escapeHtml(handout.title)}</span>
-        <span class="prep-item-status ${handout.visibility}">${handout.visibility}</span>
-      </div>
-      <div class="prep-item-desc">
-        Type: ${handout.handout_type || 'document'}
-        ${handout.file_url ? ' | Has file' : ''}
-      </div>
-      <div class="prep-item-actions">
-        ${handout.visibility === 'hidden' ?
-          `<button class="btn btn-primary btn-sm" onclick="shareHandout('${handout.id}')">Share</button>` :
-          `<button class="btn btn-sm" onclick="hideHandout('${handout.id}')">Hide</button>`
-        }
-        <button class="btn btn-sm" onclick="showHandoutDetail('${handout.id}')">View</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function shareHandout(handoutId) {
-  state.socket.emit('ops:shareHandout', { handoutId });
-  const handout = state.prepHandouts.find(h => h.id === handoutId);
-  if (handout) {
-    handout.visibility = 'revealed';
-    renderPrepHandouts();
-  }
-  showNotification('Handout shared with players', 'success');
-}
-
-function hideHandout(handoutId) {
-  const handout = state.prepHandouts.find(h => h.id === handoutId);
-  if (handout) {
-    handout.visibility = 'hidden';
-    renderPrepHandouts();
-  }
-}
-
-function showHandoutDetail(handoutId) {
-  const handout = state.prepHandouts.find(h => h.id === handoutId);
-  if (!handout) return;
-
-  const html = `
-    <div class="modal-header">
-      <h2>${escapeHtml(handout.title)}</h2>
-      <button class="btn-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <p><strong>Type:</strong> ${escapeHtml(handout.handout_type || 'document')}</p>
-      <p><strong>Visibility:</strong> ${escapeHtml(handout.visibility)}</p>
-      ${handout.file_url ? `<p><strong>File:</strong> <a href="${escapeHtml(handout.file_url)}" target="_blank">View</a></p>` : ''}
-      ${handout.content_text ? `<div class="handout-content">${escapeHtml(handout.content_text)}</div>` : ''}
-      ${handout.notes ? `<p><strong>GM Notes:</strong> ${escapeHtml(handout.notes)}</p>` : ''}
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal()">Close</button>
-      ${handout.visibility === 'hidden' ?
-        `<button class="btn btn-primary" onclick="shareHandout('${handout.id}'); closeModal();">Share</button>` : ''
-      }
-    </div>
-  `;
-  showModalContent(html);
-}
+// AR-151-6: Events, Email Queue, Handouts moved to modules/gm-prep-events.js, gm-prep-emails.js, gm-prep-handouts.js
 
 // ==================== Adventure Modules (AR-140) ====================
 
@@ -9920,6 +9675,10 @@ window.showAddRevealModal = showAddRevealModal;
 window.showPlayerRevealModal = showPlayerRevealModal;
 window.renderPrepNpcs = renderPrepNpcs;
 window.renderPrepLocations = renderPrepLocations;
+// AR-151-6: Events, Emails, Handouts render functions
+window.renderPrepEvents = renderPrepEvents;
+window.renderPrepEmails = renderPrepEmails;
+window.renderPrepHandouts = renderPrepHandouts;
 // Stage 8.2: NPCs, Locations, Events
 window.revealNpc = revealNpc;
 window.hideNpc = hideNpc;
