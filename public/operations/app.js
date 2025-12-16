@@ -61,6 +61,9 @@ import { showShipStatusModal as _showShipStatusModal } from './modules/ship-stat
 import { showMailModal as _showMailModal, showMailDetailModal as _showMailDetailModal, updateMailBadge as _updateMailBadge } from './modules/mail-modal.js';
 import { showComposeMailModal as _showComposeMailModal, populateComposeContacts as _populateComposeContacts } from './modules/mail-compose.js';
 import { showFeedbackForm as _showFeedbackForm, submitFeedback as _submitFeedback, showFeedbackReview as _showFeedbackReview, copyLogAsTodo as _copyLogAsTodo } from './modules/feedback-form.js';
+import { showNPCContactsModal as _showNPCContactsModal, showAddNPCContactForm as _showAddNPCContactForm, submitNPCContact as _submitNPCContact } from './modules/npc-contacts.js';
+import { showCrewRosterMenu as _showCrewRosterMenu } from './modules/crew-roster-menu.js';
+import { showShipConfiguration as _showShipConfiguration } from './modules/ship-config.js';
 
 // Wrappers to inject state into module functions
 const showNewsMailModal = (systemName) => _showNewsMailModal(state, systemName);
@@ -84,6 +87,11 @@ const showFeedbackForm = () => _showFeedbackForm(showModalContent);
 const submitFeedback = () => _submitFeedback(state, showNotification, closeModal);
 const showFeedbackReview = () => _showFeedbackReview(state, showModalContent);
 const copyLogAsTodo = (msg) => _copyLogAsTodo(showNotification, msg);
+const showNPCContactsModal = (contacts, isGM) => _showNPCContactsModal(showModalContent, contacts, isGM);
+const showAddNPCContactForm = () => _showAddNPCContactForm(showModalContent);
+const submitNPCContact = () => _submitNPCContact(state, showNotification);
+const showCrewRosterMenu = () => _showCrewRosterMenu(state, showModalContent);
+const showShipConfiguration = () => _showShipConfiguration(state, showModalContent);
 
 // ==================== State ====================
 const state = {
@@ -8977,107 +8985,7 @@ function showHandoutModal(handout) {
 
 // AR-151-2d: Mail Compose Modal moved to modules/mail-compose.js
 
-// ==================== NPC Contacts Modal (Autorun 6) ====================
-
-function showNPCContactsModal(contacts, isGM) {
-  let html = `
-    <div class="modal-header npc-contacts-modal">
-      <h2>NPC Contacts</h2>
-      <button class="btn-close" data-close-modal>×</button>
-    </div>
-    <div class="modal-body">
-  `;
-
-  if (!contacts || contacts.length === 0) {
-    html += '<p class="text-muted">No known contacts.</p>';
-  } else {
-    html += '<div class="npc-contacts-list">';
-    for (const contact of contacts) {
-      html += `
-        <div class="npc-contact-item">
-          <div class="npc-contact-name">${contact.name}</div>
-          ${contact.title ? `<div class="npc-contact-title">${contact.title}</div>` : ''}
-          ${contact.location ? `<div class="npc-contact-location">Location: ${contact.location}</div>` : ''}
-          ${contact.description ? `<div class="npc-contact-desc">${contact.description}</div>` : ''}
-          ${isGM ? `<div class="npc-contact-visibility">Visible to: ${Array.isArray(contact.visible_to) && contact.visible_to.includes('all') ? 'Everyone' : (contact.visible_to?.length || 0) + ' players'}</div>` : ''}
-        </div>
-      `;
-    }
-    html += '</div>';
-  }
-
-  if (isGM) {
-    html += `
-      <div class="gm-controls">
-        <button class="btn btn-small" onclick="showAddNPCContactForm()">+ Add Contact</button>
-      </div>
-    `;
-  }
-
-  html += `
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-close-modal>Close</button>
-    </div>
-  `;
-
-  showModalContent(html);
-}
-
-function showAddNPCContactForm() {
-  const html = `
-    <div class="modal-header">
-      <h2>Add NPC Contact</h2>
-      <button class="btn-close" data-close-modal>×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Name:</label>
-        <input type="text" id="npc-name" class="form-input" required>
-      </div>
-      <div class="form-group">
-        <label>Title:</label>
-        <input type="text" id="npc-title" class="form-input" placeholder="e.g., Ship Broker, Scout">
-      </div>
-      <div class="form-group">
-        <label>Location:</label>
-        <input type="text" id="npc-location" class="form-input" placeholder="e.g., Regina Downport">
-      </div>
-      <div class="form-group">
-        <label>Description:</label>
-        <textarea id="npc-description" class="form-input" rows="3"></textarea>
-      </div>
-      <div class="form-group">
-        <label><input type="checkbox" id="npc-visible-all"> Visible to all players</label>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="state.socket.emit('ops:getNPCContacts')">Cancel</button>
-      <button class="btn btn-primary" onclick="submitNPCContact()">Add Contact</button>
-    </div>
-  `;
-  showModalContent(html);
-}
-
-function submitNPCContact() {
-  const name = document.getElementById('npc-name')?.value;
-  if (!name) {
-    showNotification('Name is required', 'error');
-    return;
-  }
-
-  const data = {
-    name,
-    title: document.getElementById('npc-title')?.value || null,
-    location: document.getElementById('npc-location')?.value || null,
-    description: document.getElementById('npc-description')?.value || null,
-    visibleTo: document.getElementById('npc-visible-all')?.checked ? ['all'] : []
-  };
-
-  state.socket.emit('ops:addNPCContact', data);
-  showNotification('Contact added', 'success');
-  state.socket.emit('ops:getNPCContacts');
-}
+// AR-151-3a: NPC Contacts Modal moved to modules/npc-contacts.js
 
 function showModalContent(html) {
   const modalContent = document.getElementById('modal-content');
@@ -9095,148 +9003,8 @@ function showModalContent(html) {
 
 // AR-151f: Library Computer moved to modules/library-computer.js
 
-// ==================== AR-48: Crew Roster (Menu) ====================
-
-function showCrewRosterMenu() {
-  const ship = state.ship || {};
-  const template = state.shipTemplate || {};
-  const npcCrew = ship.npc_crew || template.npcCrew || [];
-  const connectedPlayers = state.connectedPlayers || [];
-
-  let html = `
-    <div class="modal-header">
-      <h2>📋 Crew Roster - ${template.name || 'Ship'}</h2>
-      <button class="btn-close" data-close-modal>×</button>
-    </div>
-    <div class="modal-body crew-roster">
-      <div class="roster-section">
-        <h4>Online Crew (${connectedPlayers.length})</h4>
-        <div class="roster-list">
-  `;
-
-  if (connectedPlayers.length === 0) {
-    html += '<div class="roster-empty">No crew currently online</div>';
-  } else {
-    for (const p of connectedPlayers) {
-      const roleLabel = p.role ? p.role.charAt(0).toUpperCase() + p.role.slice(1).replace('_', ' ') : 'Unassigned';
-      html += `
-        <div class="roster-item online">
-          <span class="roster-status">●</span>
-          <span class="roster-name">${escapeHtml(p.slotName || p.username || 'Unknown')}</span>
-          <span class="roster-role">${roleLabel}</span>
-        </div>
-      `;
-    }
-  }
-
-  html += `
-        </div>
-      </div>
-      <div class="roster-section">
-        <h4>Ship's Complement (${npcCrew.length} NPC)</h4>
-        <div class="roster-list">
-  `;
-
-  if (npcCrew.length === 0) {
-    html += '<div class="roster-empty">No NPC crew assigned</div>';
-  } else {
-    for (const npc of npcCrew) {
-      html += `
-        <div class="roster-item npc">
-          <span class="roster-status npc">◆</span>
-          <span class="roster-name">${escapeHtml(npc.name || 'NPC')}</span>
-          <span class="roster-role">${npc.role || npc.position || 'Crew'}</span>
-        </div>
-      `;
-    }
-  }
-
-  html += `
-        </div>
-      </div>
-      <div class="roster-summary" style="margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color);">
-        <small>Crew Capacity: ${template.staterooms || '?'} staterooms | Low Berths: ${template.lowBerths || 0}</small>
-      </div>
-    </div>
-  `;
-
-  showModalContent(html);
-}
-
-// ==================== AR-48: Ship Configuration ====================
-
-function showShipConfiguration() {
-  const ship = state.ship || {};
-  const template = state.shipTemplate || {};
-  const shipData = ship.ship_data || template || {};
-
-  const weapons = shipData.weapons || [];
-  const drives = {
-    mDrive: shipData.mDrive || shipData.maneuver || '?',
-    jDrive: shipData.jDrive || shipData.jumpRating || '?',
-    powerPlant: shipData.powerPlant || shipData.power || '?'
-  };
-
-  let html = `
-    <div class="modal-header">
-      <h2>🔧 ${shipData.name || template.name || 'Ship'} Configuration</h2>
-      <button class="btn-close" data-close-modal>×</button>
-    </div>
-    <div class="modal-body ship-config">
-      <div class="config-section">
-        <h4>Hull</h4>
-        <table class="config-table">
-          <tr><td>Tonnage</td><td>${shipData.tonnage || template.tonnage || '?'} dT</td></tr>
-          <tr><td>Hull Points</td><td>${shipData.hull || template.hull || '?'}</td></tr>
-          <tr><td>Structure</td><td>${shipData.structure || template.structure || '?'}</td></tr>
-          <tr><td>Armor</td><td>${shipData.armor || template.armor || 0}</td></tr>
-        </table>
-      </div>
-
-      <div class="config-section">
-        <h4>Drives & Power</h4>
-        <table class="config-table">
-          <tr><td>Maneuver</td><td>${drives.mDrive}-G</td></tr>
-          <tr><td>Jump</td><td>Jump-${drives.jDrive}</td></tr>
-          <tr><td>Power Plant</td><td>${drives.powerPlant}</td></tr>
-        </table>
-      </div>
-
-      <div class="config-section">
-        <h4>Fuel & Cargo</h4>
-        <table class="config-table">
-          <tr><td>Fuel Capacity</td><td>${shipData.fuel || template.fuel || '?'} tons</td></tr>
-          <tr><td>Cargo Capacity</td><td>${shipData.cargo || template.cargo || '?'} tons</td></tr>
-        </table>
-      </div>
-
-      <div class="config-section">
-        <h4>Weapons (${weapons.length})</h4>
-        ${weapons.length === 0 ? '<div class="config-empty">No weapons installed</div>' : `
-        <table class="config-table">
-          ${weapons.map(w => `
-            <tr>
-              <td>${w.name || 'Weapon'}</td>
-              <td>${w.damage || '?'} dmg</td>
-              <td>${w.mount || 'Turret'}</td>
-            </tr>
-          `).join('')}
-        </table>
-        `}
-      </div>
-
-      <div class="config-section">
-        <h4>Accommodations</h4>
-        <table class="config-table">
-          <tr><td>Staterooms</td><td>${shipData.staterooms || template.staterooms || '?'}</td></tr>
-          <tr><td>Low Berths</td><td>${shipData.lowBerths || template.lowBerths || 0}</td></tr>
-        </table>
-      </div>
-    </div>
-  `;
-
-  showModalContent(html);
-}
+// AR-151-3b: Crew Roster Menu moved to modules/crew-roster-menu.js
+// AR-151-3c: Ship Configuration moved to modules/ship-config.js
 
 // ==================== AR-48: Medical Records ====================
 
