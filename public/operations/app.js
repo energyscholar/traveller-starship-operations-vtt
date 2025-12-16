@@ -60,6 +60,7 @@ import {
 import { showShipStatusModal as _showShipStatusModal } from './modules/ship-status-modal.js';
 import { showMailModal as _showMailModal, showMailDetailModal as _showMailDetailModal, updateMailBadge as _updateMailBadge } from './modules/mail-modal.js';
 import { showComposeMailModal as _showComposeMailModal, populateComposeContacts as _populateComposeContacts } from './modules/mail-compose.js';
+import { showFeedbackForm as _showFeedbackForm, submitFeedback as _submitFeedback, showFeedbackReview as _showFeedbackReview, copyLogAsTodo as _copyLogAsTodo } from './modules/feedback-form.js';
 
 // Wrappers to inject state into module functions
 const showNewsMailModal = (systemName) => _showNewsMailModal(state, systemName);
@@ -79,6 +80,10 @@ const showMailDetailModal = (mail) => _showMailDetailModal(state, showModalConte
 const updateMailBadge = () => _updateMailBadge(state);
 const showComposeMailModal = () => _showComposeMailModal(state, showModalContent, showError, showMessage);
 const populateComposeContacts = (contacts) => _populateComposeContacts(state, contacts);
+const showFeedbackForm = () => _showFeedbackForm(showModalContent);
+const submitFeedback = () => _submitFeedback(state, showNotification, closeModal);
+const showFeedbackReview = () => _showFeedbackReview(state, showModalContent);
+const copyLogAsTodo = (msg) => _copyLogAsTodo(showNotification, msg);
 
 // ==================== State ====================
 const state = {
@@ -9086,132 +9091,7 @@ function showModalContent(html) {
   });
 }
 
-// ==================== Feedback Form (Autorun 6) ====================
-
-function showFeedbackForm() {
-  const html = `
-    <div class="modal-header">
-      <h2>Submit Feedback</h2>
-      <button class="btn-close" data-close-modal>×</button>
-    </div>
-    <div class="modal-body">
-      <p class="feedback-intro">Help improve Traveller VTT! Report bugs or request features.</p>
-      <div class="form-group">
-        <label>Type:</label>
-        <select id="feedback-type" class="form-input">
-          <option value="bug">Bug Report</option>
-          <option value="feature">Feature Request</option>
-          <option value="question">Question</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Title:</label>
-        <input type="text" id="feedback-title" class="form-input" placeholder="Brief description" required>
-      </div>
-      <div class="form-group">
-        <label>Details:</label>
-        <textarea id="feedback-description" class="form-input" rows="5" placeholder="Provide as much detail as possible. For bugs: what happened vs what you expected."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Priority:</label>
-        <select id="feedback-priority" class="form-input">
-          <option value="low">Low - Minor issue</option>
-          <option value="normal" selected>Normal</option>
-          <option value="high">High - Significantly impacts gameplay</option>
-          <option value="critical">Critical - Game-breaking</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-close-modal>Cancel</button>
-      <button class="btn btn-primary" onclick="submitFeedback()">Submit Feedback</button>
-    </div>
-  `;
-  showModalContent(html);
-}
-
-function submitFeedback() {
-  const title = document.getElementById('feedback-title')?.value;
-  if (!title) {
-    showNotification('Title is required', 'error');
-    return;
-  }
-
-  const feedbackType = document.getElementById('feedback-type')?.value || 'other';
-  const description = document.getElementById('feedback-description')?.value || '';
-  const priority = document.getElementById('feedback-priority')?.value || 'normal';
-
-  // Submit as a log entry with type 'feedback'
-  const message = `[${feedbackType.toUpperCase()}] [${priority}] ${title}${description ? ': ' + description : ''}`;
-
-  state.socket.emit('ops:addLogEntry', {
-    entryType: 'feedback',
-    message
-  });
-
-  showNotification('Feedback submitted - check ship log!', 'success');
-  closeModal();
-}
-
-// GM: Show feedback from ship log (filtered by entry_type='feedback')
-function showFeedbackReview() {
-  const feedbackLogs = (state.logs || []).filter(log => log.entry_type === 'feedback');
-
-  let html = `
-    <div class="modal-header">
-      <h2>Feedback Review</h2>
-      <button class="btn-close" data-close-modal>×</button>
-    </div>
-    <div class="modal-body feedback-review-body">
-      <div class="feedback-stats">
-        <span class="stat-item">Total: ${feedbackLogs.length}</span>
-      </div>
-      <div class="feedback-list">
-  `;
-
-  if (feedbackLogs.length === 0) {
-    html += '<p class="text-muted">No feedback submitted yet. Players can submit feedback via the hamburger menu.</p>';
-  } else {
-    for (const log of feedbackLogs.reverse()) {
-      html += `
-        <div class="feedback-item">
-          <div class="feedback-item-header">
-            <span class="feedback-date">${log.game_date || ''}</span>
-            <span class="feedback-actor">${log.actor || 'Anonymous'}</span>
-          </div>
-          <div class="feedback-message">${log.message}</div>
-          <div class="feedback-actions">
-            <button class="btn btn-small" onclick="copyLogAsTodo('${log.message.replace(/'/g, "\\'")}')">Copy as TODO</button>
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  html += `
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-close-modal>Close</button>
-    </div>
-  `;
-
-  showModalContent(html);
-}
-
-function copyLogAsTodo(message) {
-  // Extract the title from the feedback message format: [TYPE] [PRIORITY] Title: Description
-  const match = message.match(/\[.*?\]\s*\[.*?\]\s*(.+)/);
-  const title = match ? match[1].split(':')[0].trim() : message;
-  const todoText = `TODO: ${title}`;
-
-  navigator.clipboard.writeText(todoText).then(() => {
-    showNotification('Copied to clipboard as TODO!', 'success');
-  }).catch(() => {
-    prompt('Copy this TODO:', todoText);
-  });
-}
+// AR-151-2e: Feedback Form moved to modules/feedback-form.js
 
 // AR-151f: Library Computer moved to modules/library-computer.js
 
