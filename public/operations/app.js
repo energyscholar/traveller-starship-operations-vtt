@@ -95,6 +95,8 @@ import { requestJumpStatus as _requestJumpStatus, updateFuelEstimate as _updateF
 import { updateJumpMap as _updateJumpMap, fetchJumpDestinations, selectJumpDestination, initJumpMapIfNeeded as _initJumpMapIfNeeded, setMapSize, restoreMapSize, initMapInteractions } from './modules/jump-map.js';
 import { performScan as _performScan, toggleECM as _toggleECM, toggleECCM as _toggleECCM, acquireSensorLock as _acquireSensorLock, breakSensorLock as _breakSensorLock, toggleStealth as _toggleStealth, setSensorLock as _setSensorLock, toggleSensorPanelMode as _toggleSensorPanelMode, checkSensorThreats as _checkSensorThreats, renderMiniRadar } from './modules/sensor-operations.js';
 import { expandRolePanel as _expandRolePanel, collapseRolePanel as _collapseRolePanel, togglePanelExpand as _togglePanelExpand, expandPanel as _expandPanel, collapseExpandedPanel as _collapseExpandedPanel, updateRoleClass as _updateRoleClass } from './modules/panel-management.js';
+// AR-153: Phase 3 modules
+import { openRefuelModal as _openRefuelModal, processFuel as _processFuel, populateRefuelModal as _populateRefuelModal, updateRefuelAmountPreview as _updateRefuelAmountPreview, updateRefuelPreview, executeRefuel as _executeRefuel, setRefuelMax as _setRefuelMax, executeProcessFuel as _executeProcessFuel, setProcessMax as _setProcessMax, requestFuelStatus as _requestFuelStatus } from './modules/refueling-operations.js';
 
 // AR-152: Helper wrappers for notification variants
 const showError = (msg) => showNotification(msg, 'error');
@@ -213,6 +215,16 @@ const togglePanelExpand = (panelId) => _togglePanelExpand(state, expandRolePanel
 const expandPanel = (panelId) => _expandPanel(state, panelId);
 const collapseExpandedPanel = () => _collapseExpandedPanel(state);
 const updateRoleClass = () => _updateRoleClass(state);
+// AR-153: Phase 3 wrappers
+const openRefuelModal = () => _openRefuelModal(state, showModal);
+const processFuel = () => _processFuel(state);
+const updateRefuelAmountPreview = () => _updateRefuelAmountPreview(state);
+const executeRefuel = () => _executeRefuel(state);
+const setRefuelMax = () => _setRefuelMax(state, updateRefuelAmountPreview);
+const populateRefuelModal = () => _populateRefuelModal(state, setRefuelMax);
+const executeProcessFuel = () => _executeProcessFuel(state, closeModal);
+const setProcessMax = () => _setProcessMax(state);
+const requestFuelStatus = () => _requestFuelStatus(state);
 
 // ==================== State ====================
 const state = {
@@ -4671,155 +4683,7 @@ function handleFireResult(data) {
 
 // AR-153: Jump Map moved to modules/jump-map.js
 
-// ==================== Refueling ====================
-
-function openRefuelModal() {
-  // Request refuel options from server
-  state.socket.emit('ops:getRefuelOptions');
-  showModal('template-refuel');
-}
-
-function processFuel() {
-  if (!state.socket || !state.campaignId) {
-    showNotification('Not connected to campaign', 'error');
-    return;
-  }
-
-  // Get unrefined fuel amount from ship state
-  const fuel = state.shipState?.fuel || {};
-  const unrefined = fuel.unrefined || 0;
-
-  if (unrefined <= 0) {
-    showNotification('No unrefined fuel to process', 'warning');
-    return;
-  }
-
-  // Prompt for amount
-  const tons = prompt(`Process how many tons of unrefined fuel? (0-${unrefined})`, unrefined);
-  if (tons === null) return;
-
-  const amount = parseFloat(tons);
-  if (isNaN(amount) || amount <= 0 || amount > unrefined) {
-    showNotification('Invalid amount', 'error');
-    return;
-  }
-
-  state.socket.emit('ops:startFuelProcessing', { tons: amount });
-}
-
-function populateRefuelModal() {
-  const sourceSelect = document.getElementById('refuel-source');
-  if (!sourceSelect) return;
-
-  if (!state.fuelSources || state.fuelSources.length === 0) {
-    sourceSelect.innerHTML = '<option value="">No fuel sources available</option>';
-    return;
-  }
-
-  sourceSelect.innerHTML = state.fuelSources.map(s =>
-    `<option value="${s.id}">${s.name} - ${s.fuelType} (${s.cost > 0 ? 'Cr' + s.cost + '/ton' : 'Free'})</option>`
-  ).join('');
-
-  // AR-60: Default amount to MAX
-  setRefuelMax();
-}
-
-function updateRefuelAmountPreview() {
-  const sourceId = document.getElementById('refuel-source')?.value;
-  const tons = parseInt(document.getElementById('refuel-amount')?.value) || 0;
-
-  if (sourceId && tons > 0) {
-    state.socket.emit('ops:canRefuel', { sourceId, tons });
-  } else {
-    updateRefuelPreview({ canRefuel: false });
-  }
-}
-
-function updateRefuelPreview(data) {
-  const previewEl = document.getElementById('refuel-preview');
-  if (!previewEl) return;
-
-  if (!data.canRefuel) {
-    if (data.error) {
-      previewEl.innerHTML = `<div class="refuel-error">${data.error}</div>`;
-    } else {
-      previewEl.innerHTML = '<div class="refuel-info">Select source and amount</div>';
-    }
-    return;
-  }
-
-  previewEl.innerHTML = `
-    <div class="refuel-preview-info">
-      <div class="preview-row">
-        <span>Fuel Type:</span>
-        <span class="preview-value">${data.fuelType}</span>
-      </div>
-      <div class="preview-row">
-        <span>Cost:</span>
-        <span class="preview-value">${data.cost > 0 ? 'Cr' + data.cost : 'Free'}</span>
-      </div>
-      <div class="preview-row">
-        <span>Time:</span>
-        <span class="preview-value">${data.timeHours > 0 ? data.timeHours + ' hours' : 'Instant'}</span>
-      </div>
-      ${data.skillCheck ? `
-      <div class="preview-row">
-        <span>Skill Check:</span>
-        <span class="preview-value">${data.skillCheck.skill} (${data.skillCheck.difficulty}+)</span>
-      </div>
-      ` : ''}
-    </div>
-  `;
-}
-
-function executeRefuel() {
-  const sourceId = document.getElementById('refuel-source')?.value;
-  const tons = parseInt(document.getElementById('refuel-amount')?.value) || 0;
-
-  if (!sourceId || tons <= 0) {
-    showNotification('Please select source and amount', 'error');
-    return;
-  }
-
-  state.socket.emit('ops:refuel', { sourceId, tons });
-}
-
-function setRefuelMax() {
-  const fuelStatus = state.fuelStatus || {};
-  const spaceAvailable = (fuelStatus.max || 40) - (fuelStatus.total || 0);
-  const amountInput = document.getElementById('refuel-amount');
-  if (amountInput) {
-    amountInput.value = spaceAvailable;
-    updateRefuelAmountPreview();
-  }
-}
-
-function executeProcessFuel() {
-  const tons = parseInt(document.getElementById('process-amount')?.value) || 0;
-
-  if (tons <= 0) {
-    showNotification('Please enter amount to process', 'error');
-    return;
-  }
-
-  state.socket.emit('ops:startFuelProcessing', { tons });
-  closeModal();
-}
-
-function setProcessMax() {
-  const fuelStatus = state.fuelStatus || {};
-  const unrefined = fuelStatus.breakdown?.unrefined || 0;
-  const amountInput = document.getElementById('process-amount');
-  if (amountInput) {
-    amountInput.value = unrefined;
-  }
-}
-
-function requestFuelStatus() {
-  if (state.socket && state.selectedShipId) {
-    state.socket.emit('ops:getFuelStatus');
-  }
-}
+// AR-153: Refueling Operations moved to modules/refueling-operations.js
 
 function renderShipLog() {
   const container = document.getElementById('ship-log');
@@ -8016,6 +7880,17 @@ window.togglePanelExpand = togglePanelExpand;
 window.expandPanel = expandPanel;
 window.collapseExpandedPanel = collapseExpandedPanel;
 window.updateRoleClass = updateRoleClass;
+// AR-153: Refueling Operations exports
+window.openRefuelModal = openRefuelModal;
+window.processFuel = processFuel;
+window.populateRefuelModal = populateRefuelModal;
+window.updateRefuelAmountPreview = updateRefuelAmountPreview;
+window.updateRefuelPreview = updateRefuelPreview;
+window.executeRefuel = executeRefuel;
+window.setRefuelMax = setRefuelMax;
+window.executeProcessFuel = executeProcessFuel;
+window.setProcessMax = setProcessMax;
+window.requestFuelStatus = requestFuelStatus;
 // AR-151: Core utilities and maps for onclick handlers
 window.showModalContent = showModalContent;
 window.showNotification = showNotification;

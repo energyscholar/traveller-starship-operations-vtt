@@ -66,6 +66,20 @@ const PHASE2_EXPORTS = [
   'updateRoleClass'
 ];
 
+const PHASE3_EXPORTS = [
+  // Phase 3: Refueling Operations
+  'openRefuelModal',
+  'processFuel',
+  'populateRefuelModal',
+  'updateRefuelAmountPreview',
+  'updateRefuelPreview',
+  'executeRefuel',
+  'setRefuelMax',
+  'executeProcessFuel',
+  'setProcessMax',
+  'requestFuelStatus'
+];
+
 async function runTest() {
   let browser;
   try {
@@ -80,7 +94,7 @@ async function runTest() {
       timeout: 10000
     });
 
-    const ALL_EXPORTS = [...PHASE1_EXPORTS, ...PHASE2_EXPORTS];
+    const ALL_EXPORTS = [...PHASE1_EXPORTS, ...PHASE2_EXPORTS, ...PHASE3_EXPORTS];
     const results = await page.evaluate((exports) => {
       const missing = [];
       const present = [];
