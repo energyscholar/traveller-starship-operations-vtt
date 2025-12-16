@@ -188,15 +188,18 @@ async function loadSectorData(subsectorId) {
     if (titleEl) titleEl.textContent = `${data.name} Subsector`;
 
     // AR-111: Set ship hex by looking up current system name (subsector coords differ from sector coords)
+    // AR-168: Only do name lookup if hex not already set (hex takes priority over name)
     const currentSystem = window.state?.campaign?.current_system;
-    if (currentSystem) {
+    if (currentSystem && !sectorMapState.currentShipHex) {
       const sys = sectorMapState.systems.find(s =>
         s.name === currentSystem || s.name.toLowerCase() === currentSystem.toLowerCase()
       );
       if (sys?.hex) {
         sectorMapState.currentShipHex = sys.hex;
-        console.log(`[SectorMap] Ship at ${sys.hex} (${currentSystem})`);
+        console.log(`[SectorMap] Ship at ${sys.hex} (${currentSystem}) - from name lookup`);
       }
+    } else if (sectorMapState.currentShipHex) {
+      console.log(`[SectorMap] Ship hex already set: ${sectorMapState.currentShipHex}, skipping name lookup`);
     }
 
     renderSectorMap();
@@ -1092,14 +1095,12 @@ async function showSectorMap() {
     // AR-144: Dynamic subsector loading based on ship hex
     const subsectorFile = await getSubsectorForCurrentSystem();
     console.log(`[SectorMap] Loading subsector: ${subsectorFile}`);
-    loadSectorData(subsectorFile);
+    await loadSectorData(subsectorFile);  // AR-168: Must await before centering!
 
-    // AR-36: Center on ship's current location after a brief delay for rendering
-    setTimeout(() => {
-      if (sectorMapState.currentShipHex) {
-        centerOnHex(sectorMapState.currentShipHex);
-      }
-    }, 100);
+    // AR-36: Center on ship's current location AFTER data loaded
+    if (sectorMapState.currentShipHex) {
+      centerOnHex(sectorMapState.currentShipHex);
+    }
   }
 }
 

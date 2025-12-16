@@ -154,7 +154,11 @@ export function handleJumpPlotted(data) {
  * @param {number} distance - Jump distance
  */
 export function initiateJumpFromPlot(state, destination, distance) {
-  state.socket.emit('ops:initiateJump', { destination, distance });
+  // Read hex/sector from input data attributes (set when destination selected)
+  const destInput = document.getElementById('jump-destination');
+  const destinationHex = destInput?.dataset?.hex || null;
+  const destinationSector = destInput?.dataset?.sector || null;
+  state.socket.emit('ops:initiateJump', { destination, distance, destinationHex, destinationSector });
 }
 
 /**
@@ -162,7 +166,8 @@ export function initiateJumpFromPlot(state, destination, distance) {
  * @param {Object} state - Application state
  */
 export function initiateJump(state) {
-  const destination = document.getElementById('jump-destination')?.value?.trim();
+  const destInput = document.getElementById('jump-destination');
+  const destination = destInput?.value?.trim();
   const distance = parseInt(document.getElementById('jump-distance')?.value) || 1;
 
   if (!destination) {
@@ -170,9 +175,14 @@ export function initiateJump(state) {
     return;
   }
 
+  // Send hex/sector as UIDs for reliable server-side lookup
+  const destinationHex = destInput?.dataset?.hex || null;
+  const destinationSector = destInput?.dataset?.sector || null;
   state.socket.emit('ops:initiateJump', {
     destination,
-    distance
+    distance,
+    destinationHex,
+    destinationSector
   });
 }
 

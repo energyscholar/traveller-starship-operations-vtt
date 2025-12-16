@@ -722,6 +722,7 @@ function initSocket() {
     state.logEntries = data.logs || [];
     state.campaign = data.campaign;
     state.selectedRole = data.role;
+
     showScreen('bridge');
     renderBridge();
     // Save session for reconnect (Stage 3.5.5)
@@ -1191,8 +1192,10 @@ function initSocket() {
     }
     // AR-103: Update hex after jump (parsec location changed) with system tooltip
     // AR-126: Also update sector for jump map recentering
+    console.log('[AR-168] ops:jumpCompleted received:', { hex: data.hex, sector: data.sector, arrivedAt: data.arrivedAt });
     if (data.hex) {
       state.campaign.current_hex = data.hex;
+      console.log('[AR-168] Updated state.campaign.current_hex to:', data.hex);
       if (state.ship?.current_state) {
         state.ship.current_state.systemHex = data.hex;
       }
@@ -1250,6 +1253,12 @@ function initSocket() {
       if (state.shipState) {
         state.shipState.systemHex = data.currentHex;
       }
+      // AR-168: Update bridge-hex DOM element (was missing!)
+      const hexEl = document.getElementById('bridge-hex');
+      if (hexEl) {
+        hexEl.textContent = data.currentHex;
+        hexEl.title = data.currentSystem || 'Current parsec';
+      }
     }
     if (data.currentSector) {
       state.campaign.current_sector = data.currentSector;
@@ -1257,6 +1266,13 @@ function initSocket() {
     showNotification(data.message, data.success ? 'success' : 'warning');
     renderRoleDetailPanel(state.selectedRole);
     renderBridge();
+    // AR-168: Refresh displays after position verification (system changed)
+    if (data.currentSystem) {
+      loadCurrentSystem(data.currentSystem);
+    }
+    if (state.selectedRole === 'astrogator') {
+      updateJumpMap();
+    }
   });
 
   state.socket.on('ops:locationChanged', (data) => {
@@ -1270,6 +1286,12 @@ function initSocket() {
       if (state.shipState) {
         state.shipState.systemHex = data.hex;
       }
+      // AR-168: Update bridge-hex DOM element (was missing!)
+      const hexEl = document.getElementById('bridge-hex');
+      if (hexEl) {
+        hexEl.textContent = data.hex;
+        hexEl.title = data.newLocation || 'Current parsec';
+      }
     }
     // Update sector if provided
     if (data.sector) {
@@ -1282,6 +1304,10 @@ function initSocket() {
     renderBridge();
     // AR-110: Refresh role panel (especially Astrogator which shows current system)
     renderRoleDetailPanel(state.selectedRole);
+    // AR-168: Load new system data for System View
+    if (data.newLocation) {
+      loadCurrentSystem(data.newLocation);
+    }
     // Refresh jump map for astrogator after location change
     if (state.selectedRole === 'astrogator') {
       initJumpMapIfNeeded();
@@ -3037,12 +3063,20 @@ function renderBridge() {
   // Date/time - start the ticking clock
   startBridgeClock(state.campaign?.current_date || '1115-001 00:00');
 
-  // Current location within system (e.g., "Flammarion Highport")
+  // AR-168: Full location display (system + ship position) - moved from status panel
   const locationEl = document.getElementById('bridge-location');
   if (locationEl) {
-    // Use ship's locationName, fall back to system name
-    const locationName = state.shipState?.locationName || state.ship?.current_state?.locationName;
-    locationEl.textContent = locationName || state.campaign?.current_system || 'Unknown';
+    const shipLocation = state.shipState?.locationName || state.ship?.current_state?.locationName;
+    const systemName = state.campaign?.current_system || 'Unknown';
+    let locationDisplay;
+    if (shipLocation && !shipLocation.includes(systemName)) {
+      locationDisplay = `${systemName} · ${shipLocation}`;
+    } else if (shipLocation) {
+      locationDisplay = shipLocation;
+    } else {
+      locationDisplay = systemName;
+    }
+    locationEl.textContent = locationDisplay;
   }
 
   // AR-103: Hex coordinate display with system name tooltip
@@ -3169,24 +3203,7 @@ function renderShipStatus() {
   powerBar.style.width = `${powerPercent}%`;
   powerBar.style.backgroundPosition = `${powerPercent}% 0`;
   document.getElementById('power-value').textContent = `${powerPercent}%`;
-
-  // Location (UI-5: Better location display)
-  // Use ship's detailed location if available, fall back to campaign system
-  const shipLocation = shipState.location;
-  const systemName = state.campaign?.current_system || 'Unknown';
-  let locationDisplay;
-
-  if (shipLocation && !shipLocation.includes(systemName)) {
-    // Ship has specific location not including system name - combine both
-    locationDisplay = `${systemName} · ${shipLocation}`;
-  } else if (shipLocation) {
-    // Ship location already includes system info
-    locationDisplay = shipLocation;
-  } else {
-    // Just system name
-    locationDisplay = systemName;
-  }
-  document.getElementById('location-value').textContent = locationDisplay;
+  // AR-168: Location moved to top bar (bridge-location in renderBridge)
 }
 
 function renderRoleActions(roleConfig) {

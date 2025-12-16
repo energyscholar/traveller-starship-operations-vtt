@@ -13,7 +13,10 @@ export async function updateJumpMap(state) {
   const sector = state.campaign?.current_sector;
   const hex = state.campaign?.current_hex;
 
-  if (!sector || !hex) return;
+
+  if (!sector || !hex) {
+    return;
+  }
 
   const range = parseInt(document.getElementById('jump-map-range')?.value) || 2;
   const style = document.getElementById('jump-map-style')?.value || 'poster';
@@ -93,10 +96,13 @@ export function selectJumpDestination(element) {
   const sector = element.dataset.sector;
   const hex = element.dataset.hex;
 
-  // Fill in the destination input
+  // Fill in the destination input - AR-168: Store hex/sector as data attributes for UID lookup
   const destInput = document.getElementById('jump-destination');
   if (destInput) {
     destInput.value = `${name} (${sector} ${hex})`;
+    destInput.dataset.hex = hex;
+    destInput.dataset.sector = sector;
+    destInput.dataset.name = name;
   }
 
   // Highlight selected
