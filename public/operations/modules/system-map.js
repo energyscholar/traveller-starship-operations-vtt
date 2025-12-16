@@ -2667,6 +2667,10 @@ function loadSystemFromJSON(jsonData) {
   systemMapState.celestialObjects = embeddedObjects;
 
   console.log(`[SystemMap] Loaded JSON system: ${jsonData.name} (${embeddedObjects.length} objects)`, system);
+
+  // AR-164: Emit event so compact viewscreen can sync
+  systemMapEvents.emit('systemLoaded', { system, celestialObjects: embeddedObjects });
+
   return system;
 }
 

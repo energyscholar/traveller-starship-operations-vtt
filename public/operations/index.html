@@ -379,8 +379,26 @@
       </section>
 
       <main class="bridge-main">
-        <!-- Sensor Display (Top) -->
-        <section id="sensor-display" class="sensor-panel" title="Sensor contacts - Click on a contact for details">
+        <!-- AR-164: Ship Status Panels (Top Row) -->
+        <section id="status-panels" class="status-panels-row">
+          <!-- Left: Ship Status Panel (Cutaway Diagram) -->
+          <div id="ship-status-panel" class="ship-status-panel" title="Ship systems status - Hover over sections for details">
+            <!-- SVG loaded dynamically by ship-status-panel.js -->
+          </div>
+
+          <!-- Right: Compact Viewscreen (System Map) -->
+          <div id="compact-viewscreen" class="compact-viewscreen" title="System map viewscreen">
+            <!-- Canvas and frame created by compact-viewscreen.js -->
+          </div>
+
+          <!-- Toggle to show sensor display -->
+          <button id="btn-show-sensors" class="btn btn-icon btn-show-sensors" title="Show Sensor Display">
+            <span class="sensor-icon">📡</span>
+          </button>
+        </section>
+
+        <!-- Sensor Display (Hidden by default, shown by sensor operator or toggle) -->
+        <section id="sensor-display" class="sensor-panel sensor-panel-hidden" title="Sensor contacts - Click on a contact for details">
           <div class="panel-header">
             <h2>Sensor Display</h2>
             <div class="sensor-controls">
@@ -398,6 +416,7 @@
               </select>
             </div>
             <span id="sensor-status" class="status-indicator" title="PASSIVE: Detecting emissions. ACTIVE: Emitting pulses (detectable). DEEP SCAN: Detailed analysis.">PASSIVE</span>
+            <button id="btn-hide-sensors" class="btn btn-icon btn-panel-collapse" title="Hide Sensor Display">✕</button>
             <button class="btn btn-icon btn-panel-expand" data-panel="sensor-display" title="Expand panel [1]">⛶</button>
           </div>
           <div id="sensor-contacts" class="contacts-list">

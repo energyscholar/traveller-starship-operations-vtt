@@ -1699,7 +1699,323 @@ input[type="checkbox"] {
   overflow: hidden;
 }
 
-/* Sensor Panel - spans full top row */
+/* AR-164: Status Panels Row - replaces sensor panel as default */
+.status-panels-row {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  gap: var(--space-md);
+  position: relative;
+}
+
+/* Ship Status Panel (Left) */
+.ship-status-panel {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.ship-status-panel svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ship-status-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* Compact Viewscreen (Right) */
+.compact-viewscreen {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  min-height: 200px;
+}
+
+/* Viewscreen Frame Styling */
+.viewscreen-frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0a0e14;
+}
+
+.viewscreen-bezel {
+  flex: 1;
+  padding: 8px;
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border-radius: var(--radius-md);
+  margin: 6px;
+}
+
+.viewscreen-display {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #0a0e14;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid #4a5568;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.viewscreen-display canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.viewscreen-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  pointer-events: none;
+}
+
+.viewscreen-label {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: rgba(74, 85, 104, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* AR-166: Toast message in lower right of panel */
+.viewscreen-toast {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: var(--text-muted);
+  font-size: 10px;
+  font-family: var(--font-mono);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  max-width: 180px;
+  white-space: pre-line;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.viewscreen-toast.visible {
+  opacity: 1;
+}
+
+.viewscreen-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 12px 8px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  gap: 8px;
+}
+
+/* Panel Selector Dropdown */
+.panel-selector {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 4px 8px;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.panel-selector:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-primary);
+}
+
+.panel-selector:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+}
+
+/* Compact Panel Content */
+.panel-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.panel-header-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 6px;
+}
+
+/* Compact Log View */
+.ship-log-view .log-entries-compact {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 10px;
+}
+
+.log-entry-compact {
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  gap: 8px;
+}
+
+.log-time-compact {
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-size: 9px;
+}
+
+.log-msg-compact {
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Compact Sensors View */
+.sensors-view .contacts-compact {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sensor-mode {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--bg-dark);
+  color: var(--color-success);
+}
+
+.contact-compact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 10px;
+}
+
+.contact-compact.hostile {
+  color: var(--color-danger);
+}
+
+.contact-icon {
+  font-size: 12px;
+}
+
+.contact-name-compact {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-range-compact {
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+/* Compact Crew View */
+.crew-view .crew-compact {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.crew-member-compact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 10px;
+}
+
+.crew-member-compact.npc {
+  opacity: 0.7;
+}
+
+.crew-role-compact {
+  color: var(--accent-gold);
+  min-width: 70px;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.crew-name-compact {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.npc-badge {
+  font-size: 8px;
+  padding: 1px 4px;
+  border-radius: 2px;
+  background: var(--bg-dark);
+  color: var(--text-muted);
+}
+
+/* Placeholder text in compact panels */
+.panel-content .placeholder {
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.viewscreen-status {
+  color: var(--color-success);
+}
+
+.viewscreen-time {
+  color: var(--accent-gold);
+}
+
+/* Button to show sensors (floating in corner) */
+.btn-show-sensors {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 10;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.btn-show-sensors:hover {
+  opacity: 1;
+  background: var(--bg-panel);
+}
+
+.sensor-icon {
+  display: inline-block;
+}
+
+/* Sensor Panel - spans full top row (hidden by default with AR-164) */
 .sensor-panel {
   grid-column: 1 / -1;
   grid-row: 1;
@@ -1709,6 +2025,29 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+/* Hidden state for sensor panel */
+.sensor-panel-hidden {
+  display: none;
+}
+
+/* When sensor panel is shown, hide status panels */
+.status-panels-row.hidden {
+  display: none;
+}
+
+.btn-panel-collapse {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 14px;
+}
+
+.btn-panel-collapse:hover {
+  color: var(--text-primary);
 }
 
 /* Bottom row panels */

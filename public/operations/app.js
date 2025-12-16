@@ -105,6 +105,9 @@ import { getStarPopupContent, getShipPopupContent, getStationPopupContent, showC
 import { getEditorState, setEditorData, openShipEditor as _openShipEditor, populateShipEditor as _populateShipEditor, populateEditorFields, loadTemplateForEditor as _loadTemplateForEditor, renderWeaponsList, renderSystemsList, addWeaponToEditor, addSystemToEditor, updateValidationSummary, collectEditorData, saveEditedShip as _saveEditedShip, switchEditorTab } from './modules/ship-template-editor.js';
 // AR-153: Phase 7 modules
 import { getEvasiveState, setEvasiveState, getPendingTravel, clearPendingTravel, toggleEvasive as _toggleEvasive, changeRange as _changeRange, setCourse as _setCourse, clearCourse as _clearCourse, travel as _travel, undock as _undock, setupPilotListeners as _setupPilotListeners } from './modules/pilot-controls.js';
+// AR-164: Ship Status Panels
+import { initShipStatusPanel, refreshShipStatus, destroyShipStatusPanel } from './modules/ship-status-panel.js';
+import { initCompactViewscreen, destroyCompactViewscreen, setViewscreenVisible } from './modules/compact-viewscreen.js';
 
 // AR-152: Helper wrappers for notification variants
 const showError = (msg) => showNotification(msg, 'error');
@@ -369,6 +372,10 @@ function initSocket() {
       showScreen('bridge');
       renderBridge();
       showNotification('Session restored', 'success');
+      // AR-166: Load current system for compact viewscreen on reconnect
+      if (data.campaign?.current_system) {
+        loadCurrentSystem(data.campaign.current_system);
+      }
     } else if (data.screen === 'player-setup') {
       showScreen('player-setup');
       renderPlayerSetup();
@@ -726,6 +733,17 @@ function initSocket() {
     // AR-102: Load current system data early for system map and navigation
     if (data.campaign?.current_system) {
       loadCurrentSystem(data.campaign.current_system);
+    }
+    // AR-164: Refresh ship status panel with ship data
+    if (state.ship) {
+      refreshShipStatus(state.ship);
+    }
+    // AR-164: Auto-show sensor panel for sensor operators
+    if (data.role === 'sensor_operator') {
+      const statusPanels = document.getElementById('status-panels');
+      const sensorPanel = document.getElementById('sensor-display');
+      if (statusPanels) statusPanels.classList.add('hidden');
+      if (sensorPanel) sensorPanel.classList.remove('sensor-panel-hidden');
     }
   });
 
@@ -2669,6 +2687,31 @@ function renderRoleSelection() {
 
 // ==================== Bridge Screen ====================
 function initBridgeScreen() {
+  // AR-164: Initialize Ship Status Panels
+  const shipStatusContainer = document.getElementById('ship-status-panel');
+  const viewscreenContainer = document.getElementById('compact-viewscreen');
+  if (shipStatusContainer) {
+    initShipStatusPanel(shipStatusContainer);
+  }
+  if (viewscreenContainer) {
+    initCompactViewscreen(viewscreenContainer);
+  }
+
+  // AR-164: Sensor panel toggle handlers
+  document.getElementById('btn-show-sensors')?.addEventListener('click', () => {
+    const statusPanels = document.getElementById('status-panels');
+    const sensorPanel = document.getElementById('sensor-display');
+    if (statusPanels) statusPanels.classList.add('hidden');
+    if (sensorPanel) sensorPanel.classList.remove('sensor-panel-hidden');
+  });
+
+  document.getElementById('btn-hide-sensors')?.addEventListener('click', () => {
+    const statusPanels = document.getElementById('status-panels');
+    const sensorPanel = document.getElementById('sensor-display');
+    if (statusPanels) statusPanels.classList.remove('hidden');
+    if (sensorPanel) sensorPanel.classList.add('sensor-panel-hidden');
+  });
+
   // AR-25: Contact sort/filter controls
   document.getElementById('contact-sort')?.addEventListener('change', (e) => {
     state.contactSort = e.target.value;
