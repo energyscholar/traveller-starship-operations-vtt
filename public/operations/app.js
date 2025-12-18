@@ -49,6 +49,9 @@ import './socket-handlers/jump.js';
 import './socket-handlers/combat.js';
 import './socket-handlers/sensors.js';
 import './socket-handlers/gm.js';
+import './socket-handlers/fuel.js';
+import './socket-handlers/map.js';
+import './socket-handlers/misc.js';
 import { initAllHandlers, getRegisteredHandlers } from './socket-handlers/index.js';
 import { DEFAULT_SECTOR, DEFAULT_SUBSECTOR, DEFAULT_SYSTEM, DEFAULT_HEX } from './modules/constants.js';
 import { startBridgeClock, stopBridgeClock, setBridgeClockDate, parseCampaignDate, formatClockTime, formatDayYear } from './modules/bridge-clock.js';
@@ -402,7 +405,28 @@ function initSocket() {
     handleWeaponsAuthorized,
     handleFireResult,
     // Sensors
-    handleScanResult
+    handleScanResult,
+    // Fuel
+    populateRefuelModal,
+    updateRefuelPreview,
+    // Map
+    updateSharedMapBadge,
+    mapDebugMessage,
+    showSharedMap,
+    updateSharedMapFrame,
+    updateSharedMapButtons,
+    closeSharedMap,
+    showSystemMap,
+    loadSystemMap,
+    // Misc
+    updateMailBadge,
+    openEmailApp,
+    showHandoutModal,
+    populateComposeContacts,
+    showNPCContactsModal,
+    renderFeedbackReview,
+    renderPrepReveals,
+    showPlayerRevealModal
   };
 
   // AR-201: Initialize extracted handlers (campaigns, etc.)
@@ -539,198 +563,12 @@ function initSocket() {
     renderRoleDetailPanel(state.selectedRole);
   });
 
-  // Stage 7: Handle time updates (from jumps or GM actions)
-  state.socket.on('ops:timeUpdated', (data) => {
-    if (data.currentDate && state.campaign) {
-      state.campaign.current_date = data.currentDate;
-      // Update date display
-      setBridgeClockDate(data.currentDate);
-      const gmDateEl = document.getElementById('campaign-date');
-      if (gmDateEl) gmDateEl.value = data.currentDate;
-    }
-    if (data.reason) {
-      showNotification(`Time advanced: ${data.reason}`, 'info');
-    }
-  });
-
-  // Autorun 6: Mail system handlers
-  state.socket.on('ops:mailList', (data) => {
-    state.unreadMailCount = data.unreadCount || 0;
-    updateMailBadge();
-    openEmailApp(data.mail, data.unreadCount);
-  });
-
-  state.socket.on('ops:newMail', (data) => {
-    if (data.recipientId === state.accountId || data.recipientId === 'all') {
-      showNotification(`New mail from ${data.senderName}: ${data.subject}`, 'info');
-      // Increment unread count and update badge
-      state.unreadMailCount = (state.unreadMailCount || 0) + 1;
-      updateMailBadge();
-    }
-  });
-
-  // Stage 9.3: Handout viewer
-  state.socket.on('ops:showHandout', (data) => {
-    showHandoutModal(data.handout);
-    showNotification(`${data.handout.sharedBy} shared a handout with you`, 'info');
-  });
-
-  // Autorun 6: NPC contacts handlers
-  state.socket.on('ops:npcContactsList', (data) => {
-    // If compose modal is waiting for contacts, populate it
-    if (state.pendingComposeContacts) {
-      populateComposeContacts(data.contacts);
-    } else {
-      showNPCContactsModal(data.contacts, data.isGM);
-    }
-  });
-
-  state.socket.on('ops:npcContactsRefresh', () => {
-    // Refresh NPC contacts if modal is open
-    if (document.querySelector('.npc-contacts-modal')) {
-      state.socket.emit('ops:getNPCContacts');
-    }
-  });
-
-  // Autorun 6: Feedback handlers
-  state.socket.on('ops:feedbackSubmitted', (data) => {
-    showNotification('Feedback submitted successfully!', 'success');
-    closeModal();
-  });
-
-  state.socket.on('ops:feedbackList', (data) => {
-    renderFeedbackReview(data.feedback, data.stats);
-  });
-
-  state.socket.on('ops:feedbackStatusUpdated', (data) => {
-    showNotification(`Feedback marked as ${data.status}`, 'success');
-  });
-
-  // Hail response handler
-  state.socket.on('ops:hailResult', (data) => {
-    if (data.success) {
-      showNotification(data.message, 'success');
-      // Refresh NPC contacts if a new contact was created
-      if (data.newContact) {
-        state.socket.emit('ops:getNPCContacts');
-      }
-    } else {
-      showNotification(data.message || 'Hail failed', 'error');
-    }
-  });
-
-  // AUTORUN-8: Prep Panel events
-  state.socket.on('ops:prepData', (data) => {
-    state.prepReveals = data.reveals || [];
-    state.prepNpcs = data.npcs || [];
-    state.prepLocations = data.locations || [];
-    state.prepEvents = data.events || [];
-    state.prepEmails = data.emails || [];
-    state.prepHandouts = data.handouts || [];
-    renderPrepReveals();
-  });
-
-  state.socket.on('ops:revealAdded', (data) => {
-    state.prepReveals = state.prepReveals || [];
-    state.prepReveals.push(data.reveal);
-    renderPrepReveals();
-  });
-
-  state.socket.on('ops:revealUpdated', (data) => {
-    const idx = (state.prepReveals || []).findIndex(r => r.id === data.reveal.id);
-    if (idx >= 0) {
-      state.prepReveals[idx] = data.reveal;
-      renderPrepReveals();
-    }
-  });
-
-  state.socket.on('ops:revealDeleted', (data) => {
-    state.prepReveals = (state.prepReveals || []).filter(r => r.id !== data.revealId);
-    renderPrepReveals();
-  });
-
-  state.socket.on('ops:revealExecuted', (data) => {
-    // Update reveal status
-    const reveal = (state.prepReveals || []).find(r => r.id === data.revealId);
-    if (reveal) {
-      reveal.status = 'revealed';
-      renderPrepReveals();
-    }
-    // Show notification to GM
-    if (state.isGM) {
-      showNotification(`Revealed: ${data.title}`, 'success');
-    }
-  });
-
-  state.socket.on('ops:playerReveal', (data) => {
-    // Player received a reveal - show it to them
-    showPlayerRevealModal(data);
-  });
+  // AR-201: Misc events moved to socket-handlers/misc.js
+  // (16 handlers: ops:timeUpdated, ops:mailList, ops:prepData, etc.)
 
   // Refueling events
-  state.socket.on('ops:fuelStatus', (data) => {
-    state.fuelStatus = data;
-    if (state.selectedRole === 'engineer') {
-      renderRoleDetailPanel('engineer');
-    }
-    renderShipStatus();
-  });
-
-  state.socket.on('ops:refuelOptions', (data) => {
-    state.fuelSources = data.sources;
-    state.fuelTypes = data.fuelTypes;
-    if (data.fuelStatus) {
-      state.fuelStatus = data.fuelStatus;
-    }
-    populateRefuelModal();
-  });
-
-  state.socket.on('ops:canRefuelResult', (data) => {
-    // Update refuel modal with cost/time info
-    updateRefuelPreview(data);
-  });
-
-  state.socket.on('ops:refueled', (data) => {
-    state.fuelStatus = data.newFuelStatus;
-    // Update ship state
-    if (state.ship?.current_state) {
-      state.ship.current_state.fuel = data.newFuelStatus.total;
-      state.ship.current_state.fuelBreakdown = data.newFuelStatus.breakdown;
-    }
-    showNotification(`Refueled ${data.fuelAdded} tons of ${data.fuelType} fuel`, 'success');
-    renderShipStatus();
-    if (state.selectedRole === 'engineer') {
-      renderRoleDetailPanel('engineer');
-    }
-    closeModal();
-  });
-
-  state.socket.on('ops:fuelProcessingStarted', (data) => {
-    showNotification(`Started processing ${data.tons} tons of fuel (${data.timeHours} hours)`, 'info');
-    state.socket.emit('ops:getFuelStatus');
-  });
-
-  state.socket.on('ops:fuelProcessingStatus', (data) => {
-    state.fuelProcessing = data;
-    if (state.selectedRole === 'engineer') {
-      renderRoleDetailPanel('engineer');
-    }
-  });
-
-  state.socket.on('ops:fuelProcessingCompleted', (data) => {
-    state.fuelStatus = data.newFuelStatus;
-    showNotification(`Fuel processing complete: ${data.tons} tons now ready`, 'success');
-    renderShipStatus();
-    if (state.selectedRole === 'engineer') {
-      renderRoleDetailPanel('engineer');
-    }
-  });
-
-  state.socket.on('ops:jumpFuelPenalties', (data) => {
-    if (data.hasUnrefined) {
-      showNotification(`Warning: Using ${data.unrefinedAmount} tons unrefined fuel (DM ${data.dmModifier}, ${data.misjumpRisk * 100}% misjump risk)`, 'warning');
-    }
-  });
+  // AR-201: Fuel events moved to socket-handlers/fuel.js
+  // (8 handlers: ops:fuelStatus, ops:refuelOptions, ops:refueled, etc.)
 
   // Error handling
   state.socket.on('ops:error', (error) => {
@@ -863,88 +701,8 @@ function initSocket() {
 
   // ==================== AR-27: Shared Map Events ====================
 
-  // GM shared the map - auto-switch all players
-  state.socket.on('ops:mapShared', (data) => {
-    state.sharedMapActive = true;
-    state.sharedMapView = data;
-    updateSharedMapBadge(true);
-    mapDebugMessage(`Map shared by ${data.sharedBy || 'GM'}`, 'info');
-
-    // Auto-switch for PLAYERS only - GM already has map open
-    if (data.autoSwitch && !state.isGM) {
-      showSharedMap();
-      updateSharedMapFrame(data);
-      showNotification('GM is sharing the map', 'info');
-    }
-
-    // GM just needs button state updated
-    updateSharedMapButtons();
-  });
-
-  // GM stopped sharing
-  state.socket.on('ops:mapUnshared', () => {
-    state.sharedMapActive = false;
-    state.sharedMapView = null;
-    updateSharedMapBadge(false);
-    updateSharedMapButtons();
-    mapDebugMessage('Map sharing stopped', 'info');
-    if (!state.isGM) {
-      showNotification('Map sharing ended', 'info');
-      closeSharedMap();
-    }
-  });
-
-  // GM updated the view (pan/zoom)
-  state.socket.on('ops:mapViewUpdated', (data) => {
-    state.sharedMapView = data;
-    mapDebugMessage(`View updated: ${data.sector || 'unknown'}`, 'info');
-    if (!state.isGM) {
-      updateSharedMapFrame(data);
-    }
-  });
-
-  // Reconnect: get current map state
-  state.socket.on('ops:mapState', (data) => {
-    state.sharedMapActive = data.shared;
-    state.sharedMapView = data.shared ? data : null;
-    updateSharedMapBadge(data.shared);
-    if (data.shared) {
-      mapDebugMessage('Reconnected to shared map', 'info');
-    }
-  });
-
-  // ==================== AR-29.5: Star System Map Events ====================
-
-  // GM shared a star system - players receive it
-  state.socket.on('ops:starSystemShared', (data) => {
-    console.log('[StarSystem] Received shared system:', data.sector, data.hex);
-    showNotification(`Star system shared: ${data.system?.name || data.hex}`, 'info');
-
-    // Auto-open the system map for players with the shared data
-    if (!state.isGM) {
-      showSystemMap(data.system?.name || 'Shared System');
-      // Wait for canvas to initialize, then load the system
-      setTimeout(() => {
-        if (typeof loadSystemMap === 'function') {
-          loadSystemMap(data.system, data.sector, data.hex);
-        }
-      }, 100);
-    }
-  });
-
-  // Server sends star system data (from database or generated)
-  state.socket.on('ops:starSystemData', (data) => {
-    console.log('[StarSystem] Received system data:', data.sector, data.hex);
-    if (typeof loadSystemMap === 'function') {
-      loadSystemMap(data.system, data.sector, data.hex);
-    }
-  });
-
-  // Star system saved confirmation
-  state.socket.on('ops:starSystemSaved', (data) => {
-    console.log('[StarSystem] System saved:', data.sector, data.hex);
-    showNotification('Star system saved', 'success');
-  });
+  // AR-201: Map sharing events moved to socket-handlers/map.js
+  // (7 handlers: ops:mapShared, ops:mapUnshared, ops:starSystemShared, etc.)
 
   // ==================== Puppetry Debug System ====================
   // Quick-and-dirty eval-based puppetry for debugging
