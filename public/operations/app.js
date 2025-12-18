@@ -54,6 +54,19 @@ import './socket-handlers/map.js';
 import './socket-handlers/misc.js';
 import './socket-handlers/conditions.js';
 import { initAllHandlers, getRegisteredHandlers } from './socket-handlers/index.js';
+// AR-201: Modal handler modules
+import './modals/character-import.js';
+import './modals/system-lookup.js';
+import './modals/gm-bridge-menu.js';
+import './modals/simple-modals.js';
+import './modals/ship-modals.js';
+import { getModalHandler, getRegisteredModals } from './modals/index.js';
+// AR-201: Screen handler modules
+import './screens/login-screen.js';
+import './screens/gm-setup-screen.js';
+import './screens/player-setup-screen.js';
+import './screens/bridge-screen.js';
+import { getScreenHandler, getRegisteredScreens } from './screens/index.js';
 import { DEFAULT_SECTOR, DEFAULT_SUBSECTOR, DEFAULT_SYSTEM, DEFAULT_HEX } from './modules/constants.js';
 import { startBridgeClock, stopBridgeClock, setBridgeClockDate, parseCampaignDate, formatClockTime, formatDayYear } from './modules/bridge-clock.js';
 import { showNewsMailModal as _showNewsMailModal, closeNewsMailModal } from './modules/news-mail.js';
@@ -787,133 +800,6 @@ function hideCombatScreen() {
   showScreen('bridge');
 }
 
-// ==================== Login Screen ====================
-function initLoginScreen() {
-  // Restore saved campaign code from localStorage
-  const savedCode = localStorage.getItem('ops_campaign_code');
-  if (savedCode) {
-    document.getElementById('campaign-code').value = savedCode;
-  }
-
-  // GM Login
-  document.getElementById('btn-gm-login').addEventListener('click', () => {
-    state.isGM = true;
-    document.querySelector('.login-options').classList.add('hidden');
-    document.getElementById('campaign-select').classList.remove('hidden');
-    state.socket.emit('ops:getCampaigns');
-  });
-
-  // Player Login
-  document.getElementById('btn-player-login').addEventListener('click', () => {
-    state.isGM = false;
-    document.querySelector('.login-options').classList.add('hidden');
-    document.getElementById('player-select').classList.remove('hidden');
-  });
-
-  // Back buttons
-  document.getElementById('btn-back-login').addEventListener('click', () => {
-    document.getElementById('campaign-select').classList.add('hidden');
-    document.querySelector('.login-options').classList.remove('hidden');
-  });
-
-  document.getElementById('btn-back-player').addEventListener('click', () => {
-    document.getElementById('player-select').classList.add('hidden');
-    document.querySelector('.login-options').classList.remove('hidden');
-  });
-
-  document.getElementById('btn-back-player-slot').addEventListener('click', () => {
-    document.getElementById('player-slot-select').classList.add('hidden');
-    document.getElementById('player-select').classList.remove('hidden');
-  });
-
-  // Create campaign
-  document.getElementById('btn-create-campaign').addEventListener('click', () => {
-    showModal('template-create-campaign');
-  });
-
-  // AR-21: Import campaign from JSON
-  document.getElementById('btn-import-campaign').addEventListener('click', () => {
-    document.getElementById('import-file-input').click();
-  });
-
-  document.getElementById('import-file-input').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const campaignData = JSON.parse(event.target.result);
-        const gmName = prompt('Enter GM name for imported campaign:', 'GM');
-        if (gmName) {
-          state.socket.emit('ops:importCampaign', { campaignData, gmName });
-        }
-      } catch (err) {
-        showNotification('Invalid JSON file', 'error');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = ''; // Reset for re-import
-  });
-
-  // Join campaign (player)
-  document.getElementById('btn-join-campaign').addEventListener('click', () => {
-    const code = document.getElementById('campaign-code').value.trim();
-    if (code) {
-      // Save campaign code to localStorage for convenience
-      localStorage.setItem('ops_campaign_code', code);
-      state.socket.emit('ops:joinCampaignAsPlayer', { campaignId: code });
-      document.getElementById('player-select').classList.add('hidden');
-      document.getElementById('player-slot-select').classList.remove('hidden');
-    }
-  });
-
-  // AR-58: ENTER hotkey for campaign code input
-  document.getElementById('campaign-code')?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      e.preventDefault();
-      document.getElementById('btn-join-campaign').click();
-    }
-  });
-
-  // Guest login flow (Stage 13.5 - completed)
-  const btnJoinGuest = document.getElementById('btn-join-guest');
-  if (btnJoinGuest) {
-    btnJoinGuest.addEventListener('click', () => {
-      const code = document.getElementById('campaign-code').value.trim();
-      if (code) {
-        state.guestCampaignCode = code;
-        document.getElementById('player-select').classList.add('hidden');
-        document.getElementById('guest-name-select').classList.remove('hidden');
-      } else {
-        showNotification('Please enter a campaign code first', 'error');
-      }
-    });
-  }
-
-  const btnConfirmGuest = document.getElementById('btn-confirm-guest');
-  if (btnConfirmGuest) {
-    btnConfirmGuest.addEventListener('click', () => {
-      const guestName = document.getElementById('guest-name').value.trim();
-      if (guestName && state.guestCampaignCode) {
-        state.socket.emit('ops:joinAsGuest', {
-          campaignId: state.guestCampaignCode,
-          guestName: guestName
-        });
-      } else {
-        showNotification('Please enter your name', 'error');
-      }
-    });
-  }
-
-  const btnBackGuest = document.getElementById('btn-back-guest');
-  if (btnBackGuest) {
-    btnBackGuest.addEventListener('click', () => {
-      document.getElementById('guest-name-select').classList.add('hidden');
-      document.getElementById('player-select').classList.remove('hidden');
-    });
-  }
-}
 
 function renderCampaignList() {
   const container = document.getElementById('campaign-list');
@@ -1107,97 +993,6 @@ function renderPlayerSlots() {
   });
 }
 
-// ==================== GM Setup Screen ====================
-function initGMSetupScreen() {
-  // Copy campaign code button
-  document.getElementById('btn-copy-code').addEventListener('click', () => {
-    const codeEl = document.getElementById('campaign-code-value');
-    const code = codeEl.textContent;
-    if (code && code !== '--------') {
-      copyWithFeedback(code, 'btn-copy-code');
-    }
-  });
-
-  // Add player slot
-  document.getElementById('btn-add-player-slot').addEventListener('click', () => {
-    const name = document.getElementById('new-slot-name').value.trim();
-    if (name) {
-      state.socket.emit('ops:createPlayerSlot', {
-        campaignId: state.campaign.id,
-        slotName: name
-      });
-      document.getElementById('new-slot-name').value = '';
-    }
-  });
-
-  // Add ship
-  document.getElementById('btn-add-ship').addEventListener('click', () => {
-    state.socket.emit('ops:getShipTemplates');
-    showModal('template-add-ship');
-  });
-
-  // Custom ship (AR-17)
-  document.getElementById('btn-custom-ship').addEventListener('click', () => {
-    openShipEditor(null); // null = new ship
-  });
-
-  // Campaign settings
-  document.getElementById('campaign-date').addEventListener('change', (e) => {
-    state.socket.emit('ops:updateCampaign', {
-      campaignId: state.campaign.id,
-      current_date: e.target.value
-    });
-  });
-
-  document.getElementById('campaign-system').addEventListener('change', (e) => {
-    state.socket.emit('ops:updateCampaign', {
-      campaignId: state.campaign.id,
-      current_system: e.target.value
-    });
-  });
-
-  document.getElementById('god-mode-toggle').addEventListener('change', (e) => {
-    state.socket.emit('ops:updateCampaign', {
-      campaignId: state.campaign.id,
-      god_mode: e.target.checked ? 1 : 0
-    });
-  });
-
-  // AR-124: Position verification toggle
-  document.getElementById('position-verify-toggle').addEventListener('change', (e) => {
-    state.socket.emit('ops:setRequirePositionVerification', { enabled: e.target.checked });
-  });
-
-  // AR-186: GM Roll Modifier
-  document.getElementById('btn-gm-modifier-apply').addEventListener('click', () => {
-    const dm = parseInt(document.getElementById('gm-modifier-dm').value) || 0;
-    const reason = document.getElementById('gm-modifier-reason').value || '';
-    const persistent = document.getElementById('gm-modifier-persistent').checked;
-    state.socket.emit('ops:setGmModifier', { dm, reason, persistent });
-  });
-
-  document.getElementById('btn-gm-modifier-clear').addEventListener('click', () => {
-    state.socket.emit('ops:clearGmModifier');
-    document.getElementById('gm-modifier-dm').value = '';
-    document.getElementById('gm-modifier-reason').value = '';
-    document.getElementById('gm-modifier-persistent').checked = false;
-  });
-
-  // Start session
-  document.getElementById('btn-start-session').addEventListener('click', () => {
-    state.socket.emit('ops:startSession', { campaignId: state.campaign.id });
-  });
-
-  // Logout
-  document.getElementById('btn-gm-logout').addEventListener('click', () => {
-    state.campaign = null;
-    state.isGM = false;
-    clearStoredSession();
-    showScreen('login');
-    document.getElementById('campaign-select').classList.add('hidden');
-    document.querySelector('.login-options').classList.remove('hidden');
-  });
-}
 
 // AR-23.7: Render quick location buttons (recent, favorites, home)
 function renderQuickLocations() {
@@ -1332,47 +1127,6 @@ function renderGMSetup() {
   });
 }
 
-// ==================== Player Setup Screen ====================
-function initPlayerSetupScreen() {
-  // Import character
-  document.getElementById('btn-import-character').addEventListener('click', () => {
-    showModal('template-character-import');
-  });
-
-  // Quick character (minimal)
-  document.getElementById('btn-quick-character').addEventListener('click', () => {
-    const name = prompt('Character name:');
-    if (name) {
-      state.socket.emit('ops:importCharacter', {
-        playerId: state.player.id,
-        character: { name, skills: {}, stats: {} }
-      });
-    }
-  });
-
-  // Join bridge
-  document.getElementById('btn-join-bridge').addEventListener('click', () => {
-    if (state.selectedShipId && state.selectedRole) {
-      state.socket.emit('ops:joinBridge', {
-        playerId: state.player.id,
-        shipId: state.selectedShipId,
-        role: state.selectedRole
-      });
-    }
-  });
-
-  // Logout
-  document.getElementById('btn-player-logout').addEventListener('click', () => {
-    // AR-132: Release slot reservation on server before clearing local state
-    state.socket.emit('ops:releaseSlot');
-    state.player = null;
-    clearStoredSession();
-    showScreen('login');
-    document.getElementById('player-slot-select').classList.add('hidden');
-    document.getElementById('player-select').classList.add('hidden');
-    document.querySelector('.login-options').classList.remove('hidden');
-  });
-}
 
 function renderPlayerSetup() {
   document.getElementById('player-slot-name').textContent = state.player?.slot_name || 'Player Setup';
@@ -1554,227 +1308,6 @@ function renderRoleSelection() {
   });
 }
 
-// ==================== Bridge Screen ====================
-function initBridgeScreen() {
-  // AR-164: Initialize Ship Status Panels
-  const shipStatusContainer = document.getElementById('ship-status-panel');
-  const viewscreenContainer = document.getElementById('compact-viewscreen');
-  if (shipStatusContainer) {
-    initShipStatusPanel(shipStatusContainer);
-  }
-  if (viewscreenContainer) {
-    // AR-167: Pass role for default panel selection
-    initCompactViewscreen(viewscreenContainer, state.selectedRole);
-  }
-
-  // AR-164: Sensor panel toggle handlers
-  document.getElementById('btn-show-sensors')?.addEventListener('click', () => {
-    const statusPanels = document.getElementById('status-panels');
-    const sensorPanel = document.getElementById('sensor-display');
-    if (statusPanels) statusPanels.classList.add('hidden');
-    if (sensorPanel) sensorPanel.classList.remove('sensor-panel-hidden');
-  });
-
-  document.getElementById('btn-hide-sensors')?.addEventListener('click', () => {
-    const statusPanels = document.getElementById('status-panels');
-    const sensorPanel = document.getElementById('sensor-display');
-    if (statusPanels) statusPanels.classList.remove('hidden');
-    if (sensorPanel) sensorPanel.classList.add('sensor-panel-hidden');
-  });
-
-  // AR-25: Contact sort/filter controls
-  document.getElementById('contact-sort')?.addEventListener('change', (e) => {
-    state.contactSort = e.target.value;
-    localStorage.setItem('ops_contact_sort', state.contactSort);
-    renderContacts();
-  });
-
-  document.getElementById('contact-filter')?.addEventListener('change', (e) => {
-    state.contactFilter = e.target.value;
-    localStorage.setItem('ops_contact_filter', state.contactFilter);
-    renderContacts();
-  });
-
-  // Restore saved sort/filter preferences
-  const savedSort = localStorage.getItem('ops_contact_sort');
-  const savedFilter = localStorage.getItem('ops_contact_filter');
-  if (savedSort) {
-    state.contactSort = savedSort;
-    const sortEl = document.getElementById('contact-sort');
-    if (sortEl) sortEl.value = savedSort;
-  }
-  if (savedFilter) {
-    state.contactFilter = savedFilter;
-    const filterEl = document.getElementById('contact-filter');
-    if (filterEl) filterEl.value = savedFilter;
-  }
-
-  // Toggle detail view
-  document.getElementById('btn-toggle-detail').addEventListener('click', () => {
-    const detail = document.getElementById('role-detail-view');
-    const btn = document.getElementById('btn-toggle-detail');
-    detail.classList.toggle('hidden');
-    btn.textContent = detail.classList.contains('hidden') ? 'Show Details ▼' : 'Hide Details ▲';
-  });
-
-  // Expandable Role Panel Controls (Stage 13.3)
-  document.getElementById('btn-expand-half')?.addEventListener('click', () => {
-    expandRolePanel('half');
-  });
-
-  document.getElementById('btn-expand-full')?.addEventListener('click', () => {
-    expandRolePanel('full');
-  });
-
-  document.getElementById('btn-collapse-panel')?.addEventListener('click', () => {
-    collapseRolePanel();
-  });
-
-  // AR-15.9: Browser fullscreen toggle
-  document.getElementById('btn-fullscreen')?.addEventListener('click', toggleBrowserFullscreen);
-
-  // Ship Systems panel toggle
-  document.getElementById('btn-ship-systems')?.addEventListener('click', toggleShipSystemsPanel);
-  document.getElementById('btn-close-ship-systems')?.addEventListener('click', hideShipSystemsPanel);
-
-  // Keyboard shortcuts for panel expansion
-  document.addEventListener('keydown', (e) => {
-    if (state.currentScreen !== 'bridge') return;
-    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
-
-    // Escape collapses any expanded panel
-    if (e.key === 'Escape') {
-      collapseRolePanel();
-      collapseExpandedPanel();
-    }
-
-    // F key for fullscreen toggle
-    if (e.key === 'f' || e.key === 'F') {
-      const rolePanel = document.getElementById('role-panel');
-      if (rolePanel.classList.contains('expanded-full')) {
-        collapseRolePanel();
-      } else {
-        expandRolePanel('full');
-      }
-    }
-
-    // Number keys 1-4 toggle panel expansion
-    const panelKeys = { '1': 'sensor-display', '2': 'role-panel', '3': 'crew-panel', '4': 'log-panel' };
-    if (panelKeys[e.key]) {
-      togglePanelExpand(panelKeys[e.key]);
-    }
-
-    // AR-150: 'u' key toggles UI status indicators (dev mode only)
-    if ((e.key === 'u' || e.key === 'U') && DEBUG) {
-      const isVisible = document.body.classList.toggle('show-ui-status');
-      showNotification(`UI Status Indicators: ${isVisible ? 'ON' : 'OFF'}`, 'info');
-      if (isVisible) applyStatusIndicators();
-    }
-  });
-
-  // Panel expand button click handlers
-  document.querySelectorAll('.btn-panel-expand').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const panelId = btn.dataset.panel;
-      togglePanelExpand(panelId);
-    });
-  });
-
-  // Add log note
-  document.getElementById('btn-add-log').addEventListener('click', () => {
-    const note = prompt('Log entry:');
-    if (note) {
-      state.socket.emit('ops:addLogEntry', {
-        shipId: state.ship.id,
-        message: note,
-        entryType: 'manual'
-      });
-    }
-  });
-
-  // TIP-2: Click ship name to show status modal
-  document.getElementById('bridge-ship-name').addEventListener('click', showShipStatusModal);
-  document.getElementById('bridge-ship-name').style.cursor = 'pointer';
-
-  // Menu button - show hamburger menu (Autorun 6)
-  document.getElementById('btn-bridge-menu').addEventListener('click', () => {
-    openHamburgerMenu();
-  });
-
-  // Close hamburger menu
-  document.getElementById('btn-close-menu')?.addEventListener('click', closeHamburgerMenu);
-  document.getElementById('hamburger-menu-overlay')?.addEventListener('click', closeHamburgerMenu);
-
-  // Hamburger menu item clicks
-  document.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const feature = item.dataset.feature;
-      handleMenuFeature(feature);
-    });
-  });
-
-  // Change role button (NAV-1)
-  document.getElementById('btn-change-role').addEventListener('click', () => {
-    if (state.isGM) {
-      showNotification('GMs cannot change roles', 'info');
-      return;
-    }
-    // Return to player setup screen for role selection
-    state.selectedRole = null;
-    document.getElementById('gm-overlay')?.classList.add('hidden');
-    showScreen('player-setup');
-    renderPlayerSetup();
-  });
-
-  // NAV-4: Leave role (go off-duty)
-  document.getElementById('btn-leave-role').addEventListener('click', () => {
-    if (state.isGM) {
-      showNotification('GMs cannot leave roles', 'info');
-      return;
-    }
-    if (!state.selectedRole) {
-      showNotification('No role assigned', 'info');
-      return;
-    }
-    // Confirm before leaving
-    if (confirm(`Leave ${formatRoleName(state.selectedRole)} station? NPC will take over.`)) {
-      state.socket.emit('ops:leaveRole');
-    }
-  });
-
-  // Stage 2: Edit role personality (quirk/title)
-  document.getElementById('btn-edit-role-personality').addEventListener('click', () => {
-    if (!state.selectedRole || state.selectedRole === 'observer') {
-      showNotification('No role to customize', 'info');
-      return;
-    }
-    showModal('template-edit-role-personality');
-  });
-
-  // Bridge logout
-  document.getElementById('btn-bridge-logout').addEventListener('click', () => {
-    // AR-132: Release slot reservation on server before clearing local state
-    state.socket.emit('ops:releaseSlot');
-    // Reset all state
-    state.ship = null;
-    state.selectedShipId = null;
-    state.selectedRole = null;
-    state.player = null;
-    state.campaign = null;
-    state.isGM = false;
-    state.isGuest = false;
-    clearStoredSession();
-    // Hide GM overlay if visible
-    document.getElementById('gm-overlay')?.classList.add('hidden');
-    showScreen('login');
-  });
-
-  // GM controls
-  initGMControls();
-
-  // AUTORUN-8: GM Prep Panel
-  initPrepPanel();
-}
 
 function initGMControls() {
   // Alert status buttons
@@ -3391,6 +2924,68 @@ function generateRoleStatus(role) {
 }
 
 // ==================== Modal Management ====================
+
+// AR-201: Modal helpers object for extracted handlers
+const modalHelpers = {
+  closeModal,
+  showNotification,
+  escapeHtml,
+  advanceTime,
+  parseCharacterText,
+  showTravelModal,
+  addContact,
+  applySystemDamage,
+  populateShipTemplateSelect,
+  updateShipTemplateInfo,
+  populateShipEditor,
+  switchEditorTab,
+  loadTemplateForEditor,
+  addWeaponToEditor,
+  addSystemToEditor,
+  saveEditedShip,
+  updateValidationSummary,
+  updateRefuelAmountPreview,
+  setRefuelMax,
+  executeRefuel,
+  setProcessMax,
+  executeProcessFuel
+};
+
+// AR-201: Screen helpers object for extracted screen handlers
+const screenHelpers = {
+  // Core
+  showModal,
+  showScreen,
+  showNotification,
+  clearStoredSession,
+  // Login
+  // GM Setup
+  copyWithFeedback,
+  openShipEditor,
+  // Player Setup
+  // Bridge
+  renderContacts,
+  formatRoleName,
+  initShipStatusPanel,
+  initCompactViewscreen,
+  expandRolePanel,
+  collapseRolePanel,
+  toggleBrowserFullscreen,
+  toggleShipSystemsPanel,
+  hideShipSystemsPanel,
+  collapseExpandedPanel,
+  togglePanelExpand,
+  showShipStatusModal,
+  openHamburgerMenu,
+  closeHamburgerMenu,
+  handleMenuFeature,
+  renderPlayerSetup,
+  initGMControls,
+  initPrepPanel,
+  applyStatusIndicators,
+  DEBUG
+};
+
 function showModal(templateId) {
   const template = document.getElementById(templateId);
   const modal = document.getElementById('modal-content');
@@ -3401,660 +2996,30 @@ function showModal(templateId) {
     el.addEventListener('click', closeModal);
   });
 
-  // Modal-specific handlers
-  if (templateId === 'template-create-campaign') {
-    const confirmCreate = () => {
-      const name = document.getElementById('new-campaign-name').value.trim();
-      const gmName = document.getElementById('gm-name').value.trim();
-      if (name && gmName) {
-        state.socket.emit('ops:createCampaign', { name, gmName });
-        closeModal();
-      }
-    };
-    document.getElementById('btn-confirm-create-campaign').addEventListener('click', confirmCreate);
-
-    // AR-58: ENTER hotkey for create campaign inputs
-    ['new-campaign-name', 'gm-name'].forEach(id => {
-      document.getElementById(id)?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.keyCode === 13) {
-          e.preventDefault();
-          confirmCreate();
-        }
-      });
-    });
+  // AR-201: Check registry for extracted handlers
+  const handler = getModalHandler(templateId);
+  if (handler) {
+    handler(modal, state, modalHelpers);
+    document.getElementById('modal-overlay').classList.remove('hidden');
+    return;
   }
 
-  if (templateId === 'template-character-import') {
-    // AR-19.3-4: File upload and drag-drop handlers
-    const dropZone = document.getElementById('char-file-drop');
-    const fileInput = document.getElementById('char-file-input');
-    const pasteArea = document.getElementById('char-paste');
-    const statusEl = document.getElementById('parse-status');
+  // AR-201: All modals now use registry pattern - no inline handlers
 
-    // Handle file selection
-    const handleFile = (file) => {
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        pasteArea.value = e.target.result;
-        // Auto-trigger parse
-        document.getElementById('btn-parse-character').click();
-      };
-      reader.onerror = () => {
-        statusEl.textContent = 'Error reading file';
-        statusEl.className = 'parse-status error';
-      };
-      reader.readAsText(file);
-    };
-
-    // File input change handler
-    fileInput.addEventListener('change', (e) => {
-      if (e.target.files.length > 0) {
-        handleFile(e.target.files[0]);
-      }
-    });
-
-    // Drag and drop handlers
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropZone.classList.add('drag-over');
-    });
-
-    dropZone.addEventListener('dragleave', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropZone.classList.remove('drag-over');
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropZone.classList.remove('drag-over');
-      if (e.dataTransfer.files.length > 0) {
-        handleFile(e.dataTransfer.files[0]);
-      }
-    });
-
-    // Click on drop zone opens file dialog
-    dropZone.addEventListener('click', (e) => {
-      if (e.target.tagName !== 'LABEL') {
-        fileInput.click();
-      }
-    });
-
-    // Parse button - extract data from pasted text
-    document.getElementById('btn-parse-character').addEventListener('click', () => {
-      const text = document.getElementById('char-paste').value.trim();
-      const statusEl = document.getElementById('parse-status');
-
-      if (!text) {
-        statusEl.textContent = 'Please paste character data first';
-        statusEl.className = 'parse-status warning';
-        return;
-      }
-
-      // Parse the text
-      const parsed = parseCharacterText(text);
-
-      // Populate form fields
-      if (parsed.name) {
-        document.getElementById('char-name').value = parsed.name;
-      }
-
-      // Map skills to form fields
-      const skillMap = {
-        'Pilot': 'skill-pilot',
-        'Astrogation': 'skill-astrogation',
-        'Engineer': 'skill-engineer',
-        'Gunnery': 'skill-gunnery',
-        'Sensors': 'skill-sensors',
-        'Electronics': 'skill-sensors',
-        'Leadership': 'skill-leadership',
-        'Tactics': 'skill-tactics'
-      };
-
-      for (const [skillName, inputId] of Object.entries(skillMap)) {
-        if (parsed.skills[skillName] !== undefined) {
-          const el = document.getElementById(inputId);
-          if (el) el.value = parsed.skills[skillName];
-        }
-      }
-
-      // Map stats
-      if (parsed.stats.dex) document.getElementById('stat-dex').value = parsed.stats.dex;
-      if (parsed.stats.int) document.getElementById('stat-int').value = parsed.stats.int;
-      if (parsed.stats.edu) document.getElementById('stat-edu').value = parsed.stats.edu;
-
-      // Show status
-      const found = [];
-      if (parsed.name) found.push('name');
-      if (Object.keys(parsed.skills).length > 0) found.push(`${Object.keys(parsed.skills).length} skills`);
-      if (parsed.stats.dex || parsed.stats.int || parsed.stats.edu) found.push('stats');
-
-      if (found.length > 0) {
-        statusEl.textContent = `Parsed: ${found.join(', ')}. Review and edit below.`;
-        statusEl.className = 'parse-status success';
-      } else {
-        statusEl.textContent = 'Could not parse any data. Please enter manually.';
-        statusEl.className = 'parse-status warning';
-      }
-    });
-
-    // Save button
-    document.getElementById('btn-save-character').addEventListener('click', () => {
-      const character = {
-        name: document.getElementById('char-name').value.trim(),
-        skills: {
-          pilot: parseInt(document.getElementById('skill-pilot').value) || 0,
-          astrogation: parseInt(document.getElementById('skill-astrogation').value) || 0,
-          engineer: parseInt(document.getElementById('skill-engineer').value) || 0,
-          gunnery: parseInt(document.getElementById('skill-gunnery').value) || 0,
-          sensors: parseInt(document.getElementById('skill-sensors').value) || 0,
-          leadership: parseInt(document.getElementById('skill-leadership').value) || 0,
-          tactics: parseInt(document.getElementById('skill-tactics').value) || 0
-        },
-        stats: {
-          DEX: parseInt(document.getElementById('stat-dex').value) || 7,
-          INT: parseInt(document.getElementById('stat-int').value) || 7,
-          EDU: parseInt(document.getElementById('stat-edu').value) || 7
-        }
-      };
-
-      if (character.name) {
-        state.socket.emit('ops:importCharacter', {
-          characterData: character
-        });
-        closeModal();
-      }
-    });
+  // Unregistered modal fallback (show modal overlay anyway)
+  if (!handler) {
+    console.warn(`No handler registered for modal: ${templateId}`);
   }
 
-  if (templateId === 'template-time-advance') {
-    // Quick time buttons
-    modal.querySelectorAll('.time-quick').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const hours = parseInt(btn.dataset.hours) || 0;
-        const minutes = parseInt(btn.dataset.minutes) || 0;
-        advanceTime(hours, minutes);
-        closeModal();
-      });
-    });
+  // AR-201: All modal handlers moved to modals/ directory
 
-    // Custom time button
-    document.getElementById('btn-custom-time').addEventListener('click', () => {
-      const hours = parseInt(document.getElementById('custom-hours').value) || 0;
-      const minutes = parseInt(document.getElementById('custom-minutes').value) || 0;
-      if (hours > 0 || minutes > 0) {
-        advanceTime(hours, minutes);
-        closeModal();
-      }
-    });
-  }
-
-  if (templateId === 'template-add-log') {
-    document.getElementById('btn-save-log-entry').addEventListener('click', () => {
-      const entryType = document.getElementById('log-entry-type').value;
-      const message = document.getElementById('log-entry-message').value.trim();
-      if (message) {
-        state.socket.emit('ops:addLogEntry', {
-          shipId: state.ship.id,
-          entryType,
-          message
-        });
-        closeModal();
-      }
-    });
-  }
-
-  // Stage 2: Edit Role Personality Modal
-  if (templateId === 'template-edit-role-personality') {
-    let selectedIcon = state.player?.quirk_icon || '';
-
-    // Pre-fill current values
-    document.getElementById('edit-role-title').value = state.player?.role_title || '';
-    document.getElementById('edit-quirk-text').value = state.player?.quirk_text || '';
-
-    // Icon picker selection
-    modal.querySelectorAll('.icon-btn').forEach(btn => {
-      const icon = btn.dataset.icon;
-      if (icon === selectedIcon) btn.classList.add('selected');
-      btn.addEventListener('click', () => {
-        modal.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedIcon = icon;
-      });
-    });
-
-    // Save button
-    document.getElementById('btn-save-role-personality').addEventListener('click', () => {
-      const roleTitle = document.getElementById('edit-role-title').value.trim();
-      const quirkText = document.getElementById('edit-quirk-text').value.trim();
-
-      state.socket.emit('ops:updateRolePersonality', {
-        playerId: state.player?.id,
-        roleTitle: roleTitle || null,
-        quirkText: quirkText || null,
-        quirkIcon: selectedIcon || null
-      });
-      closeModal();
-    });
-  }
-
-  // Stage 5: System Lookup Modal (TravellerMap)
-  if (templateId === 'template-system-lookup') {
-    let selectedSystem = null;
-
-    async function performSearch() {
-      const query = document.getElementById('system-search-input').value.trim();
-      if (!query) return;
-
-      const resultsContainer = document.getElementById('system-search-results');
-      resultsContainer.innerHTML = '<p class="search-loading">Searching TravellerMap...</p>';
-      document.getElementById('btn-set-system').disabled = true;
-      selectedSystem = null;
-
-      try {
-        const response = await fetch(`/api/travellermap/search?q=${encodeURIComponent(query)}`);
-        const data = await response.json();
-
-        if (data.Results?.Count > 0) {
-          // Filter to only World results
-          const worlds = data.Results.Items.filter(item => item.World);
-          if (worlds.length === 0) {
-            resultsContainer.innerHTML = '<p class="search-placeholder">No worlds found. Try a different search.</p>';
-            return;
-          }
-
-          resultsContainer.innerHTML = worlds.map((item, index) => {
-            const world = item.World;
-            return `<div class="system-result-item" data-index="${index}">
-              <div class="system-result-name">${escapeHtml(world.Name)}<span class="system-result-uwp">${world.Uwp}</span></div>
-              <div class="system-result-details">${escapeHtml(world.Sector)} ${world.HexX}${String(world.HexY).padStart(2, '0')}</div>
-            </div>`;
-          }).join('');
-
-          // Store worlds data for selection
-          resultsContainer.dataset.worlds = JSON.stringify(worlds);
-
-          // Click handler for results
-          resultsContainer.querySelectorAll('.system-result-item').forEach(item => {
-            item.addEventListener('click', () => {
-              resultsContainer.querySelectorAll('.system-result-item').forEach(i => i.classList.remove('selected'));
-              item.classList.add('selected');
-              const worlds = JSON.parse(resultsContainer.dataset.worlds);
-              selectedSystem = worlds[parseInt(item.dataset.index)].World;
-              document.getElementById('btn-set-system').disabled = false;
-            });
-          });
-        } else {
-          resultsContainer.innerHTML = '<p class="search-placeholder">No results found. Try a different search.</p>';
-        }
-      } catch (error) {
-        resultsContainer.innerHTML = `<p class="search-placeholder">Search failed: ${error.message}</p>`;
-      }
-    }
-
-    // Search button
-    document.getElementById('btn-system-search').addEventListener('click', performSearch);
-
-    // Enter key in search input
-    document.getElementById('system-search-input').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') performSearch();
-    });
-
-    // Set system button - AR-33: Show travel confirmation modal
-    document.getElementById('btn-set-system').addEventListener('click', () => {
-      if (!selectedSystem) return;
-      // AR-66: Fix undefined hex coordinates
-      const hexX = selectedSystem.HexX || selectedSystem.Hex?.substring(0, 2) || '??';
-      const hexY = selectedSystem.HexY || selectedSystem.Hex?.substring(2, 4) || '??';
-      const systemName = `${selectedSystem.Name} (${selectedSystem.Sector || 'Unknown'} ${hexX}${String(hexY).padStart(2, '0')})`;
-      showTravelModal({
-        system: systemName,
-        uwp: selectedSystem.Uwp,
-        sector: selectedSystem.Sector,
-        hex: `${selectedSystem.HexX}${String(selectedSystem.HexY).padStart(2, '0')}`
-      });
-    });
-
-    // AR-23.6: Deep space mode toggle
-    const deepSpaceToggle = document.getElementById('deep-space-toggle');
-    const deepSpaceFields = document.getElementById('deep-space-fields');
-    if (deepSpaceToggle && deepSpaceFields) {
-      deepSpaceToggle.addEventListener('change', () => {
-        deepSpaceFields.classList.toggle('hidden', !deepSpaceToggle.checked);
-        if (!deepSpaceToggle.checked) {
-          // Disable deep space mode
-          state.socket.emit('ops:setDeepSpace', { enabled: false });
-        } else {
-          // Set reference to current system
-          const refInput = document.getElementById('deep-space-reference');
-          if (refInput && state.campaign?.current_system) {
-            refInput.value = state.campaign.current_system;
-          }
-        }
-      });
-    }
-
-    // AR-23.6: Update deep space position button
-    const updateDeepSpaceBtn = document.getElementById('btn-update-deep-space');
-    if (updateDeepSpaceBtn) {
-      updateDeepSpaceBtn.addEventListener('click', () => {
-        const referenceSystem = document.getElementById('deep-space-reference').value;
-        const bearing = parseInt(document.getElementById('deep-space-bearing').value) || 0;
-        const distance = parseFloat(document.getElementById('deep-space-distance').value) || 0;
-        state.socket.emit('ops:setDeepSpace', {
-          enabled: true,
-          referenceSystem,
-          bearing,
-          distance
-        });
-      });
-    }
-
-    // AR-23.7: Home system button - go to home
-    const homeBtn = document.getElementById('home-system-btn');
-    if (homeBtn) {
-      homeBtn.addEventListener('click', () => {
-        if (state.homeSystem) {
-          // Parse home system and set it
-          state.socket.emit('ops:setCurrentSystem', { system: state.homeSystem });
-          closeModal();
-        }
-      });
-    }
-
-    // AR-23.7: Quick location clicks (recent + favorites)
-    const bindQuickLocationClicks = () => {
-      // Recent locations
-      document.querySelectorAll('#recent-locations .quick-location-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-          if (e.target.classList.contains('btn-favorite')) return;
-          const loc = JSON.parse(item.dataset.location);
-          state.socket.emit('ops:setCurrentSystem', {
-            system: loc.system,
-            uwp: loc.uwp,
-            sector: loc.sector,
-            hex: loc.hex
-          });
-          closeModal();
-        });
-        // Favorite toggle
-        const favBtn = item.querySelector('.btn-favorite');
-        if (favBtn) {
-          favBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const loc = JSON.parse(item.dataset.location);
-            state.socket.emit('ops:toggleFavoriteLocation', { location: loc });
-          });
-        }
-      });
-
-      // Favorite locations
-      document.querySelectorAll('#favorite-locations .quick-location-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-          if (e.target.classList.contains('btn-set-home')) return;
-          const loc = JSON.parse(item.dataset.location);
-          state.socket.emit('ops:setCurrentSystem', {
-            system: loc.system,
-            uwp: loc.uwp,
-            sector: loc.sector,
-            hex: loc.hex
-          });
-          closeModal();
-        });
-        // Set as home button
-        const homeBtn = item.querySelector('.btn-set-home');
-        if (homeBtn) {
-          homeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const loc = JSON.parse(item.dataset.location);
-            state.socket.emit('ops:setHomeSystem', { locationDisplay: loc.locationDisplay });
-          });
-        }
-      });
-    };
-
-    // Fetch location data and render
-    state.socket.emit('ops:getLocationData');
-    // Wait for data then bind clicks (renderQuickLocations will be called by socket handler)
-    setTimeout(bindQuickLocationClicks, 100);
-  }
-
-  if (templateId === 'template-add-contact') {
-    // Quick add buttons set type and submit
-    modal.querySelectorAll('.contact-quick').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const type = btn.dataset.type;
-        document.getElementById('contact-type').value = type;
-        // Auto-submit with defaults
-        addContact({
-          type,
-          bearing: 0,
-          range_km: 10000,
-          signature: 'normal'
-        });
-        closeModal();
-      });
-    });
-
-    // Full form submit
-    document.getElementById('btn-save-contact').addEventListener('click', () => {
-      addContact({
-        name: document.getElementById('contact-name').value.trim() || null,
-        type: document.getElementById('contact-type').value,
-        bearing: parseInt(document.getElementById('contact-bearing').value) || 0,
-        range_km: parseInt(document.getElementById('contact-range').value) || 0,
-        transponder: document.getElementById('contact-transponder').value.trim() || null,
-        signature: document.getElementById('contact-signature').value,
-        gm_notes: document.getElementById('contact-notes').value.trim() || null
-      });
-      closeModal();
-    });
-  }
-
-  if (templateId === 'template-apply-damage') {
-    // Apply damage button
-    document.getElementById('btn-apply-damage').addEventListener('click', () => {
-      const system = document.getElementById('damage-system').value;
-      const severity = parseInt(document.getElementById('damage-severity').value) || 1;
-      applySystemDamage(system, severity);
-      closeModal();
-    });
-
-    // Clear all damage button
-    document.getElementById('btn-clear-damage').addEventListener('click', () => {
-      if (confirm('Clear all damage from this ship?')) {
-        state.socket.emit('ops:clearSystemDamage', {
-          shipId: state.shipId,
-          location: 'all'
-        });
-        closeModal();
-      }
-    });
-  }
-
-  if (templateId === 'template-add-ship') {
-    // Populate template dropdown (templates should arrive via socket)
-    populateShipTemplateSelect();
-
-    // Template selection change - show info
-    document.getElementById('ship-template').addEventListener('change', (e) => {
-      updateShipTemplateInfo(e.target.value);
-    });
-
-    // Create ship button
-    document.getElementById('btn-create-ship').addEventListener('click', () => {
-      const name = document.getElementById('ship-name').value.trim();
-      const templateId = document.getElementById('ship-template').value;
-      const isPartyShip = document.getElementById('ship-is-party').checked;
-
-      if (!name) {
-        showNotification('Please enter a ship name', 'error');
-        return;
-      }
-      if (!templateId) {
-        showNotification('Please select a ship type', 'error');
-        return;
-      }
-
-      state.socket.emit('ops:addShipFromTemplate', {
-        templateId,
-        name,
-        isPartyShip
-      });
-    });
-  }
-
-  // Ship Template Editor (AR-17)
-  if (templateId === 'template-edit-ship') {
-    // Populate editor with current data
-    populateShipEditor();
-
-    // Tab switching
-    document.querySelectorAll('.editor-tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        switchEditorTab(btn.dataset.tab);
-      });
-    });
-
-    // Template selection change - load full template
-    document.getElementById('edit-ship-template').addEventListener('change', (e) => {
-      loadTemplateForEditor(e.target.value);
-    });
-
-    // Add weapon button
-    document.getElementById('btn-add-weapon').addEventListener('click', addWeaponToEditor);
-
-    // Add system button
-    document.getElementById('btn-add-system').addEventListener('click', addSystemToEditor);
-
-    // Save ship button
-    document.getElementById('btn-save-edited-ship').addEventListener('click', saveEditedShip);
-
-    // Update validation on field changes
-    const fields = [
-      'edit-hull-tonnage', 'edit-hull-points', 'edit-armor-rating',
-      'edit-mdrive-thrust', 'edit-jdrive-rating', 'edit-power-output',
-      'edit-fuel-capacity', 'edit-cargo-tonnage', 'edit-staterooms',
-      'edit-low-berths', 'edit-common-areas'
-    ];
-    fields.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('change', updateValidationSummary);
-    });
-
-    // Initial validation
-    updateValidationSummary();
-  }
-
-  // GM Bridge Menu (GM-1)
-  if (templateId === 'template-gm-bridge-menu') {
-    document.getElementById('btn-gm-copy-code').addEventListener('click', () => {
-      const codeEl = document.getElementById('gm-menu-campaign-code');
-      const code = codeEl?.textContent;
-      if (code && code !== '--------') {
-        navigator.clipboard.writeText(code).then(() => {
-          const btn = document.getElementById('btn-gm-copy-code');
-          const originalText = btn.textContent;
-          btn.textContent = 'Copied!';
-          btn.classList.add('btn-copy-success');
-          setTimeout(() => {
-            btn.textContent = originalText;
-            btn.classList.remove('btn-copy-success');
-          }, 2000);
-        }).catch(() => {
-          showNotification('Failed to copy code', 'error');
-        });
-      }
-    });
-
-    // GM-3: God Mode Handlers
-    // Populate current ship values
-    if (state.ship?.current_state) {
-      const cs = state.ship.current_state;
-      document.getElementById('god-ship-hull').value = cs.hullPoints || 0;
-      document.getElementById('god-ship-fuel').value = cs.fuel || 0;
-      document.getElementById('god-ship-power').value = cs.power || 100;
-      document.getElementById('god-ship-alert').value = cs.alertStatus || 'NORMAL';
-    }
-
-    // Apply Ship Changes
-    document.getElementById('btn-god-apply-ship').addEventListener('click', () => {
-      const updates = {
-        hullPoints: parseInt(document.getElementById('god-ship-hull').value) || 0,
-        fuel: parseInt(document.getElementById('god-ship-fuel').value) || 0,
-        power: parseInt(document.getElementById('god-ship-power').value) || 100,
-        alertStatus: document.getElementById('god-ship-alert').value
-      };
-      state.socket.emit('ops:godModeUpdateShip', {
-        shipId: state.ship?.id,
-        updates
-      });
-      showNotification('Ship state updated', 'success');
-    });
-
-    // Add Contact
-    document.getElementById('btn-god-add-contact').addEventListener('click', () => {
-      const name = document.getElementById('god-contact-name').value || 'Unknown Contact';
-      const type = document.getElementById('god-contact-type').value;
-      const range = parseInt(document.getElementById('god-contact-range').value) || 50000;
-      const bearing = parseInt(document.getElementById('god-contact-bearing').value) || 0;
-      state.socket.emit('ops:godModeAddContact', {
-        campaignId: state.campaign?.id,
-        contact: { name, type, range_km: range, bearing, visible_to: 'all', signature: 'normal' }
-      });
-      document.getElementById('god-contact-name').value = '';
-      showNotification('Contact added', 'success');
-    });
-
-    // Quick Commands
-    document.getElementById('btn-god-repair-all').addEventListener('click', () => {
-      state.socket.emit('ops:godModeRepairAll', { shipId: state.ship?.id });
-      showNotification('All systems repaired', 'success');
-    });
-
-    document.getElementById('btn-god-refuel').addEventListener('click', () => {
-      state.socket.emit('ops:godModeRefuel', { shipId: state.ship?.id });
-      showNotification('Ship fully refueled', 'success');
-    });
-
-    document.getElementById('btn-god-clear-contacts').addEventListener('click', () => {
-      if (confirm('Clear all contacts?')) {
-        state.socket.emit('ops:godModeClearContacts', { campaignId: state.campaign?.id });
-        showNotification('All contacts cleared', 'success');
-      }
-    });
-
-    // AR-194: Break System
-    document.getElementById('btn-god-break-system').addEventListener('click', () => {
-      const system = document.getElementById('god-break-system').value;
-      const severityStr = document.getElementById('god-break-severity').value;
-      const severity = severityStr ? parseInt(severityStr, 10) : null;
-      state.socket.emit('ops:breakSystem', {
-        shipId: state.ship?.id,
-        system,
-        severity
-      });
-    });
-  }
-
-  // AR-108.1: Refuel modal handlers (CSP compliance)
-  if (templateId === 'template-refuel') {
-    document.getElementById('refuel-amount')?.addEventListener('input', () => updateRefuelAmountPreview());
-    document.getElementById('btn-refuel-max')?.addEventListener('click', () => setRefuelMax());
-    document.getElementById('btn-execute-refuel')?.addEventListener('click', () => executeRefuel());
-  }
-
-  // AR-108.1: Process Fuel modal handlers (CSP compliance)
-  if (templateId === 'template-process-fuel') {
-    document.getElementById('btn-process-max')?.addEventListener('click', () => setProcessMax());
-    document.getElementById('btn-execute-process')?.addEventListener('click', () => executeProcessFuel());
-  }
-
+  // Show modal overlay for any modal (registered or not)
   document.getElementById('modal-overlay').classList.remove('hidden');
 }
+
+// AR-201: ~320 lines of inline modal handlers removed here
+// Now in modals/: character-import.js, system-lookup.js, gm-bridge-menu.js,
+//                 simple-modals.js, ship-modals.js
 
 function populateShipTemplateSelect() {
   const select = document.getElementById('ship-template');
@@ -4226,10 +3191,16 @@ function tryReconnect() {
 // ==================== Initialization ====================
 document.addEventListener('DOMContentLoaded', () => {
   initSocket();
-  initLoginScreen();
-  initGMSetupScreen();
-  initPlayerSetupScreen();
-  initBridgeScreen();
+
+  // AR-201: Initialize screens via registry
+  const screenIds = ['login', 'gm-setup', 'player-setup', 'bridge'];
+  for (const screenId of screenIds) {
+    const handler = getScreenHandler(screenId);
+    if (handler) {
+      handler(state, screenHelpers);
+    }
+  }
+
   initEmailAppHandlers();
 
   // AR-101: Fetch and display version
