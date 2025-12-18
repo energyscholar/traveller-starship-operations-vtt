@@ -52,6 +52,7 @@ import './socket-handlers/gm.js';
 import './socket-handlers/fuel.js';
 import './socket-handlers/map.js';
 import './socket-handlers/misc.js';
+import './socket-handlers/conditions.js';
 import { initAllHandlers, getRegisteredHandlers } from './socket-handlers/index.js';
 import { DEFAULT_SECTOR, DEFAULT_SUBSECTOR, DEFAULT_SYSTEM, DEFAULT_HEX } from './modules/constants.js';
 import { startBridgeClock, stopBridgeClock, setBridgeClockDate, parseCampaignDate, formatClockTime, formatDayYear } from './modules/bridge-clock.js';
@@ -642,62 +643,8 @@ function initSocket() {
   state.socket.on('ops:medicalRecords', handleMedicalRecords);
 
   // ==================== AR-49: Environmental Monitoring Events ====================
-  state.socket.on('ops:environmentalData', (data) => {
-    state.environmentalData = data;
-    // Refresh sensors panel if active
-    if (state.selectedRole === 'sensor_operator') {
-      renderRoleDetailPanel(state.selectedRole);
-    }
-  });
-
-  // AR-49: Repair Queue Events
-  state.socket.on('ops:repairQueue', (data) => {
-    state.repairQueue = data.repairs || [];
-    // Refresh engineer panel if active
-    if (state.selectedRole === 'engineer') {
-      renderRoleDetailPanel(state.selectedRole);
-    }
-  });
-
-  // AR-49: Rescue Targets Events (Captain triage)
-  state.socket.on('ops:rescueTargets', (data) => {
-    state.rescueTargets = data.targets || [];
-    if (state.selectedRole === 'captain') {
-      renderRoleDetailPanel(state.selectedRole);
-    }
-  });
-
-  // AR-49: Flight Conditions Events (Pilot)
-  state.socket.on('ops:flightConditions', (data) => {
-    state.flightConditions = data;
-    if (state.selectedRole === 'pilot') {
-      renderRoleDetailPanel(state.selectedRole);
-    }
-  });
-
-  // AR-49: Medical Conditions Events (Medic)
-  state.socket.on('ops:medicalConditions', (data) => {
-    state.medicalConditions = data;
-    if (state.selectedRole === 'medic') {
-      renderRoleDetailPanel(state.selectedRole);
-    }
-  });
-
-  // AR-49: Target Conditions Events (Gunner)
-  state.socket.on('ops:targetConditions', (data) => {
-    state.targetConditions = data;
-    if (state.selectedRole === 'gunner') {
-      renderRoleDetailPanel(state.selectedRole);
-    }
-  });
-
-  // AR-49: Boarding Conditions Events (Marines)
-  state.socket.on('ops:boardingConditions', (data) => {
-    state.boardingConditions = data;
-    if (state.selectedRole === 'marines') {
-      renderRoleDetailPanel(state.selectedRole);
-    }
-  });
+  // AR-201: Conditions events moved to socket-handlers/conditions.js
+  // (7 handlers: ops:environmentalData, ops:repairQueue, ops:flightConditions, etc.)
 
   // ==================== AR-27: Shared Map Events ====================
 
