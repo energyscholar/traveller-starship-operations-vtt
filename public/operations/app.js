@@ -1708,6 +1708,21 @@ function initSocket() {
     showNotification(error.message, 'error');
   });
 
+  // AR-194: System Broken notification
+  state.socket.on('ops:systemBroken', (data) => {
+    const { system, severity, failure } = data;
+    const severityText = ['', 'Minor', 'Major', 'Critical'][severity] || 'Unknown';
+    let message = `⚠️ ${system} DAMAGED (${severityText})`;
+    if (failure?.name) {
+      message += `: ${failure.name}`;
+    }
+    showNotification(message, 'warning');
+    // Refresh role panel if on engineer/damage control
+    if (state.selectedRole === 'engineer' || state.selectedRole === 'damage_control') {
+      renderRoleDetailPanel(state.selectedRole);
+    }
+  });
+
   // ==================== AR-40: Library Computer Events ====================
   state.socket.on('ops:libraryResults', handleLibraryResults);
   state.socket.on('ops:uwpDecoded', handleUWPDecoded);
@@ -5234,6 +5249,18 @@ function showModal(templateId) {
         state.socket.emit('ops:godModeClearContacts', { campaignId: state.campaign?.id });
         showNotification('All contacts cleared', 'success');
       }
+    });
+
+    // AR-194: Break System
+    document.getElementById('btn-god-break-system').addEventListener('click', () => {
+      const system = document.getElementById('god-break-system').value;
+      const severityStr = document.getElementById('god-break-severity').value;
+      const severity = severityStr ? parseInt(severityStr, 10) : null;
+      state.socket.emit('ops:breakSystem', {
+        shipId: state.ship?.id,
+        system,
+        severity
+      });
     });
   }
 

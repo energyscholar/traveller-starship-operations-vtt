@@ -111,9 +111,8 @@ function getSystemTooltip(system, template) {
 }
 
 export function renderSystemStatusItem(name, status, tooltip = '') {
-  const tooltipAttr = tooltip ? ` title="${tooltip}"` : '';
-
   if (!status) {
+    const tooltipAttr = tooltip ? ` title="${tooltip}"` : '';
     return `
       <div class="system-status-item operational"${tooltipAttr}>
         <span class="system-name">${name}</span>
@@ -124,9 +123,35 @@ export function renderSystemStatusItem(name, status, tooltip = '') {
 
   const severity = status.totalSeverity || 0;
   const statusClass = severity === 0 ? 'operational' : severity <= 2 ? 'damaged' : 'critical';
-  const statusText = severity === 0 ? 'Operational' :
-                     status.disabled ? 'DISABLED' :
-                     status.message || `Damaged (Sev ${severity})`;
+
+  // AR-194: Get failure reason from latest unrepaired crit
+  const unrepairedCrits = (status.crits || []).filter(c => !c.repaired);
+  const latestCrit = unrepairedCrits[unrepairedCrits.length - 1];
+  const failureReason = latestCrit?.failureReason;
+
+  // Build status text with failure reason if available
+  let statusText;
+  if (severity === 0) {
+    statusText = 'Operational';
+  } else if (status.disabled) {
+    statusText = 'DISABLED';
+  } else if (failureReason?.name) {
+    statusText = failureReason.name;
+  } else {
+    statusText = status.message || `Damaged (Sev ${severity})`;
+  }
+
+  // Build tooltip with failure description
+  let fullTooltip = tooltip || '';
+  if (failureReason) {
+    const reasonTooltip = [
+      failureReason.name,
+      failureReason.description,
+      failureReason.flavorText ? `"${failureReason.flavorText}"` : ''
+    ].filter(Boolean).join(' - ');
+    fullTooltip = fullTooltip ? `${fullTooltip}\n\n${reasonTooltip}` : reasonTooltip;
+  }
+  const tooltipAttr = fullTooltip ? ` title="${fullTooltip}"` : '';
 
   return `
     <div class="system-status-item ${statusClass}"${tooltipAttr}>
