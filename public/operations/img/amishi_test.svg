@@ -297,7 +297,13 @@ Quick-transfer fuel plumbing</title>
     <text x="0" y="15" fill="#7a6a5a" font-family="monospace" font-size="10">FLEET:</text>
 
     <!-- Kimbly -->
-    <g transform="translate(60, 0)">
+    <g transform="translate(60, 0)" data-craft="kimbly" style="cursor: pointer;">
+      <title>KIMBLY - Type S Scout/Courier (100t)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Jump-2 capable, Thrust 2G
+Sensor suite, Air/Raft bay
+Used for reconnaissance and courier runs
+Status: Docked in main hangar</title>
       <rect x="0" y="0" width="120" height="35" rx="4" fill="#1a202c" stroke="#5a4a3a"/>
       <circle cx="15" cy="17" r="6" fill="url(#operational)"/>
       <text x="30" y="15" fill="#c9a882" font-family="monospace" font-size="9" font-weight="bold">KIMBLY</text>
@@ -305,7 +311,13 @@ Quick-transfer fuel plumbing</title>
     </g>
 
     <!-- Fighters -->
-    <g transform="translate(195, 0)">
+    <g transform="translate(195, 0)" data-craft="fighters" style="cursor: pointer;">
+      <title>LIGHT FIGHTERS ×6 (10t each)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Thrust 6G, Pulse Lasers
+Agile interceptors for ship defense
+60 tons total hangar space
+Status: All 6 ready in hangar bay</title>
       <rect x="0" y="0" width="140" height="35" rx="4" fill="#1a202c" stroke="#5a4a3a"/>
       <circle cx="15" cy="17" r="6" fill="url(#operational)"/>
       <text x="30" y="15" fill="#c9a882" font-family="monospace" font-size="9" font-weight="bold">FIGHTERS ×6</text>
@@ -313,7 +325,13 @@ Quick-transfer fuel plumbing</title>
     </g>
 
     <!-- Launch -->
-    <g transform="translate(350, 0)">
+    <g transform="translate(350, 0)" data-craft="launch" style="cursor: pointer;">
+      <title>ARMED LAUNCH (24t)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Thrust 4G, Single pulse laser turret
+Utility shuttle with light armament
+Cargo: 10t, Passengers: 8
+Status: Docked in hangar bay</title>
       <rect x="0" y="0" width="120" height="35" rx="4" fill="#1a202c" stroke="#5a4a3a"/>
       <circle cx="15" cy="17" r="6" fill="url(#operational)"/>
       <text x="30" y="15" fill="#c9a882" font-family="monospace" font-size="9" font-weight="bold">LAUNCH</text>
@@ -321,7 +339,14 @@ Quick-transfer fuel plumbing</title>
     </g>
 
     <!-- Pinnace -->
-    <g transform="translate(485, 0)">
+    <g transform="translate(485, 0)" data-craft="pinnace" style="cursor: pointer;">
+      <title>ARMORED PINNACE (40t) + G-Carrier
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Thrust 5G, Dual pulse lasers, Armor 4
+Pirate salvage - combat capable
+Carries: 10t Armored G-Carrier
+50t collapsible fuel bladder
+Status: External dorsal mount</title>
       <rect x="0" y="0" width="155" height="35" rx="4" fill="#1a202c" stroke="#5a4a3a"/>
       <circle cx="15" cy="17" r="6" fill="url(#operational)"/>
       <text x="30" y="15" fill="#c9a882" font-family="monospace" font-size="9" font-weight="bold">PINNACE</text>

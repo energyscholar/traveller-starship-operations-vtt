@@ -79,10 +79,43 @@ export function getActionMessage(action, playerName, roleName) {
  * @param {object} status - System status object
  * @returns {string} HTML string
  */
-export function renderSystemStatusItem(name, status) {
+/**
+ * AR-187: Generate tooltip text for ship system
+ * @param {string} system - System key (mDrive, jDrive, etc.)
+ * @param {object} template - Ship template data
+ * @returns {string} Tooltip text
+ */
+function getSystemTooltip(system, template) {
+  if (!template) return '';
+  switch (system) {
+    case 'mDrive':
+      return `Thrust ${template.thrust || '?'} | ${template.tonnage || '?'}t ship`;
+    case 'jDrive':
+      return template.jump ? `Jump-${template.jump} | Fuel: ${template.fuel || '?'}t` : 'No Jump Drive';
+    case 'powerPlant':
+      return `Powers ${template.tonnage || '?'}t ship | TL${template.techLevel || '?'}`;
+    case 'sensors':
+      return template.sensors || 'Standard sensors';
+    case 'computer':
+      return template.computer || 'Ship computer';
+    case 'armour':
+      return `Armour ${template.armour || 0} | Hull ${template.hull || '?'}`;
+    case 'hull':
+      return `${template.hull || '?'} HP | ${template.tonnage || '?'} tons`;
+    case 'weapon':
+      const turretCount = template.turrets?.length || 0;
+      return turretCount ? `${turretCount} turret${turretCount > 1 ? 's' : ''}` : 'No weapons';
+    default:
+      return '';
+  }
+}
+
+export function renderSystemStatusItem(name, status, tooltip = '') {
+  const tooltipAttr = tooltip ? ` title="${tooltip}"` : '';
+
   if (!status) {
     return `
-      <div class="system-status-item operational">
+      <div class="system-status-item operational"${tooltipAttr}>
         <span class="system-name">${name}</span>
         <span class="system-state">Operational</span>
       </div>
@@ -96,7 +129,7 @@ export function renderSystemStatusItem(name, status) {
                      status.message || `Damaged (Sev ${severity})`;
 
   return `
-    <div class="system-status-item ${statusClass}">
+    <div class="system-status-item ${statusClass}"${tooltipAttr}>
       <span class="system-name">${name}</span>
       <span class="system-state">${statusText}</span>
       ${severity > 0 ? `<span class="system-severity">Sev ${severity}</span>` : ''}
@@ -404,6 +437,10 @@ function getPilotPanel(shipState, template, campaign, jumpStatus = {}, flightCon
           <button class="btn btn-small" onclick="advanceTime(10, 0)" title="Advance 10 days">+10d</button>
           <button class="btn btn-small" onclick="advanceTime(14, 0)" title="Advance 2 weeks">+14d</button>
         </div>
+        <div class="time-row time-custom">
+          <input type="text" id="custom-time-input" placeholder="e.g. 5h, 2d, 1w" title="Enter time: h=hours, d=days, w=weeks" style="width: 100px;">
+          <button class="btn btn-small" onclick="advanceCustomTime()" title="Advance by custom amount">Go</button>
+        </div>
       </div>
       ${inJump && jumpStatus.canExit ? `
       <button onclick="completeJump()" class="btn btn-primary btn-exit-jump" title="Exit jump space at destination">Exit Jump</button>
@@ -444,10 +481,18 @@ function getEngineerPanel(shipState, template, systemStatus, damagedSystems, fue
   if (powerEffects.sensorsDM < 0) warnings.push(`Sensors: ${powerEffects.sensorsDM} DM`);
   if (powerEffects.thrustMultiplier < 1) warnings.push(`Thrust: ${Math.round(powerEffects.thrustMultiplier * 100)}%`);
 
+  // AR-191: Power breakdown tooltip
+  const powerTooltip = `Power Usage: ${powerPercent}%\n` +
+    `M-Drive: ${power.mDrive}%\n` +
+    `Weapons: ${power.weapons}%\n` +
+    `Sensors: ${power.sensors}%\n` +
+    `Life Support: ${power.lifeSupport}%\n` +
+    `Computer: ${power.computer}%`;
+
   return `
     <div class="detail-section power-section power-controls">
       <h4>Power Allocation</h4>
-      <div class="power-budget" title="Total power draw across all systems">
+      <div class="power-budget" title="${powerTooltip}">
         <span class="power-budget-label">Power Budget:</span>
         <div class="power-budget-bar">
           <div class="power-budget-fill ${powerPercent > 100 ? 'overload' : powerPercent > 80 ? 'high' : ''}" style="width: ${Math.min(powerPercent, 100)}%"></div>
@@ -496,12 +541,12 @@ function getEngineerPanel(shipState, template, systemStatus, damagedSystems, fue
     <div class="detail-section system-status">
       <h4>System Status</h4>
       <div class="system-status-grid systems-grid">
-        ${renderSystemStatusItem('M-Drive', systemStatus.mDrive)}
-        ${renderSystemStatusItem('Power Plant', systemStatus.powerPlant)}
-        ${renderSystemStatusItem('J-Drive', systemStatus.jDrive)}
-        ${renderSystemStatusItem('Sensors', systemStatus.sensors)}
-        ${renderSystemStatusItem('Computer', systemStatus.computer)}
-        ${renderSystemStatusItem('Armour', systemStatus.armour)}
+        ${renderSystemStatusItem('M-Drive', systemStatus.mDrive, getSystemTooltip('mDrive', template))}
+        ${renderSystemStatusItem('Power Plant', systemStatus.powerPlant, getSystemTooltip('powerPlant', template))}
+        ${renderSystemStatusItem('J-Drive', systemStatus.jDrive, getSystemTooltip('jDrive', template))}
+        ${renderSystemStatusItem('Sensors', systemStatus.sensors, getSystemTooltip('sensors', template))}
+        ${renderSystemStatusItem('Computer', systemStatus.computer, getSystemTooltip('computer', template))}
+        ${renderSystemStatusItem('Armour', systemStatus.armour, getSystemTooltip('armour', template))}
       </div>
     </div>
     ${damagedSystems.length > 0 ? `
@@ -559,6 +604,12 @@ function getEngineerPanel(shipState, template, systemStatus, damagedSystems, fue
           <div class="fuel-type unrefined"><span class="fuel-dot"></span>Unrefined: ${fuelBreakdown.unrefined}t</div>
         </div>
       </div>
+      ${fs.percentFull < 25 ? `
+      <div class="fuel-warning fuel-warning-low">
+        <span class="warning-icon">⚠</span>
+        LOW FUEL: ${fs.percentFull}% remaining - refuel soon!
+      </div>
+      ` : ''}
       ${fuelBreakdown.unrefined > 0 ? `
       <div class="fuel-warning">
         <span class="warning-icon">!</span>
@@ -1787,14 +1838,14 @@ function getDamageControlPanel(shipState, template, systemStatus = {}, damagedSy
     <div class="detail-section">
       <h4>System Status</h4>
       <div class="system-status-grid">
-        ${renderSystemStatusItem('M-Drive', systemStatus.mDrive)}
-        ${renderSystemStatusItem('Power Plant', systemStatus.powerPlant)}
-        ${renderSystemStatusItem('J-Drive', systemStatus.jDrive)}
-        ${renderSystemStatusItem('Sensors', systemStatus.sensors)}
-        ${renderSystemStatusItem('Computer', systemStatus.computer)}
-        ${renderSystemStatusItem('Armour', systemStatus.armour)}
-        ${renderSystemStatusItem('Weapons', systemStatus.weapon)}
-        ${renderSystemStatusItem('Hull', systemStatus.hull)}
+        ${renderSystemStatusItem('M-Drive', systemStatus.mDrive, getSystemTooltip('mDrive', template))}
+        ${renderSystemStatusItem('Power Plant', systemStatus.powerPlant, getSystemTooltip('powerPlant', template))}
+        ${renderSystemStatusItem('J-Drive', systemStatus.jDrive, getSystemTooltip('jDrive', template))}
+        ${renderSystemStatusItem('Sensors', systemStatus.sensors, getSystemTooltip('sensors', template))}
+        ${renderSystemStatusItem('Computer', systemStatus.computer, getSystemTooltip('computer', template))}
+        ${renderSystemStatusItem('Armour', systemStatus.armour, getSystemTooltip('armour', template))}
+        ${renderSystemStatusItem('Weapons', systemStatus.weapon, getSystemTooltip('weapon', template))}
+        ${renderSystemStatusItem('Hull', systemStatus.hull, getSystemTooltip('hull', template))}
         ${renderSystemStatusItem('Fuel', systemStatus.fuel)}
         ${renderSystemStatusItem('Cargo', systemStatus.cargo)}
       </div>

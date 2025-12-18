@@ -213,6 +213,12 @@ function getBodyWorldPosition(bodyId, time = systemMapState.time) {
 function initSystemMap(container) {
   systemMapState.container = container;
 
+  // AR-199: Load label preference from localStorage
+  const savedLabels = localStorage.getItem('systemMapLabels');
+  if (savedLabels !== null) {
+    systemMapState.showLabels = savedLabels === 'true';
+  }
+
   // Create canvas
   const canvas = document.createElement('canvas');
   canvas.id = 'system-map-canvas';
@@ -294,7 +300,7 @@ function initSystemMap(container) {
 
 /**
  * AR-168: Handle keyboard hotkeys for system map
- * P = Places, S = Set Course, T = Travel, G = Go To, Escape = Close panels
+ * P = Places, S = Set Course, T = Travel, G = Go To, L = Labels, Escape = Close panels
  */
 function handleSystemMapKeydown(e) {
   // Don't trigger if typing in input/textarea
@@ -344,6 +350,12 @@ function handleSystemMapKeydown(e) {
           e.preventDefault();
         }
       }
+      break;
+
+    case 'l':
+      // AR-199: Toggle body labels
+      toggleSystemMapLabels();
+      e.preventDefault();
       break;
 
     case 'escape':
@@ -973,15 +985,16 @@ function showPlaceDetails(placeId) {
       ${physicsHtml}
     </div>
     <div class="details-footer">
-      <button onclick="window.goToPlace('${placeId}'); window.hidePlaceDetails();">Go To</button>
+      <button onclick="window.goToPlace('${placeId}'); window.hidePlaceDetails();" title="Jump camera to location [G]">Go To</button>
       <button id="btn-set-course"
               onclick="window.setCourseFromDetails('${placeId}', ${travelHours});"
-              title="Set navigation course to this destination. Pilot role only - the pilot then uses TRAVEL to execute."
+              title="Set navigation course [S] - Pilot role only"
               ${isSameLocation ? 'disabled' : ''}>
         Set Course
       </button>
       <button id="btn-travel"
               onclick="window.travelFromDetails();"
+              title="Execute travel to destination [T]"
               ${hasCourse ? '' : 'disabled'}>
         Travel
       </button>
@@ -1863,11 +1876,14 @@ function drawFullSystem(ctx, centerX, centerY, zoom, system) {
       const isVerified = typeof window.getShipState === 'function'
         ? window.getShipState()?.positionVerified !== false
         : true;
-      const labelText = isVerified ? planet.name : '???';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.font = '10px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(labelText, planetX, planetY + planetSize + 12);
+      // AR-199: Only draw labels if enabled
+      if (systemMapState.showLabels) {
+        const labelText = isVerified ? planet.name : '???';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(labelText, planetX, planetY + planetSize + 12);
+      }
     }
 
     // Draw moons at high zoom
@@ -2001,11 +2017,15 @@ function resetSystemMapView() {
 }
 
 /**
- * AR-87: Toggle labels on system map
+ * AR-87/AR-199: Toggle labels on system map
  */
 function toggleSystemMapLabels() {
   systemMapState.showLabels = !systemMapState.showLabels;
+  localStorage.setItem('systemMapLabels', systemMapState.showLabels);
   console.log('[SystemMap] Labels:', systemMapState.showLabels ? 'ON' : 'OFF');
+  if (window.showNotification) {
+    window.showNotification(`Labels ${systemMapState.showLabels ? 'shown' : 'hidden'}`, 'info');
+  }
 }
 
 /**
@@ -3098,15 +3118,18 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
     // AR-124: Labels hidden until position verified (immersive)
     // Labels only visible when zoomed in enough to distinguish locations
     if (zoom > 5) {
-      const isVerified = typeof window.getShipState === 'function'
-        ? window.getShipState()?.positionVerified !== false
-        : true;
-      const labelText = isVerified ? loc.name : '???';
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.font = `${Math.max(8, 9 * Math.sqrt(zoom))}px monospace`;
-      ctx.textAlign = 'center';
-      ctx.fillText(labelText, screen.x, screen.y + dotSize + 10);
+      // AR-199: Only draw labels if enabled
+      if (systemMapState.showLabels) {
+        const isVerified = typeof window.getShipState === 'function'
+          ? window.getShipState()?.positionVerified !== false
+          : true;
+        const labelText = isVerified ? loc.name : '???';
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.font = `${Math.max(8, 9 * Math.sqrt(zoom))}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillText(labelText, screen.x, screen.y + dotSize + 10);
+      }
     }
     ctx.restore();
   }
@@ -3178,12 +3201,14 @@ function drawPartyShip(ctx, centerX, centerY, zoom) {
 
   ctx.restore();
 
-  // Ship label
-  const name = shipMapState.partyShip.name || 'Party Ship';
-  ctx.fillStyle = '#88aaff';
-  ctx.font = '10px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(name, screenX, screenY + size + 14);
+  // Ship label - AR-199: Only draw labels if enabled
+  if (systemMapState.showLabels) {
+    const name = shipMapState.partyShip.name || 'Party Ship';
+    ctx.fillStyle = '#88aaff';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(name, screenX, screenY + size + 14);
+  }
 }
 
 /**
@@ -3318,12 +3343,15 @@ function drawMapContacts(ctx, centerX, centerY, zoom) {
     ctx.stroke();
 
     // Contact label (transponder or designation)
-    const label = contact.transponder || contact.designation || contact.name;
-    if (label && zoom > 0.5) {
-      ctx.fillStyle = color;
-      ctx.font = '9px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(label, screenX, screenY + size + 10);
+    // AR-199: Only draw labels if enabled
+    if (systemMapState.showLabels) {
+      const label = contact.transponder || contact.designation || contact.name;
+      if (label && zoom > 0.5) {
+        ctx.fillStyle = color;
+        ctx.font = '9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, screenX, screenY + size + 10);
+      }
     }
   }
 }
@@ -3745,8 +3773,8 @@ function renderEmbeddedMap() {
       ctx.stroke();
     }
 
-    // Label
-    if (zoom > 0.5 && obj.name) {
+    // Label - AR-199: Only draw labels if enabled
+    if (systemMapState.showLabels && zoom > 0.5 && obj.name) {
       ctx.fillStyle = '#aaaacc';
       ctx.font = '10px monospace';
       ctx.textAlign = 'left';
@@ -3774,11 +3802,13 @@ function renderEmbeddedMap() {
   ctx.stroke();
   ctx.restore();
 
-  // Ship label
-  ctx.fillStyle = '#00ff00';
-  ctx.font = '9px monospace';
-  ctx.textAlign = 'left';
-  ctx.fillText('SHIP', shipX + 10, shipY + 3);
+  // Ship label - AR-199: Only draw labels if enabled
+  if (systemMapState.showLabels) {
+    ctx.fillStyle = '#00ff00';
+    ctx.font = '9px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('SHIP', shipX + 10, shipY + 3);
+  }
 
   // Draw course line if destination selected
   if (selectedDestination) {

@@ -158,6 +158,23 @@
                   Require Position Verify
                 </label>
               </div>
+              <!-- AR-186: GM Roll Modifier -->
+              <div class="form-group gm-modifier-control" title="Apply modifier to all rolls">
+                <label>Roll Modifier</label>
+                <div class="gm-modifier-row">
+                  <input type="number" id="gm-modifier-dm" placeholder="±DM" style="width: 60px;">
+                  <input type="text" id="gm-modifier-reason" placeholder="reason" style="width: 100px;">
+                  <label class="gm-modifier-persist">
+                    <input type="checkbox" id="gm-modifier-persistent">
+                    Keep
+                  </label>
+                </div>
+                <div class="gm-modifier-buttons">
+                  <button id="btn-gm-modifier-apply" class="btn btn-sm">Apply</button>
+                  <button id="btn-gm-modifier-clear" class="btn btn-sm btn-secondary">Clear</button>
+                </div>
+                <div id="gm-modifier-status" class="gm-modifier-status hidden"></div>
+              </div>
             </section>
           </div>
         </div>

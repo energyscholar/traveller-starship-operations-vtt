@@ -1275,6 +1275,43 @@ function initSocket() {
     }
   });
 
+  // AR-186: GM Roll Modifier socket handlers
+  state.socket.on('ops:gmModifierSet', (data) => {
+    state.gmModifier = data;
+    const statusEl = document.getElementById('gm-modifier-status');
+    if (statusEl) {
+      const dmText = data.dm >= 0 ? `+${data.dm}` : data.dm;
+      statusEl.textContent = `Active: ${dmText}${data.reason ? ` (${data.reason})` : ''}${data.persistent ? ' [persistent]' : ''}`;
+      statusEl.classList.remove('hidden');
+    }
+    showNotification(`GM Modifier: ${data.dm >= 0 ? '+' : ''}${data.dm}${data.reason ? ` (${data.reason})` : ''}`, 'info');
+  });
+
+  state.socket.on('ops:gmModifierCleared', () => {
+    state.gmModifier = null;
+    const statusEl = document.getElementById('gm-modifier-status');
+    if (statusEl) {
+      statusEl.textContent = '';
+      statusEl.classList.add('hidden');
+    }
+    showNotification('GM Modifier cleared', 'info');
+  });
+
+  state.socket.on('ops:gmModifierState', (data) => {
+    state.gmModifier = data;
+    if (data) {
+      document.getElementById('gm-modifier-dm').value = data.dm;
+      document.getElementById('gm-modifier-reason').value = data.reason || '';
+      document.getElementById('gm-modifier-persistent').checked = data.persistent;
+      const statusEl = document.getElementById('gm-modifier-status');
+      if (statusEl) {
+        const dmText = data.dm >= 0 ? `+${data.dm}` : data.dm;
+        statusEl.textContent = `Active: ${dmText}${data.reason ? ` (${data.reason})` : ''}`;
+        statusEl.classList.remove('hidden');
+      }
+    }
+  });
+
   state.socket.on('ops:locationChanged', (data) => {
     state.campaign.current_system = data.newLocation;
     if (data.newDate) {
@@ -2338,6 +2375,21 @@ function initGMSetupScreen() {
   // AR-124: Position verification toggle
   document.getElementById('position-verify-toggle').addEventListener('change', (e) => {
     state.socket.emit('ops:setRequirePositionVerification', { enabled: e.target.checked });
+  });
+
+  // AR-186: GM Roll Modifier
+  document.getElementById('btn-gm-modifier-apply').addEventListener('click', () => {
+    const dm = parseInt(document.getElementById('gm-modifier-dm').value) || 0;
+    const reason = document.getElementById('gm-modifier-reason').value || '';
+    const persistent = document.getElementById('gm-modifier-persistent').checked;
+    state.socket.emit('ops:setGmModifier', { dm, reason, persistent });
+  });
+
+  document.getElementById('btn-gm-modifier-clear').addEventListener('click', () => {
+    state.socket.emit('ops:clearGmModifier');
+    document.getElementById('gm-modifier-dm').value = '';
+    document.getElementById('gm-modifier-reason').value = '';
+    document.getElementById('gm-modifier-persistent').checked = false;
   });
 
   // Start session
@@ -3809,6 +3861,50 @@ function advanceTime(days, hours, minutes = 0, reason = '') {
     return;
   }
   state.socket.emit('ops:advanceTime', { days, hours, minutes, reason });
+}
+
+// AR-192: Custom time input parser
+function advanceCustomTime() {
+  const input = document.getElementById('custom-time-input');
+  if (!input) return;
+
+  const value = input.value.trim().toLowerCase();
+  if (!value) {
+    showNotification('Enter a time value (e.g., 5h, 2d, 1w)', 'warning');
+    return;
+  }
+
+  // Parse formats: "5h", "2d", "1w", "3d 5h", "2.5d"
+  let totalHours = 0;
+  const parts = value.split(/\s+/);
+
+  for (const part of parts) {
+    const match = part.match(/^(\d+\.?\d*)\s*(h|d|w|hours?|days?|weeks?)$/i);
+    if (!match) {
+      showNotification(`Invalid format: "${part}". Use h/d/w (e.g., 5h, 2d, 1w)`, 'error');
+      return;
+    }
+
+    const num = parseFloat(match[1]);
+    const unit = match[2].charAt(0).toLowerCase();
+
+    if (unit === 'h') totalHours += num;
+    else if (unit === 'd') totalHours += num * 24;
+    else if (unit === 'w') totalHours += num * 24 * 7;
+  }
+
+  if (totalHours <= 0) {
+    showNotification('Time must be greater than 0', 'error');
+    return;
+  }
+
+  const days = Math.floor(totalHours / 24);
+  const hours = Math.floor(totalHours % 24);
+  const minutes = Math.round((totalHours % 1) * 60);
+
+  advanceTime(days, hours, minutes, 'custom');
+  input.value = '';
+  showNotification(`Advanced ${totalHours.toFixed(1)} hours`, 'success');
 }
 
 // AR-33: Travel confirmation modal
@@ -6687,6 +6783,7 @@ window.changeRange = changeRange;
 window.setCourse = setCourse;
 window.clearCourse = clearCourse;
 window.advanceTime = advanceTime;
+window.advanceCustomTime = advanceCustomTime;
 // AR-64: Travel/Navigation
 window.travel = travel;
 window.getPendingTravel = getPendingTravel;
