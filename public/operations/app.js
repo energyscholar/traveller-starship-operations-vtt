@@ -67,6 +67,29 @@ import './screens/gm-setup-screen.js';
 import './screens/player-setup-screen.js';
 import './screens/bridge-screen.js';
 import { getScreenHandler, getRegisteredScreens } from './screens/index.js';
+// AR-201: Renderer modules
+import {
+  initRenderers,
+  renderBridge as _renderBridge,
+  renderShipStatus as _renderShipStatus,
+  renderRoleActions as _renderRoleActions,
+  renderObserverPanel as _renderObserverPanel,
+  renderRoleDetailPanel as _renderRoleDetailPanel,
+  handleRoleAction as _handleRoleAction,
+  renderCrewList as _renderCrewList,
+  relieveCrewMember as _relieveCrewMember,
+  gmAssignRole as _gmAssignRole,
+  renderContacts as _renderContacts,
+  updateRoleQuirkDisplay as _updateRoleQuirkDisplay,
+  initGMControls as _initGMControls,
+  renderGMSetup as _renderGMSetup,
+  renderPlayerSetup as _renderPlayerSetup,
+  renderRoleSelection as _renderRoleSelection,
+  renderPlayerSlots as _renderPlayerSlots,
+  renderQuickLocations as _renderQuickLocations,
+  renderCampaignList as _renderCampaignList,
+  showDeleteCampaignModal as _showDeleteCampaignModal
+} from './renderers/index.js';
 import { DEFAULT_SECTOR, DEFAULT_SUBSECTOR, DEFAULT_SYSTEM, DEFAULT_HEX } from './modules/constants.js';
 import { startBridgeClock, stopBridgeClock, setBridgeClockDate, parseCampaignDate, formatClockTime, formatDayYear } from './modules/bridge-clock.js';
 import { showNewsMailModal as _showNewsMailModal, closeNewsMailModal } from './modules/news-mail.js';
@@ -801,1206 +824,89 @@ function hideCombatScreen() {
 }
 
 
+// AR-201: Delegate to extracted renderers
 function renderCampaignList() {
-  const container = document.getElementById('campaign-list');
-
-  if (state.campaigns.length === 0) {
-    container.innerHTML = '<p class="placeholder">No campaigns yet</p>';
-    return;
-  }
-
-  container.innerHTML = state.campaigns.map(c => `
-    <div class="campaign-item" data-campaign-id="${c.id}">
-      <div class="campaign-info">
-        <div class="campaign-name" title="${escapeHtml(c.name)}">${escapeHtml(c.name)}</div>
-        <div class="campaign-meta">${escapeHtml(c.gm_name)} · ${c.current_system}</div>
-      </div>
-      <div class="campaign-actions">
-        <button class="btn btn-small btn-primary btn-select" title="Select campaign">Select</button>
-        <button class="btn btn-small btn-icon btn-rename" title="Rename campaign">✏</button>
-        <button class="btn btn-small btn-icon btn-duplicate" title="Duplicate campaign">⧉</button>
-        <button class="btn btn-small btn-icon btn-export" title="Export campaign">📥</button>
-        <button class="btn btn-small btn-icon btn-delete" title="Delete campaign">🗑</button>
-      </div>
-    </div>
-  `).join('');
-
-  // Select campaign
-  container.querySelectorAll('.btn-select').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const campaignId = btn.closest('.campaign-item').dataset.campaignId;
-      state.socket.emit('ops:selectCampaign', { campaignId });
-    });
-  });
-
-  // Duplicate campaign
-  container.querySelectorAll('.btn-duplicate').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const campaignId = btn.closest('.campaign-item').dataset.campaignId;
-      state.socket.emit('ops:duplicateCampaign', { campaignId });
-    });
-  });
-
-  // AR-21: Rename campaign (inline edit)
-  container.querySelectorAll('.btn-rename').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const item = btn.closest('.campaign-item');
-      const campaignId = item.dataset.campaignId;
-      const nameEl = item.querySelector('.campaign-name');
-      const currentName = nameEl.textContent;
-
-      // Create inline input
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.className = 'campaign-name-input';
-      input.value = currentName;
-      input.style.cssText = 'width: 100%; padding: 2px 4px; font-size: inherit;';
-
-      nameEl.replaceWith(input);
-      input.focus();
-      input.select();
-
-      const save = () => {
-        const newName = input.value.trim();
-        if (newName && newName !== currentName) {
-          state.socket.emit('ops:renameCampaign', { campaignId, newName });
-        }
-        // Restore display (will be re-rendered on success)
-        const newEl = document.createElement('div');
-        newEl.className = 'campaign-name';
-        newEl.textContent = newName || currentName;
-        input.replaceWith(newEl);
-      };
-
-      input.addEventListener('blur', save);
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') save();
-        if (e.key === 'Escape') {
-          const newEl = document.createElement('div');
-          newEl.className = 'campaign-name';
-          newEl.textContent = currentName;
-          input.replaceWith(newEl);
-        }
-      });
-    });
-  });
-
-  // AR-21: Export campaign
-  container.querySelectorAll('.btn-export').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const campaignId = btn.closest('.campaign-item').dataset.campaignId;
-      state.socket.emit('ops:exportCampaign', { campaignId });
-    });
-  });
-
-  // Delete campaign
-  container.querySelectorAll('.btn-delete').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const item = btn.closest('.campaign-item');
-      const campaignId = item.dataset.campaignId;
-      const campaignName = item.querySelector('.campaign-name').textContent;
-      showDeleteCampaignModal(campaignId, campaignName);
-    });
-  });
+  _renderCampaignList();
 }
 
-// AR-21: Delete campaign confirmation modal
 function showDeleteCampaignModal(campaignId, campaignName) {
-  const modal = document.createElement('div');
-  modal.className = 'modal-overlay';
-  modal.innerHTML = `
-    <div class="modal-content delete-modal">
-      <div class="modal-header">
-        <h2>Delete Campaign</h2>
-        <button class="btn-close">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete "<strong>${escapeHtml(campaignName)}</strong>"?</p>
-        <p class="text-warning">This will permanently delete all players, ships, and logs.</p>
-        <div class="form-group">
-          <label>Type DELETE to confirm:</label>
-          <input type="text" id="delete-confirm-input" placeholder="Type DELETE" autocomplete="off">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary btn-cancel">Cancel</button>
-        <button class="btn btn-danger btn-confirm-delete" disabled>Delete</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-
-  const input = modal.querySelector('#delete-confirm-input');
-  const confirmBtn = modal.querySelector('.btn-confirm-delete');
-  const cancelBtn = modal.querySelector('.btn-cancel');
-  const closeBtn = modal.querySelector('.btn-close');
-
-  input.addEventListener('input', () => {
-    confirmBtn.disabled = input.value !== 'DELETE';
-  });
-
-  confirmBtn.addEventListener('click', () => {
-    state.socket.emit('ops:deleteCampaign', { campaignId });
-    modal.remove();
-  });
-
-  cancelBtn.addEventListener('click', () => modal.remove());
-  closeBtn.addEventListener('click', () => modal.remove());
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.remove();
-  });
-
-  input.focus();
+  _showDeleteCampaignModal(campaignId, campaignName);
 }
 
 function renderPlayerSlots() {
-  const container = document.getElementById('player-slot-list');
-
-  if (state.players.length === 0) {
-    container.innerHTML = '<p class="placeholder">No player slots available</p>';
-    return;
-  }
-
-  // AR-16: Deduplicate players by ID
-  const seenIds = new Set();
-  const uniquePlayers = state.players.filter(p => {
-    if (seenIds.has(p.id)) return false;
-    seenIds.add(p.id);
-    return true;
-  });
-
-  container.innerHTML = uniquePlayers.map(p => `
-    <div class="slot-item ${p.character_name ? 'has-character' : ''}" data-player-id="${p.id}">
-      <div>
-        <div class="slot-name">${escapeHtml(p.slot_name)}</div>
-        ${p.character_name ? `<div class="slot-character">${escapeHtml(p.character_name)}</div>` : ''}
-      </div>
-      <button class="btn btn-small btn-primary">Join</button>
-    </div>
-  `).join('');
-
-  // Add click handlers
-  container.querySelectorAll('.slot-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const accountId = item.dataset.playerId;  // Server expects accountId
-      state.socket.emit('ops:selectPlayerSlot', { accountId });
-    });
-  });
+  _renderPlayerSlots();
 }
 
 
-// AR-23.7: Render quick location buttons (recent, favorites, home)
+// AR-201: Delegate to extracted renderer
 function renderQuickLocations() {
-  // Home system button
-  const homeBtn = document.getElementById('home-system-btn');
-  if (homeBtn) {
-    if (state.homeSystem) {
-      homeBtn.classList.remove('hidden');
-      homeBtn.querySelector('.location-name').textContent = state.homeSystem;
-    } else {
-      homeBtn.classList.add('hidden');
-    }
-  }
-
-  // Recent locations
-  const recentContainer = document.getElementById('recent-locations');
-  if (recentContainer) {
-    if (state.locationHistory && state.locationHistory.length > 0) {
-      recentContainer.innerHTML = state.locationHistory.slice(0, 5).map(loc => `
-        <div class="quick-location-item" data-location='${JSON.stringify(loc).replace(/'/g, "&#39;")}'>
-          <span class="location-name">${escapeHtml(loc.locationDisplay || loc.system)}</span>
-          <button class="btn-icon btn-favorite" title="Toggle favorite">★</button>
-        </div>
-      `).join('');
-    } else {
-      recentContainer.innerHTML = '<p class="quick-placeholder">No recent locations</p>';
-    }
-  }
-
-  // Favorite locations
-  const favContainer = document.getElementById('favorite-locations');
-  if (favContainer) {
-    if (state.favoriteLocations && state.favoriteLocations.length > 0) {
-      favContainer.innerHTML = state.favoriteLocations.map(loc => `
-        <div class="quick-location-item favorite" data-location='${JSON.stringify(loc).replace(/'/g, "&#39;")}'>
-          <span class="location-icon">★</span>
-          <span class="location-name">${escapeHtml(loc.locationDisplay || loc.system)}</span>
-          <button class="btn-icon btn-set-home" title="Set as home">🏠</button>
-        </div>
-      `).join('');
-    } else {
-      favContainer.innerHTML = '<p class="quick-placeholder">No favorites saved</p>';
-    }
-  }
-
-  // Update deep space toggle state
-  const deepSpaceToggle = document.getElementById('deep-space-toggle');
-  const deepSpaceFields = document.getElementById('deep-space-fields');
-  if (deepSpaceToggle && deepSpaceFields) {
-    deepSpaceToggle.checked = state.inDeepSpace || false;
-    deepSpaceFields.classList.toggle('hidden', !state.inDeepSpace);
-    if (state.inDeepSpace) {
-      const refInput = document.getElementById('deep-space-reference');
-      const bearingInput = document.getElementById('deep-space-bearing');
-      const distanceInput = document.getElementById('deep-space-distance');
-      if (refInput) refInput.value = state.deepSpaceReference || '';
-      if (bearingInput) bearingInput.value = state.deepSpaceBearing || '';
-      if (distanceInput) distanceInput.value = state.deepSpaceDistance || '';
-    }
-  }
+  _renderQuickLocations();
 }
 
+// AR-201: Delegate to extracted renderers
 function renderGMSetup() {
-  document.getElementById('gm-campaign-name').textContent = state.campaign?.name || 'Campaign Setup';
-
-  // Campaign code display
-  const codeEl = document.getElementById('campaign-code-value');
-  if (codeEl && state.campaign?.id) {
-    // Show first 8 characters of campaign ID as the join code
-    codeEl.textContent = state.campaign.id.substring(0, 8).toUpperCase();
-  }
-
-  // Campaign settings
-  document.getElementById('campaign-date').value = state.campaign?.current_date || '1105-001';
-  document.getElementById('campaign-system').value = state.campaign?.current_system || 'Regina';
-  document.getElementById('god-mode-toggle').checked = state.campaign?.god_mode;
-  // AR-124: Position verification toggle (default true if not set)
-  document.getElementById('position-verify-toggle').checked = state.campaign?.require_position_verification !== 0;
-
-  // Player slots
-  const slotsContainer = document.getElementById('gm-player-slots');
-  slotsContainer.innerHTML = state.players.map(p => `
-    <div class="player-slot">
-      <span class="name">${escapeHtml(p.slot_name)}</span>
-      <span class="status ${p.last_login ? 'online' : ''}">${p.character_name || 'No character'}</span>
-      <button class="btn btn-small btn-danger" data-delete-slot="${p.id}">×</button>
-    </div>
-  `).join('') || '<p class="placeholder">No player slots yet</p>';
-
-  // Add delete handlers
-  slotsContainer.querySelectorAll('[data-delete-slot]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      state.socket.emit('ops:deletePlayerSlot', { playerId: btn.dataset.deleteSlot });
-    });
-  });
-
-  // Ships list - GM can select which ship to view on bridge
-  const shipsContainer = document.getElementById('gm-ships-list');
-
-  // Auto-select party ship if none selected
-  if (!state.gmSelectedShipId && state.ships.length > 0) {
-    const partyShip = state.ships.find(s => s.is_party_ship);
-    state.gmSelectedShipId = partyShip?.id || state.ships[0].id;
-  }
-
-  shipsContainer.innerHTML = state.ships.map(s => `
-    <div class="ship-item selectable ${state.gmSelectedShipId === s.id ? 'selected' : ''}" data-ship-id="${s.id}">
-      <span class="name">${escapeHtml(s.name)}</span>
-      <span class="type">${s.ship_data?.type || 'Unknown'}</span>
-      ${s.is_party_ship ? '<span class="badge">Party Ship</span>' : ''}
-      <button class="btn btn-small btn-secondary" data-edit-ship="${s.id}" title="Edit Ship">✎</button>
-    </div>
-  `).join('') || '<p class="placeholder">No ships yet</p>';
-
-  // Add click handlers for ship selection
-  shipsContainer.querySelectorAll('.ship-item.selectable').forEach(item => {
-    item.addEventListener('click', (e) => {
-      // Don't select if clicking edit button
-      if (e.target.matches('[data-edit-ship]')) return;
-      state.gmSelectedShipId = item.dataset.shipId;
-      renderGMSetup(); // Re-render to show selection
-    });
-  });
-
-  // Add edit handlers
-  shipsContainer.querySelectorAll('[data-edit-ship]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openShipEditor(btn.dataset.editShip);
-    });
-  });
+  _renderGMSetup();
 }
-
 
 function renderPlayerSetup() {
-  document.getElementById('player-slot-name').textContent = state.player?.slot_name || 'Player Setup';
-
-  // Character display
-  const charDisplay = document.getElementById('character-display');
-  if (state.player?.character_data) {
-    const char = state.player.character_data;
-    const skills = Object.entries(char.skills || {})
-      .filter(([, v]) => v > 0)
-      .map(([k, v]) => `<span class="skill-badge">${k}: ${v}</span>`)
-      .join('');
-
-    charDisplay.innerHTML = `
-      <div class="char-name">${escapeHtml(char.name)}</div>
-      <div class="char-skills">${skills || 'No skills defined'}</div>
-    `;
-  } else {
-    charDisplay.innerHTML = '<p class="placeholder">No character imported</p>';
-  }
-
-  // Ship selection
-  const shipContainer = document.getElementById('ship-select-list');
-  const partyShips = state.ships
-    .filter(s => s.is_party_ship && s.visible_to_players)
-    .sort((a, b) => a.name.localeCompare(b.name));  // Alphabetize ships
-
-  shipContainer.innerHTML = partyShips.map(s => `
-    <div class="ship-option ${state.selectedShipId === s.id ? 'selected' : ''}" data-ship-id="${s.id}">
-      <div class="ship-name">${escapeHtml(s.name)}</div>
-      <div class="ship-type">${s.ship_data?.type || 'Unknown Type'}</div>
-    </div>
-  `).join('') || '<p class="placeholder">No ships available</p>';
-
-  // Add ship selection handlers
-  shipContainer.querySelectorAll('.ship-option').forEach(opt => {
-    opt.addEventListener('click', () => {
-      state.selectedShipId = opt.dataset.shipId;
-      renderPlayerSetup();
-      state.socket.emit('ops:selectShip', {
-        playerId: state.player.id,
-        shipId: state.selectedShipId
-      });
-    });
-  });
-
-  // Role selection
-  renderRoleSelection();
-
-  // Update join button state
-  const joinBtn = document.getElementById('btn-join-bridge');
-  joinBtn.disabled = !state.selectedShipId || !state.selectedRole || !state.player?.character_data;
+  _renderPlayerSetup();
 }
 
+// AR-201: Delegate to extracted renderers
 function renderRoleSelection() {
-  const container = document.getElementById('role-select-list');
-  const baseRoles = [
-    { id: 'pilot', name: 'Pilot', desc: 'Navigation, maneuvering, docking' },
-    { id: 'captain', name: 'Captain', desc: 'Command, tactics, leadership' },
-    { id: 'astrogator', name: 'Astrogator', desc: 'Jump plotting, navigation' },
-    { id: 'engineer', name: 'Engineer', desc: 'Power, drives, repairs' },
-    { id: 'sensor_operator', name: 'Sensors', desc: 'Detection, comms, EW' },
-    { id: 'gunner', name: 'Gunner', desc: 'Weapons, point defense' },
-    { id: 'damage_control', name: 'Damage Control', desc: 'Repairs, emergencies' },
-    { id: 'marines', name: 'Marines', desc: 'Security, boarding' },
-    { id: 'medic', name: 'Medic', desc: 'Medical care' },
-    { id: 'steward', name: 'Steward', desc: 'Passengers, supplies' },
-    { id: 'cargo_master', name: 'Cargo', desc: 'Cargo operations' },
-    { id: 'observer', name: 'Observer', desc: 'Watch bridge operations', unlimited: true }
-  ].sort((a, b) => a.name.localeCompare(b.name));  // Alphabetize roles
-
-  // Get crew requirements from ship template (if available)
-  const crewReqs = state.ship?.template_data?.crew?.minimum || {};
-
-  // Expand roles based on crew requirements
-  const roles = [];
-  for (const r of baseRoles) {
-    // Unlimited roles (observer) always show as single option, never expand
-    if (r.unlimited) {
-      roles.push({
-        id: r.id,
-        instance: 1,
-        fullId: r.id,
-        name: r.name,
-        desc: r.desc,
-        unlimited: true
-      });
-      continue;
-    }
-    const count = crewReqs[r.id] || 1;
-    if (count > 1) {
-      // Multiple instances of this role
-      for (let i = 1; i <= count; i++) {
-        roles.push({
-          id: r.id,
-          instance: i,
-          fullId: `${r.id}:${i}`,
-          name: `${r.name} ${i}`,
-          desc: r.desc
-        });
-      }
-    } else {
-      roles.push({
-        id: r.id,
-        instance: 1,
-        fullId: r.id,
-        name: r.name,
-        desc: r.desc
-      });
-    }
-  }
-
-  // Get taken roles (from other players on same ship)
-  // Format: role or role:instance
-  const takenRoles = state.players
-    .filter(p => p.ship_id === state.selectedShipId && p.id !== state.player?.id)
-    .map(p => ({
-      role: p.role,
-      roleInstance: p.role_instance || 1,
-      fullId: p.role_instance > 1 ? `${p.role}:${p.role_instance}` : p.role,
-      name: p.slot_name
-    }));
-
-  container.innerHTML = roles.map(r => {
-    const takenBy = takenRoles.find(t => t.fullId === r.fullId);
-    const isSelected = state.selectedRole === r.id &&
-                       (state.selectedRoleInstance || 1) === r.instance;
-    // Unlimited roles are never marked as taken
-    const isTaken = !r.unlimited && takenBy && !isSelected;
-
-    // TODO: Expand tooltips with detailed role responsibilities
-    const tooltip = `${r.name}: ${r.desc}`;
-    return `
-      <div class="role-option ${isSelected ? 'selected' : ''} ${isTaken ? 'taken' : ''} ${r.unlimited ? 'unlimited' : ''}"
-           data-role-id="${r.id}" data-role-instance="${r.instance}"
-           data-taken-by="${isTaken ? escapeHtml(takenBy.name) : ''}"
-           title="${tooltip}">
-        <div class="role-name">${r.name}</div>
-        <div class="role-desc">${r.desc}</div>
-        ${isTaken ? `<div class="role-taken-by">Taken by ${escapeHtml(takenBy.name)}</div>` : ''}
-      </div>
-    `;
-  }).join('');
-
-  // Add role selection handlers for available roles
-  container.querySelectorAll('.role-option:not(.taken)').forEach(opt => {
-    opt.addEventListener('click', () => {
-      state.selectedRole = opt.dataset.roleId;
-      state.selectedRoleInstance = parseInt(opt.dataset.roleInstance) || 1;
-      state.socket.emit('ops:assignRole', {
-        playerId: state.player.id,
-        role: state.selectedRole,
-        roleInstance: state.selectedRoleInstance
-      });
-    });
-  });
-
-  // AR-143: Add click handlers for taken roles (with confirmation)
-  container.querySelectorAll('.role-option.taken').forEach(opt => {
-    opt.style.cursor = 'pointer'; // Make it clear it's clickable
-    opt.addEventListener('click', () => {
-      const roleName = opt.querySelector('.role-name')?.textContent || 'this role';
-      const takenByName = opt.dataset.takenBy || 'another player';
-
-      // Show confirmation dialog
-      const confirmed = confirm(`Replace ${takenByName} as ${roleName}?\n\nThis will remove them from this station.`);
-
-      if (confirmed) {
-        state.selectedRole = opt.dataset.roleId;
-        state.selectedRoleInstance = parseInt(opt.dataset.roleInstance) || 1;
-        state.socket.emit('ops:assignRole', {
-          playerId: state.player.id,
-          role: state.selectedRole,
-          roleInstance: state.selectedRoleInstance
-        });
-        showNotification(`Taking over ${roleName} from ${takenByName}`, 'info');
-      }
-    });
-  });
+  _renderRoleSelection();
 }
-
 
 function initGMControls() {
-  // Alert status buttons
-  document.getElementById('btn-alert-normal').addEventListener('click', () => {
-    state.socket.emit('ops:setAlertStatus', { status: 'NORMAL' });
-  });
-  document.getElementById('btn-alert-yellow').addEventListener('click', () => {
-    state.socket.emit('ops:setAlertStatus', { status: 'YELLOW' });
-  });
-  document.getElementById('btn-alert-red').addEventListener('click', () => {
-    state.socket.emit('ops:setAlertStatus', { status: 'RED' });
-  });
-
-  // Time advance
-  document.getElementById('btn-gm-advance-time').addEventListener('click', () => {
-    showModal('template-time-advance');
-  });
-
-  // Add log entry
-  document.getElementById('btn-gm-add-log').addEventListener('click', () => {
-    showModal('template-add-log');
-  });
-
-  // Add contact
-  document.getElementById('btn-gm-add-contact').addEventListener('click', () => {
-    showModal('template-add-contact');
-  });
-
-  // Stage 5: Lookup System (TravellerMap)
-  document.getElementById('btn-gm-lookup-system').addEventListener('click', () => {
-    showModal('template-system-lookup');
-  });
-
-  document.getElementById('btn-gm-initiative').addEventListener('click', () => {
-    state.socket.emit('ops:callInitiative', {
-      campaignId: state.campaign.id
-    });
-  });
-
-  document.getElementById('btn-gm-combat').addEventListener('click', () => {
-    // Get targetable contacts
-    const targetable = state.contacts?.filter(c => c.is_targetable) || [];
-    if (targetable.length === 0) {
-      showNotification('No targetable contacts for combat', 'error');
-      return;
-    }
-    if (confirm(`Start combat mode with ${targetable.length} contact(s)?`)) {
-      state.socket.emit('ops:enterCombat', {
-        selectedContacts: targetable.map(c => c.id)
-      });
-    }
-  });
-
-  // AR-25: Spawn Training Target DRN
-  document.getElementById('btn-spawn-training')?.addEventListener('click', () => {
-    state.socket.emit('ops:spawnTrainingTarget');
-  });
-
-  // Exit combat button
-  document.getElementById('btn-exit-combat')?.addEventListener('click', () => {
-    if (confirm('End combat and return to bridge operations?')) {
-      state.socket.emit('ops:exitCombat', { outcome: 'disengaged' });
-    }
-  });
-
-  // Autorun 14: Add combat contact from prep panel
-  document.getElementById('btn-add-combat-contact')?.addEventListener('click', () => {
-    showAddCombatContactModal();
-  });
-
-  // System damage button (if exists)
-  const damageBtn = document.getElementById('btn-gm-damage');
-  if (damageBtn) {
-    damageBtn.addEventListener('click', () => {
-      showModal('template-apply-damage');
-    });
-  }
+  _initGMControls();
 }
 
-// Stage 2: Update quirk display in role panel header
 function updateRoleQuirkDisplay() {
-  const quirkDisplay = document.getElementById('role-quirk-display');
-  if (!quirkDisplay) return;
-
-  const icon = state.player?.quirk_icon || '';
-  const text = state.player?.quirk_text || '';
-
-  if (icon || text) {
-    let display = '';
-    if (icon) display += icon;
-    if (icon && text) display += ' ';
-    if (text) display += `"${text}"`;
-    quirkDisplay.textContent = display;
-    quirkDisplay.title = text || 'Station quirk';
-  } else {
-    quirkDisplay.textContent = '';
-  }
+  _updateRoleQuirkDisplay();
 }
 
+// AR-201: Delegate to extracted renderer
 function renderBridge() {
-  // AR-71: Sync contacts to system map for rendering
-  if (state.contacts) {
-    updateMapContacts(state.contacts);
-  }
-
-  // Ship name
-  const shipNameEl = document.getElementById('bridge-ship-name');
-  shipNameEl.textContent = state.ship?.name || 'Unknown Ship';
-  // AR-103.4: Ship type + campaign as tooltip on ship name
-  const shipType = state.shipTemplate?.name || state.ship?.template_id?.replace(/_/g, ' ') || '';
-  const campaignName = state.campaign?.name ? `Campaign: ${state.campaign.name}` : '';
-  const tooltipParts = [shipType, campaignName].filter(Boolean);
-  shipNameEl.title = tooltipParts.join(' | ');
-
-  // AR-51.2: Update screen label with role
-  const screenLabel = document.getElementById('bridge-screen-label');
-  if (screenLabel) {
-    const roleDisplay = state.isGM ? 'GM' : (state.selectedRole || 'Crew');
-    const roleName = roleDisplay.charAt(0).toUpperCase() + roleDisplay.slice(1).replace(/_/g, ' ');
-    screenLabel.textContent = `Bridge · ${roleName}`;
-  }
-
-  // Campaign name (AR-92: now hidden, shown as tooltip on ship name)
-  const campaignNameEl = document.getElementById('bridge-campaign-name');
-  if (campaignNameEl) {
-    campaignNameEl.textContent = state.campaign?.name || '';
-  }
-
-  // Date/time - start the ticking clock
-  startBridgeClock(state.campaign?.current_date || '1115-001 00:00');
-
-  // AR-168: Full location display (system + ship position) - moved from status panel
-  const locationEl = document.getElementById('bridge-location');
-  if (locationEl) {
-    const shipLocation = state.shipState?.locationName || state.ship?.current_state?.locationName;
-    const systemName = state.campaign?.current_system || 'Unknown';
-    let locationDisplay;
-    if (shipLocation && !shipLocation.includes(systemName)) {
-      locationDisplay = `${systemName} · ${shipLocation}`;
-    } else if (shipLocation) {
-      locationDisplay = shipLocation;
-    } else {
-      locationDisplay = systemName;
-    }
-    locationEl.textContent = locationDisplay;
-  }
-
-  // AR-103: Hex coordinate display with system name tooltip
-  const hexEl = document.getElementById('bridge-hex');
-  if (hexEl) {
-    hexEl.textContent = state.campaign?.current_hex || '----';
-    hexEl.title = state.campaign?.current_system || 'Current parsec';
-  }
-
-  // Guest indicator with skill level
-  const guestIndicator = document.getElementById('guest-indicator');
-  if (guestIndicator) {
-    if (state.isGuest) {
-      guestIndicator.classList.remove('hidden');
-      const badge = guestIndicator.querySelector('.guest-badge');
-      if (badge) {
-        badge.textContent = `GUEST (Skill ${state.guestSkill || 0})`;
-      }
-    } else {
-      guestIndicator.classList.add('hidden');
-    }
-  }
-
-  // User identity display (Name, Role, Ship)
-  const userNameEl = document.getElementById('bridge-user-name');
-  const userRoleEl = document.getElementById('bridge-user-role');
-  const userShipEl = document.getElementById('bridge-user-ship');
-  if (userNameEl && userRoleEl) {
-    if (state.isGM) {
-      userNameEl.textContent = 'GM';
-      userRoleEl.textContent = 'Game Master';
-      userRoleEl.className = 'user-role-badge role-gm';
-    } else {
-      userNameEl.textContent = state.player?.character_data?.name || state.player?.slot_name || 'Player';
-      userRoleEl.textContent = formatRoleName(state.selectedRole);
-      userRoleEl.className = `user-role-badge role-${state.selectedRole || 'unknown'}`;
-    }
-  }
-  // AR-103.2: Hide change role button for GM (GMs cannot change roles)
-  const changeRoleBtn = document.getElementById('btn-change-role');
-  if (changeRoleBtn) {
-    changeRoleBtn.style.display = state.isGM ? 'none' : '';
-  }
-  if (userShipEl) {
-    userShipEl.textContent = state.ship?.name || 'No Ship';
-  }
-
-  // Ship status bar
-  renderShipStatus();
-
-  // Role panel - observers get ASCII art instead
-  const roleConfig = getRoleConfig(state.selectedRole);
-  const isObserver = state.selectedRole === 'observer';
-
-  if (isObserver) {
-    // Show observer view with ship ASCII art
-    document.getElementById('role-panel-title').textContent = 'Observer';
-    document.getElementById('role-name').textContent = 'Spectator View';
-    document.getElementById('btn-edit-role-personality').style.display = 'none';
-    renderObserverPanel();
-  } else {
-    document.getElementById('role-panel-title').textContent = roleConfig.name;
-    // Use custom title if set, otherwise use formatted role name
-    const displayName = state.player?.role_title || formatRoleName(state.selectedRole);
-    document.getElementById('role-name').textContent = displayName;
-    document.getElementById('btn-edit-role-personality').style.display = '';
-    // Render role actions
-    renderRoleActions(roleConfig);
-  }
-
-  // Stage 2: Update quirk display
-  updateRoleQuirkDisplay();
-
-  // Render crew list
-  renderCrewList();
-
-  // Render contacts
-  renderContacts();
-
-  // Render ship log
-  renderShipLog();
-
-  // Show GM overlay if GM
-  if (state.isGM) {
-    document.getElementById('gm-overlay').classList.remove('hidden');
-    // Show prep panel toggle button for GM (AUTORUN-8)
-    const prepToggle = document.getElementById('btn-toggle-prep-panel');
-    if (prepToggle) {
-      prepToggle.classList.remove('hidden');
-    }
-  } else {
-    // Hide prep panel elements for non-GM
-    const prepToggle = document.getElementById('btn-toggle-prep-panel');
-    const prepPanel = document.getElementById('gm-prep-panel');
-    if (prepToggle) prepToggle.classList.add('hidden');
-    if (prepPanel) prepPanel.classList.add('hidden');
-  }
+  _renderBridge();
 }
 
+// AR-201: Delegate to extracted renderer
 function renderShipStatus() {
-  const shipState = state.ship?.current_state || {};
-  const template = state.ship?.template_data || {};
-
-  // Hull
-  const maxHull = template.hull || 100;
-  const currentHull = shipState.hull ?? maxHull;
-  const hullPercent = Math.round((currentHull / maxHull) * 100);
-  const hullBar = document.getElementById('hull-bar');
-  hullBar.style.width = `${hullPercent}%`;
-  // AR-15.9: Dynamic gradient position (100% = green, 0% = red)
-  hullBar.style.backgroundPosition = `${hullPercent}% 0`;
-  document.getElementById('hull-value').textContent = `${hullPercent}%`;
-
-  // Fuel
-  const maxFuel = template.fuel || 40;
-  const currentFuel = shipState.fuel ?? maxFuel;
-  const fuelPercent = Math.round((currentFuel / maxFuel) * 100);
-  document.getElementById('fuel-bar').style.width = `${fuelPercent}%`;
-  document.getElementById('fuel-value').textContent = `${currentFuel}/${maxFuel}`;
-
-  // Power - AR-15.9: Dynamic gradient (green→yellow→red as power decreases)
-  const powerPercent = shipState.powerPercent ?? 100;
-  const powerBar = document.getElementById('power-bar');
-  powerBar.style.width = `${powerPercent}%`;
-  powerBar.style.backgroundPosition = `${powerPercent}% 0`;
-  document.getElementById('power-value').textContent = `${powerPercent}%`;
-  // AR-168: Location moved to top bar (bridge-location in renderBridge)
+  _renderShipStatus();
 }
 
+// AR-201: Delegate to extracted renderers
 function renderRoleActions(roleConfig) {
-  const container = document.getElementById('role-actions');
-  container.innerHTML = (roleConfig.actions || []).map(action => `
-    <button class="btn" data-action="${action}">${formatActionName(action)}</button>
-  `).join('');
-
-  // Add action handlers
-  container.querySelectorAll('[data-action]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      handleRoleAction(btn.dataset.action);
-    });
-  });
-
-  // Render role-specific detail panel
-  renderRoleDetailPanel(state.selectedRole);
-
-  // Stage 6: Initialize jump map if astrogator
-  initJumpMapIfNeeded();
+  _renderRoleActions(roleConfig);
 }
 
 function renderObserverPanel() {
-  // Clear role actions for observers
-  const actionsContainer = document.getElementById('role-actions');
-  actionsContainer.innerHTML = '';
-
-  // Get ship type for ASCII art
-  const shipType = state.ship?.template_data?.type || state.ship?.type || 'unknown';
-  const shipName = state.ship?.name || 'Unknown Ship';
-  const asciiArt = getShipAsciiArt(shipType);
-
-  // Show ASCII art and observer message in the detail panel
-  const detailContainer = document.getElementById('role-detail-view');
-  detailContainer.innerHTML = `
-    <div class="observer-panel">
-      <div class="observer-ascii-art">
-        <pre class="ship-ascii-art">${asciiArt}</pre>
-      </div>
-      <div class="observer-info">
-        <h4>${escapeHtml(shipName)}</h4>
-        <p class="observer-message">You are observing bridge operations.</p>
-        <p class="observer-hint">Watch the crew manage their stations. You have no controls.</p>
-      </div>
-    </div>
-  `;
-
-  // Make sure detail view is visible for observers
-  detailContainer.classList.remove('hidden');
+  _renderObserverPanel();
 }
 
 function renderRoleDetailPanel(role) {
-  const container = document.getElementById('role-detail-view');
-
-  // Build context object for role panel
-  const context = {
-    shipState: state.ship?.current_state || {},
-    template: state.ship?.template_data || {},
-    systemStatus: state.systemStatus || {},
-    damagedSystems: state.damagedSystems || [],
-    fuelStatus: state.fuelStatus,
-    jumpStatus: state.jumpStatus || {},
-    campaign: state.campaign,
-    contacts: state.contacts,
-    crewOnline: state.crewOnline,
-    ship: state.ship,
-    environmentalData: state.environmentalData || null,
-    repairQueue: state.repairQueue || [],
-    rescueTargets: state.rescueTargets || [],
-    flightConditions: state.flightConditions || null,
-    medicalConditions: state.medicalConditions || null,
-    targetConditions: state.targetConditions || null,
-    boardingConditions: state.boardingConditions || null
-  };
-
-  // Role-specific content from module
-  const detailContent = getRoleDetailContent(role, context);
-  container.innerHTML = detailContent;
-
-  // AR-150: Apply UI status indicators after panel render
-  applyStatusIndicators();
-
-  // AR-102: Show embedded map for pilot role
-  if (role === 'pilot' && state.selectedRole === 'pilot') {
-    expandRolePanel('pilot-map');
-  }
+  _renderRoleDetailPanel(role);
 }
 
 function handleRoleAction(action) {
-  // ROLE-1: Each role has functional actions
-  const playerName = state.player?.character_data?.name || state.player?.slot_name || 'Player';
-  const roleName = formatRoleName(state.selectedRole);
-
-  // Get action message from role-panels module
-  const logMessage = getActionMessage(action, playerName, roleName);
-
-  // Emit action to server with log entry
-  state.socket.emit('ops:roleAction', {
-    shipId: state.ship.id,
-    playerId: state.player.id,
-    role: state.selectedRole,
-    action: action,
-    logMessage: logMessage
-  });
-
-  showNotification(`${formatActionName(action)} executed`, 'success');
+  _handleRoleAction(action);
 }
 
+// AR-201: Delegate to extracted renderers
 function renderCrewList() {
-  const container = document.getElementById('crew-list');
-  const allCrew = [];
-
-  // NAV-3: Role priority for sorting crew list
-  const ROLE_PRIORITY = {
-    'captain': 1,
-    'pilot': 2,
-    'engineer': 3,
-    'astrogator': 4,
-    'sensor_operator': 5,
-    'gunner': 6,
-    'damage_control': 7,
-    'marines': 8,
-    'medic': 9,
-    'steward': 10,
-    'cargo_master': 11,
-    'gm': 0  // GM always first
-  };
-
-  // Add online players (always filter out GM entries - GM is observer, not crew)
-  // AR-16: Deduplicate by accountId to prevent duplicate entries
-  const seenAccountIds = new Set();
-  state.crewOnline.forEach(c => {
-    // Always skip GM entries - GM should never appear in crew list
-    if (c.role === 'gm' || c.isGM) {
-      return;
-    }
-    // Dedupe by accountId
-    const accountId = c.id || c.accountId;
-    if (accountId && seenAccountIds.has(accountId)) {
-      return; // Skip duplicate
-    }
-    if (accountId) {
-      seenAccountIds.add(accountId);
-    }
-    // Determine if this is the current user
-    // GM is never "you" in crew list - they're an observer
-    // For players, must have valid matching IDs (non-empty strings)
-    const playerId = state.player?.id;
-    const playerAccountId = state.player?.accountId;
-    const crewId = accountId;
-    const isYou = !state.isGM && crewId && (
-      (playerId && typeof playerId === 'string' && playerId === crewId) ||
-      (playerAccountId && typeof playerAccountId === 'string' && playerAccountId === crewId)
-    );
-    allCrew.push({
-      name: c.character_name || c.slot_name || c.name,
-      role: c.role,
-      isNPC: false,
-      isOnline: true,
-      isYou: isYou,
-      accountId: accountId,  // Server sends 'id', map to accountId
-      characterData: c.character_data
-    });
-  });
-
-  // Add NPC crew for unfilled roles
-  if (state.ship?.npcCrew) {
-    state.ship.npcCrew.forEach(npc => {
-      if (!allCrew.find(c => c.role === npc.role)) {
-        allCrew.push({
-          name: npc.name,
-          role: npc.role,
-          isNPC: true,
-          skillLevel: npc.skill_level,
-          isOnline: false
-        });
-      }
-    });
-  }
-
-  // Sort by role priority (NAV-3)
-  allCrew.sort((a, b) => {
-    const priorityA = ROLE_PRIORITY[a.role] ?? 99;
-    const priorityB = ROLE_PRIORITY[b.role] ?? 99;
-    return priorityA - priorityB;
-  });
-
-  // Check if current user can relieve crew (Captain, Medic, or GM)
-  const canRelieve = state.selectedRole === 'captain' || state.selectedRole === 'medic' || state.isGM;
-
-  container.innerHTML = allCrew.map(c => {
-    const charDataAttr = c.characterData ? `data-character='${JSON.stringify(c.characterData).replace(/'/g, '&#39;')}'` : '';
-    const hasCharClass = c.characterData ? 'has-character' : '';
-    // Show relieve button if: can relieve AND not NPC AND not self AND has a role
-    const showRelieveBtn = canRelieve && !c.isNPC && !c.isYou && c.role && c.accountId;
-    // AR-15.10: Descriptive tooltip with name and role
-    const relieveBtn = showRelieveBtn
-      ? `<button class="btn-relieve" data-action="relieve" data-account-id="${escapeHtml(c.accountId)}" data-name="${escapeHtml(c.name)}" data-role="${escapeHtml(c.role)}" title="Relieve ${escapeHtml(c.name)} from ${formatRoleName(c.role)}">✕</button>`
-      : '';
-    // Show assign button if: GM AND not NPC AND not self AND (no role OR we want reassign option)
-    const showAssignBtn = state.isGM && !c.isNPC && !c.isYou && c.accountId;
-    const assignBtn = showAssignBtn
-      ? `<button class="btn-assign" data-action="assign" data-account-id="${escapeHtml(c.accountId)}" data-name="${escapeHtml(c.name)}" title="Assign role">⚙</button>`
-      : '';
-    return `
-    <div class="crew-member ${c.isNPC ? 'npc' : ''} ${c.isYou ? 'is-you' : ''}">
-      <span class="online-indicator ${c.isOnline ? 'online' : ''}"></span>
-      <span class="crew-name ${hasCharClass}" ${charDataAttr}>${escapeHtml(c.name)}${c.isYou ? ' (You)' : ''}</span>
-      <span class="crew-role">${formatRoleName(c.role)}</span>
-      ${assignBtn}${relieveBtn}
-    </div>`;
-  }).join('') || '<p class="placeholder">No crew</p>';
+  _renderCrewList();
 }
 
-// Relieve crew member from duty (Captain, Medic, or GM)
 function relieveCrewMember(accountId, name, role) {
-  const roleName = formatRoleName(role);
-  if (!confirm(`Relieve ${name} from duty as ${roleName}?`)) {
-    return;
-  }
-  state.socket.emit('ops:relieveCrewMember', { accountId });
+  _relieveCrewMember(accountId, name, role);
 }
 
-// GM assigns role to crew member
 function gmAssignRole(accountId, name) {
-  // Get list of available roles
-  const roles = [
-    { id: 'captain', name: 'Captain' },
-    { id: 'pilot', name: 'Pilot' },
-    { id: 'astrogator', name: 'Astrogator' },
-    { id: 'engineer', name: 'Engineer' },
-    { id: 'sensor_operator', name: 'Sensors' },
-    { id: 'gunner', name: 'Gunner' },
-    { id: 'damage_control', name: 'Damage Control' },
-    { id: 'medic', name: 'Medical Officer' },
-    { id: 'marines', name: 'Marines' },
-    { id: 'steward', name: 'Steward' },
-    { id: 'cargo_master', name: 'Cargo Master' },
-    { id: 'observer', name: 'Observer' }
-  ];
-
-  // Simple prompt for now - could be upgraded to a modal later
-  const roleOptions = roles.map(r => r.name).join(', ');
-  const input = prompt(`Assign ${name} to which role?\n\nAvailable: ${roleOptions}`);
-
-  if (!input) return;
-
-  // Find matching role
-  const inputLower = input.toLowerCase().trim();
-  const role = roles.find(r =>
-    r.id === inputLower ||
-    r.name.toLowerCase() === inputLower ||
-    r.name.toLowerCase().startsWith(inputLower)
-  );
-
-  if (!role) {
-    showNotification(`Unknown role: ${input}`, 'error');
-    return;
-  }
-
-  state.socket.emit('ops:gmAssignRole', {
-    accountId,
-    role: role.id,
-    roleInstance: 1
-  });
+  _gmAssignRole(accountId, name);
 }
 
 function renderContacts() {
-  const container = document.getElementById('sensor-contacts');
-
-  if (state.contacts.length === 0) {
-    container.innerHTML = '<p class="placeholder">No contacts detected</p>';
-    return;
-  }
-
-  // AR-25: Apply filtering
-  let filteredContacts = state.contacts.filter(c => {
-    if (state.contactFilter === 'all') return true;
-    if (state.contactFilter === 'ships') {
-      return ['Ship', 'Patrol', 'Trader', 'Warship', 'Scout', 'Free Trader', 'Far Trader'].includes(c.type);
-    }
-    if (state.contactFilter === 'stations') {
-      return ['Station', 'Starport', 'Base', 'orbital'].includes(c.type);
-    }
-    if (state.contactFilter === 'celestial') {
-      return c.celestial || ['Star', 'Planet', 'Moon', 'Gas Giant', 'Belt'].includes(c.type);
-    }
-    if (state.contactFilter === 'hostiles') {
-      return c.weapons_free || c.hostile;
-    }
-    return true;
-  });
-
-  // AR-25: Apply sorting
-  const rangePriority = { adjacent: 0, close: 1, short: 2, medium: 3, long: 4, distant: 5, stellar: 6, planetary: 7 };
-  filteredContacts.sort((a, b) => {
-    if (state.contactSort === 'range') {
-      const aRank = rangePriority[a.range_band] ?? 99;
-      const bRank = rangePriority[b.range_band] ?? 99;
-      return aRank - bRank;
-    }
-    if (state.contactSort === 'name') {
-      return (a.name || a.type || '').localeCompare(b.name || b.type || '');
-    }
-    if (state.contactSort === 'type') {
-      return (a.type || '').localeCompare(b.type || '');
-    }
-    return 0;
-  });
-
-  if (filteredContacts.length === 0) {
-    container.innerHTML = '<p class="placeholder">No matching contacts</p>';
-    return;
-  }
-
-  container.innerHTML = filteredContacts.map(c => {
-    const rangeClass = getRangeClass(c.range_band);
-    const gmControls = state.isGM ? `
-      <button class="btn btn-icon btn-delete-contact" data-id="${c.id}" title="Delete">✕</button>
-    ` : '';
-    // Authorized target indicator (weapons_free)
-    const authorizedIndicator = c.weapons_free ? '<span class="authorized-indicator" title="Weapons Authorized">🎯</span>' : '';
-    const authorizedClass = c.weapons_free ? 'weapons-authorized' : '';
-
-    // Build inline summary (always visible on contact line)
-    const inlineParts = [];
-    if (c.type && c.type !== c.name) inlineParts.push(c.type);
-    if (c.transponder) inlineParts.push(c.transponder);
-    const inlineSummary = inlineParts.length > 0 ? `<span class="contact-inline-detail">${escapeHtml(inlineParts.join(' · '))}</span>` : '';
-
-    // Build rich tooltip (only if substantial detail exists)
-    const tooltipLines = [];
-
-    // Celestial bodies (stars, planets)
-    if (c.celestial || ['Star', 'Planet', 'Moon', 'Gas Giant', 'Belt'].includes(c.type)) {
-      if (c.spectral_class) tooltipLines.push(`Spectral: ${c.spectral_class}`);
-      if (c.luminosity) tooltipLines.push(`Luminosity: ${c.luminosity}`);
-      if (c.uwp) {
-        tooltipLines.push(`UWP: ${c.uwp}`);
-        tooltipLines.push(interpretUWP(c.uwp));
-      }
-      if (c.population) tooltipLines.push(`Pop: ${formatPopulation(c.population)}`);
-      if (c.trade_codes) tooltipLines.push(`Trade: ${c.trade_codes}`);
-      if (c.description) tooltipLines.push(c.description);
-    }
-
-    // Ships - detail based on scan level
-    if (['Ship', 'Patrol', 'Trader', 'Warship', 'Scout'].includes(c.type)) {
-      if (c.tonnage) tooltipLines.push(`Tonnage: ${c.tonnage} dT`);
-      if (c.ship_class) tooltipLines.push(`Class: ${c.ship_class}`);
-      // Active scan reveals more
-      if (c.scan_level >= 2) {
-        if (c.thrust) tooltipLines.push(`Thrust: ${c.thrust}G`);
-        if (c.jump) tooltipLines.push(`Jump: ${c.jump}`);
-        if (c.armament) tooltipLines.push(`Weapons: ${c.armament}`);
-      }
-      // Deep scan reveals everything
-      if (c.scan_level >= 3) {
-        if (c.hull_status) tooltipLines.push(`Hull: ${c.hull_status}%`);
-        if (c.crew_count) tooltipLines.push(`Crew: ${c.crew_count}`);
-        if (c.cargo) tooltipLines.push(`Cargo: ${c.cargo}`);
-        if (c.damage_status) tooltipLines.push(`Damage: ${c.damage_status}`);
-      }
-    }
-
-    // Stations
-    if (['Station', 'Starport', 'Base'].includes(c.type)) {
-      if (c.starport_class) tooltipLines.push(`Class: ${c.starport_class}`);
-      if (c.services) tooltipLines.push(`Services: ${c.services}`);
-      if (c.berthing) tooltipLines.push(`Berthing: ${c.berthing} Cr`);
-    }
-
-    // Range in km if known
-    if (c.range_km) tooltipLines.push(`Range: ${formatRange(c.range_km)}`);
-
-    // GM notes
-    if (state.isGM && c.gm_notes) tooltipLines.push(`GM: ${c.gm_notes}`);
-
-    // Only render tooltip if we have substantial content
-    const tooltipHtml = tooltipLines.length > 0
-      ? `<div class="contact-hover-details">${tooltipLines.map(l => `<div>${escapeHtml(l)}</div>`).join('')}</div>`
-      : '';
-
-    // Format range km for display
-    const rangeKmDisplay = c.range_km ? `<span class="contact-range-km">${formatRange(c.range_km)}</span>` : '';
-
-    return `
-      <div class="contact-item compact ${rangeClass} ${authorizedClass}" data-contact-id="${c.id}">
-        <span class="contact-icon">${getContactIcon(c.type)}${authorizedIndicator}</span>
-        <span class="contact-name" title="${escapeHtml(c.name || c.type)}">${escapeHtml(c.name || c.type)}</span>
-        ${inlineSummary}
-        ${rangeKmDisplay}
-        <span class="contact-bearing">${c.bearing}°</span>
-        <span class="contact-range-band">${formatRangeBand(c.range_band)}</span>
-        ${gmControls}
-        ${tooltipHtml}
-      </div>
-    `;
-  }).join('');
-
-  // Add click handlers for contact selection (TIP-1: Click-to-pin)
-  container.querySelectorAll('.contact-item').forEach(item => {
-    item.addEventListener('click', (e) => {
-      // Don't select if clicking delete button
-      if (e.target.classList.contains('btn-delete-contact')) return;
-      e.stopPropagation();
-      const contactId = item.dataset.contactId;
-      showContactTooltip(contactId, item);
-    });
-  });
-
-  // GM delete handlers
-  if (state.isGM) {
-    container.querySelectorAll('.btn-delete-contact').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const contactId = btn.dataset.id;
-        state.socket.emit('ops:deleteContact', { contactId });
-      });
-    });
-  }
+  _renderContacts();
 }
 
 // ==================== Ship Systems ====================
@@ -2950,6 +1856,53 @@ const modalHelpers = {
   setProcessMax,
   executeProcessFuel
 };
+
+// AR-201: Renderer helpers for extracted render functions
+const rendererHelpers = {
+  // Utilities
+  escapeHtml,
+  formatRoleName,
+  formatActionName,
+  formatRange,
+  getRangeClass,
+  formatRangeBand,
+  getContactIcon,
+  getShipAsciiArt,
+  // Role system
+  getRoleConfig,
+  getRoleDetailContent,
+  getActionMessage,
+  // State updates
+  updateMapContacts,
+  startBridgeClock,
+  applyStatusIndicators,
+  expandRolePanel,
+  initJumpMapIfNeeded,
+  // Notifications
+  showNotification,
+  showModal,
+  showContactTooltip,
+  showAddCombatContactModal,
+  showDeleteCampaignModal,
+  // Setup
+  openShipEditor,
+  // Recursive render calls
+  renderObserverPanel,
+  renderRoleActions,
+  updateRoleQuirkDisplay,
+  renderCrewList,
+  renderContacts,
+  renderShipLog,
+  handleRoleAction,
+  renderRoleDetailPanel,
+  renderRoleSelection,
+  // UWP helpers
+  interpretUWP,
+  formatPopulation
+};
+
+// AR-201: Initialize renderers with state and helpers
+initRenderers(state, rendererHelpers);
 
 // AR-201: Screen helpers object for extracted screen handlers
 const screenHelpers = {
