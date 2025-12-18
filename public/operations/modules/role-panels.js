@@ -973,6 +973,21 @@ function getGunnerPanel(shipState, template, contacts, roleInstance = 1, shipWea
         </div>
       </div>
       ` : ''}
+      <div class="called-shot-selector" style="margin-bottom: 8px;">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted);">
+          <span>Called Shot:</span>
+          <select id="called-shot-target" style="flex: 1; padding: 4px; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 11px;">
+            <option value="">Normal Shot (no penalty)</option>
+            <option value="mDrive">M-Drive (DM -2) - prevent escape</option>
+            <option value="jDrive">J-Drive (DM -4) - prevent jump</option>
+            <option value="powerPlant">Power Plant (DM -4) - cripple ship</option>
+            <option value="sensors">Sensors (DM -2) - blind target</option>
+            <option value="weapon">Weapons (DM -2) - disarm</option>
+            <option value="computer">Computer (DM -3) - disable fire control</option>
+            <option value="fuel">Fuel (DM -2) - strand ship</option>
+          </select>
+        </label>
+      </div>
       <div class="fire-buttons" style="display: flex; gap: 5px; flex-wrap: wrap;">
         <button onclick="fireWeapon()" class="btn btn-danger btn-fire"
                 title="${hasTargets ? `Fire ${selectedWeapon?.name || 'weapon'} at ${selectedTarget?.name || 'target'}${hitChance ? ` (${hitChance}% hit chance)` : ''}` : 'No target locked - awaiting hostile contacts or authorization'}"

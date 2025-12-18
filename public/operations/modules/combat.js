@@ -7,6 +7,7 @@ import { escapeHtml } from './utils.js';
 
 /**
  * Fire weapon using new combat system
+ * AR-196: Supports called shots with target system selection
  * @param {Object} state - App state
  */
 export function fireWeapon(state) {
@@ -21,8 +22,19 @@ export function fireWeapon(state) {
   const selectedWeapon = document.querySelector('input[name="weapon-select"]:checked');
   const weaponId = selectedWeapon?.value || null;
 
-  state.socket.emit('ops:fireWeapon', { targetId, weaponId });
-  window.showNotification('Firing...', 'warning');
+  // AR-196: Get called shot target system
+  const calledShotSelect = document.getElementById('called-shot-target');
+  const targetSystem = calledShotSelect?.value || null;
+
+  state.socket.emit('ops:fireWeapon', { targetId, weaponId, targetSystem });
+
+  // Show firing notification with called shot info
+  if (targetSystem) {
+    const systemName = calledShotSelect.options[calledShotSelect.selectedIndex]?.text.split(' (')[0] || targetSystem;
+    window.showNotification(`Firing at ${systemName}...`, 'warning');
+  } else {
+    window.showNotification('Firing...', 'warning');
+  }
 }
 
 /**
