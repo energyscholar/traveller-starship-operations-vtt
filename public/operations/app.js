@@ -281,6 +281,29 @@ const togglePanelExpand = (panelId) => _togglePanelExpand(state, expandRolePanel
 const expandPanel = (panelId) => _expandPanel(state, panelId);
 const collapseExpandedPanel = () => _collapseExpandedPanel(state);
 const updateRoleClass = () => _updateRoleClass(state);
+// AR-201: Bridge header update (was missing, referenced but never defined)
+const updateBridgeHeader = () => {
+  const screenLabel = document.getElementById('bridge-screen-label');
+  if (screenLabel) {
+    const roleDisplay = state.isGM ? 'GM' : (state.selectedRole || 'Crew');
+    const roleName = roleDisplay.charAt(0).toUpperCase() + roleDisplay.slice(1).replace(/_/g, ' ');
+    screenLabel.textContent = `Bridge · ${roleName}`;
+  }
+};
+// AR-201: Role panel render (was missing, referenced but never defined)
+const renderRolePanel = () => {
+  if (state.selectedRole) {
+    const roleConfig = getRoleConfig(state.selectedRole);
+    if (roleConfig) {
+      renderRoleActions(roleConfig);
+    }
+  }
+};
+// AR-201: Feedback review render (was missing, referenced but never defined)
+const renderFeedbackReview = (feedback, stats) => {
+  // TODO: Implement feedback review UI when needed
+  console.log('[Feedback] renderFeedbackReview called with', feedback?.length || 0, 'items');
+};
 // AR-153: Phase 3 wrappers
 const openRefuelModal = () => _openRefuelModal(state, showModal);
 const processFuel = () => _processFuel(state);
