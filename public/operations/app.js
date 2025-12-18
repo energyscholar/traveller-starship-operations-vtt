@@ -37,6 +37,10 @@ import {
 } from './modules/system-map.js';
 import { applyStatusIndicators, toggleStatusIndicators } from './modules/ui-status-registry.js';
 import { DEBUG, debugLog, debugWarn, debugError } from './modules/debug-config.js';
+// AR-201: Socket handler modules
+import './socket-handlers/campaigns.js';
+import './socket-handlers/roles.js';
+import { initAllHandlers, getRegisteredHandlers } from './socket-handlers/index.js';
 import { DEFAULT_SECTOR, DEFAULT_SUBSECTOR, DEFAULT_SYSTEM, DEFAULT_HEX } from './modules/constants.js';
 import { startBridgeClock, stopBridgeClock, setBridgeClockDate, parseCampaignDate, formatClockTime, formatDayYear } from './modules/bridge-clock.js';
 import { showNewsMailModal as _showNewsMailModal, closeNewsMailModal } from './modules/news-mail.js';
@@ -327,6 +331,35 @@ window.state = state;
 function initSocket() {
   state.socket = io();
 
+  // AR-201: Create helpers object for extracted socket handlers
+  const socketHelpers = {
+    // Screen/UI
+    showScreen,
+    showNotification,
+    closeModal,
+    // Campaign
+    renderCampaignList,
+    renderGMSetup,
+    renderPlayerSlots,
+    renderPlayerSetup,
+    saveSession,
+    loadAIPendingResponses,
+    // Roles
+    formatRoleName,
+    renderCrewList,
+    updateBridgeHeader,
+    updateRoleClass,
+    renderRolePanel,
+    updateRoleQuirkDisplay,
+    renderRoleSelection,
+    renderBridge,
+    debugLog
+  };
+
+  // AR-201: Initialize extracted handlers (campaigns, etc.)
+  initAllHandlers(state.socket, state, socketHelpers);
+  debugLog(`[AR-201] Initialized ${getRegisteredHandlers().length} extracted socket handlers`);
+
   // Connection events
   state.socket.on('connect', () => {
     debugLog('Connected to server');
@@ -406,312 +439,11 @@ function initSocket() {
     }
   });
 
-  // Campaign events
-  state.socket.on('ops:campaigns', (data) => {
-    state.campaigns = data.campaigns;
-    renderCampaignList();
-  });
+  // AR-201: Campaign events moved to socket-handlers/campaigns.js
+  // (13 handlers: ops:campaigns, ops:campaignCreated, ops:campaignData, etc.)
 
-  state.socket.on('ops:campaignCreated', (data) => {
-    state.campaign = data.campaign;
-    state.campaigns.push(data.campaign);
-    if (state.isGM) {
-      showScreen('gm-setup');
-      renderGMSetup();
-    }
-  });
-
-  state.socket.on('ops:campaignData', (data) => {
-    state.campaign = data.campaign;
-    state.players = data.players;
-    state.ships = data.ships;
-
-    if (state.isGM) {
-      showScreen('gm-setup');
-      renderGMSetup();
-      // Save session for reconnect (Stage 3.5.5)
-      saveSession();
-      // AR-27: Request shared map state
-      state.socket.emit('ops:getMapState');
-      // AR-130: Load pending AI responses
-      loadAIPendingResponses();
-    }
-  });
-
-  state.socket.on('ops:campaignUpdated', (data) => {
-    state.campaign = data.campaign;
-    if (state.isGM) {
-      renderGMSetup();
-    }
-  });
-
-  // AR-21: Campaign CRUD events
-  state.socket.on('ops:campaignDeleted', (data) => {
-    state.campaigns = state.campaigns.filter(c => c.id !== data.campaignId);
-    renderCampaignList();
-  });
-
-  state.socket.on('ops:campaignDuplicated', (data) => {
-    state.campaigns.push(data.campaign);
-    renderCampaignList();
-  });
-
-  state.socket.on('ops:campaignRenamed', (data) => {
-    const campaign = state.campaigns.find(c => c.id === data.campaignId);
-    if (campaign) campaign.name = data.name;
-    renderCampaignList();
-  });
-
-  // AR-21: Export campaign - download JSON file
-  state.socket.on('ops:campaignExported', (data) => {
-    const json = JSON.stringify(data.data, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${data.data.manifest.campaignName.replace(/[^a-z0-9]/gi, '_')}_export.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
-
-  // AR-21: Import campaign - add to list
-  state.socket.on('ops:campaignImported', (data) => {
-    state.campaigns.push(data.campaign);
-    renderCampaignList();
-    showNotification(`Campaign "${data.campaign.name}" imported successfully`, 'success');
-  });
-
-  // Player slot events
-  state.socket.on('ops:playerSlotCreated', (data) => {
-    state.players.push(data.account);
-    renderGMSetup();
-    renderPlayerSlots();
-  });
-
-  state.socket.on('ops:playerSlotDeleted', (data) => {
-    state.players = state.players.filter(p => p.id !== data.accountId);
-    renderGMSetup();
-    renderPlayerSlots();
-  });
-
-  // Player join events
-  state.socket.on('ops:campaignJoined', (data) => {
-    state.campaign = data.campaign;
-    state.players = data.availableSlots;
-    renderPlayerSlots();
-    // AR-27: Request shared map state
-    state.socket.emit('ops:getMapState');
-  });
-
-  state.socket.on('ops:playerSlotSelected', (data) => {
-    state.player = data.account;
-    state.ships = data.ships;
-    state.isGuest = false;
-
-    // Get available party ships
-    const partyShips = (data.ships || []).filter(s => s.is_party_ship && s.visible_to_players);
-
-    // Auto-select default ship from account preferences (if still valid)
-    if (data.account.ship_id && partyShips.some(s => s.id === data.account.ship_id)) {
-      state.selectedShipId = data.account.ship_id;
-    } else if (partyShips.length === 1) {
-      // Auto-select if only one party ship available
-      state.selectedShipId = partyShips[0].id;
-    } else {
-      state.selectedShipId = null;
-    }
-
-    // Auto-select role from account preferences
-    if (data.account.role) {
-      state.selectedRole = data.account.role;
-    }
-    showScreen('player-setup');
-    renderPlayerSetup();
-  });
-
-  state.socket.on('ops:playerJoined', (data) => {
-    showNotification(`${data.slotName} joined the campaign`, 'info');
-  });
-
-  // Guest events
-  state.socket.on('ops:guestJoined', (data) => {
-    state.campaign = data.campaign;
-    state.ships = data.ships;
-    state.isGuest = true;
-    state.guestName = data.guestName;
-    state.guestSkill = data.defaultSkill;
-    state.player = {
-      slot_name: data.guestName,
-      character_data: null
-    };
-    showScreen('player-setup');
-    renderPlayerSetup();
-    showNotification(`Joined as guest "${data.guestName}" (skill 0)`, 'info');
-  });
-
-  state.socket.on('ops:skillOverride', (data) => {
-    state.guestSkill = data.skillLevel;
-    showNotification(`GM set your ${data.role} skill to ${data.skillLevel}`, 'info');
-  });
-
-  // NAV-4: Role cleared (left duty station)
-  state.socket.on('ops:roleCleared', (data) => {
-    const roleName = formatRoleName(data.previousRole);
-    state.selectedRole = null;
-    showNotification(`Left ${roleName} station - now off-duty`, 'info');
-    // Return to player setup to select new role
-    document.getElementById('gm-overlay')?.classList.add('hidden');
-    showScreen('player-setup');
-    renderPlayerSetup();
-  });
-
-  // Relieved from duty by Captain or Medical Officer
-  state.socket.on('ops:relievedFromDuty', (data) => {
-    const roleName = formatRoleName(data.previousRole);
-    state.selectedRole = null;
-    const message = data.reason
-      ? `You have been relieved of ${roleName} duty by ${data.byCaption}: ${data.reason}`
-      : `You have been relieved of ${roleName} duty by ${data.byCaption}`;
-    showNotification(message, 'warning');
-    // Return to player setup to select new role
-    document.getElementById('gm-overlay')?.classList.add('hidden');
-    showScreen('player-setup');
-    renderPlayerSetup();
-  });
-
-  // Confirmation when Captain/Medic/GM relieves someone
-  state.socket.on('ops:crewMemberRelieved', (data) => {
-    showNotification(`${data.slotName} has been relieved of ${formatRoleName(data.previousRole)} duty`, 'success');
-    // Update local crew state - find the relieved crew member and clear their role
-    const crewIdx = state.crewOnline.findIndex(c =>
-      (c.id && c.id === data.accountId) || (c.accountId && c.accountId === data.accountId)
-    );
-    if (crewIdx >= 0) {
-      state.crewOnline[crewIdx].role = null;
-    }
-    renderCrewList();
-  });
-
-  // Confirmation when GM assigns role
-  state.socket.on('ops:gmRoleAssigned', (data) => {
-    showNotification(`${data.slotName} assigned to ${formatRoleName(data.role)}`, 'success');
-    renderCrewList();
-  });
-
-  // Player notified when GM assigns them a role
-  state.socket.on('ops:roleAssignedByGM', (data) => {
-    state.selectedRole = data.role;
-    state.selectedRoleInstance = data.roleInstance || 1;
-    showNotification(`GM assigned you to ${formatRoleName(data.role)}`, 'info');
-    updateBridgeHeader();
-    updateRoleClass();
-    renderRolePanel();
-  });
-
-  // Character events
-  state.socket.on('ops:characterImported', (data) => {
-    if (state.player) {
-      state.player.character_data = data.character;
-    }
-    renderPlayerSetup();
-    closeModal();
-    showNotification('Character saved', 'success');
-  });
-
-  // Stage 2: Role personality updated
-  state.socket.on('ops:rolePersonalityUpdated', (data) => {
-    if (state.player && state.player.id === data.playerId) {
-      state.player.role_title = data.roleTitle;
-      state.player.quirk_text = data.quirkText;
-      state.player.quirk_icon = data.quirkIcon;
-      updateRoleQuirkDisplay();
-    }
-    showNotification('Station personality saved', 'success');
-  });
-
-  // Ship & role events
-  state.socket.on('ops:shipSelected', (data) => {
-    state.ship = data.ship;
-    state.ship.npcCrew = data.npcCrew || [];  // Store NPC crew on ship object
-    // Update taken roles display
-    renderRoleSelection();
-  });
-
-  state.socket.on('ops:roleAssigned', (data) => {
-    state.selectedRole = data.role;
-    renderPlayerSetup();
-  });
-
-  // AR-135: Handle being bumped from a role
-  state.socket.on('ops:roleBumped', (data) => {
-    const { oldRole, newRole, message } = data;
-    debugLog('[OPS] Role bumped:', data);
-
-    // Update local state
-    state.selectedRole = newRole;
-
-    // Show toast notification
-    showNotification(message || `You have been moved to ${newRole} role`, 'warning', 5000);
-
-    // Re-render if on bridge
-    if (state.currentScreen === 'bridge') {
-      renderBridge();
-    } else if (state.currentScreen === 'player-setup') {
-      renderPlayerSetup();
-    }
-  });
-
-  state.socket.on('ops:crewUpdate', (data) => {
-    // Another player changed their role
-    debugLog('[OPS] Crew update received:', data);
-
-    // Update role selection if on player-setup screen
-    if (state.currentScreen === 'player-setup') {
-      renderRoleSelection();
-    }
-
-    // Update bridge crew display if on bridge screen
-    if (state.currentScreen === 'bridge') {
-      // Skip GM entries - GM is an observer, not crew
-      if (data.role === 'gm' || data.isGM) {
-        return;
-      }
-      // Update crewOnline array with the change
-      if (data.crew) {
-        // Full crew list provided - filter out any GM entries
-        state.crewOnline = data.crew.filter(c => c.role !== 'gm' && !c.isGM);
-      } else if (data.action === 'joined' || data.role) {
-        // Someone joined or took a role - add/update them
-        const existingIdx = state.crewOnline.findIndex(c => c.accountId === data.accountId);
-        if (existingIdx >= 0) {
-          state.crewOnline[existingIdx].role = data.role;
-          state.crewOnline[existingIdx].roleInstance = data.roleInstance;
-        } else if (data.slotName || data.accountId) {
-          state.crewOnline.push({
-            accountId: data.accountId,
-            name: data.slotName || data.playerName || 'Unknown',
-            role: data.role,
-            roleInstance: data.roleInstance,
-            isNPC: false,
-            character_data: data.character_data || null  // AR-14.7.4: Include character data for crew cards
-          });
-        }
-      } else if (data.action === 'left' || data.action === 'disconnected' || data.action === 'relieved') {
-        // Someone left, disconnected, or was relieved - remove them or clear their role
-        const existingIdx = state.crewOnline.findIndex(c => c.accountId === data.accountId);
-        if (existingIdx >= 0) {
-          if (data.action === 'disconnected') {
-            state.crewOnline.splice(existingIdx, 1);
-          } else {
-            state.crewOnline[existingIdx].role = null;
-          }
-        }
-      }
-      renderCrewList();
-    }
-  });
+  // AR-201: Role events moved to socket-handlers/roles.js
+  // (14 handlers: ops:playerJoined, ops:guestJoined, ops:roleCleared, etc.)
 
   // Bridge events
   state.socket.on('ops:bridgeJoined', (data) => {
