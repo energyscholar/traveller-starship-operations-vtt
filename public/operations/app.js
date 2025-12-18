@@ -47,6 +47,8 @@ import './socket-handlers/contacts.js';
 import './socket-handlers/systems.js';
 import './socket-handlers/jump.js';
 import './socket-handlers/combat.js';
+import './socket-handlers/sensors.js';
+import './socket-handlers/gm.js';
 import { initAllHandlers, getRegisteredHandlers } from './socket-handlers/index.js';
 import { DEFAULT_SECTOR, DEFAULT_SUBSECTOR, DEFAULT_SYSTEM, DEFAULT_HEX } from './modules/constants.js';
 import { startBridgeClock, stopBridgeClock, setBridgeClockDate, parseCampaignDate, formatClockTime, formatDayYear } from './modules/bridge-clock.js';
@@ -398,7 +400,9 @@ function initSocket() {
     showCombatScreen,
     hideCombatScreen,
     handleWeaponsAuthorized,
-    handleFireResult
+    handleFireResult,
+    // Sensors
+    handleScanResult
   };
 
   // AR-201: Initialize extracted handlers (campaigns, etc.)
@@ -513,77 +517,11 @@ function initSocket() {
   // AR-201: Jump events moved to socket-handlers/jump.js
   // (5 handlers: ops:jumpStatus, ops:jumpPlotted, ops:jumpInitiated, etc.)
 
-  // AR-186: GM Roll Modifier socket handlers
-  state.socket.on('ops:gmModifierSet', (data) => {
-    state.gmModifier = data;
-    const statusEl = document.getElementById('gm-modifier-status');
-    if (statusEl) {
-      const dmText = data.dm >= 0 ? `+${data.dm}` : data.dm;
-      statusEl.textContent = `Active: ${dmText}${data.reason ? ` (${data.reason})` : ''}${data.persistent ? ' [persistent]' : ''}`;
-      statusEl.classList.remove('hidden');
-    }
-    showNotification(`GM Modifier: ${data.dm >= 0 ? '+' : ''}${data.dm}${data.reason ? ` (${data.reason})` : ''}`, 'info');
-  });
+  // AR-201: GM modifier events moved to socket-handlers/gm.js
+  // (3 handlers: ops:gmModifierSet, ops:gmModifierCleared, ops:gmModifierState)
 
-  state.socket.on('ops:gmModifierCleared', () => {
-    state.gmModifier = null;
-    const statusEl = document.getElementById('gm-modifier-status');
-    if (statusEl) {
-      statusEl.textContent = '';
-      statusEl.classList.add('hidden');
-    }
-    showNotification('GM Modifier cleared', 'info');
-  });
-
-  state.socket.on('ops:gmModifierState', (data) => {
-    state.gmModifier = data;
-    if (data) {
-      document.getElementById('gm-modifier-dm').value = data.dm;
-      document.getElementById('gm-modifier-reason').value = data.reason || '';
-      document.getElementById('gm-modifier-persistent').checked = data.persistent;
-      const statusEl = document.getElementById('gm-modifier-status');
-      if (statusEl) {
-        const dmText = data.dm >= 0 ? `+${data.dm}` : data.dm;
-        statusEl.textContent = `Active: ${dmText}${data.reason ? ` (${data.reason})` : ''}`;
-        statusEl.classList.remove('hidden');
-      }
-    }
-  });
-
-  // ops:locationChanged moved to socket-handlers/navigation.js
-
-  // Autorun 5: Handle contacts replaced on jump arrival
-  state.socket.on('ops:contactsReplaced', (data) => {
-    state.contacts = data.contacts || [];
-    showNotification(`Sensor contacts updated: ${state.contacts.length} objects detected`, 'info');
-    renderRoleDetailPanel(state.selectedRole);
-    renderCombatContactsList(); // Autorun 14
-  });
-
-  // Autorun 5: Handle sensor scan results
-  state.socket.on('ops:scanResult', (data) => {
-    handleScanResult(data);
-  });
-
-  // Autorun 11: Handle targeted scan results (AR-70: Enhanced with skill rolls)
-  state.socket.on('ops:scanContactResult', (data) => {
-    if (data.success) {
-      // Update contact in state
-      const idx = state.contacts.findIndex(c => c.id === data.contactId);
-      if (idx >= 0 && data.contact) {
-        state.contacts[idx] = data.contact;
-      }
-      renderContacts();
-      renderRoleDetailPanel(state.selectedRole);
-      // AR-70: Show roll details if available
-      const rollInfo = data.roll ? ` (${data.roll.join('+')}=${data.total})` : '';
-      showNotification(data.message + rollInfo || 'Scan complete', 'success');
-    } else {
-      // AR-70: Failed scan shows roll details
-      const rollInfo = data.roll ? ` (Roll: ${data.roll.join('+')}=${data.total})` : '';
-      showNotification(data.message + rollInfo || 'Scan inconclusive', 'warning');
-    }
-  });
+  // AR-201: Sensor events moved to socket-handlers/sensors.js
+  // (3 handlers: ops:contactsReplaced, ops:scanResult, ops:scanContactResult)
 
   // AR-201: Combat events moved to socket-handlers/combat.js
   // (11 handlers: ops:combatStarted, ops:combatEnded, ops:targetAcquired, etc.)
