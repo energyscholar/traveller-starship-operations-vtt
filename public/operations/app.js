@@ -46,6 +46,7 @@ import './socket-handlers/ships.js';
 import './socket-handlers/contacts.js';
 import './socket-handlers/systems.js';
 import './socket-handlers/jump.js';
+import './socket-handlers/combat.js';
 import { initAllHandlers, getRegisteredHandlers } from './socket-handlers/index.js';
 import { DEFAULT_SECTOR, DEFAULT_SUBSECTOR, DEFAULT_SYSTEM, DEFAULT_HEX } from './modules/constants.js';
 import { startBridgeClock, stopBridgeClock, setBridgeClockDate, parseCampaignDate, formatClockTime, formatDayYear } from './modules/bridge-clock.js';
@@ -392,7 +393,12 @@ function initSocket() {
     handleJumpPlotted,
     renderShipStatus,
     showNewsMailModal,
-    updateJumpMap
+    updateJumpMap,
+    // Combat
+    showCombatScreen,
+    hideCombatScreen,
+    handleWeaponsAuthorized,
+    handleFireResult
   };
 
   // AR-201: Initialize extracted handlers (campaigns, etc.)
@@ -579,122 +585,12 @@ function initSocket() {
     }
   });
 
-  // Autorun 12: Combat mode events
-  state.socket.on('ops:combatStarted', (data) => {
-    state.inCombat = true;
-    state.combatState = data;
-    showNotification('COMBAT STATIONS! Tactical mode engaged.', 'warning');
-    showCombatScreen(data);
-  });
-
-  state.socket.on('ops:combatEnded', (data) => {
-    state.inCombat = false;
-    state.combatState = null;
-    showNotification(`Combat ended: ${data.outcome}`, 'info');
-    hideCombatScreen();
-  });
-
-  state.socket.on('ops:combatState', (data) => {
-    state.inCombat = data.inCombat;
-    state.combatState = data;
-    if (data.inCombat) {
-      showCombatScreen(data);
-    }
-  });
-
-  // Autorun 5: Handle weapons authorization
-  state.socket.on('ops:weaponsAuthorized', (data) => {
-    handleWeaponsAuthorized(data);
-  });
-
-  // Autorun 5: Handle fire results
-  state.socket.on('ops:fireResult', (data) => {
-    handleFireResult(data.result || data);
-  });
-
-  // Autorun 14: Combat system handlers
-  state.socket.on('ops:targetAcquired', (data) => {
-    const contact = data.contact;
-    state.lockedTarget = contact.id;
-    showNotification(`Target locked: ${contact.name}`, 'success');
-    renderRoleDetailPanel(state.selectedRole);
-  });
-
-  state.socket.on('ops:combatAction', (data) => {
-    // Handle combat action broadcast (hit/miss/point defense)
-    const { type, attacker, target, weapon, damage, message, targetDestroyed } = data;
-
-    // Add to combat log in state
-    if (!state.combatLog) state.combatLog = [];
-    state.combatLog.unshift({
-      timestamp: new Date().toISOString(),
-      type,
-      attacker,
-      target,
-      weapon,
-      damage,
-      message
-    });
-
-    // Keep only last 50 entries
-    if (state.combatLog.length > 50) {
-      state.combatLog = state.combatLog.slice(0, 50);
-    }
-
-    // Show notification for combat events
-    if (type === 'hit') {
-      showNotification(`${attacker} HIT ${target} for ${damage} damage!`, 'warning');
-    } else if (type === 'miss') {
-      showNotification(`${attacker} missed ${target}`, 'info');
-    } else if (type === 'pointDefense') {
-      showNotification(message, 'info');
-    }
-
-    // Refresh gunner panel to update combat log
-    if (state.selectedRole === 'gunner') {
-      renderRoleDetailPanel('gunner');
-    }
-  });
-
-  state.socket.on('ops:targetDestroyed', (data) => {
-    const { contactId, name, destroyedBy } = data;
-    showNotification(`TARGET DESTROYED: ${name} by ${destroyedBy}!`, 'success');
-
-    // Remove from contacts
-    if (state.contacts) {
-      state.contacts = state.contacts.filter(c => c.id !== contactId);
-    }
-
-    // Clear locked target if it was destroyed
-    if (state.lockedTarget === contactId) {
-      state.lockedTarget = null;
-    }
-
-    renderRoleDetailPanel(state.selectedRole);
-  });
-
-  state.socket.on('ops:shipWeapons', (data) => {
-    state.shipWeapons = data.weapons || [];
-    renderRoleDetailPanel(state.selectedRole);
-  });
+  // AR-201: Combat events moved to socket-handlers/combat.js
+  // (11 handlers: ops:combatStarted, ops:combatEnded, ops:targetAcquired, etc.)
 
   // Ship Systems status response
   state.socket.on('ops:shipSystems', (data) => {
     updateShipSystemsDisplay(data.systems);
-  });
-
-  state.socket.on('ops:combatLog', (data) => {
-    state.combatLog = data.log || [];
-    renderRoleDetailPanel(state.selectedRole);
-  });
-
-  state.socket.on('ops:pointDefenseStatus', (data) => {
-    state.pointDefenseEnabled = data.enabled;
-    const btn = document.querySelector('.btn-point-defense');
-    if (btn) {
-      btn.classList.toggle('active', data.enabled);
-      btn.textContent = data.enabled ? 'Point Defense ON' : 'Point Defense';
-    }
   });
 
   // Autorun 5: Handle jump status update (for skip-to-exit feature)
