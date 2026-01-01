@@ -53,17 +53,44 @@ function handleSystemDamageCleared(data, state, helpers) {
   }
 }
 
+// AR-214: Ship Systems display update
+function handleShipSystems(data, state, helpers) {
+  // Delegate to window function for UI update
+  if (typeof window.updateShipSystemsDisplay === 'function') {
+    window.updateShipSystemsDisplay(data.systems);
+  }
+}
+
+// AR-214: System Broken notification (AR-194)
+function handleSystemBroken(data, state, helpers) {
+  const { system, severity, failure } = data;
+  const severityText = ['', 'Minor', 'Major', 'Critical'][severity] || 'Unknown';
+  let message = `⚠️ ${system} DAMAGED (${severityText})`;
+  if (failure?.name) {
+    message += `: ${failure.name}`;
+  }
+  helpers.showNotification(message, 'warning');
+  // Refresh role panel if on engineer/damage control
+  if (state.selectedRole === 'engineer' || state.selectedRole === 'damage_control') {
+    helpers.renderRoleDetailPanel(state.selectedRole);
+  }
+}
+
 // ==================== Register All Handlers ====================
 
 registerHandler('ops:systemStatus', handleSystemStatus);
 registerHandler('ops:systemDamaged', handleSystemDamaged);
 registerHandler('ops:repairAttempted', handleRepairAttempted);
 registerHandler('ops:systemDamageCleared', handleSystemDamageCleared);
+registerHandler('ops:shipSystems', handleShipSystems);
+registerHandler('ops:systemBroken', handleSystemBroken);
 
 // Export for testing
 export {
   handleSystemStatus,
   handleSystemDamaged,
   handleRepairAttempted,
-  handleSystemDamageCleared
+  handleSystemDamageCleared,
+  handleShipSystems,
+  handleSystemBroken
 };

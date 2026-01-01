@@ -613,10 +613,7 @@ function initSocket() {
   // AR-201: Combat events moved to socket-handlers/combat.js
   // (11 handlers: ops:combatStarted, ops:combatEnded, ops:targetAcquired, etc.)
 
-  // Ship Systems status response
-  state.socket.on('ops:shipSystems', (data) => {
-    updateShipSystemsDisplay(data.systems);
-  });
+  // AR-214: ops:shipSystems moved to socket-handlers/systems.js
 
   // Autorun 5: Handle jump status update (for skip-to-exit feature)
   state.socket.on('ops:jumpStatusUpdated', (data) => {
@@ -638,20 +635,7 @@ function initSocket() {
     showNotification(error.message, 'error');
   });
 
-  // AR-194: System Broken notification
-  state.socket.on('ops:systemBroken', (data) => {
-    const { system, severity, failure } = data;
-    const severityText = ['', 'Minor', 'Major', 'Critical'][severity] || 'Unknown';
-    let message = `⚠️ ${system} DAMAGED (${severityText})`;
-    if (failure?.name) {
-      message += `: ${failure.name}`;
-    }
-    showNotification(message, 'warning');
-    // Refresh role panel if on engineer/damage control
-    if (state.selectedRole === 'engineer' || state.selectedRole === 'damage_control') {
-      renderRoleDetailPanel(state.selectedRole);
-    }
-  });
+  // AR-214: ops:systemBroken moved to socket-handlers/systems.js
 
   // AR-197: Jump Emergence Alert
   state.socket.on('ops:jumpEmergence', (data) => {
