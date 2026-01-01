@@ -47,6 +47,36 @@ const {
 // ============================================================================
 
 /**
+ * Marina's Called Shot Logic
+ * Marina (Gunner-6) prefers to disable ships for prize capture
+ * She uses called shots 60% of the time, targeting power systems
+ * @param {Object} defenderShip - Defender ship
+ * @param {Object} defenderSystems - Defender's systems state
+ * @param {string} weapon - Weapon being used
+ * @returns {string|null} Target system ID or null for normal attack
+ */
+function getMarinaCalledShotTarget(defenderShip, defenderSystems, weapon) {
+  // Marina only uses called shots with lasers (not missiles)
+  if (weapon === 'missile_rack') return null;
+
+  // 60% chance Marina uses called shot
+  if (Math.random() > 0.6) return null;
+
+  // Priority for prize capture: powerPlant > mDrive > jDrive
+  // (Disable power first, they can't do anything)
+  if (defenderSystems?.powerPlant && !defenderSystems.powerPlant.disabled) {
+    return 'powerPlant';
+  }
+  if (defenderSystems?.mDrive && !defenderSystems.mDrive.disabled) {
+    return 'mDrive';
+  }
+  if (defenderSystems?.jDrive && !defenderSystems.jDrive.disabled) {
+    return 'jDrive';
+  }
+  return null;
+}
+
+/**
  * Enemy AI: Decide if enemy should use a called shot
  * @param {Object} attackerShip - Attacker ship
  * @param {Object} defenderShip - Defender (player) ship
@@ -1234,7 +1264,8 @@ async function runDemo() {
   // Final exchanges - Round 2
   state.currentActor = 'player';
   const r2pTurret = state.player.turrets[0];
-  await resolveAttack('player', 'enemy', state.player, state.enemy, r2pTurret);
+  const r2pTarget = getMarinaCalledShotTarget(state.enemy, state.enemy.systems, r2pTurret.weapons[0]);
+  await resolveAttack('player', 'enemy', state.player, state.enemy, r2pTurret, r2pTarget);
   await delay(800);
 
   if (state.enemy.hull <= 0) {
@@ -1313,7 +1344,8 @@ async function runDemo() {
   // Round 3 attacks
   state.currentActor = 'player';
   const r3pTurret = state.player.turrets[0];
-  await resolveAttack('player', 'enemy', state.player, state.enemy, r3pTurret);
+  const r3pTarget = getMarinaCalledShotTarget(state.enemy, state.enemy.systems, r3pTurret.weapons[0]);
+  await resolveAttack('player', 'enemy', state.player, state.enemy, r3pTurret, r3pTarget);
   await delay(800);
 
   if (state.enemy.hull <= 0) {
@@ -1380,7 +1412,8 @@ async function runDemo() {
   // Round 4 attacks
   state.currentActor = 'player';
   const r4pTurret = state.player.turrets[0];
-  await resolveAttack('player', 'enemy', state.player, state.enemy, r4pTurret);
+  const r4pTarget = getMarinaCalledShotTarget(state.enemy, state.enemy.systems, r4pTurret.weapons[0]);
+  await resolveAttack('player', 'enemy', state.player, state.enemy, r4pTurret, r4pTarget);
   await delay(800);
 
   if (state.enemy.hull <= 0) {
@@ -1430,10 +1463,11 @@ async function runExtraRound() {
   render();
   await delay(600);
 
-  // Player attacks
+  // Player attacks - Marina uses called shots
   state.currentActor = 'player';
   const pTurret = state.player.turrets[0];
-  await resolveAttack('player', 'enemy', state.player, state.enemy, pTurret);
+  const pTarget = getMarinaCalledShotTarget(state.enemy, state.enemy.systems, pTurret.weapons[0]);
+  await resolveAttack('player', 'enemy', state.player, state.enemy, pTurret, pTarget);
   await delay(800);
 
   if (state.enemy.hull <= 0) {
