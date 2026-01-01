@@ -205,6 +205,42 @@ function rollShipInitiative(ship) {
   };
 }
 
+/**
+ * Apply tactical stance for fleet based on range and situation
+ * Fighters at Long/Very Long range should be evasive (M-6 = -6 to hit them)
+ */
+function applyTacticalStance(fleet, range) {
+  const isLongRange = ['long', 'very long', 'distant'].includes(range?.toLowerCase());
+
+  for (const ship of fleet) {
+    if (ship.destroyed) continue;
+
+    // Fighters with high thrust should be evasive at long range
+    if (ship.thrust >= 6 && isLongRange) {
+      ship.evasive = true;
+    } else {
+      ship.evasive = false;
+    }
+  }
+}
+
+/**
+ * Calculate total missiles available in fleet for alpha strike
+ */
+function countFleetMissiles(fleet) {
+  let count = 0;
+  for (const ship of fleet) {
+    if (ship.destroyed) continue;
+    // Ship missiles
+    if (ship.missiles > 0) count += ship.missiles;
+    // Turret missile racks
+    for (const turret of (ship.turrets || [])) {
+      if (turret.weapons?.includes('missile_rack')) count++;
+    }
+  }
+  return count;
+}
+
 function addNarrative(text) {
   state.narrative.push(text);
   while (state.narrative.length > state.maxNarrative) state.narrative.shift();
@@ -359,6 +395,8 @@ async function resolveAttack(attacker, defender, weapon) {
   const fc = attacker.fireControl || 0;
   const gunner = turret.gunnerSkill || 0;
   const rangeDM = getRangeDM(state.range);
+  // Evasive targets are harder to hit (uses thrust as dodge bonus in Mongoose Traveller)
+  const evasiveDM = defender?.evasive ? -(defender.thrust || 0) : 0;
 
   // 10% chance of called shot for regular gunners (not missiles)
   const canCalledShot = !['missile_rack'].includes(turret.weapons?.[0]);
@@ -366,7 +404,7 @@ async function resolveAttack(attacker, defender, weapon) {
   const calledShotTarget = useCalledShot ? CALLED_SHOT_TARGETS[Math.floor(Math.random() * CALLED_SHOT_TARGETS.length)] : null;
   const calledShotDM = useCalledShot ? -2 : 0;  // Standard called shot penalty
 
-  const totalDM = fc + gunner + rangeDM + calledShotDM;
+  const totalDM = fc + gunner + rangeDM + calledShotDM + evasiveDM;
 
   const roll = roll2d6();
   const total = roll.total + totalDM;
@@ -776,6 +814,17 @@ async function runDemo() {
   addNarrative(narrative.phaseHeader('FLEET ENGAGEMENT!'));
   addNarrative(`Q-Ship Fleet reveals hidden weapons!`);
   addNarrative(`${GREEN}8 vessels${RESET} vs ${RED}INS Vigilant${RESET} at ${YELLOW}${state.range}${RESET} range`);
+
+  // Apply tactical stance based on range (fighters go evasive at long range)
+  applyTacticalStance(state.playerFleet, state.range);
+  applyTacticalStance(state.enemyFleet, state.range);
+
+  // Show tactical posture for high-thrust ships at long range
+  const evasiveFighters = state.playerFleet.filter(s => s.evasive && s.thrust >= 6);
+  if (evasiveFighters.length > 0) {
+    addNarrative(`${CYAN}${evasiveFighters.length} fighters adopt evasive maneuvers (M-6: -6 to hit)${RESET}`);
+  }
+
   render();
   await delay(2000);
 
