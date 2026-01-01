@@ -532,6 +532,136 @@ async function particleAttack(attacker, defender) {
   return { hit: false };
 }
 
+/**
+ * Marina's Coordinated Knockout Combo
+ * Particle Barbette (called shot Power Plant) + Ion Barbette (power drain)
+ * Goal: Disable for prize capture, not destroy
+ */
+async function coordinatedBarrage(attacker, defender) {
+  state.actingShip = attacker.id;
+  render();
+
+  // Check if both barbettes available
+  const particleBarbette = attacker.barbettes?.find(b => b.id === 'particle');
+  const ionBarbette = attacker.barbettes?.find(b => b.id === 'ion');
+
+  if (!particleBarbette || !ionBarbette) {
+    // Fall back to sequential if not both available
+    await ionAttack(attacker, defender);
+    if (!defender.destroyed) await particleAttack(attacker, defender);
+    return;
+  }
+
+  // Dramatic coordination announcement
+  addNarrative(narrative.quote('MARINA', 'Yuki, target their power plant on my mark...'));
+  render();
+  await delay(600);
+  addNarrative(narrative.quote('YUKI', 'Ion barbette charged and ready!'));
+  render();
+  await delay(400);
+  addNarrative(narrative.quote('MARINA', 'MARK!'));
+  addNarrative(narrative.phaseHeader('COORDINATED KNOCKOUT'));
+  render();
+  await delay(500);
+
+  const fc = attacker.fireControl || 0;
+  const rangeDM = getRangeDM(state.range);
+
+  // === PARTICLE ATTACK (Called Shot: Power Plant) ===
+  const particleGunner = particleBarbette.gunnerSkill || 0;
+  const calledShotDM = -4;  // Power Plant penalty
+  const particleTotalDM = fc + particleGunner + rangeDM + calledShotDM;
+  const particleRoll = roll2d6();
+  const particleTotal = particleRoll.total + particleTotalDM;
+  const particleHit = particleTotal >= 8;
+  const particleEffect = particleHit ? particleTotal - 8 : 0;
+
+  addNarrative(narrative.attackNarrative(attacker, defender, 'particle', particleHit, { isPlayer: true }));
+  addNarrative(narrative.crunch(`Particle: ${particleRoll.total}+${particleGunner}${rangeDM < 0 ? rangeDM : '+' + rangeDM}${calledShotDM}=${particleTotal} vs 8`));
+
+  let particleDamage = 0;
+  if (particleHit) {
+    combatStats.calledShotsAttempted++;
+    const damageRoll = rollNd6(6);
+    const armor = defender.armour || 0;
+    particleDamage = Math.max(0, damageRoll - armor);
+    defender.hull = Math.max(0, defender.hull - particleDamage);
+
+    // Called shot system damage
+    if (!defender.systems) defender.systems = {};
+    if (!defender.systems.powerPlant) defender.systems.powerPlant = { hits: 0 };
+    defender.systems.powerPlant.hits = (defender.systems.powerPlant.hits || 0) + 1;
+    combatStats.calledShotsHit++;
+
+    const ppStatus = defender.systems.powerPlant.hits >= 3 ? 'DISABLED!' : `${defender.systems.powerPlant.hits}/3`;
+    addNarrative(narrative.calledShotNarrative(attacker, defender, 'Power Plant', true));
+    addNarrative(narrative.crunch(`${damageRoll} - ${armor} armor = ${particleDamage} | PP: ${ppStatus}`));
+  }
+  render();
+  await delay(300);
+
+  // === ION ATTACK (Power Drain) ===
+  const ionGunner = ionBarbette.gunnerSkill || 0;
+  const ionTotalDM = fc + ionGunner + rangeDM;
+  const ionRoll = roll2d6();
+  const ionTotal = ionRoll.total + ionTotalDM;
+  const ionHit = ionTotal >= 8;
+  const ionEffect = ionHit ? ionTotal - 8 : 0;
+
+  addNarrative(narrative.attackNarrative(attacker, defender, 'ion', ionHit, { isPlayer: true }));
+  addNarrative(narrative.crunch(`Ion: ${ionRoll.total}+${ionTotalDM}=${ionTotal} vs 8`));
+
+  let powerDrain = 0;
+  if (ionHit) {
+    const ionDice = rollNd6(3);
+    powerDrain = (ionDice + ionEffect) * 10;
+    defender.power = Math.max(0, (defender.power || defender.maxPower || 100) - powerDrain);
+    addNarrative(narrative.ionDrainNarrative(defender, powerDrain, defender.power));
+    addNarrative(narrative.crunch(`(${ionDice}+${ionEffect})×10 = ${powerDrain} power`));
+  }
+  render();
+  await delay(400);
+
+  // === COMBO RESULT ===
+  const ppDisabled = defender.systems?.powerPlant?.hits >= 3;
+  const powerDead = defender.power <= 0;
+
+  if (ppDisabled) {
+    defender.systems.powerPlant.disabled = true;
+    combatStats.powerPlantsDisabled++;
+  }
+
+  if (ppDisabled && powerDead) {
+    addNarrative(narrative.victoryBanner('KNOCKOUT! Target disabled for capture!', true));
+    addNarrative(narrative.quote('MARINA', 'Power plant destroyed. She\'s dead in space. Prize secured.'));
+  } else if (ppDisabled || powerDead) {
+    addNarrative(`${YELLOW}${BOLD}Target crippled!${RESET} ${ppDisabled ? 'Power plant disabled.' : ''} ${powerDead ? 'No power remaining.' : ''}`);
+    addNarrative(narrative.quote('MARINA', 'Good hit. One more pass should finish it.'));
+  } else if (particleHit || ionHit) {
+    addNarrative(`${YELLOW}Hits scored but target still fighting.${RESET}`);
+  } else {
+    addNarrative(`${DIM}Coordinated attack missed. Recalibrating...${RESET}`);
+  }
+
+  // Check destruction (we tried to avoid but massive damage happens)
+  if (defender.hull <= 0) {
+    defender.destroyed = true;
+    addNarrative(narrative.destroyedNarrative(defender));
+    addNarrative(narrative.quote('MARINA', 'Damn. Wanted that one intact.'));
+  }
+
+  render();
+  await delay(600);
+
+  return {
+    particleHit,
+    ionHit,
+    particleDamage,
+    powerDrain,
+    knockout: ppDisabled && powerDead
+  };
+}
+
 // Enemy capital ship attacks player fleet (targets weakest)
 async function capitalShipAttack(capitalShip, playerFleet) {
   state.actingShip = capitalShip.id;
@@ -613,15 +743,8 @@ async function runDemo() {
       addNarrative(`${GREEN}${BOLD}─── Q-SHIP ATTACK ───${RESET}`);
       render();
       await delay(600);
-      await ionAttack(qship, enemy);
-      render();
-      await delay(400);
-      // Marina fires particle barbette with called shots
-      if (!enemy.destroyed) {
-        await particleAttack(qship, enemy);
-        render();
-        await delay(600);
-      }
+      // Marina's coordinated knockout - particle + ion combo
+      await coordinatedBarrage(qship, enemy);
     }
 
     // Enemy counterattack
@@ -637,16 +760,9 @@ async function runDemo() {
       await fighterAlphaStrike(getAliveShips(fighters), enemy);
     }
 
-    // Q-Ship barbette attacks
+    // Q-Ship coordinated knockout
     if (!enemy.destroyed && !qship.destroyed) {
-      await ionAttack(qship, enemy);
-      render();
-      await delay(400);
-      if (!enemy.destroyed) {
-        await particleAttack(qship, enemy);
-        render();
-        await delay(600);
-      }
+      await coordinatedBarrage(qship, enemy);
     }
   }
 
@@ -716,16 +832,9 @@ async function runDemo() {
     await fighterAlphaStrike(aliveFighters, enemy);
   }
 
-  // Q-Ship continues barbette bombardment
+  // Q-Ship continues coordinated assault
   if (!enemy.destroyed && !qship.destroyed) {
-    await ionAttack(qship, enemy);
-    render();
-    await delay(400);
-    if (!enemy.destroyed) {
-      await particleAttack(qship, enemy);
-      render();
-      await delay(600);
-    }
+    await coordinatedBarrage(qship, enemy);
   }
 
   // Pinnace attacks
@@ -792,10 +901,13 @@ async function runExtraRound() {
     }
   }
 
-  // Capital ships attack
+  // Capital ships attack - Q-Ship uses coordinated barrage
   const aliveCapitals = getAliveShips(state.playerFleet).filter(s => s.shipType !== 'Fighter');
   for (const ship of aliveCapitals) {
-    if (ship.turrets?.length > 0) {
+    if (ship.barbettes?.length >= 2) {
+      // Q-Ship with Marina's coordinated knockout
+      await coordinatedBarrage(ship, enemy);
+    } else if (ship.turrets?.length > 0) {
       for (const turret of ship.turrets) {
         await resolveAttack(ship, enemy, turret);
         if (enemy.destroyed || enemy.hull <= 0) break;
