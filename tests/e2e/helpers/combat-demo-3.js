@@ -22,6 +22,7 @@ const {
   narrateAttack
 } = require('./combat-display');
 const { showFleetSummary } = require('./battle-summary');
+const narrative = require('./combat-narrative');
 
 // ANSI codes
 const ESC = '\x1b';
@@ -323,13 +324,18 @@ async function resolveAttack(attacker, defender, weapon) {
     await delay(400);
   }
 
+  // Narrative: Story first, crunch second
+  const isPlayer = state.playerFleet.includes(attacker);
   if (useCalledShot && !shouldFireMissile) {
     combatStats.calledShotsAttempted++;
-    addNarrative(`${attackerColor}${attacker.name}${RESET} fires ${weaponName} [CALLED: ${calledShotTarget}]`);
+    addNarrative(narrative.attackNarrative(attacker, defender, weaponName, hit, { isPlayer }));
+    if (hit) {
+      addNarrative(narrative.calledShotNarrative(attacker, defender, calledShotTarget, true));
+    }
   } else {
-    addNarrative(`${attackerColor}${attacker.name}${RESET} fires ${weaponName} at ${defender.name}`);
+    addNarrative(narrative.attackNarrative(attacker, defender, weaponName, hit, { isPlayer }));
   }
-  addNarrative(`  Roll: ${roll.total}+${totalDM}=${total} vs 8 → ${hit ? `${GREEN}HIT${RESET}` : `${DIM}MISS${RESET}`}`);
+  addNarrative(narrative.crunch(`Roll: ${roll.total}+${totalDM}=${total} vs 8`));
 
   if (hit) {
     // Calculate damage
@@ -351,11 +357,12 @@ async function resolveAttack(attacker, defender, weapon) {
           const pdSuccess = pdTotal >= 8;
 
           if (pdSuccess) {
-            addNarrative(`  ${CYAN}★ POINT DEFENSE ★${RESET} ${GREEN}${defender.name} shoots down missile!${RESET}`);
-            addNarrative(`    (${pdRoll.total}+${pdGunnerSkill}${pdPenalty < 0 ? pdPenalty : ''}=${pdTotal} vs 8)`);
+            addNarrative(narrative.pointDefenseNarrative(defender, true));
+            addNarrative(narrative.crunch(`PD: ${pdRoll.total}+${pdGunnerSkill}${pdPenalty < 0 ? pdPenalty : ''}=${pdTotal} vs 8`));
             return { hit: false, pointDefense: true };
           } else {
-            addNarrative(`  ${CYAN}POINT DEFENSE${RESET} ${RED}MISS${RESET} (${pdTotal} vs 8)`);
+            addNarrative(narrative.pointDefenseNarrative(defender, false));
+            addNarrative(narrative.crunch(`PD: ${pdTotal} vs 8`));
           }
         }
       }
@@ -370,11 +377,12 @@ async function resolveAttack(attacker, defender, weapon) {
 
     defender.hull = Math.max(0, defender.hull - damage);
 
-    addNarrative(`  ${YELLOW}Damage: ${damageRoll} - ${armor} armor = ${damage}${RESET}`);
+    addNarrative(narrative.damageNarrative(defender, damage, armor));
+    addNarrative(narrative.crunch(`${damageRoll} - ${armor} armor = ${damage}`));
 
     if (defender.hull <= 0) {
       defender.destroyed = true;
-      addNarrative(`  ${RED}${BOLD}>>> ${defender.name} DESTROYED! <<<${RESET}`);
+      addNarrative(narrative.destroyedNarrative(defender));
     }
 
     return { hit: true, damage, effect };
@@ -385,7 +393,7 @@ async function resolveAttack(attacker, defender, weapon) {
 
 // Fighter alpha strike - all fighters fire missiles at target
 async function fighterAlphaStrike(fighters, target) {
-  addNarrative(`${CYAN}${BOLD}═══ FIGHTER ALPHA STRIKE ═══${RESET}`);
+  addNarrative(narrative.phaseHeader('FIGHTER ALPHA STRIKE'));
   render();
   await delay(800);
 
@@ -406,7 +414,7 @@ async function fighterAlphaStrike(fighters, target) {
     if (target.destroyed) break;
   }
 
-  addNarrative(`${CYAN}═══ ALPHA STRIKE COMPLETE ═══${RESET}`);
+  addNarrative(narrative.phaseHeader('ALPHA STRIKE COMPLETE'));
   render();
   await delay(600);
 }
@@ -429,8 +437,8 @@ async function ionAttack(attacker, defender) {
   const hit = total >= 8;
   const effect = hit ? total - 8 : 0;
 
-  addNarrative(`${GREEN}${attacker.name}${RESET} fires ${CYAN}ION BARBETTE${RESET} at ${defender.name}`);
-  addNarrative(`  Roll: ${roll.total}+${totalDM}=${total} vs 8 → ${hit ? `${GREEN}HIT${RESET}` : `${DIM}MISS${RESET}`}`);
+  addNarrative(narrative.attackNarrative(attacker, defender, 'ion', hit, { isPlayer: true }));
+  addNarrative(narrative.crunch(`Roll: ${roll.total}+${totalDM}=${total} vs 8`));
 
   if (hit) {
     // Ion damage: (3d6 + Effect) × 10 power drain
@@ -439,12 +447,8 @@ async function ionAttack(attacker, defender) {
 
     defender.power = Math.max(0, (defender.power || defender.maxPower || 100) - powerDrain);
 
-    addNarrative(`  ${CYAN}${BOLD}⚡ ${powerDrain} POWER DRAINED!${RESET} (${defender.power}/${defender.maxPower || 100})`);
-
-    // Check if power is critically low
-    if (defender.power <= 0) {
-      addNarrative(`  ${YELLOW}${BOLD}>>> ${defender.name} POWER CRITICAL! <<<${RESET}`);
-    }
+    addNarrative(narrative.ionDrainNarrative(defender, powerDrain, defender.power));
+    addNarrative(narrative.crunch(`(${ionDice}+${effect})×10 = ${powerDrain} power`));
 
     return { hit: true, powerDrain };
   }
@@ -479,12 +483,12 @@ async function particleAttack(attacker, defender) {
   const effect = hit ? total - 8 : 0;
 
   if (useCalledShot) {
-    addNarrative(`${MAGENTA}${BOLD}MARINA: "Targeting power plant!"${RESET}`);
-    addNarrative(`${GREEN}${attacker.name}${RESET} fires ${MAGENTA}PARTICLE BARBETTE${RESET} [CALLED SHOT: Power Plant]`);
-    addNarrative(`  Roll: ${roll.total}+${gunner}${rangeDM < 0 ? rangeDM : '+' + rangeDM}${calledShotDM}=${total} vs 8 → ${hit ? `${GREEN}HIT${RESET}` : `${DIM}MISS${RESET}`}`);
+    addNarrative(narrative.quote('MARINA', 'Targeting power plant!'));
+    addNarrative(narrative.attackNarrative(attacker, defender, 'particle', hit, { isPlayer: true }));
+    addNarrative(narrative.crunch(`Roll: ${roll.total}+${gunner}${rangeDM < 0 ? rangeDM : '+' + rangeDM}${calledShotDM}=${total} vs 8`));
   } else {
-    addNarrative(`${GREEN}${attacker.name}${RESET} fires ${MAGENTA}PARTICLE BARBETTE${RESET}`);
-    addNarrative(`  Roll: ${roll.total}+${totalDM}=${total} vs 8 → ${hit ? `${GREEN}HIT${RESET}` : `${DIM}MISS${RESET}`}`);
+    addNarrative(narrative.attackNarrative(attacker, defender, 'particle', hit, { isPlayer: true }));
+    addNarrative(narrative.crunch(`Roll: ${roll.total}+${totalDM}=${total} vs 8`));
   }
 
   if (hit) {
@@ -503,21 +507,23 @@ async function particleAttack(attacker, defender) {
 
       combatStats.calledShotsHit++;
       const status = defender.systems.powerPlant.hits >= 3 ? 'DISABLED!' : `${defender.systems.powerPlant.hits}/3 hits`;
-      addNarrative(`  ${MAGENTA}${BOLD}★ POWER PLANT HIT! ★${RESET} ${status}`);
-      addNarrative(`  ${YELLOW}Damage: ${damageRoll} - ${armor} armor = ${damage}${RESET}`);
+      addNarrative(narrative.calledShotNarrative(attacker, defender, 'Power Plant', true));
+      addNarrative(narrative.damageNarrative(defender, damage, armor));
+      addNarrative(narrative.crunch(`${damageRoll} - ${armor} armor = ${damage} | PP: ${status}`));
 
       if (defender.systems.powerPlant.hits >= 3) {
         defender.systems.powerPlant.disabled = true;
         combatStats.powerPlantsDisabled++;
-        addNarrative(`  ${RED}${BOLD}>>> ${defender.name} POWER PLANT DISABLED! <<<${RESET}`);
+        addNarrative(narrative.victoryBanner(`${defender.name} POWER PLANT DISABLED!`, true));
       }
     } else {
-      addNarrative(`  ${YELLOW}Damage: ${damageRoll} - ${armor} armor = ${damage}${RESET}`);
+      addNarrative(narrative.damageNarrative(defender, damage, armor));
+      addNarrative(narrative.crunch(`${damageRoll} - ${armor} armor = ${damage}`));
     }
 
     if (defender.hull <= 0) {
       defender.destroyed = true;
-      addNarrative(`  ${RED}${BOLD}>>> ${defender.name} DESTROYED! <<<${RESET}`);
+      addNarrative(narrative.destroyedNarrative(defender));
     }
 
     return { hit: true, damage, effect, calledShot: calledShotTarget };
@@ -537,7 +543,7 @@ async function capitalShipAttack(capitalShip, playerFleet) {
   const fighters = targets.filter(s => s.shipType?.includes('Fighter'));
   const target = fighters.length > 0 ? fighters[0] : targets[0];
 
-  addNarrative(`${RED}${BOLD}═══ ENEMY COUNTERATTACK ═══${RESET}`);
+  addNarrative(narrative.phaseHeader('ENEMY COUNTERATTACK'));
   render();
   await delay(600);
 
@@ -549,13 +555,13 @@ async function capitalShipAttack(capitalShip, playerFleet) {
     await delay(400);
   }
 
-  addNarrative(`${RED}═══ COUNTERATTACK COMPLETE ═══${RESET}`);
+  addNarrative(narrative.phaseHeader('COUNTERATTACK COMPLETE'));
   render();
   await delay(600);
 }
 
 async function runDemo() {
-  addNarrative(`${CYAN}${BOLD}═══ FLEET ENGAGEMENT! ═══${RESET}`);
+  addNarrative(narrative.phaseHeader('FLEET ENGAGEMENT!'));
   addNarrative(`Q-Ship Fleet reveals hidden weapons!`);
   addNarrative(`${GREEN}8 vessels${RESET} vs ${RED}INS Vigilant${RESET} at ${YELLOW}${state.range}${RESET} range`);
   render();
@@ -591,7 +597,7 @@ async function runDemo() {
   // === ROUND 1: FIGHTER ALPHA STRIKE ===
   state.round = 1;
   state.phase = 'attack';
-  addNarrative(`${WHITE}${BOLD}═══ ROUND 1: ATTACK ═══${RESET}`);
+  addNarrative(narrative.phaseHeader('ROUND 1: ATTACK'));
   render();
   await delay(1000);
 
@@ -664,7 +670,7 @@ async function runDemo() {
   // === ROUND 2 ===
   state.round = 2;
   state.phase = 'manoeuvre';
-  addNarrative(`${WHITE}${BOLD}═══ ROUND 2 ═══${RESET}`);
+  addNarrative(narrative.phaseHeader('ROUND 2'));
   render();
   await delay(1500);
 
@@ -750,7 +756,7 @@ async function runDemo() {
   }
 
   // Both sides still fighting - offer continue
-  addNarrative(`${CYAN}═══ ROUND ${state.round} COMPLETE ═══${RESET}`);
+  addNarrative(narrative.phaseHeader(`ROUND ${state.round} COMPLETE`));
   addNarrative(`${enemy.name}: ${enemy.hull}/${enemy.maxHull} hull`);
   addNarrative(`Player fleet: ${getAliveShips(state.playerFleet).length}/${state.playerFleet.length} ships`);
   render();
@@ -769,7 +775,7 @@ async function runExtraRound() {
   state.round++;
   const enemy = state.enemyFleet[0];
 
-  addNarrative(`${CYAN}${BOLD}═══ ROUND ${state.round} ═══${RESET}`);
+  addNarrative(narrative.phaseHeader(`ROUND ${state.round}`));
   render();
   await delay(600);
 
@@ -818,7 +824,7 @@ async function runExtraRound() {
   }
 
   // Still fighting - offer continue
-  addNarrative(`${CYAN}═══ ROUND ${state.round} COMPLETE ═══${RESET}`);
+  addNarrative(narrative.phaseHeader(`ROUND ${state.round} COMPLETE`));
   addNarrative(`${enemy.name}: ${enemy.hull}/${enemy.maxHull} hull`);
   addNarrative(`Player fleet: ${getAliveShips(state.playerFleet).length}/${state.playerFleet.length} ships`);
   render();
