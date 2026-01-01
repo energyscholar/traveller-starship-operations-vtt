@@ -84,6 +84,145 @@ const CYAN = `${ESC}[36m`;
 const MAGENTA = `${ESC}[35m`;
 const WHITE = `${ESC}[37m`;
 
+// ============================================================================
+// BATTLE SUMMARY (displayed at end of combat)
+// ============================================================================
+
+/**
+ * Rate the battle outcome
+ * @param {Object} state - Combat state
+ * @returns {Object} { rating, color, description }
+ */
+function rateBattle(state) {
+  const playerHullPct = (state.player.hull / state.player.maxHull) * 100;
+  const enemyHullPct = (state.enemy.hull / state.enemy.maxHull) * 100;
+  const playerWon = state.enemy.hull <= 0;
+  const playerLost = state.player.hull <= 0;
+
+  if (playerWon) {
+    if (playerHullPct > 75) {
+      return { rating: 'DECISIVE VICTORY', color: GREEN, description: 'A textbook engagement.' };
+    } else if (playerHullPct > 50) {
+      return { rating: 'SOLID VICTORY', color: GREEN, description: 'A hard-fought win.' };
+    } else if (playerHullPct > 25) {
+      return { rating: 'MARGINAL VICTORY', color: YELLOW, description: 'Victory, but at a cost.' };
+    } else {
+      return { rating: 'PYRRHIC VICTORY', color: RED, description: 'Survived... barely.' };
+    }
+  } else if (playerLost) {
+    if (enemyHullPct < 25) {
+      return { rating: 'MARGINAL DEFEAT', color: YELLOW, description: 'Went down fighting.' };
+    } else if (enemyHullPct < 50) {
+      return { rating: 'SOLID DEFEAT', color: RED, description: 'Outmatched.' };
+    } else {
+      return { rating: 'DECISIVE DEFEAT', color: RED, description: 'Never stood a chance.' };
+    }
+  } else {
+    // Stalemate - rate based on hull comparison
+    const diff = playerHullPct - enemyHullPct;
+    if (diff > 20) {
+      return { rating: 'TACTICAL ADVANTAGE', color: GREEN, description: 'Winning on points.' };
+    } else if (diff < -20) {
+      return { rating: 'TACTICAL DISADVANTAGE', color: RED, description: 'Losing ground.' };
+    } else {
+      return { rating: 'STALEMATE', color: YELLOW, description: 'Honors even.' };
+    }
+  }
+}
+
+/**
+ * Generate dramatic battle summary
+ * @param {Object} state - Combat state
+ * @returns {string[]} Array of summary lines
+ */
+function generateBattleSummary(state) {
+  const lines = [];
+  const playerWon = state.enemy.hull <= 0;
+  const playerLost = state.player.hull <= 0;
+  const rating = rateBattle(state);
+
+  // Header
+  lines.push('');
+  lines.push(`${CYAN}${BOLD}╔══════════════════════════════════════════════════════╗${RESET}`);
+  lines.push(`${CYAN}${BOLD}║${RESET}              ${WHITE}${BOLD}⚔ BATTLE REPORT ⚔${RESET}                     ${CYAN}${BOLD}║${RESET}`);
+  lines.push(`${CYAN}${BOLD}╚══════════════════════════════════════════════════════╝${RESET}`);
+  lines.push('');
+
+  // Battle Rating
+  lines.push(`${rating.color}${BOLD}${rating.rating}${RESET}`);
+  lines.push(`${DIM}${rating.description}${RESET}`);
+  lines.push('');
+
+  // Outcome narrative
+  const playerHullPct = Math.round((state.player.hull / state.player.maxHull) * 100);
+  const enemyHullPct = Math.round((state.enemy.hull / state.enemy.maxHull) * 100);
+
+  if (playerWon) {
+    lines.push(`The ${state.enemy.name} has been reduced to floating wreckage.`);
+    if (playerHullPct > 75) {
+      lines.push(`${GREEN}${state.player.name} sustained minimal damage (${playerHullPct}% hull).${RESET}`);
+    } else if (playerHullPct > 50) {
+      lines.push(`${YELLOW}${state.player.name} took moderate damage (${playerHullPct}% hull).${RESET}`);
+    } else if (playerHullPct > 25) {
+      lines.push(`${RED}${state.player.name} is heavily damaged (${playerHullPct}% hull)!${RESET}`);
+    } else {
+      lines.push(`${RED}${BOLD}${state.player.name} barely survived (${playerHullPct}% hull)!${RESET}`);
+    }
+  } else if (playerLost) {
+    lines.push(`${state.player.name} has been destroyed!`);
+    lines.push(`The ${state.enemy.name} emerges victorious (${enemyHullPct}% hull).`);
+  } else {
+    lines.push(`Both ships remain operational after ${state.round} rounds.`);
+    lines.push(`${state.player.name}: ${playerHullPct}% hull | ${state.enemy.name}: ${enemyHullPct}% hull`);
+  }
+
+  // Combat statistics
+  lines.push('');
+  lines.push(`${DIM}─────────────────────────────────────────────────────────${RESET}`);
+  lines.push(`${WHITE}Combat lasted ${state.round} round${state.round > 1 ? 's' : ''}.${RESET}`);
+
+  // Footer
+  lines.push('');
+  lines.push(`${DIM}Press ENTER to continue...${RESET}`);
+
+  return lines;
+}
+
+/**
+ * Display battle summary and wait for ENTER
+ * @param {Object} state - Combat state
+ */
+async function showBattleSummary(state) {
+  const lines = generateBattleSummary(state);
+
+  // Clear screen and display summary
+  process.stdout.write(CLEAR + HOME);
+  for (const line of lines) {
+    process.stdout.write(line + '\n');
+  }
+
+  // Wait for ENTER
+  return new Promise((resolve) => {
+    const onData = (key) => {
+      if (key === '\r' || key === '\n') {
+        process.stdin.removeListener('data', onData);
+        resolve();
+      }
+      // Also accept 'q' to quit
+      if (key === 'q' || key === 'Q') {
+        process.stdout.write(CLEAR + HOME);
+        process.exit(0);
+      }
+      // Ctrl+C
+      if (key === '\u0003') {
+        process.stdout.write(CLEAR + HOME);
+        process.exit(0);
+      }
+    };
+    process.stdin.on('data', onData);
+  });
+}
+
 // Load demo config
 const config = DEMO_CONFIGS.demo1;
 
@@ -949,7 +1088,8 @@ async function runDemo() {
     const col = firstAttacker === 'player' ? GREEN : RED;
     addNarrative(`${col}${BOLD}*** ${firstTarget.name} DESTROYED! ***${RESET}`);
     render();
-    await delay(3000);
+    await delay(2000);
+    await showBattleSummary(state);
     return;
   }
 
@@ -977,7 +1117,8 @@ async function runDemo() {
     const col = secondAttacker === 'player' ? GREEN : RED;
     addNarrative(`${col}${BOLD}*** ${secondTarget.name} DESTROYED! ***${RESET}`);
     render();
-    await delay(3000);
+    await delay(2000);
+    await showBattleSummary(state);
     return;
   }
 
@@ -1005,7 +1146,8 @@ async function runDemo() {
       addNarrative(`Pilot: ${result.pirateRoll} vs ${result.playerRoll} (margin +${result.margin}) - ${RED}${BOLD}ESCAPED!${RESET}`);
       addNarrative(`${RED}${state.enemy.name} jumps to safety!${RESET}`);
       render();
-      await delay(3000);
+      await delay(2000);
+    await showBattleSummary(state);
       return;
     } else {
       addNarrative(`Pilot: ${result.pirateRoll} vs ${result.playerRoll} (margin ${result.margin}) - ${GREEN}Escape blocked!${RESET}`);
@@ -1034,7 +1176,8 @@ async function runDemo() {
   if (state.enemy.hull <= 0) {
     addNarrative(`${GREEN}${BOLD}*** ${state.enemy.name} DESTROYED! ***${RESET}`);
     render();
-    await delay(3000);
+    await delay(2000);
+    await showBattleSummary(state);
     return;
   }
 
@@ -1047,7 +1190,8 @@ async function runDemo() {
   if (state.player.hull <= 0) {
     addNarrative(`${RED}${BOLD}*** ${state.player.name} DESTROYED! ***${RESET}`);
     render();
-    await delay(3000);
+    await delay(2000);
+    await showBattleSummary(state);
     return;
   }
 
@@ -1069,7 +1213,8 @@ async function runDemo() {
       addNarrative(`Pilot: ${result.pirateRoll} vs ${result.playerRoll} (margin +${result.margin}) - ${RED}${BOLD}ESCAPED!${RESET}`);
       addNarrative(`${RED}${state.enemy.name} jumps to safety!${RESET}`);
       render();
-      await delay(3000);
+      await delay(2000);
+    await showBattleSummary(state);
       return;
     } else {
       addNarrative(`Pilot: ${result.pirateRoll} vs ${result.playerRoll} (margin ${result.margin}) - ${GREEN}Escape blocked!${RESET}`);
@@ -1110,7 +1255,8 @@ async function runDemo() {
   if (state.enemy.hull <= 0) {
     addNarrative(`${GREEN}${BOLD}*** ${state.enemy.name} DESTROYED! ***${RESET}`);
     render();
-    await delay(3000);
+    await delay(2000);
+    await showBattleSummary(state);
     return;
   }
 
@@ -1123,7 +1269,8 @@ async function runDemo() {
   if (state.player.hull <= 0) {
     addNarrative(`${RED}${BOLD}*** ${state.player.name} DESTROYED! ***${RESET}`);
     render();
-    await delay(3000);
+    await delay(2000);
+    await showBattleSummary(state);
     return;
   }
 
@@ -1145,7 +1292,8 @@ async function runDemo() {
       addNarrative(`Pilot: ${result.pirateRoll} vs ${result.playerRoll} (margin +${result.margin}) - ${RED}${BOLD}ESCAPED!${RESET}`);
       addNarrative(`${RED}${state.enemy.name} jumps to safety!${RESET}`);
       render();
-      await delay(3000);
+      await delay(2000);
+    await showBattleSummary(state);
       return;
     } else {
       addNarrative(`Pilot: ${result.pirateRoll} vs ${result.playerRoll} (margin ${result.margin}) - ${GREEN}Escape blocked!${RESET}`);
@@ -1174,7 +1322,8 @@ async function runDemo() {
   if (state.enemy.hull <= 0) {
     addNarrative(`${GREEN}${BOLD}*** ${state.enemy.name} DESTROYED! ***${RESET}`);
     render();
-    await delay(3000);
+    await delay(2000);
+    await showBattleSummary(state);
     return;
   }
 
@@ -1187,7 +1336,8 @@ async function runDemo() {
   if (state.player.hull <= 0) {
     addNarrative(`${RED}${BOLD}*** ${state.player.name} DESTROYED! ***${RESET}`);
     render();
-    await delay(3000);
+    await delay(2000);
+    await showBattleSummary(state);
     return;
   }
 
@@ -1196,7 +1346,8 @@ async function runDemo() {
   addNarrative(`${state.player.name}: ${state.player.hull}/${state.player.maxHull} hull`);
   addNarrative(`${state.enemy.name}: ${state.enemy.hull}/${state.enemy.maxHull} hull`);
   render();
-  await delay(3000);
+  await delay(2000);
+    await showBattleSummary(state);
 }
 
 // === KEYBOARD HANDLING ===
