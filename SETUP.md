@@ -12,7 +12,7 @@ npm install
 npm test
 ```
 
-Expected: 328/328 tests passing across 19 test suites
+Expected: 392/392 tests passing across 36 test suites
 
 ### 3. Start the Server
 ```bash
@@ -38,14 +38,13 @@ Server starts on `http://localhost:3000`
 
 ## Current Status
 
-- **Stage:** 9 Complete ✅
-- **Features:** Full space combat with movement, initiative, weapons, crew
-- **Tests:** 328/328 passing (100%)
-- **Next:** Stage 10+ (Enhanced combat features)
+- **Features:** Multi-role starship operations, real-time multiplayer, 11 crew roles
+- **Tests:** 392/392 passing (100%)
+- **Active Work:** See `.claude/AR-208-combat-ui-enhancements.md`
 
 ## Verify Everything Works
 
-1. Run `npm test` - All 328 tests should pass
+1. Run `npm test` - All 392 tests should pass
 2. Run `npm start` - Server starts on port 3000
 3. Open browser to `http://localhost:3000`
 4. Single player mode: Select ship → Click Ready → Combat starts

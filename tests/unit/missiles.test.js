@@ -1,12 +1,27 @@
 /**
- * Missile Mechanics Unit Tests
- * Stage 11: Test missile tracking, movement, point defense
+ * AR-226: Missile Mechanics Unit Tests (Mongoose Traveller 2e)
+ *
+ * Tests the corrected missile implementation:
+ * - Flight time table (not 1 band/turn)
+ * - Cannot launch at Adjacent/Close
+ * - Point defense only on arrival turn
+ * - Cumulative -1 DM per PD attempt
+ * - Turret bonuses (+1 double, +2 triple)
+ * - Smart missiles persist until destroyed
+ * - ECM warfare against missiles
  */
 
-const { MissileTracker, getMissileRangeBonus, canLaunchMissile } = require('../../lib/weapons/missiles');
+const {
+  MissileTracker,
+  getMissileRangeBonus,
+  canLaunchMissile,
+  getFlightTime,
+  MISSILE_FLIGHT_TIME,
+  BLOCKED_LAUNCH_RANGES
+} = require('../../lib/weapons/missiles');
 
 console.log('========================================');
-console.log('MISSILE MECHANICS UNIT TESTS');
+console.log('AR-226: MISSILE MECHANICS TESTS');
 console.log('========================================\n');
 
 let testsPassed = 0;
@@ -31,375 +46,730 @@ function assert(condition, message) {
 }
 
 // ========================================
-// Missile Launch Tests
+// AR-226.1: Flight Time Table
 // ========================================
 
-console.log('Missile Launch (5 tests):\n');
+console.log('AR-226.1 Flight Time Table (6 tests):\n');
 
-test('1.1: Can launch missile from any range', () => {
+test('1.1: Short range = 1 turn flight time', () => {
+  assert(getFlightTime('short') === 1, 'Short should be 1 turn');
+});
+
+test('1.2: Medium range = 1 turn flight time', () => {
+  assert(getFlightTime('medium') === 1, 'Medium should be 1 turn');
+});
+
+test('1.3: Long range = 2 turns flight time', () => {
+  assert(getFlightTime('long') === 2, 'Long should be 2 turns');
+});
+
+test('1.4: Very Long range = 5 turns flight time', () => {
+  assert(getFlightTime('very_long') === 5, 'Very Long should be 5 turns');
+});
+
+test('1.5: Distant range = 10 turns flight time', () => {
+  assert(getFlightTime('distant') === 10, 'Distant should be 10 turns');
+});
+
+test('1.6: Missile tracks arrival round correctly', () => {
   const tracker = new MissileTracker();
   const missile = tracker.launchMissile({
-    attackerId: 'player1',
-    defenderId: 'player2',
-    currentRange: 'distant',
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'long',
+    round: 3
+  });
+
+  assert(missile.launchRound === 3, 'Should record launch round');
+  assert(missile.flightTime === 2, 'Long range = 2 turn flight');
+  assert(missile.arrivalRound === 5, 'Should arrive round 3 + 2 = 5');
+});
+
+// ========================================
+// AR-226.2: Adjacent/Close Launch Block
+// ========================================
+
+console.log('\nAR-226.2 Adjacent/Close Block (5 tests):\n');
+
+test('2.1: Cannot launch at adjacent range', () => {
+  assert(canLaunchMissile('adjacent') === false, 'Adjacent should be blocked');
+});
+
+test('2.2: Cannot launch at close range', () => {
+  assert(canLaunchMissile('close') === false, 'Close should be blocked');
+});
+
+test('2.3: Can launch at short range', () => {
+  assert(canLaunchMissile('short') === true, 'Short should be allowed');
+});
+
+test('2.4: Tracker returns error for blocked range', () => {
+  const tracker = new MissileTracker();
+  const result = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'adjacent',
     round: 1
   });
 
-  assert(missile.id, 'Missile should have ID');
-  assert(missile.attacker === 'player1', 'Missile should track attacker');
-  assert(missile.target === 'player2', 'Missile should track target');
-  assert(missile.currentRange === 'distant', 'Missile should start at launch range');
-  assert(missile.status === 'tracking', 'Missile should be tracking');
+  assert(result.error === true, 'Should return error');
+  assert(result.reason.includes('too close'), 'Should explain reason');
 });
 
-test('1.2: Missile IDs are unique', () => {
-  const tracker = new MissileTracker();
-  const m1 = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-  const m2 = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-
-  assert(m1.id !== m2.id, 'Each missile should have unique ID');
+test('2.5: BLOCKED_LAUNCH_RANGES constant is correct', () => {
+  assert(BLOCKED_LAUNCH_RANGES.includes('adjacent'), 'Should include adjacent');
+  assert(BLOCKED_LAUNCH_RANGES.includes('close'), 'Should include close');
+  assert(!BLOCKED_LAUNCH_RANGES.includes('short'), 'Should not include short');
 });
 
-test('1.3: Missile tracks launch round', () => {
+// ========================================
+// AR-226.3: Smart Missiles
+// ========================================
+
+console.log('\nAR-226.3 Smart Missiles (4 tests):\n');
+
+test('3.1: Smart missile flag is tracked', () => {
   const tracker = new MissileTracker();
   const missile = tracker.launchMissile({
-    attackerId: 'p1',
-    defenderId: 'p2',
+    attackerId: 'ship1',
+    defenderId: 'ship2',
     currentRange: 'medium',
-    round: 5
+    round: 1,
+    isSmart: true
   });
 
-  assert(missile.launchRound === 5, 'Missile should remember launch round');
-  assert(missile.turnsInFlight === 0, 'Missile starts with 0 turns in flight');
+  assert(missile.isSmart === true, 'Should track smart flag');
 });
 
-test('1.4: Can launch at all ranges', () => {
-  assert(canLaunchMissile('adjacent'), 'Can launch at adjacent');
-  assert(canLaunchMissile('close'), 'Can launch at close');
-  assert(canLaunchMissile('short'), 'Can launch at short');
-  assert(canLaunchMissile('medium'), 'Can launch at medium');
-  assert(canLaunchMissile('long'), 'Can launch at long');
-  assert(canLaunchMissile('very_long'), 'Can launch at very long');
-  assert(canLaunchMissile('distant'), 'Can launch at distant');
-});
-
-test('1.5: Missile range bonus at long ranges', () => {
-  assert(getMissileRangeBonus('adjacent') === 0, 'No bonus at adjacent');
-  assert(getMissileRangeBonus('close') === 0, 'No bonus at close');
-  assert(getMissileRangeBonus('short') === 0, 'No bonus at short');
-  assert(getMissileRangeBonus('medium') === 0, 'No bonus at medium');
-  assert(getMissileRangeBonus('long') === 2, '+2 bonus at long');
-  assert(getMissileRangeBonus('very_long') === 2, '+2 bonus at very long');
-  assert(getMissileRangeBonus('distant') === 2, '+2 bonus at distant');
-});
-
-// ========================================
-// Missile Movement Tests
-// ========================================
-
-console.log('\nMissile Movement (6 tests):\n');
-
-test('2.1: Missile moves 1 range band per round', () => {
+test('3.2: Smart missiles always need 8+ to hit', () => {
   const tracker = new MissileTracker();
-  tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'medium', round: 1 });
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',
+    round: 1,
+    isSmart: true,
+    gunneryEffect: 6  // Would normally reduce target number
+  });
 
-  const updates = tracker.updateMissiles(2);
-  const missile = Array.from(tracker.missiles.values())[0];
-
-  assert(missile.currentRange === 'short', 'Missile should move from medium to short');
-  assert(missile.turnsInFlight === 1, 'Missile should have 1 turn in flight');
-});
-
-test('2.2: Missile moves through all range bands', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-
-  // Round 2: long → medium
+  // Move to arrival round
   tracker.updateMissiles(2);
-  assert(missile.currentRange === 'medium', 'Round 2: Should be at medium');
 
-  // Round 3: medium → short
-  tracker.updateMissiles(3);
-  assert(missile.currentRange === 'short', 'Round 3: Should be at short');
-
-  // Round 4: short → close
-  tracker.updateMissiles(4);
-  assert(missile.currentRange === 'close', 'Round 4: Should be at close');
-
-  // Round 5: close → adjacent
-  tracker.updateMissiles(5);
-  assert(missile.currentRange === 'adjacent', 'Round 5: Should be at adjacent');
-});
-
-test('2.3: Missile from distant takes 6 rounds', () => {
-  const tracker = new MissileTracker();
-  tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'distant', round: 1 });
-
-  // distant → very_long → long → medium → short → close → adjacent
-  for (let round = 2; round <= 7; round++) {
-    tracker.updateMissiles(round);
-  }
-
-  const missile = Array.from(tracker.missiles.values())[0];
-  assert(missile.currentRange === 'adjacent', 'Should reach adjacent after 6 rounds');
-  assert(missile.turnsInFlight === 6, 'Should have 6 turns in flight');
-});
-
-test('2.4: Update returns movement info', () => {
-  const tracker = new MissileTracker();
-  tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'short', round: 1 });
-
-  const updates = tracker.updateMissiles(2);
-
-  assert(updates.length > 0, 'Should return updates');
-  assert(updates[0].action === 'moved', 'Update should indicate movement');
-});
-
-test('2.5: Impact detected at adjacent range', () => {
-  const tracker = new MissileTracker();
-  tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'close', round: 1 });
-
-  const updates = tracker.updateMissiles(2);
-
-  const impactUpdate = updates.find(u => u.action === 'impact');
-  assert(impactUpdate, 'Should detect impact when reaching adjacent');
-});
-
-test('2.6: Missile stops at adjacent', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'adjacent', round: 1 });
-
-  tracker.updateMissiles(2);
-  tracker.updateMissiles(3);
-
-  assert(missile.currentRange === 'adjacent', 'Missile should stay at adjacent');
-});
-
-// ========================================
-// Point Defense Tests
-// ========================================
-
-console.log('\nPoint Defense (8 tests):\n');
-
-test('3.1: Point defense requires gunner skill check', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-
-  const result = tracker.pointDefense(missile.id, {}, 0);
-
-  assert(result.success, 'Point defense should attempt');
-  assert(result.hasOwnProperty('destroyed'), 'Should indicate if destroyed');
-  assert(result.roll, 'Should include dice roll');
-  assert(result.total !== undefined, 'Should include total');
-});
-
-test('3.2: Point defense with high skill more likely to succeed', () => {
-  const tracker = new MissileTracker();
-  let successes = 0;
-
-  // Run 20 trials with Gunner-3 skill
+  // Try multiple times to verify target is always 8
+  let foundTargetNumber = false;
   for (let i = 0; i < 20; i++) {
-    const m = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-    const result = tracker.pointDefense(m.id, {}, 3);
-    if (result.destroyed) successes++;
-  }
-
-  // With +3 skill and target 8, expect ~70-80% success rate
-  assert(successes >= 10, `Expected high success rate with skill 3, got ${successes}/20`);
-});
-
-test('3.3: Point defense destroys missile on hit', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-
-  // Keep trying until we get a hit (or max 50 tries)
-  let destroyed = false;
-  for (let i = 0; i < 50; i++) {
-    const m = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-    const result = tracker.pointDefense(m.id, {}, 5);
-    if (result.destroyed) {
-      destroyed = true;
-      assert(m.status === 'destroyed', 'Missile status should be destroyed');
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1,
+      isSmart: true,
+      gunneryEffect: 6
+    });
+    tracker.updateMissiles(2);
+    const result = tracker.resolveMissileImpact(m.id);
+    if (result.targetNumber === 8) {
+      foundTargetNumber = true;
       break;
     }
   }
 
-  assert(destroyed, 'Should eventually destroy a missile with skill 5');
+  assert(foundTargetNumber, 'Smart missiles should use target 8 regardless of gunnery');
 });
 
-test('3.4: Cannot point defense non-existent missile', () => {
-  const tracker = new MissileTracker();
-  const result = tracker.pointDefense('fake_missile_id', {}, 2);
-
-  assert(!result.success, 'Should fail for non-existent missile');
-  assert(result.reason === 'missile_not_found', 'Should give correct error');
-});
-
-test('3.5: Cannot point defense already destroyed missile', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-
-  missile.status = 'destroyed';
-  const result = tracker.pointDefense(missile.id, {}, 2);
-
-  assert(!result.success, 'Should fail for destroyed missile');
-  assert(result.reason === 'missile_not_active', 'Should give correct error');
-});
-
-test('3.6: Point defense target number is 8', () => {
+test('3.3: Normal missile target improves with gunnery', () => {
   const tracker = new MissileTracker();
 
-  let hits = 0;
-  let misses = 0;
-
-  // Run many trials with skill 0 to verify 8+ threshold
-  for (let i = 0; i < 100; i++) {
-    const m = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-    const result = tracker.pointDefense(m.id, {}, 0);
-
-    if (result.destroyed && result.total >= 8) hits++;
-    if (!result.destroyed && result.total < 8) misses++;
-  }
-
-  // Should see consistent pattern: hit when total >= 8, miss when < 8
-  assert(hits + misses >= 80, 'Target number 8 should be consistent');
-});
-
-test('3.7: Gunner skill improves point defense', () => {
-  const tracker = new MissileTracker();
-
-  const testSkill = (skill) => {
-    let successes = 0;
-    for (let i = 0; i < 30; i++) {
-      const m = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-      const result = tracker.pointDefense(m.id, {}, skill);
-      if (result.destroyed) successes++;
-    }
-    return successes;
-  };
-
-  const skill0 = testSkill(0);
-  const skill3 = testSkill(3);
-
-  assert(skill3 > skill0, `Skill 3 (${skill3}/30) should have more successes than skill 0 (${skill0}/30)`);
-});
-
-test('3.8: Get missiles targeting specific ship', () => {
-  const tracker = new MissileTracker();
-
-  tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-  tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'medium', round: 1 });
-  tracker.launchMissile({ attackerId: 'p2', defenderId: 'p1', currentRange: 'short', round: 1 });
-
-  const targetingP2 = tracker.getMissilesTargeting('p2');
-  const targetingP1 = tracker.getMissilesTargeting('p1');
-
-  assert(targetingP2.length === 2, 'Should find 2 missiles targeting p2');
-  assert(targetingP1.length === 1, 'Should find 1 missile targeting p1');
-});
-
-// ========================================
-// Missile Impact Tests
-// ========================================
-
-console.log('\nMissile Impact (5 tests):\n');
-
-test('4.1: Missile deals 4D6 damage', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'adjacent', round: 1 });
-
-  const result = tracker.resolveMissileImpact(missile.id);
-
-  assert(result.hit, 'Missile should hit');
-  assert(result.damageRoll.length === 4, 'Should roll 4 dice');
-  assert(result.damage >= 4 && result.damage <= 24, 'Damage should be 4-24');
-});
-
-test('4.2: Missile automatically hits (no attack roll)', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'adjacent', round: 1 });
-
-  const result = tracker.resolveMissileImpact(missile.id);
-
-  assert(result.hit, 'Missiles always hit');
-  assert(!result.attackRoll, 'No attack roll needed');
-});
-
-test('4.3: Impact changes missile status', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'adjacent', round: 1 });
-
-  tracker.resolveMissileImpact(missile.id);
-
-  assert(missile.status === 'impacted', 'Missile status should be impacted');
-});
-
-test('4.4: Cannot impact non-tracking missile', () => {
-  const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'adjacent', round: 1 });
-
-  missile.status = 'destroyed';
-  const result = tracker.resolveMissileImpact(missile.id);
-
-  assert(!result.hit, 'Destroyed missile cannot impact');
-  assert(result.reason === 'missile_not_active', 'Should give correct error');
-});
-
-test('4.5: Damage varies (dice rolls are random)', () => {
-  const tracker = new MissileTracker();
-  const damages = [];
-
-  for (let i = 0; i < 10; i++) {
-    const m = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'adjacent', round: 1 });
+  // High gunnery effect should reduce target number
+  let foundReducedTarget = false;
+  for (let i = 0; i < 20; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1,
+      isSmart: false,
+      gunneryEffect: 6
+    });
+    tracker.updateMissiles(2);
     const result = tracker.resolveMissileImpact(m.id);
-    damages.push(result.damage);
+    if (result.targetNumber < 8) {
+      foundReducedTarget = true;
+      break;
+    }
   }
 
-  const uniqueDamages = new Set(damages);
-  assert(uniqueDamages.size > 1, 'Damage should vary across rolls');
+  assert(foundReducedTarget, 'Normal missiles should have reduced target with high gunnery');
+});
+
+test('3.4: Smart missile persists on miss', () => {
+  const tracker = new MissileTracker();
+
+  // Try to get a miss on a smart missile
+  let foundPersist = false;
+  for (let i = 0; i < 50; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1,
+      isSmart: true
+    });
+    tracker.updateMissiles(2);
+    const result = tracker.resolveMissileImpact(m.id, 5);  // High dodge
+    if (!result.hit && result.smartPersist) {
+      foundPersist = true;
+      assert(m.status === 'tracking', 'Smart missile should still be tracking');
+      assert(m.arrivalRound === 3, 'Should attack again next round');
+      break;
+    }
+  }
+
+  assert(foundPersist, 'Smart missiles should persist on miss');
 });
 
 // ========================================
-// Missile Tracker State Tests
+// AR-226.4: Point Defense Timing
 // ========================================
 
-console.log('\nMissile Tracker State (3 tests):\n');
+console.log('\nAR-226.4 Point Defense Timing (4 tests):\n');
 
-test('5.1: Tracker maintains missile count', () => {
+test('4.1: Cannot PD missile before arrival', () => {
+  const tracker = new MissileTracker();
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'long',  // 2 turn flight
+    round: 1
+  });
+
+  // Try PD on round 2 (arrives round 3)
+  const result = tracker.pointDefense(missile.id, { round: 2 });
+
+  assert(result.success === false, 'Should fail');
+  assert(result.reason === 'missile_not_arrived', 'Should explain timing');
+  assert(result.turnsRemaining === 1, 'Should show turns remaining');
+});
+
+test('4.2: Can PD missile on arrival round', () => {
+  const tracker = new MissileTracker();
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',  // 1 turn flight, arrives round 2
+    round: 1
+  });
+
+  tracker.updateMissiles(2);
+  const result = tracker.pointDefense(missile.id, { gunnerSkill: 3, round: 2 });
+
+  assert(result.success === true, 'Should allow PD on arrival');
+});
+
+test('4.3: getArrivingMissiles only returns arrived', () => {
   const tracker = new MissileTracker();
 
-  tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'long', round: 1 });
-  tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'medium', round: 1 });
+  // Launch at different ranges
+  tracker.launchMissile({ attackerId: 's1', defenderId: 'target', currentRange: 'short', round: 1 });   // arrives r2
+  tracker.launchMissile({ attackerId: 's2', defenderId: 'target', currentRange: 'medium', round: 1 });  // arrives r2
+  tracker.launchMissile({ attackerId: 's3', defenderId: 'target', currentRange: 'long', round: 1 });    // arrives r3
+
+  tracker.updateMissiles(2);
+  const arriving = tracker.getArrivingMissiles('target', 2);
+
+  assert(arriving.length === 2, 'Should only get 2 missiles arriving at round 2');
+});
+
+test('4.4: Arriving flag set correctly', () => {
+  const tracker = new MissileTracker();
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',
+    round: 1
+  });
+
+  const updates = tracker.updateMissiles(2);
+  const arrivingUpdate = updates.find(u => u.action === 'arriving');
+
+  assert(arrivingUpdate, 'Should have arriving update');
+  assert(missile.arriving === true, 'Missile should be marked arriving');
+});
+
+// ========================================
+// AR-226.5: Cumulative PD Penalty
+// ========================================
+
+console.log('\nAR-226.5 Cumulative PD Penalty (3 tests):\n');
+
+test('5.1: First PD attempt has no penalty', () => {
+  const tracker = new MissileTracker();
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',
+    round: 1
+  });
+  tracker.updateMissiles(2);
+
+  const result = tracker.pointDefense(missile.id, {
+    gunnerSkill: 2,
+    gunnerId: 'gunner1',
+    round: 2
+  });
+
+  assert(result.modifiers.cumulativePenalty === 0, 'First attempt should have no penalty');
+  assert(result.modifiers.attemptNumber === 1, 'Should be attempt 1');
+});
+
+test('5.2: Second PD attempt has -1 penalty', () => {
+  const tracker = new MissileTracker();
+
+  const m1 = tracker.launchMissile({ attackerId: 's1', defenderId: 'target', currentRange: 'short', round: 1 });
+  const m2 = tracker.launchMissile({ attackerId: 's2', defenderId: 'target', currentRange: 'short', round: 1 });
+  tracker.updateMissiles(2);
+
+  tracker.pointDefense(m1.id, { gunnerSkill: 2, gunnerId: 'gunner1', round: 2 });
+  const result = tracker.pointDefense(m2.id, { gunnerSkill: 2, gunnerId: 'gunner1', round: 2 });
+
+  assert(result.modifiers.cumulativePenalty === -1, 'Second attempt should have -1 penalty');
+  assert(result.modifiers.attemptNumber === 2, 'Should be attempt 2');
+});
+
+test('5.3: Penalty resets each round', () => {
+  const tracker = new MissileTracker();
+
+  const m1 = tracker.launchMissile({ attackerId: 's1', defenderId: 'target', currentRange: 'short', round: 1 });
+  tracker.updateMissiles(2);
+  tracker.pointDefense(m1.id, { gunnerSkill: 2, gunnerId: 'gunner1', round: 2 });
+
+  // New round
+  const m2 = tracker.launchMissile({ attackerId: 's2', defenderId: 'target', currentRange: 'short', round: 2 });
+  tracker.updateMissiles(3);  // This resets PD counters
+  const result = tracker.pointDefense(m2.id, { gunnerSkill: 2, gunnerId: 'gunner1', round: 3 });
+
+  assert(result.modifiers.cumulativePenalty === 0, 'Penalty should reset each round');
+});
+
+// ========================================
+// AR-226.6: Turret PD Bonuses
+// ========================================
+
+console.log('\nAR-226.6 Turret PD Bonuses (3 tests):\n');
+
+test('6.1: Single turret gives no bonus', () => {
+  const tracker = new MissileTracker();
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',
+    round: 1
+  });
+  tracker.updateMissiles(2);
+
+  const result = tracker.pointDefense(missile.id, {
+    gunnerSkill: 2,
+    turretSize: 1,
+    round: 2
+  });
+
+  assert(result.modifiers.turretBonus === 0, 'Single turret = 0 bonus');
+});
+
+test('6.2: Double turret gives +1 bonus', () => {
+  const tracker = new MissileTracker();
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',
+    round: 1
+  });
+  tracker.updateMissiles(2);
+
+  const result = tracker.pointDefense(missile.id, {
+    gunnerSkill: 2,
+    turretSize: 2,
+    round: 2
+  });
+
+  assert(result.modifiers.turretBonus === 1, 'Double turret = +1 bonus');
+});
+
+test('6.3: Triple turret gives +2 bonus', () => {
+  const tracker = new MissileTracker();
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',
+    round: 1
+  });
+  tracker.updateMissiles(2);
+
+  const result = tracker.pointDefense(missile.id, {
+    gunnerSkill: 2,
+    turretSize: 3,
+    round: 2
+  });
+
+  assert(result.modifiers.turretBonus === 2, 'Triple turret = +2 bonus');
+});
+
+// ========================================
+// AR-226.7: ECM Against Missiles
+// ========================================
+
+console.log('\nAR-226.7 ECM Warfare (5 tests):\n');
+
+test('7.1: ECM can jam missiles', () => {
+  const tracker = new MissileTracker();
+
+  let jammed = false;
+  for (let i = 0; i < 30; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1
+    });
+    const result = tracker.electronicWarfare(m.id, 3);
+    if (result.jammed) {
+      jammed = true;
+      assert(m.status === 'jammed', 'Missile should be jammed');
+      break;
+    }
+  }
+
+  assert(jammed, 'ECM should eventually jam a missile');
+});
+
+test('7.2: ECM can only be attempted once per salvo', () => {
+  const tracker = new MissileTracker();
+  const missile = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',
+    round: 1
+  });
+
+  tracker.electronicWarfare(missile.id, 2);
+  const result = tracker.electronicWarfare(missile.id, 2);
+
+  assert(result.success === false, 'Should fail second ECM attempt');
+  assert(result.reason === 'ecm_already_attempted', 'Should explain reason');
+});
+
+test('7.3: Smart missiles can resist ECM', () => {
+  const tracker = new MissileTracker();
+
+  let resisted = false;
+  for (let i = 0; i < 50; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1,
+      isSmart: true
+    });
+    const result = tracker.electronicWarfare(m.id, 3);
+    if (result.success && !result.jammed && result.smartResist) {
+      resisted = true;
+      assert(m.status === 'tracking', 'Smart missile should still track');
+      break;
+    }
+  }
+
+  assert(resisted, 'Smart missiles should sometimes resist ECM');
+});
+
+test('7.4: ECM target number is 8', () => {
+  const tracker = new MissileTracker();
+
+  let confirmed = false;
+  for (let i = 0; i < 30; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1
+    });
+    const result = tracker.electronicWarfare(m.id, 0);
+    if (result.total >= 8 && result.jammed) {
+      confirmed = true;
+      break;
+    }
+    if (result.total < 8 && !result.jammed) {
+      confirmed = true;
+      break;
+    }
+  }
+
+  assert(confirmed, 'ECM should use target 8');
+});
+
+test('7.5: Sensor skill improves ECM', () => {
+  const tracker = new MissileTracker();
+
+  let skill0Jams = 0;
+  let skill3Jams = 0;
+
+  for (let i = 0; i < 30; i++) {
+    const m1 = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1
+    });
+    const r1 = tracker.electronicWarfare(m1.id, 0);
+    if (r1.jammed) skill0Jams++;
+
+    const m2 = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1
+    });
+    const r2 = tracker.electronicWarfare(m2.id, 3);
+    if (r2.jammed) skill3Jams++;
+  }
+
+  assert(skill3Jams >= skill0Jams, 'Higher sensor skill should jam more');
+});
+
+// ========================================
+// Missile Range Bonus (unchanged from before)
+// ========================================
+
+console.log('\nMissile Range Bonus (4 tests):\n');
+
+test('8.1: No bonus at short range', () => {
+  assert(getMissileRangeBonus('short') === 0, 'No bonus at short');
+});
+
+test('8.2: No bonus at medium range', () => {
+  assert(getMissileRangeBonus('medium') === 0, 'No bonus at medium');
+});
+
+test('8.3: +2 bonus at long range', () => {
+  assert(getMissileRangeBonus('long') === 2, '+2 at long');
+});
+
+test('8.4: +2 bonus at very long and distant', () => {
+  assert(getMissileRangeBonus('very_long') === 2, '+2 at very long');
+  assert(getMissileRangeBonus('distant') === 2, '+2 at distant');
+});
+
+// ========================================
+// Missile Impact and Damage
+// ========================================
+
+console.log('\nMissile Impact (4 tests):\n');
+
+test('9.1: Missile deals 4D6 damage on hit', () => {
+  const tracker = new MissileTracker();
+
+  let foundHit = false;
+  for (let i = 0; i < 30; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1
+    });
+    tracker.updateMissiles(2);
+    const result = tracker.resolveMissileImpact(m.id, 0);
+    if (result.hit) {
+      foundHit = true;
+      assert(result.damageRoll.length === 4, 'Should roll 4 dice');
+      assert(result.damage >= 4 && result.damage <= 24, 'Damage should be 4-24');
+      break;
+    }
+  }
+
+  assert(foundHit, 'Should eventually hit');
+});
+
+test('9.2: Impact sets status to impacted', () => {
+  const tracker = new MissileTracker();
+
+  for (let i = 0; i < 30; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1
+    });
+    tracker.updateMissiles(2);
+    const result = tracker.resolveMissileImpact(m.id, 0);
+    if (result.hit) {
+      assert(m.status === 'impacted', 'Status should be impacted');
+      break;
+    }
+  }
+});
+
+test('9.3: Dodge DM reduces hit chance', () => {
+  const tracker = new MissileTracker();
+
+  let hits0 = 0;
+  let hits5 = 0;
+
+  for (let i = 0; i < 30; i++) {
+    const m1 = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1
+    });
+    tracker.updateMissiles(2);
+    if (tracker.resolveMissileImpact(m1.id, 0).hit) hits0++;
+
+    const m2 = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1
+    });
+    tracker.updateMissiles(2);
+    if (tracker.resolveMissileImpact(m2.id, 5).hit) hits5++;
+  }
+
+  assert(hits0 > hits5, 'Higher dodge should reduce hits');
+});
+
+test('9.4: Normal missile miss sets status to missed', () => {
+  const tracker = new MissileTracker();
+
+  for (let i = 0; i < 50; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1,
+      isSmart: false
+    });
+    tracker.updateMissiles(2);
+    const result = tracker.resolveMissileImpact(m.id, 6);  // High dodge
+    if (!result.hit) {
+      assert(m.status === 'missed', 'Normal missile should miss permanently');
+      break;
+    }
+  }
+});
+
+// ========================================
+// Tracker State Management
+// ========================================
+
+console.log('\nTracker State (3 tests):\n');
+
+test('10.1: getState returns correct counts', () => {
+  const tracker = new MissileTracker();
+
+  tracker.launchMissile({ attackerId: 's1', defenderId: 'target', currentRange: 'short', round: 1 });
+  tracker.launchMissile({ attackerId: 's2', defenderId: 'target', currentRange: 'medium', round: 1 });
 
   const state = tracker.getState();
-  assert(state.activeMissiles === 2, 'Should track 2 active missiles');
-  assert(state.totalMissiles === 2, 'Should track 2 total missiles');
+  assert(state.activeMissiles === 2, 'Should show 2 active');
+  assert(state.totalMissiles === 2, 'Should show 2 total');
 });
 
-test('5.2: Cleanup removes old missiles', () => {
+test('10.2: getMissilesTargeting filters correctly', () => {
   const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'adjacent', round: 1 });
 
-  tracker.resolveMissileImpact(missile.id);
-  missile.turnsInFlight = 15; // Old missile
+  tracker.launchMissile({ attackerId: 's1', defenderId: 'target1', currentRange: 'short', round: 1 });
+  tracker.launchMissile({ attackerId: 's2', defenderId: 'target1', currentRange: 'short', round: 1 });
+  tracker.launchMissile({ attackerId: 's3', defenderId: 'target2', currentRange: 'short', round: 1 });
+
+  const t1 = tracker.getMissilesTargeting('target1');
+  const t2 = tracker.getMissilesTargeting('target2');
+
+  assert(t1.length === 2, '2 missiles targeting target1');
+  assert(t2.length === 1, '1 missile targeting target2');
+});
+
+test('10.3: cleanup removes old missiles', () => {
+  const tracker = new MissileTracker();
+  const m = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'short',
+    round: 1
+  });
+  tracker.updateMissiles(2);
+
+  // Simulate impact and age
+  tracker.resolveMissileImpact(m.id, 0);
+  m.turnsInFlight = 15;
 
   tracker.cleanup();
 
   const state = tracker.getState();
-  assert(state.totalMissiles === 0, 'Old missiles should be cleaned up');
+  assert(state.totalMissiles === 0, 'Old missiles should be cleaned');
 });
 
-test('5.3: Recent impacted missiles kept for logging', () => {
+// ========================================
+// AR-226.8: Nuclear Missiles
+// ========================================
+
+console.log('\nAR-226.8 Nuclear Missiles (5 tests):\n');
+
+test('11.1: Can launch nuclear missile', () => {
   const tracker = new MissileTracker();
-  const missile = tracker.launchMissile({ attackerId: 'p1', defenderId: 'p2', currentRange: 'adjacent', round: 1 });
+  const m = tracker.launchMissile({
+    attackerId: 'ship1',
+    defenderId: 'ship2',
+    currentRange: 'medium',
+    round: 1,
+    missileType: 'nuclear'
+  });
 
-  tracker.resolveMissileImpact(missile.id);
-  missile.turnsInFlight = 2; // Recent missile
+  assert(!m.error, 'Should launch successfully');
+  assert(m.missileType === 'nuclear', 'Should track missile type');
+  assert(m.isNuclear === true, 'Should flag as nuclear');
+});
 
-  tracker.cleanup();
+test('11.2: Nuclear missile has radiation result on hit', () => {
+  const tracker = new MissileTracker();
 
-  const state = tracker.getState();
-  assert(state.totalMissiles === 1, 'Recent impacted missiles should be kept');
+  let foundRadiation = false;
+  for (let i = 0; i < 30; i++) {
+    const m = tracker.launchMissile({
+      attackerId: 'ship1',
+      defenderId: 'ship2',
+      currentRange: 'short',
+      round: 1,
+      missileType: 'nuclear'
+    });
+    tracker.updateMissiles(2);
+    const result = tracker.resolveMissileImpact(m.id, 0, { armor: 2 });
+    if (result.hit && result.isNuclear) {
+      foundRadiation = true;
+      assert(result.radiationResult, 'Should have radiation result');
+      break;
+    }
+  }
+
+  assert(foundRadiation, 'Should eventually hit and have radiation result');
+});
+
+test('11.3: Armor 8+ blocks radiation', () => {
+  const { checkRadiationDamage } = require('../../lib/weapons/missiles');
+  const result = checkRadiationDamage(8);
+  assert(result.applies === false, 'Armor 8 should block radiation');
+  assert(result.reason.includes('Armor 8+'), 'Should explain why blocked');
+});
+
+test('11.4: Nuclear damper blocks radiation', () => {
+  const { checkRadiationDamage } = require('../../lib/weapons/missiles');
+  const result = checkRadiationDamage(4, true);
+  assert(result.applies === false, 'Nuclear damper should block radiation');
+});
+
+test('11.5: MISSILE_TYPES has nuclear type', () => {
+  const { MISSILE_TYPES } = require('../../lib/weapons/missiles');
+  assert(MISSILE_TYPES.nuclear, 'Should have nuclear type');
+  assert(MISSILE_TYPES.nuclear.radiation === true, 'Nuclear should have radiation');
+  assert(MISSILE_TYPES.nuclear.legal === false, 'Nuclear should be illegal');
 });
 
 // ========================================

@@ -547,7 +547,11 @@ export function renderContacts() {
 
   container.innerHTML = filteredContacts.map(c => {
     const rangeClass = getRangeClass(c.range_band);
+    // BD-3: Add fire button for armed contacts
+    const hasWeapons = c.weapons && Array.isArray(c.weapons) && c.weapons.length > 0;
+    const fireButton = hasWeapons ? `<button class="btn btn-icon btn-fire-contact" data-id="${c.id}" title="Fire Weapon">🔥</button>` : '';
     const gmControls = state.isGM ? `
+      ${fireButton}
       <button class="btn btn-icon btn-delete-contact" data-id="${c.id}" title="Delete">✕</button>
     ` : '';
     // Authorized target indicator (weapons_free)
@@ -648,6 +652,26 @@ export function renderContacts() {
         e.stopPropagation();
         const contactId = btn.dataset.id;
         state.socket.emit('ops:deleteContact', { contactId });
+      });
+    });
+
+    // BD-3: GM fire handlers
+    container.querySelectorAll('.btn-fire-contact').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const contactId = btn.dataset.id;
+        // Find a party ship to target
+        const targetShip = state.ships?.find(s => s.is_party_ship);
+        if (!targetShip) {
+          helpers.showNotification('No party ship to target', 'error');
+          return;
+        }
+        // Fire the first weapon (weaponIndex 0)
+        state.socket.emit('ops:fireAsContact', {
+          contactId,
+          weaponIndex: 0,
+          targetShipId: targetShip.id
+        });
       });
     });
   }

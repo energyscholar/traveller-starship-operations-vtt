@@ -1,0 +1,26 @@
+{
+  "sector": "Spinward Marches",
+  "generated": "2026-01-01T09:12:16.548Z",
+  "generator": "AR-222 generate-spinward-marches.js",
+  "totalSystems": 439,
+  "totalEmptyHexes": 841,
+  "subsectorCount": 16,
+  "subsectorFiles": [
+    "subsector-a-cronor.json",
+    "subsector-b-jewell.json",
+    "subsector-c-vilis.json",
+    "subsector-d-rhylanor.json",
+    "subsector-e-querion.json",
+    "subsector-f-regina.json",
+    "subsector-g-lanth.json",
+    "subsector-h-aramis.json",
+    "subsector-i-darrian.json",
+    "subsector-j-sword-worlds.json",
+    "subsector-k-lunion.json",
+    "subsector-l-mora.json",
+    "subsector-m-five-sisters.json",
+    "subsector-n-district-268.json",
+    "subsector-o-glisten.json",
+    "subsector-p-trins-veil.json"
+  ]
+}

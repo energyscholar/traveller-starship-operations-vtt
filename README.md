@@ -1,6 +1,6 @@
 # Traveller VTT for Starship Operations
 
-[![Test Status](https://img.shields.io/badge/tests-339%20passing-brightgreen)](https://github.com/energyscholar/traveller-combat-vtt)
+[![Test Status](https://img.shields.io/badge/tests-392%20passing-brightgreen)](https://github.com/energyscholar/traveller-combat-vtt)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 
@@ -18,7 +18,7 @@ Traveller VTT is a web-based virtual tabletop for **Mongoose Traveller 2nd Editi
 - **Ship Operations** - Jump plotting, sensor contacts, ship mail, crew status
 - **Shared TravellerMap** - GM can share sector maps with all players (with caching)
 - **Ship Template Editor** - Build and customize ships with High Guard rules
-- **339 Passing Tests** across 31 test suites
+- **392 Passing Tests** across 36 test suites
 
 **Version:** 1.0.0
 
@@ -28,23 +28,15 @@ Traveller VTT is a web-based virtual tabletop for **Mongoose Traveller 2nd Editi
 
 | Metric | Value |
 |--------|-------|
-| **Total Lines of Code** | ~107,000 |
-| JavaScript | 61,819 |
-| Test Code | 18,097 |
-| JSON | 12,162 |
-| CSS | 7,839 |
-| HTML | 1,729 |
-| **Total Files** | 430+ |
-| JavaScript files | 219 |
-| Test files | 64 |
-| TypeScript files | 26 |
-| Directories | 72 |
+| **Total Lines of Code** | ~117,000 |
+| JavaScript (production) | 68,000 |
+| JavaScript (test) | 48,000 |
+| **Total Files** | 500+ |
+| JavaScript files | 493 |
 | **Git Stats** | |
-| Total commits | 259 |
+| Total commits | 457 |
 | Contributors | 3 |
-| Branches | 22 |
-| Tags/Releases | 12 |
-| Project age | ~5 weeks |
+| Project age | ~7 weeks |
 | **Dependencies** | |
 | Runtime | 7 |
 | Dev | 4 |
@@ -180,14 +172,14 @@ curl http://localhost:3000/health
 ### Testing
 - **[Jest](https://jestjs.io/)** (29.7.0) - Testing framework
 - **[Puppeteer](https://pptr.dev/)** (24.29.1) - Browser automation for E2E tests
-- **339 tests** across 31 test suites (~1.7s runtime)
+- **392 tests** across 36 test suites (~3s runtime)
 
 ---
 
 ## Testing
 
 ```bash
-# All tests (339 tests across 31 suites)
+# All tests (392 tests across 36 suites)
 npm test
 
 # Smoke tests (fast, ~0.5s)
@@ -275,8 +267,8 @@ Contributions welcome! Please:
 ---
 
 **Version:** 1.0.0
-**Tests:** 339 passing (31 suites)
-**Last Updated:** 2025-12-04
+**Tests:** 392 passing (36 suites)
+**Last Updated:** 2025-12-31
 **Created by:** Bruce Stephenson
 
 © 2025 Bruce Stephenson. Open source under GPL-3.0 License.

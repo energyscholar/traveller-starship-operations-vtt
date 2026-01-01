@@ -1,0 +1,6802 @@
+{
+  "subsector": "N",
+  "name": "District 268",
+  "sector": "Spinward Marches",
+  "hexRange": {
+    "colMin": 9,
+    "colMax": 16,
+    "rowMin": 31,
+    "rowMax": 40
+  },
+  "generated": "2026-01-01T09:12:16.545Z",
+  "systems": [
+    {
+      "id": "asteltine",
+      "hex": "0931",
+      "name": "Asteltine",
+      "uwp": "B7A7",
+      "stellar": {
+        "primary": "K7 V",
+        "type": "Binary"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "210",
+      "allegiance": "NaHu",
+      "gasGiants": 0,
+      "tradeCodes": [
+        "Fl",
+        "Ni"
+      ],
+      "notes": "Good starport. TL10.",
+      "worlds": 9,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "asteltine-star",
+          "name": "Asteltine Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "stellarClass": "K7 V",
+          "transponder": "NONE",
+          "gmNotes": "K7 V M3 V primary star."
+        },
+        {
+          "id": "asteltine-mainworld",
+          "name": "Asteltine",
+          "type": "Planet",
+          "orbitAU": 1.4348799318504963,
+          "bearing": 186,
+          "uwp": "B7A7402-A",
+          "tradeCodes": [
+            "Fl",
+            "Ni"
+          ],
+          "atmosphere": "Exotic",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "ASTELTINE CONTROL",
+          "gmNotes": "Mainworld. Pop 10^4. TL10."
+        },
+        {
+          "id": "asteltine-highport",
+          "name": "Asteltine Highport",
+          "type": "Station",
+          "parent": "asteltine-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "uwp": "B7A7402-A",
+          "transponder": "ASTELTINE HIGHPORT",
+          "gmNotes": "Class B Good starport.",
+          "celestial": false
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "asteltine-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "asteltine-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Asteltine",
+          "type": "orbit",
+          "linkedTo": "asteltine-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "launch_craft",
+            "dock"
+          ],
+          "travelTimeHours": {
+            "loc-dock-highport": 1,
+            "loc-mainworld-jump": 4
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Dock - Asteltine Highport",
+          "type": "dock",
+          "linkedTo": "asteltine-highport",
+          "x": 460,
+          "y": 310,
+          "actions": [
+            "refuel_refined",
+            "repair",
+            "trade",
+            "passengers",
+            "undock"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "inchin",
+      "hex": "0938",
+      "name": "Inchin",
+      "uwp": "D420",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "823",
+      "allegiance": "Im",
+      "gasGiants": 3,
+      "wikiUrl": "https://wiki.travellerrpg.com/Inchin_(world)",
+      "tradeCodes": [
+        "De",
+        "He",
+        "Lo",
+        "Po"
+      ],
+      "notes": "Poor starport. TL10.",
+      "worlds": 10,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "inchin-star",
+          "name": "Inchin Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "inchin-mainworld",
+          "name": "Inchin",
+          "type": "Planet",
+          "orbitAU": 0.541323417411848,
+          "bearing": 184,
+          "radiusKm": 4000,
+          "uwp": "D42035A-A",
+          "atmosphere": "Very Thin Tainted",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "INCHIN CONTROL",
+          "gmNotes": "Mainworld. Pop 10^3. TL10.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "inchin-gasgiant",
+          "name": "Inchin Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 6.7535403846201705,
+          "bearing": 219,
+          "radiusKm": 69052.95128090253,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "inchin-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "inchin-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Inchin",
+          "type": "orbit",
+          "linkedTo": "inchin-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Inchin Orbital Station",
+          "type": "dock",
+          "linkedTo": "inchin-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Inchin Landing Field",
+          "type": "surface",
+          "linkedTo": "inchin-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "singer",
+      "hex": "0940",
+      "name": "Singer",
+      "uwp": "D553",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "901",
+      "allegiance": "Im",
+      "gasGiants": 1,
+      "wikiUrl": "https://wiki.travellerrpg.com/Singer_(world)",
+      "tradeCodes": [
+        "Po"
+      ],
+      "notes": "Poor starport. TL6.",
+      "worlds": 13,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "singer-star",
+          "name": "Singer Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "singer-mainworld",
+          "name": "Singer",
+          "type": "Planet",
+          "orbitAU": 1.1078624028595214,
+          "bearing": 97,
+          "radiusKm": 4800,
+          "uwp": "D553774-6",
+          "atmosphere": "Thin",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "SINGER CONTROL",
+          "gmNotes": "Mainworld. Pop 10^7. TL6.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "singer-gasgiant",
+          "name": "Singer Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 6.571812513517074,
+          "bearing": 159,
+          "radiusKm": 58903.77169788863,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "singer-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "singer-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Singer",
+          "type": "orbit",
+          "linkedTo": "singer-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Singer Orbital Station",
+          "type": "dock",
+          "linkedTo": "singer-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Singer Landing Field",
+          "type": "surface",
+          "linkedTo": "singer-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "567-908",
+      "hex": "1031",
+      "name": "567-908",
+      "uwp": "E532",
+      "stellar": {
+        "primary": "K5 III",
+        "type": "Binary"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "010",
+      "allegiance": "NaXX",
+      "gasGiants": 0,
+      "tradeCodes": [
+        "Ba",
+        "Po"
+      ],
+      "notes": "Barren world. Shriekers native lifeform.",
+      "worlds": 11,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "567-908-star",
+          "name": "567-908 Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "stellarClass": "K5 III",
+          "transponder": "NONE",
+          "gmNotes": "K5 III D primary star."
+        },
+        {
+          "id": "567-908-mainworld",
+          "name": "567-908",
+          "type": "Planet",
+          "orbitAU": 1.144801562295365,
+          "bearing": 199,
+          "uwp": "E532000-0",
+          "tradeCodes": [
+            "Ba",
+            "Po"
+          ],
+          "atmosphere": "Very Thin",
+          "breathable": false,
+          "inGoldilocks": true,
+          "transponder": "567-908 CONTROL",
+          "gmNotes": "Mainworld. Pop 0. TL0."
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "567-908-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "567-908-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - 567-908",
+          "type": "orbit",
+          "linkedTo": "567-908-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "launch_craft",
+            "dock"
+          ],
+          "travelTimeHours": {
+            "loc-dock-highport": 1,
+            "loc-mainworld-jump": 4
+          }
+        },
+        {
+          "id": "loc-dock-downport",
+          "name": "Dock - 567-908 Downport",
+          "type": "dock",
+          "linkedTo": "567-908-mainworld",
+          "x": 460,
+          "y": 310,
+          "actions": [
+            "refuel_unrefined",
+            "undock"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "avastan",
+      "hex": "1037",
+      "name": "Avastan",
+      "uwp": "C433",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "724",
+      "allegiance": "Im",
+      "gasGiants": 4,
+      "wikiUrl": "https://wiki.travellerrpg.com/Avastan_(world)",
+      "tradeCodes": [
+        "Ni",
+        "Po"
+      ],
+      "notes": "Routine starport. TL10.",
+      "worlds": 7,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "avastan-star",
+          "name": "Avastan Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "avastan-mainworld",
+          "name": "Avastan",
+          "type": "Planet",
+          "orbitAU": 1.3124433932120536,
+          "bearing": 239,
+          "radiusKm": 4000,
+          "uwp": "C433520-A",
+          "atmosphere": "Very Thin",
+          "breathable": false,
+          "inGoldilocks": true,
+          "transponder": "AVASTAN CONTROL",
+          "gmNotes": "Mainworld. Pop 10^5. TL10.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "avastan-gasgiant",
+          "name": "Avastan Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 6.941071597230756,
+          "bearing": 235,
+          "radiusKm": 53762.145513754454,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "avastan-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "avastan-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Avastan",
+          "type": "orbit",
+          "linkedTo": "avastan-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Avastan Orbital Station",
+          "type": "dock",
+          "linkedTo": "avastan-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Avastan Starport",
+          "type": "surface",
+          "linkedTo": "avastan-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "kuai-qing",
+      "hex": "1040",
+      "name": "Kuai Qing",
+      "uwp": "C503",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "320",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Kuai%20Qing_(world)",
+      "tradeCodes": [
+        "Ic",
+        "Na",
+        "Va",
+        "Pi"
+      ],
+      "notes": "Routine starport. TL10.",
+      "worlds": 10,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "kuai-qing-star",
+          "name": "Kuai Qing Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "kuai-qing-mainworld",
+          "name": "Kuai Qing",
+          "type": "Planet",
+          "orbitAU": 0.56398561599708,
+          "bearing": 29,
+          "radiusKm": 4800,
+          "uwp": "C503758-A",
+          "atmosphere": "None",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "KUAI QING CONTROL",
+          "gmNotes": "Mainworld. Pop 10^7. TL10.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "kuai-qing-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "kuai-qing-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Kuai Qing",
+          "type": "orbit",
+          "linkedTo": "kuai-qing-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Kuai Qing Orbital Station",
+          "type": "dock",
+          "linkedTo": "kuai-qing-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Kuai Qing Starport",
+          "type": "surface",
+          "linkedTo": "kuai-qing-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "faldor",
+      "hex": "1131",
+      "name": "Faldor",
+      "uwp": "E593",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "520",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Faldor_(world)",
+      "tradeCodes": [
+        "Ni",
+        "Lt"
+      ],
+      "notes": "Frontier starport. TL5.",
+      "worlds": 9,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "faldor-star",
+          "name": "Faldor Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "faldor-mainworld",
+          "name": "Faldor",
+          "type": "Planet",
+          "orbitAU": 1.6923861702966483,
+          "bearing": 189,
+          "radiusKm": 4800,
+          "uwp": "E5936A7-5",
+          "atmosphere": "Dense Tainted",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "FALDOR CONTROL",
+          "gmNotes": "Mainworld. Pop 10^6. TL5.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "faldor-gasgiant",
+          "name": "Faldor Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 5.0669914592871965,
+          "bearing": 49,
+          "radiusKm": 68138.01481361038,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "faldor-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "faldor-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Faldor",
+          "type": "orbit",
+          "linkedTo": "faldor-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Faldor Frontier Landing",
+          "type": "surface",
+          "linkedTo": "faldor-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel_wilderness"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "bowman",
+      "hex": "1132",
+      "name": "Bowman",
+      "uwp": "D000",
+      "stellar": {
+        "primary": "M0 V",
+        "type": "Single"
+      },
+      "bases": "S",
+      "remarks": "",
+      "pbg": "831",
+      "allegiance": "CsIm",
+      "gasGiants": 1,
+      "tradeCodes": [
+        "As",
+        "Lo",
+        "Va"
+      ],
+      "notes": "Poor starport. TL9.",
+      "worlds": 10,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "bowman-star",
+          "name": "Bowman Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "stellarClass": "M0 V",
+          "transponder": "NONE",
+          "gmNotes": "M0 V primary star."
+        },
+        {
+          "id": "bowman-mainworld",
+          "name": "Bowman Belt",
+          "type": "Asteroid Belt",
+          "orbitAU": 1.0749035098895097,
+          "bearing": 183,
+          "uwp": "D000300-9",
+          "tradeCodes": [
+            "As",
+            "Lo",
+            "Va"
+          ],
+          "atmosphere": "None",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "BOWMAN CONTROL",
+          "gmNotes": "Mainworld asteroid belt. Pop 10^3 scattered across mining settlements. TL9."
+        },
+        {
+          "id": "bowman-gasgiant",
+          "name": "Bowman Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 7.409793643580308,
+          "bearing": 29,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "fuelSource": {
+            "type": "gas_giant",
+            "fuelType": "unrefined",
+            "unlimited": true
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "bowman-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "bowman-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Bowman",
+          "type": "orbit",
+          "linkedTo": "bowman-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "launch_craft",
+            "dock"
+          ],
+          "travelTimeHours": {
+            "loc-dock-highport": 1,
+            "loc-mainworld-jump": 4
+          }
+        },
+        {
+          "id": "loc-dock-downport",
+          "name": "Dock - Bowman Downport",
+          "type": "dock",
+          "linkedTo": "bowman-mainworld",
+          "x": 460,
+          "y": 310,
+          "actions": [
+            "refuel_unrefined",
+            "repair",
+            "trade",
+            "undock"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2
+          },
+          "fuelSource": {
+            "type": "starport",
+            "fuelType": "unrefined",
+            "cost": 100
+          }
+        },
+        {
+          "id": "loc-skim-gasgiant",
+          "name": "Skim - Gas Giant",
+          "type": "fuel_skim",
+          "linkedTo": "bowman-gasgiant",
+          "x": 200,
+          "y": 100,
+          "actions": [
+            "refuel_skim",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 12,
+            "loc-system-jump": 10
+          },
+          "fuelSource": {
+            "type": "gas_giant",
+            "fuelType": "unrefined",
+            "unlimited": true,
+            "hazard": "low"
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "squallia",
+      "hex": "1133",
+      "name": "Squallia",
+      "uwp": "C438",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "320",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Squallia_(world)",
+      "tradeCodes": [
+        "Ni"
+      ],
+      "notes": "Routine starport. TL9.",
+      "worlds": 6,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "squallia-star",
+          "name": "Squallia Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "squallia-mainworld",
+          "name": "Squallia",
+          "type": "Planet",
+          "orbitAU": 1.2633151341956783,
+          "bearing": 258,
+          "radiusKm": 4000,
+          "uwp": "C438679-9",
+          "atmosphere": "Very Thin",
+          "breathable": false,
+          "inGoldilocks": true,
+          "transponder": "SQUALLIA CONTROL",
+          "gmNotes": "Mainworld. Pop 10^6. TL9.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "squallia-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "squallia-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Squallia",
+          "type": "orbit",
+          "linkedTo": "squallia-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Squallia Orbital Station",
+          "type": "dock",
+          "linkedTo": "squallia-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Squallia Starport",
+          "type": "surface",
+          "linkedTo": "squallia-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "tarsus",
+      "hex": "1138",
+      "name": "Tarsus",
+      "uwp": "B584",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "202",
+      "allegiance": "Im",
+      "gasGiants": 2,
+      "wikiUrl": "https://wiki.travellerrpg.com/Tarsus_(world)",
+      "tradeCodes": [
+        "Ag",
+        "Ni",
+        "Ri"
+      ],
+      "notes": "Good starport. TL10.",
+      "worlds": 11,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "tarsus-star",
+          "name": "Tarsus Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "tarsus-mainworld",
+          "name": "Tarsus",
+          "type": "Planet",
+          "orbitAU": 1.163377829798562,
+          "bearing": 183,
+          "radiusKm": 4800,
+          "uwp": "B584620-A",
+          "atmosphere": "Dense",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "TARSUS CONTROL",
+          "gmNotes": "Mainworld. Pop 10^6. TL10.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "tarsus-highport",
+          "name": "Tarsus Highport",
+          "type": "Highport",
+          "parent": "tarsus-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "radiusKm": 2,
+          "transponder": "TARSUS HIGHPORT",
+          "gmNotes": "Class B Good starport orbital facility.",
+          "celestial": false,
+          "cameraSettings": {
+            "zoomMultiplier": 1,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Station approach"
+          }
+        },
+        {
+          "id": "tarsus-gasgiant",
+          "name": "Tarsus Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 5.505639509165193,
+          "bearing": 309,
+          "radiusKm": 53516.471068486455,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "tarsus-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "tarsus-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Tarsus",
+          "type": "orbit",
+          "linkedTo": "tarsus-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Tarsus Highport",
+          "type": "dock",
+          "linkedTo": "tarsus-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Tarsus Starport",
+          "type": "surface",
+          "linkedTo": "tarsus-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "walston",
+      "hex": "1232",
+      "name": "Walston",
+      "uwp": "C544",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "S",
+      "remarks": "",
+      "pbg": "302",
+      "allegiance": "Im",
+      "gasGiants": 2,
+      "wikiUrl": "https://wiki.travellerrpg.com/Walston_(world)",
+      "tradeCodes": [
+        "Lo"
+      ],
+      "notes": "Routine starport. TL8.",
+      "worlds": 12,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "walston-star",
+          "name": "Walston Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "walston-mainworld",
+          "name": "Walston",
+          "type": "Planet",
+          "orbitAU": 1.1513465007341697,
+          "bearing": 77,
+          "radiusKm": 4800,
+          "uwp": "C544338-8",
+          "atmosphere": "Thin Tainted",
+          "breathable": false,
+          "inGoldilocks": true,
+          "transponder": "WALSTON CONTROL",
+          "gmNotes": "Mainworld. Pop 10^3. TL8.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "walston-gasgiant",
+          "name": "Walston Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 5.994278923584414,
+          "bearing": 33,
+          "radiusKm": 58369.33173095389,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "walston-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "walston-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Walston",
+          "type": "orbit",
+          "linkedTo": "walston-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Walston Orbital Station",
+          "type": "dock",
+          "linkedTo": "walston-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Walston Starport",
+          "type": "surface",
+          "linkedTo": "walston-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "flexos",
+      "hex": "1233",
+      "name": "Flexos",
+      "uwp": "E5A1",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "610",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Flexos_(world)",
+      "tradeCodes": [
+        "Fl",
+        "He",
+        "Ni"
+      ],
+      "notes": "Frontier starport. TL8.",
+      "worlds": 8,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "flexos-star",
+          "name": "Flexos Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "flexos-mainworld",
+          "name": "Flexos",
+          "type": "Planet",
+          "orbitAU": 1.6359423504110016,
+          "bearing": 41,
+          "radiusKm": 4800,
+          "uwp": "E5A1422-8",
+          "atmosphere": "Exotic",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "FLEXOS CONTROL",
+          "gmNotes": "Mainworld. Pop 10^4. TL8.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "flexos-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "flexos-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Flexos",
+          "type": "orbit",
+          "linkedTo": "flexos-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Flexos Frontier Landing",
+          "type": "surface",
+          "linkedTo": "flexos-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel_wilderness"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "collace",
+      "hex": "1237",
+      "name": "Collace",
+      "uwp": "B628",
+      "stellar": {
+        "primary": "F1 V",
+        "type": "Binary"
+      },
+      "bases": "S",
+      "remarks": "",
+      "pbg": "101",
+      "allegiance": "CsIm",
+      "gasGiants": 1,
+      "tradeCodes": [
+        "Hi",
+        "In",
+        "Ht"
+      ],
+      "notes": "Good starport. TL13.",
+      "worlds": 12,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "collace-star",
+          "name": "Collace Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "stellarClass": "F1 V",
+          "transponder": "NONE",
+          "gmNotes": "F1 V M3 V primary star."
+        },
+        {
+          "id": "collace-mainworld",
+          "name": "Collace",
+          "type": "Planet",
+          "orbitAU": 1.4130367048264678,
+          "bearing": 317,
+          "uwp": "B628943-D",
+          "tradeCodes": [
+            "Hi",
+            "In",
+            "Ht"
+          ],
+          "atmosphere": "Very Thin Tainted",
+          "breathable": false,
+          "inGoldilocks": true,
+          "transponder": "COLLACE CONTROL",
+          "gmNotes": "Mainworld. Pop 10^9. TL13."
+        },
+        {
+          "id": "collace-highport",
+          "name": "Collace Highport",
+          "type": "Station",
+          "parent": "collace-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "uwp": "B628943-D",
+          "transponder": "COLLACE HIGHPORT",
+          "gmNotes": "Class B Good starport.",
+          "celestial": false
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "collace-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "collace-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Collace",
+          "type": "orbit",
+          "linkedTo": "collace-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "launch_craft",
+            "dock"
+          ],
+          "travelTimeHours": {
+            "loc-dock-highport": 1,
+            "loc-mainworld-jump": 4
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Dock - Collace Highport",
+          "type": "dock",
+          "linkedTo": "collace-highport",
+          "x": 460,
+          "y": 310,
+          "actions": [
+            "refuel_refined",
+            "repair",
+            "trade",
+            "passengers",
+            "undock"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1
+          },
+          "fuelSource": {
+            "type": "starport",
+            "fuelType": "refined",
+            "cost": 500
+          }
+        },
+        {
+          "id": "loc-wilderness-fuel",
+          "name": "Wilderness - Water Collection",
+          "type": "land",
+          "linkedTo": "collace-mainworld",
+          "x": 470,
+          "y": 330,
+          "actions": [
+            "refuel_wilderness",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 3
+          },
+          "fuelSource": {
+            "type": "water",
+            "fuelType": "unrefined",
+            "unlimited": true,
+            "requires": "hydrographics > 0"
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "pavabid",
+      "hex": "1238",
+      "name": "Pavabid",
+      "uwp": "C667",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "",
+      "remarks": "",
+      "pbg": "701",
+      "allegiance": "Im",
+      "gasGiants": 1,
+      "wikiUrl": "https://wiki.travellerrpg.com/Pavabid_(world)",
+      "tradeCodes": [
+        "Ga",
+        "Ri",
+        "Pa",
+        "Ph",
+        "Pz"
+      ],
+      "notes": "Routine starport. TL6.",
+      "worlds": 13,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "pavabid-star",
+          "name": "Pavabid Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "pavabid-mainworld",
+          "name": "Pavabid",
+          "type": "Planet",
+          "orbitAU": 0.9666687150546937,
+          "bearing": 17,
+          "radiusKm": 5600,
+          "uwp": "C6678D8-6",
+          "atmosphere": "Standard",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "PAVABID CONTROL",
+          "gmNotes": "Mainworld. Pop 10^8. TL6.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "pavabid-gasgiant",
+          "name": "Pavabid Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 6.027810136139665,
+          "bearing": 339,
+          "radiusKm": 61361.46596928639,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "pavabid-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "pavabid-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Pavabid",
+          "type": "orbit",
+          "linkedTo": "pavabid-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Pavabid Orbital Station",
+          "type": "dock",
+          "linkedTo": "pavabid-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Pavabid Starport",
+          "type": "surface",
+          "linkedTo": "pavabid-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "datrillian",
+      "hex": "1331",
+      "name": "Datrillian",
+      "uwp": "E427",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "801",
+      "allegiance": "Im",
+      "gasGiants": 1,
+      "wikiUrl": "https://wiki.travellerrpg.com/Datrillian_(world)",
+      "tradeCodes": [
+        "Ni"
+      ],
+      "notes": "Frontier starport. TL8.",
+      "worlds": 10,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "datrillian-star",
+          "name": "Datrillian Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "datrillian-mainworld",
+          "name": "Datrillian",
+          "type": "Planet",
+          "orbitAU": 0.6494722082524891,
+          "bearing": 174,
+          "radiusKm": 4000,
+          "uwp": "E427633-8",
+          "atmosphere": "Very Thin Tainted",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "DATRILLIAN CONTROL",
+          "gmNotes": "Mainworld. Pop 10^6. TL8.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "datrillian-gasgiant",
+          "name": "Datrillian Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 7.980261486680649,
+          "bearing": 214,
+          "radiusKm": 52986.59146529444,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "datrillian-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "datrillian-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Datrillian",
+          "type": "orbit",
+          "linkedTo": "datrillian-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Datrillian Frontier Landing",
+          "type": "surface",
+          "linkedTo": "datrillian-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel_wilderness"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "nirton",
+      "hex": "1332",
+      "name": "Nirton",
+      "uwp": "X500",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "",
+      "remarks": "",
+      "pbg": "011",
+      "allegiance": "Im",
+      "gasGiants": 1,
+      "wikiUrl": "https://wiki.travellerrpg.com/Nirton_(world)",
+      "tradeCodes": [
+        "Ba",
+        "Va",
+        "Fo",
+        "Lt"
+      ],
+      "notes": "None starport. TL0.",
+      "worlds": 10,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "nirton-star",
+          "name": "Nirton Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "nirton-mainworld",
+          "name": "Nirton",
+          "type": "Planet",
+          "orbitAU": 0.786839154163816,
+          "bearing": 164,
+          "radiusKm": 4800,
+          "uwp": "X500000-0",
+          "atmosphere": "None",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "NIRTON CONTROL",
+          "gmNotes": "Mainworld. Pop 0. TL0.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "nirton-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "nirton-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Nirton",
+          "type": "orbit",
+          "linkedTo": "nirton-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "judice",
+      "hex": "1337",
+      "name": "Judice",
+      "uwp": "E9B2",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "021",
+      "allegiance": "Im",
+      "gasGiants": 1,
+      "wikiUrl": "https://wiki.travellerrpg.com/Judice_(world)",
+      "tradeCodes": [
+        "Ba",
+        "Fl",
+        "He",
+        "Lt"
+      ],
+      "notes": "Frontier starport. TL0.",
+      "worlds": 6,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "judice-star",
+          "name": "Judice Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "judice-mainworld",
+          "name": "Judice",
+          "type": "Planet",
+          "orbitAU": 2.496515996356494,
+          "bearing": 244,
+          "radiusKm": 8000,
+          "uwp": "E9B2000-0",
+          "atmosphere": "Corrosive",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "JUDICE CONTROL",
+          "gmNotes": "Mainworld. Pop 0. TL0.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "judice-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "judice-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Judice",
+          "type": "orbit",
+          "linkedTo": "judice-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Judice Frontier Landing",
+          "type": "surface",
+          "linkedTo": "judice-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel_wilderness"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "trexalon",
+      "hex": "1339",
+      "name": "Trexalon",
+      "uwp": "B561",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "923",
+      "allegiance": "Im",
+      "gasGiants": 3,
+      "wikiUrl": "https://wiki.travellerrpg.com/Trexalon_(world)",
+      "tradeCodes": [
+        "Ri",
+        "Ph",
+        "Ht"
+      ],
+      "notes": "Good starport. TL12.",
+      "worlds": 9,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "trexalon-star",
+          "name": "Trexalon Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "trexalon-mainworld",
+          "name": "Trexalon",
+          "type": "Planet",
+          "orbitAU": 0.9846315491405491,
+          "bearing": 150,
+          "radiusKm": 4800,
+          "uwp": "B561851-C",
+          "atmosphere": "Standard",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "TREXALON CONTROL",
+          "gmNotes": "Mainworld. Pop 10^8. TL12.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "trexalon-highport",
+          "name": "Trexalon Highport",
+          "type": "Highport",
+          "parent": "trexalon-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "radiusKm": 2,
+          "transponder": "TREXALON HIGHPORT",
+          "gmNotes": "Class B Good starport orbital facility.",
+          "celestial": false,
+          "cameraSettings": {
+            "zoomMultiplier": 1,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Station approach"
+          }
+        },
+        {
+          "id": "trexalon-gasgiant",
+          "name": "Trexalon Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 7.72024739980554,
+          "bearing": 201,
+          "radiusKm": 68023.91648647282,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "trexalon-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "trexalon-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Trexalon",
+          "type": "orbit",
+          "linkedTo": "trexalon-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Trexalon Highport",
+          "type": "dock",
+          "linkedTo": "trexalon-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Trexalon Starport",
+          "type": "surface",
+          "linkedTo": "trexalon-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "motmos",
+      "hex": "1340",
+      "name": "Motmos",
+      "uwp": "B684",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "N",
+      "remarks": "",
+      "pbg": "710",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Motmos_(world)",
+      "tradeCodes": [
+        "Ag",
+        "Ni",
+        "Ri",
+        "Lt"
+      ],
+      "notes": "Good starport. TL5.",
+      "worlds": 10,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "motmos-star",
+          "name": "Motmos Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "motmos-mainworld",
+          "name": "Motmos",
+          "type": "Planet",
+          "orbitAU": 1.1672508171389198,
+          "bearing": 174,
+          "radiusKm": 5600,
+          "uwp": "B68468B-5",
+          "atmosphere": "Dense",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "MOTMOS CONTROL",
+          "gmNotes": "Mainworld. Pop 10^6. TL5.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "motmos-highport",
+          "name": "Motmos Highport",
+          "type": "Highport",
+          "parent": "motmos-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "radiusKm": 2,
+          "transponder": "MOTMOS HIGHPORT",
+          "gmNotes": "Class B Good starport orbital facility.",
+          "celestial": false,
+          "cameraSettings": {
+            "zoomMultiplier": 1,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Station approach"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "motmos-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "motmos-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Motmos",
+          "type": "orbit",
+          "linkedTo": "motmos-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Motmos Highport",
+          "type": "dock",
+          "linkedTo": "motmos-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Motmos Starport",
+          "type": "surface",
+          "linkedTo": "motmos-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "noctocol",
+      "hex": "1433",
+      "name": "Noctocol",
+      "uwp": "E7A5",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "602",
+      "allegiance": "Im",
+      "gasGiants": 2,
+      "wikiUrl": "https://wiki.travellerrpg.com/Noctocol_(world)",
+      "tradeCodes": [
+        "Fl"
+      ],
+      "notes": "Frontier starport. TL8.",
+      "worlds": 8,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "noctocol-star",
+          "name": "Noctocol Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "noctocol-mainworld",
+          "name": "Noctocol",
+          "type": "Planet",
+          "orbitAU": 2.1497245708887984,
+          "bearing": 78,
+          "radiusKm": 6400,
+          "uwp": "E7A5747-8",
+          "atmosphere": "Exotic",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "NOCTOCOL CONTROL",
+          "gmNotes": "Mainworld. Pop 10^7. TL8.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "noctocol-gasgiant",
+          "name": "Noctocol Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 5.254589384781335,
+          "bearing": 337,
+          "radiusKm": 62742.927906422956,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "noctocol-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "noctocol-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Noctocol",
+          "type": "orbit",
+          "linkedTo": "noctocol-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Noctocol Frontier Landing",
+          "type": "surface",
+          "linkedTo": "noctocol-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel_wilderness"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "tarkine",
+      "hex": "1434",
+      "name": "Tarkine",
+      "uwp": "C566",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "",
+      "remarks": "",
+      "pbg": "310",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Tarkine_(world)",
+      "tradeCodes": [
+        "Ag",
+        "Ni",
+        "Ri",
+        "Da"
+      ],
+      "notes": "Routine starport. TL7.",
+      "worlds": 13,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "tarkine-star",
+          "name": "Tarkine Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "tarkine-mainworld",
+          "name": "Tarkine",
+          "type": "Planet",
+          "orbitAU": 0.9550449794034289,
+          "bearing": 240,
+          "radiusKm": 4800,
+          "uwp": "C566662-7",
+          "atmosphere": "Standard",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "TARKINE CONTROL",
+          "gmNotes": "Mainworld. Pop 10^6. TL7.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "tarkine-gasgiant",
+          "name": "Tarkine Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 7.027837649741152,
+          "bearing": 50,
+          "radiusKm": 57597.01236911112,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "tarkine-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "tarkine-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Tarkine",
+          "type": "orbit",
+          "linkedTo": "tarkine-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Tarkine Orbital Station",
+          "type": "dock",
+          "linkedTo": "tarkine-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Tarkine Starport",
+          "type": "surface",
+          "linkedTo": "tarkine-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "dallia",
+      "hex": "1435",
+      "name": "Dallia",
+      "uwp": "B885",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "610",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Dallia_(world)",
+      "tradeCodes": [
+        "Ga",
+        "Ri",
+        "Pa",
+        "Ph"
+      ],
+      "notes": "Good starport. TL9.",
+      "worlds": 6,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "dallia-star",
+          "name": "Dallia Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "dallia-mainworld",
+          "name": "Dallia",
+          "type": "Planet",
+          "orbitAU": 1.1513561869366846,
+          "bearing": 84,
+          "radiusKm": 7200,
+          "uwp": "B885883-9",
+          "atmosphere": "Dense",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "DALLIA CONTROL",
+          "gmNotes": "Mainworld. Pop 10^8. TL9.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "dallia-highport",
+          "name": "Dallia Highport",
+          "type": "Highport",
+          "parent": "dallia-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "radiusKm": 2,
+          "transponder": "DALLIA HIGHPORT",
+          "gmNotes": "Class B Good starport orbital facility.",
+          "celestial": false,
+          "cameraSettings": {
+            "zoomMultiplier": 1,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Station approach"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "dallia-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "dallia-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Dallia",
+          "type": "orbit",
+          "linkedTo": "dallia-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Dallia Highport",
+          "type": "dock",
+          "linkedTo": "dallia-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Dallia Starport",
+          "type": "surface",
+          "linkedTo": "dallia-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "talos",
+      "hex": "1436",
+      "name": "Talos",
+      "uwp": "E433",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "820",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Talos_(world)",
+      "tradeCodes": [
+        "Ni",
+        "Po"
+      ],
+      "notes": "Frontier starport. TL9.",
+      "worlds": 8,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "talos-star",
+          "name": "Talos Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "talos-mainworld",
+          "name": "Talos",
+          "type": "Planet",
+          "orbitAU": 1.3127649748731418,
+          "bearing": 71,
+          "radiusKm": 4000,
+          "uwp": "E433532-9",
+          "atmosphere": "Very Thin",
+          "breathable": false,
+          "inGoldilocks": true,
+          "transponder": "TALOS CONTROL",
+          "gmNotes": "Mainworld. Pop 10^5. TL9.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "talos-gasgiant",
+          "name": "Talos Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 7.7381733002306365,
+          "bearing": 79,
+          "radiusKm": 53466.55843358067,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "talos-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "talos-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Talos",
+          "type": "orbit",
+          "linkedTo": "talos-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Talos Frontier Landing",
+          "type": "surface",
+          "linkedTo": "talos-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel_wilderness"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "dawnworld",
+      "hex": "1531",
+      "name": "Dawnworld",
+      "uwp": "E885",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "025",
+      "allegiance": "Im",
+      "gasGiants": 5,
+      "wikiUrl": "https://wiki.travellerrpg.com/Dawnworld_(world)",
+      "tradeCodes": [
+        "Ba",
+        "Ga",
+        "Lt"
+      ],
+      "notes": "Frontier starport. TL0.",
+      "worlds": 9,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "dawnworld-star",
+          "name": "Dawnworld Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "dawnworld-mainworld",
+          "name": "Dawnworld",
+          "type": "Planet",
+          "orbitAU": 1.2297087412306245,
+          "bearing": 35,
+          "radiusKm": 7200,
+          "uwp": "E885000-0",
+          "atmosphere": "Dense",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "DAWNWORLD CONTROL",
+          "gmNotes": "Mainworld. Pop 0. TL0.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "dawnworld-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "dawnworld-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Dawnworld",
+          "type": "orbit",
+          "linkedTo": "dawnworld-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Dawnworld Frontier Landing",
+          "type": "surface",
+          "linkedTo": "dawnworld-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel_wilderness"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "elixabeth",
+      "hex": "1532",
+      "name": "Elixabeth",
+      "uwp": "B426",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "N",
+      "remarks": "",
+      "pbg": "201",
+      "allegiance": "Im",
+      "gasGiants": 1,
+      "wikiUrl": "https://wiki.travellerrpg.com/Elixabeth_(world)",
+      "tradeCodes": [
+        "Ni"
+      ],
+      "notes": "Good starport. TL8.",
+      "worlds": 11,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "elixabeth-star",
+          "name": "Elixabeth Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "elixabeth-mainworld",
+          "name": "Elixabeth",
+          "type": "Planet",
+          "orbitAU": 0.7604715654103635,
+          "bearing": 121,
+          "radiusKm": 4000,
+          "uwp": "B426467-8",
+          "atmosphere": "Very Thin Tainted",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "ELIXABETH CONTROL",
+          "gmNotes": "Mainworld. Pop 10^4. TL8.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "elixabeth-highport",
+          "name": "Elixabeth Highport",
+          "type": "Highport",
+          "parent": "elixabeth-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "radiusKm": 2,
+          "transponder": "ELIXABETH HIGHPORT",
+          "gmNotes": "Class B Good starport orbital facility.",
+          "celestial": false,
+          "cameraSettings": {
+            "zoomMultiplier": 1,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Station approach"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "elixabeth-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "elixabeth-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Elixabeth",
+          "type": "orbit",
+          "linkedTo": "elixabeth-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Elixabeth Highport",
+          "type": "dock",
+          "linkedTo": "elixabeth-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Elixabeth Starport",
+          "type": "surface",
+          "linkedTo": "elixabeth-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "forine",
+      "hex": "1533",
+      "name": "Forine",
+      "uwp": "D312",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "610",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Forine_(world)",
+      "tradeCodes": [
+        "Hi",
+        "Ic",
+        "In",
+        "Na"
+      ],
+      "notes": "Poor starport. TL10.",
+      "worlds": 7,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "forine-star",
+          "name": "Forine Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "forine-mainworld",
+          "name": "Forine",
+          "type": "Planet",
+          "orbitAU": 0.6518451626128567,
+          "bearing": 166,
+          "radiusKm": 3200,
+          "uwp": "D3129B8-A",
+          "atmosphere": "Trace",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "FORINE CONTROL",
+          "gmNotes": "Mainworld. Pop 10^9. TL10.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "forine-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "forine-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Forine",
+          "type": "orbit",
+          "linkedTo": "forine-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Forine Orbital Station",
+          "type": "dock",
+          "linkedTo": "forine-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Forine Landing Field",
+          "type": "surface",
+          "linkedTo": "forine-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "mertactor",
+      "hex": "1537",
+      "name": "Mertactor",
+      "uwp": "B562",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "S",
+      "remarks": "",
+      "pbg": "110",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Mertactor_(world)",
+      "tradeCodes": [
+        "Ri"
+      ],
+      "notes": "Good starport. TL11.",
+      "worlds": 6,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "mertactor-star",
+          "name": "Mertactor Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "mertactor-mainworld",
+          "name": "Mertactor",
+          "type": "Planet",
+          "orbitAU": 0.9693820588759727,
+          "bearing": 226,
+          "radiusKm": 4800,
+          "uwp": "B562732-B",
+          "atmosphere": "Standard",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "MERTACTOR CONTROL",
+          "gmNotes": "Mainworld. Pop 10^7. TL11.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "mertactor-highport",
+          "name": "Mertactor Highport",
+          "type": "Highport",
+          "parent": "mertactor-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "radiusKm": 2,
+          "transponder": "MERTACTOR HIGHPORT",
+          "gmNotes": "Class B Good starport orbital facility.",
+          "celestial": false,
+          "cameraSettings": {
+            "zoomMultiplier": 1,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Station approach"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "mertactor-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "mertactor-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Mertactor",
+          "type": "orbit",
+          "linkedTo": "mertactor-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Mertactor Highport",
+          "type": "dock",
+          "linkedTo": "mertactor-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Mertactor Starport",
+          "type": "surface",
+          "linkedTo": "mertactor-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "talchek",
+      "hex": "1631",
+      "name": "Talchek",
+      "uwp": "C7B1",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "",
+      "remarks": "",
+      "pbg": "601",
+      "allegiance": "Im",
+      "gasGiants": 1,
+      "wikiUrl": "https://wiki.travellerrpg.com/Talchek_(world)",
+      "tradeCodes": [
+        "Fl",
+        "He",
+        "Ni",
+        "Da"
+      ],
+      "notes": "Routine starport. TL8.",
+      "worlds": 6,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "talchek-star",
+          "name": "Talchek Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "talchek-mainworld",
+          "name": "Talchek",
+          "type": "Planet",
+          "orbitAU": 1.8382478655467662,
+          "bearing": 348,
+          "radiusKm": 6400,
+          "uwp": "C7B1442-8",
+          "atmosphere": "Corrosive",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "TALCHEK CONTROL",
+          "gmNotes": "Mainworld. Pop 10^4. TL8.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "talchek-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "talchek-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Talchek",
+          "type": "orbit",
+          "linkedTo": "talchek-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Talchek Orbital Station",
+          "type": "dock",
+          "linkedTo": "talchek-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Talchek Starport",
+          "type": "surface",
+          "linkedTo": "talchek-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "milagro",
+      "hex": "1632",
+      "name": "Milagro",
+      "uwp": "E311",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "920",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Milagro_(world)",
+      "tradeCodes": [
+        "Ic",
+        "Na",
+        "Pi"
+      ],
+      "notes": "Frontier starport. TL7.",
+      "worlds": 10,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "milagro-star",
+          "name": "Milagro Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "milagro-mainworld",
+          "name": "Milagro",
+          "type": "Planet",
+          "orbitAU": 0.43989475187808647,
+          "bearing": 36,
+          "radiusKm": 3200,
+          "uwp": "E31178A-7",
+          "atmosphere": "Trace",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "MILAGRO CONTROL",
+          "gmNotes": "Mainworld. Pop 10^7. TL7.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "milagro-gasgiant",
+          "name": "Milagro Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 7.236418273415259,
+          "bearing": 340,
+          "radiusKm": 69797.57474590468,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "milagro-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "milagro-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Milagro",
+          "type": "orbit",
+          "linkedTo": "milagro-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Milagro Frontier Landing",
+          "type": "surface",
+          "linkedTo": "milagro-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel_wilderness"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "pagaton",
+      "hex": "1634",
+      "name": "Pagaton",
+      "uwp": "C769",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "913",
+      "allegiance": "Im",
+      "gasGiants": 3,
+      "wikiUrl": "https://wiki.travellerrpg.com/Pagaton_(world)",
+      "tradeCodes": [
+        "Ri",
+        "Ph",
+        "Lt"
+      ],
+      "notes": "Routine starport. TL4.",
+      "worlds": 12,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "pagaton-star",
+          "name": "Pagaton Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "pagaton-mainworld",
+          "name": "Pagaton",
+          "type": "Planet",
+          "orbitAU": 0.9720492915398853,
+          "bearing": 225,
+          "radiusKm": 6400,
+          "uwp": "C769873-4",
+          "atmosphere": "Standard",
+          "breathable": true,
+          "inGoldilocks": true,
+          "transponder": "PAGATON CONTROL",
+          "gmNotes": "Mainworld. Pop 10^8. TL4.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "pagaton-gasgiant",
+          "name": "Pagaton Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 5.446560887879982,
+          "bearing": 336,
+          "radiusKm": 67366.66224381156,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "pagaton-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "pagaton-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Pagaton",
+          "type": "orbit",
+          "linkedTo": "pagaton-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Pagaton Orbital Station",
+          "type": "dock",
+          "linkedTo": "pagaton-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Pagaton Starport",
+          "type": "surface",
+          "linkedTo": "pagaton-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "binges",
+      "hex": "1635",
+      "name": "Binges",
+      "uwp": "A500",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "-",
+      "remarks": "",
+      "pbg": "720",
+      "allegiance": "Im",
+      "gasGiants": 0,
+      "wikiUrl": "https://wiki.travellerrpg.com/Binges_(world)",
+      "tradeCodes": [
+        "Lo",
+        "Va"
+      ],
+      "notes": "Excellent starport. TL10.",
+      "worlds": 13,
+      "planetoidBelts": 0,
+      "celestialObjects": [
+        {
+          "id": "binges-star",
+          "name": "Binges Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "binges-mainworld",
+          "name": "Binges",
+          "type": "Planet",
+          "orbitAU": 0.4424785427535736,
+          "bearing": 268,
+          "radiusKm": 4800,
+          "uwp": "A500231-A",
+          "atmosphere": "None",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "BINGES CONTROL",
+          "gmNotes": "Mainworld. Pop 10^2. TL10.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "binges-highport",
+          "name": "Binges Highport",
+          "type": "Highport",
+          "parent": "binges-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "radiusKm": 2,
+          "transponder": "BINGES HIGHPORT",
+          "gmNotes": "Class A Excellent starport orbital facility.",
+          "celestial": false,
+          "cameraSettings": {
+            "zoomMultiplier": 1,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Station approach"
+          }
+        },
+        {
+          "id": "binges-gasgiant",
+          "name": "Binges Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 6.48924357511093,
+          "bearing": 209,
+          "radiusKm": 63460.63679335951,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "binges-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "binges-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Binges",
+          "type": "orbit",
+          "linkedTo": "binges-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Binges Highport",
+          "type": "dock",
+          "linkedTo": "binges-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Binges Starport",
+          "type": "surface",
+          "linkedTo": "binges-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    },
+    {
+      "id": "mille-falcs",
+      "hex": "1637",
+      "name": "Mille Falcs",
+      "uwp": "B9A2",
+      "stellar": {
+        "primary": "G2 V",
+        "type": "Single"
+      },
+      "bases": "NS",
+      "remarks": "",
+      "pbg": "301",
+      "allegiance": "Im",
+      "gasGiants": 1,
+      "wikiUrl": "https://wiki.travellerrpg.com/Mille%20Falcs_(world)",
+      "tradeCodes": [
+        "Fl",
+        "He",
+        "Ni",
+        "Mr",
+        "Ht"
+      ],
+      "notes": "Good starport. TL12.",
+      "worlds": 6,
+      "planetoidBelts": 1,
+      "celestialObjects": [
+        {
+          "id": "mille-falcs-star",
+          "name": "Mille Falcs Primary",
+          "type": "Star",
+          "orbitAU": 0,
+          "bearing": 0,
+          "radiusKm": 696340,
+          "stellarClass": "G2 V",
+          "stellarInfo": {
+            "temperature": "5,200-6,000 K",
+            "luminosity": "0.6-1.5 Solar",
+            "mass": "0.8-1.04 Solar",
+            "habitableZone": "0.8-1.2 AU",
+            "description": "Yellow main sequence (Sol-like)"
+          },
+          "transponder": "NONE",
+          "gmNotes": "G2 V primary.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.15,
+            "offsetX": 0.25,
+            "offsetY": 0.1,
+            "description": "Wide corona view with inner system visible"
+          }
+        },
+        {
+          "id": "mille-falcs-mainworld",
+          "name": "Mille Falcs",
+          "type": "Planet",
+          "orbitAU": 2.1595505557311734,
+          "bearing": 163,
+          "radiusKm": 8000,
+          "uwp": "B9A2469-C",
+          "atmosphere": "Exotic",
+          "breathable": false,
+          "inGoldilocks": false,
+          "transponder": "MILLE FALCS CONTROL",
+          "gmNotes": "Mainworld. Pop 10^4. TL12.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.8,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Standard world view"
+          }
+        },
+        {
+          "id": "mille-falcs-highport",
+          "name": "Mille Falcs Highport",
+          "type": "Highport",
+          "parent": "mille-falcs-mainworld",
+          "orbitKm": 400,
+          "bearing": 268,
+          "radiusKm": 2,
+          "transponder": "MILLE FALCS HIGHPORT",
+          "gmNotes": "Class B Good starport orbital facility.",
+          "celestial": false,
+          "cameraSettings": {
+            "zoomMultiplier": 1,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Station approach"
+          }
+        },
+        {
+          "id": "mille-falcs-gasgiant",
+          "name": "Mille Falcs Gas Giant",
+          "type": "Gas Giant",
+          "orbitAU": 6.765745147301914,
+          "bearing": 325,
+          "radiusKm": 67174.9989140399,
+          "transponder": "NONE",
+          "gmNotes": "Gas giant suitable for fuel skimming.",
+          "cameraSettings": {
+            "zoomMultiplier": 0.5,
+            "offsetX": 0,
+            "offsetY": 0,
+            "description": "Gas giant view"
+          }
+        }
+      ],
+      "locations": [
+        {
+          "id": "loc-exit-jump",
+          "name": "Exit Jump Space",
+          "type": "jump_point",
+          "x": 100,
+          "y": 300,
+          "actions": [
+            "scan",
+            "plot_course"
+          ]
+        },
+        {
+          "id": "loc-system-jump",
+          "name": "System Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "mille-falcs-star",
+          "x": 50,
+          "y": 150,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-exit-jump": 6,
+            "loc-mainworld-jump": 8
+          }
+        },
+        {
+          "id": "loc-mainworld-jump",
+          "name": "Mainworld Departure Jump Point",
+          "type": "jump_point",
+          "linkedTo": "mille-falcs-mainworld",
+          "x": 500,
+          "y": 280,
+          "actions": [
+            "jump",
+            "scan"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 4
+          }
+        },
+        {
+          "id": "loc-orbit-mainworld",
+          "name": "Orbit - Mille Falcs",
+          "type": "orbit",
+          "linkedTo": "mille-falcs-mainworld",
+          "x": 450,
+          "y": 300,
+          "actions": [
+            "scan",
+            "dock",
+            "land"
+          ],
+          "travelTimeHours": {
+            "loc-mainworld-jump": 4,
+            "loc-dock-highport": 1,
+            "loc-surface-starport": 2
+          }
+        },
+        {
+          "id": "loc-dock-highport",
+          "name": "Mille Falcs Highport",
+          "type": "dock",
+          "linkedTo": "mille-falcs-mainworld",
+          "x": 480,
+          "y": 320,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 1,
+            "loc-surface-starport": 3
+          }
+        },
+        {
+          "id": "loc-surface-starport",
+          "name": "Mille Falcs Starport",
+          "type": "surface",
+          "linkedTo": "mille-falcs-mainworld",
+          "x": 420,
+          "y": 350,
+          "actions": [
+            "refuel",
+            "repair",
+            "trade",
+            "passengers"
+          ],
+          "travelTimeHours": {
+            "loc-orbit-mainworld": 2,
+            "loc-dock-highport": 3
+          }
+        }
+      ],
+      "systemCamera": {
+        "zoom": 5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "primary-star"
+      },
+      "_source": "existing_encyclopedia"
+    }
+  ],
+  "emptyHexes": [
+    {
+      "hex": "0932",
+      "type": "deep_space",
+      "name": "Deep Space (0932)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107389784
+    },
+    {
+      "hex": "0933",
+      "type": "deep_space",
+      "name": "Deep Space (0933)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107389783
+    },
+    {
+      "hex": "0934",
+      "type": "deep_space",
+      "name": "Deep Space (0934)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107389782
+    },
+    {
+      "hex": "0935",
+      "type": "deep_space",
+      "name": "Deep Space (0935)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107389781
+    },
+    {
+      "hex": "0936",
+      "type": "deep_space",
+      "name": "Deep Space (0936)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107389780
+    },
+    {
+      "hex": "0937",
+      "type": "deep_space",
+      "name": "Deep Space (0937)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107389779
+    },
+    {
+      "hex": "0939",
+      "type": "deep_space",
+      "name": "Deep Space (0939)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107389777
+    },
+    {
+      "hex": "1032",
+      "type": "deep_space",
+      "name": "Deep Space (1032)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107368642
+    },
+    {
+      "hex": "1033",
+      "type": "deep_space",
+      "name": "Deep Space (1033)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107368641
+    },
+    {
+      "hex": "1034",
+      "type": "deep_space",
+      "name": "Deep Space (1034)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107368640
+    },
+    {
+      "hex": "1035",
+      "type": "deep_space",
+      "name": "Deep Space (1035)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107368639
+    },
+    {
+      "hex": "1036",
+      "type": "deep_space",
+      "name": "Deep Space (1036)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107368638
+    },
+    {
+      "hex": "1038",
+      "type": "deep_space",
+      "name": "Deep Space (1038)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107368636
+    },
+    {
+      "hex": "1039",
+      "type": "deep_space",
+      "name": "Deep Space (1039)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107368635
+    },
+    {
+      "hex": "1134",
+      "type": "deep_space",
+      "name": "Deep Space (1134)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107367679
+    },
+    {
+      "hex": "1135",
+      "type": "deep_space",
+      "name": "Deep Space (1135)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107367678
+    },
+    {
+      "hex": "1136",
+      "type": "deep_space",
+      "name": "Deep Space (1136)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107367677
+    },
+    {
+      "hex": "1137",
+      "type": "deep_space",
+      "name": "Deep Space (1137)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107367676
+    },
+    {
+      "hex": "1139",
+      "type": "deep_space",
+      "name": "Deep Space (1139)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107367674
+    },
+    {
+      "hex": "1140",
+      "type": "deep_space",
+      "name": "Deep Space (1140)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107367652
+    },
+    {
+      "hex": "1231",
+      "type": "deep_space",
+      "name": "Deep Space (1231)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107366721
+    },
+    {
+      "hex": "1234",
+      "type": "deep_space",
+      "name": "Deep Space (1234)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107366718
+    },
+    {
+      "hex": "1235",
+      "type": "deep_space",
+      "name": "Deep Space (1235)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107366717
+    },
+    {
+      "hex": "1236",
+      "type": "deep_space",
+      "name": "Deep Space (1236)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107366716
+    },
+    {
+      "hex": "1239",
+      "type": "deep_space",
+      "name": "Deep Space (1239)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107366713
+    },
+    {
+      "hex": "1240",
+      "type": "deep_space",
+      "name": "Deep Space (1240)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107366691
+    },
+    {
+      "hex": "1333",
+      "type": "deep_space",
+      "name": "Deep Space (1333)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107365758
+    },
+    {
+      "hex": "1334",
+      "type": "deep_space",
+      "name": "Deep Space (1334)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107365757
+    },
+    {
+      "hex": "1335",
+      "type": "deep_space",
+      "name": "Deep Space (1335)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107365756
+    },
+    {
+      "hex": "1336",
+      "type": "deep_space",
+      "name": "Deep Space (1336)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107365755
+    },
+    {
+      "hex": "1338",
+      "type": "deep_space",
+      "name": "Deep Space (1338)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107365753
+    },
+    {
+      "hex": "1431",
+      "type": "deep_space",
+      "name": "Deep Space (1431)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107364799
+    },
+    {
+      "hex": "1432",
+      "type": "deep_space",
+      "name": "Deep Space (1432)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107364798
+    },
+    {
+      "hex": "1437",
+      "type": "deep_space",
+      "name": "Deep Space (1437)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107364793
+    },
+    {
+      "hex": "1438",
+      "type": "deep_space",
+      "name": "Deep Space (1438)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107364792
+    },
+    {
+      "hex": "1439",
+      "type": "deep_space",
+      "name": "Deep Space (1439)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107364791
+    },
+    {
+      "hex": "1440",
+      "type": "deep_space",
+      "name": "Deep Space (1440)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107364769
+    },
+    {
+      "hex": "1534",
+      "type": "deep_space",
+      "name": "Deep Space (1534)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107363835
+    },
+    {
+      "hex": "1535",
+      "type": "deep_space",
+      "name": "Deep Space (1535)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107363834
+    },
+    {
+      "hex": "1536",
+      "type": "deep_space",
+      "name": "Deep Space (1536)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107363833
+    },
+    {
+      "hex": "1538",
+      "type": "deep_space",
+      "name": "Deep Space (1538)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107363831
+    },
+    {
+      "hex": "1539",
+      "type": "deep_space",
+      "name": "Deep Space (1539)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107363830
+    },
+    {
+      "hex": "1540",
+      "type": "deep_space",
+      "name": "Deep Space (1540)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107363808
+    },
+    {
+      "hex": "1633",
+      "type": "deep_space",
+      "name": "Deep Space (1633)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107362875
+    },
+    {
+      "hex": "1636",
+      "type": "deep_space",
+      "name": "Deep Space (1636)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107362872
+    },
+    {
+      "hex": "1638",
+      "type": "deep_space",
+      "name": "Deep Space (1638)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107362870
+    },
+    {
+      "hex": "1639",
+      "type": "deep_space",
+      "name": "Deep Space (1639)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107362869
+    },
+    {
+      "hex": "1640",
+      "type": "deep_space",
+      "name": "Deep Space (1640)",
+      "celestialObjects": [],
+      "locations": [
+        {
+          "id": "waypoint",
+          "type": "space",
+          "name": "Deep Space Waypoint",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "systemCamera": {
+        "zoom": 0.05,
+        "offsetX": 0,
+        "offsetY": 0,
+        "focusObject": "waypoint"
+      },
+      "backgroundSeed": 1107362847
+    }
+  ]
+}

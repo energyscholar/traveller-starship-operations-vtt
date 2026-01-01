@@ -3099,30 +3099,70 @@ function drawMapContacts(ctx, centerX, centerY, zoom) {
       screenY = shipScreenY + offsetY;
     }
 
-    // Contact color by marking (from captain)
-    const marking = contact.marking || 'unknown';
-    const colors = {
+    // BD-6: Determine contact color based on disposition OR health
+    let color;
+    const disposition = contact.disposition || contact.marking || 'unknown';
+    const dispositionColors = {
       hostile: '#ff4444',
       friendly: '#44ff44',
       neutral: '#ffff44',
       unknown: '#888888'
     };
-    const color = colors[marking] || colors.unknown;
+
+    // If targetable and has health, use health-based coloring
+    if (contact.is_targetable && contact.max_health > 0) {
+      const healthPercent = (contact.health / contact.max_health) * 100;
+      if (healthPercent > 66) color = '#44ff44';       // green
+      else if (healthPercent > 33) color = '#ffff44';  // yellow
+      else if (healthPercent > 0) color = '#ff4444';   // red
+      else color = '#666666';                           // destroyed (gray)
+    } else {
+      color = dispositionColors[disposition] || dispositionColors.unknown;
+    }
 
     // Size varies by type
     const baseSize = contact.type === 'ship' ? 6 : 5;
     const size = Math.max(3, Math.min(10, baseSize * Math.sqrt(zoom)));
 
-    // Draw contact dot
+    // BD-6: Draw different shapes based on type
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
+
+    const typeLC = (contact.type || '').toLowerCase();
+    if (['ship', 'patrol', 'trader', 'warship', 'scout', 'corsair'].includes(typeLC)) {
+      // Triangle pointing right (ship)
+      ctx.moveTo(screenX + size, screenY);
+      ctx.lineTo(screenX - size, screenY - size * 0.8);
+      ctx.lineTo(screenX - size, screenY + size * 0.8);
+      ctx.closePath();
+    } else if (['station', 'starport', 'base'].includes(typeLC)) {
+      // Square (station)
+      ctx.rect(screenX - size * 0.7, screenY - size * 0.7, size * 1.4, size * 1.4);
+    } else if (['missile', 'torpedo'].includes(typeLC)) {
+      // Diamond (missile)
+      ctx.moveTo(screenX, screenY - size);
+      ctx.lineTo(screenX + size * 0.7, screenY);
+      ctx.lineTo(screenX, screenY + size);
+      ctx.lineTo(screenX - size * 0.7, screenY);
+      ctx.closePath();
+    } else {
+      // Circle (default: asteroid, debris, unknown)
+      ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
+    }
     ctx.fill();
 
     // Draw border for better visibility
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
     ctx.lineWidth = 1;
     ctx.stroke();
+
+    // BD-6: Add weapons indicator for armed contacts
+    if (contact.weapons && Array.isArray(contact.weapons) && contact.weapons.length > 0) {
+      ctx.fillStyle = '#ff0000';
+      ctx.beginPath();
+      ctx.arc(screenX + size, screenY - size, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     // Contact label (transponder or designation)
     // AR-199: Only draw labels if enabled

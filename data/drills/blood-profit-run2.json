@@ -1,1 +1,40 @@
-{}
+{
+  "id": "blood-profit-run2",
+  "name": "Blood & Profit Run 2: Two Corsairs",
+  "description": "Two corsairs in a pincer attack. Coordinate fire and prioritize targets.",
+  "difficulty": "easy",
+  "startConditions": {
+    "range_band": "medium",
+    "alert_status": "YELLOW"
+  },
+  "contacts": [
+    {
+      "name": "Corsair Alpha",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 30,
+      "range_km": 8000,
+      "health": 30,
+      "max_health": 30,
+      "armor": 2,
+      "gunner_skill": 1,
+      "weapons": [
+        { "name": "Triple Turret Laser", "damage": "3d6", "range": "medium" }
+      ]
+    },
+    {
+      "name": "Corsair Beta",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 150,
+      "range_km": 9000,
+      "health": 25,
+      "max_health": 25,
+      "armor": 1,
+      "gunner_skill": 1,
+      "weapons": [
+        { "name": "Double Turret Laser", "damage": "2d6", "range": "medium" }
+      ]
+    }
+  ]
+}

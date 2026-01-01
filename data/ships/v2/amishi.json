@@ -206,8 +206,13 @@
     {"name": "Jump Control", "rating": 3},
     {"name": "Manoeuvre", "rating": 0},
     {"name": "Library", "rating": 0},
-    {"name": "Fire Control", "rating": 2}
+    {"name": "Fire Control", "rating": 4}
   ],
+
+  "combat": {
+    "fireControl": 4,
+    "notes": "FC/4 from Computer/25 with Fire Control/4 software"
+  },
 
   "drones": {
     "probe": 5,

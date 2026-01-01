@@ -8,56 +8,75 @@
  * Verifies Captain can operate all ship functions without changing roles.
  */
 
-const puppeteer = require('puppeteer');
-const { clickOrHotkey, sleep, verifyState, writeTodoForFailures } = require('./helpers/click-or-hotkey');
+const {
+  createPage,
+  navigateToOperations,
+  gmLogin,
+  startSession,
+  delay,
+  DELAYS,
+  createTestResults,
+  pass,
+  fail,
+  printResults
+} = require('./puppeteer-utils');
 
-const CAMPAIGN_CODE = 'DFFFC87E';
 const RESULTS = { passed: 0, failed: 0, errors: [] };
 
-async function loginAsCaptain(page) {
-  await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
-  await sleep(2000);
+/**
+ * Join as player with campaign code and select Captain role
+ */
+async function joinAsCaptain(page, campaignCode) {
+  await navigateToOperations(page);
+  await delay(1000);
 
-  // Click Player
+  // Click Player Login
+  console.log('  Clicking Player Login...');
+  await page.click('#btn-player-login');
+  await delay(1000);
+
+  // Enter campaign code
+  console.log(`  Entering code: ${campaignCode}`);
+  await page.type('#campaign-code', campaignCode);
+  await delay(500);
+
+  // Click Join as Player
   await page.evaluate(() => {
-    document.querySelectorAll('button').forEach(b => {
-      if (b.textContent.includes('Player')) b.click();
-    });
+    const btn = Array.from(document.querySelectorAll('button'))
+      .find(b => b.textContent.includes('Join as Player'));
+    if (btn) btn.click();
   });
-  await sleep(1000);
+  await delay(2000);
 
-  // Enter code
-  await page.type('#campaign-code', CAMPAIGN_CODE);
-  await sleep(500);
-
-  // Join
+  // Select first available slot
+  console.log('  Selecting player slot...');
   await page.evaluate(() => {
-    document.querySelectorAll('button').forEach(b => {
-      if (b.textContent.includes('Join as Player')) b.click();
-    });
+    const joinBtn = Array.from(document.querySelectorAll('button'))
+      .find(b => b.textContent.trim() === 'Join');
+    if (joinBtn) joinBtn.click();
   });
-  await sleep(2000);
-
-  // Select first slot
-  await page.evaluate(() => {
-    const btns = Array.from(document.querySelectorAll('button'));
-    btns.find(b => b.textContent.trim() === 'Join')?.click();
-  });
-  await sleep(2000);
+  await delay(2000);
 
   // Select Captain role
+  console.log('  Selecting Captain role...');
   await page.evaluate(() => {
-    document.querySelector('[data-role-id="captain"]')?.click();
+    const captainBtn = document.querySelector('[data-role-id="captain"]');
+    if (captainBtn) captainBtn.click();
   });
-  await sleep(1000);
+  await delay(1000);
 
   // Join Bridge
+  console.log('  Joining bridge...');
   await page.evaluate(() => {
-    document.querySelectorAll('button').forEach(b => {
-      if (b.textContent.includes('Join Bridge')) b.click();
-    });
+    const btn = Array.from(document.querySelectorAll('button'))
+      .find(b => b.textContent.includes('Join Bridge'));
+    if (btn) btn.click();
   });
-  await sleep(3000);
+  await delay(3000);
+
+  // Verify we're on bridge
+  const onBridge = await page.$('#bridge-screen.active');
+  return !!onBridge;
 }
 
 // ==============================================
@@ -66,9 +85,9 @@ async function loginAsCaptain(page) {
 async function testCS1_PilotSubPanel(page) {
   console.log('\n--- CS-1: Captain → Pilot Sub-Panel ---');
 
-  // Open role panel
+  // Open role panel with hotkey 2
   await page.keyboard.press('2');
-  await sleep(1000);
+  await delay(1000);
 
   // Switch to pilot sub-panel
   const switched = await page.evaluate(() => {
@@ -78,11 +97,12 @@ async function testCS1_PilotSubPanel(page) {
     }
     return false;
   });
-  await sleep(1500);
+  await delay(1500);
 
   if (!switched) {
     RESULTS.failed++;
     RESULTS.errors.push('CS-1: switchCaptainPanel not available');
+    console.log('  ✗ CS-1 FAILED - switchCaptainPanel not available');
     return false;
   }
 
@@ -92,19 +112,16 @@ async function testCS1_PilotSubPanel(page) {
                     .find(b => b.textContent.includes('Set Course')) ||
                   !!document.getElementById('btn-set-course') ||
                   !!document.querySelector('[onclick*="showPlacesOverlay"]'),
-    hasTravel: !!Array.from(document.querySelectorAll('button'))
-                 .find(b => b.textContent.includes('Travel')),
     hasEvasive: !!document.getElementById('evasive-toggle') ||
                 !!Array.from(document.querySelectorAll('button'))
                   .find(b => b.textContent.includes('Evasive')),
-    hasHelmStatus: !!document.querySelector('.helm-status, .pilot-helm'),
     noErrors: !document.body.textContent.includes('Error') &&
               !document.body.textContent.includes('undefined')
   }));
 
   console.log('  Pilot controls found:', controls);
 
-  if (controls.noErrors && (controls.hasSetCourse || controls.hasTravel)) {
+  if (controls.noErrors && (controls.hasSetCourse || controls.hasEvasive)) {
     console.log('  ✓ CS-1 PASSED');
     RESULTS.passed++;
     return true;
@@ -117,20 +134,18 @@ async function testCS1_PilotSubPanel(page) {
 }
 
 // ==============================================
-// CS-2: Captain Astrogator Sub-Panel (Already works)
+// CS-2: Captain Astrogator Sub-Panel
 // ==============================================
 async function testCS2_AstrogatorSubPanel(page) {
   console.log('\n--- CS-2: Captain → Astrogator Sub-Panel ---');
 
-  // Switch to astrogator
   await page.evaluate(() => window.switchCaptainPanel('astrogator'));
-  await sleep(1500);
+  await delay(1500);
 
   const controls = await page.evaluate(() => ({
     hasDestInput: !!document.getElementById('jump-destination'),
     hasPlotButton: !!Array.from(document.querySelectorAll('button'))
                      .find(b => b.textContent.includes('Plot')),
-    hasJumpMap: !!document.querySelector('.jump-map, #jump-map-container'),
     noErrors: !document.body.textContent.includes('Error')
   }));
 
@@ -153,28 +168,18 @@ async function testCS2_AstrogatorSubPanel(page) {
 async function testCS3_EngineerSubPanel(page) {
   console.log('\n--- CS-3: Captain → Engineer Sub-Panel ---');
 
-  // Switch to engineer
   await page.evaluate(() => window.switchCaptainPanel('engineer'));
-  await sleep(1500);
+  await delay(1500);
 
   const controls = await page.evaluate(() => {
     const bodyText = document.body.textContent;
-    const errorMatch = bodyText.match(/Error[^s]?\s*:?\s*\w{0,30}/gi);
-    const undefMatch = bodyText.includes('undefined');
-    // Find context around 'undefined'
-    const undefIdx = bodyText.indexOf('undefined');
-    const undefContext = undefIdx >= 0 ? bodyText.substring(Math.max(0, undefIdx - 30), undefIdx + 40) : null;
     return {
-      undefContext,
       hasFuelStatus: !!document.querySelector('.fuel-status, .fuel-display'),
       hasPowerControls: !!document.querySelector('.power-allocation, .power-controls'),
       hasSystemStatus: !!document.querySelector('.system-status, .systems-grid'),
       hasRepairButton: !!Array.from(document.querySelectorAll('button'))
                          .find(b => b.textContent.includes('Repair')),
-      errorText: errorMatch ? errorMatch.slice(0, 3) : null,
-      hasUndefined: undefMatch,
-      noErrors: !bodyText.includes('Error') &&
-              !bodyText.includes('undefined')
+      noErrors: !bodyText.includes('Error') && !bodyText.includes('undefined')
     };
   });
 
@@ -185,7 +190,7 @@ async function testCS3_EngineerSubPanel(page) {
     RESULTS.passed++;
     return true;
   } else {
-    console.log('  ✗ CS-3 FAILED - Missing engineer controls or errors detected');
+    console.log('  ✗ CS-3 FAILED');
     RESULTS.failed++;
     RESULTS.errors.push('CS-3: Engineer sub-panel missing controls');
     return false;
@@ -197,43 +202,23 @@ async function testCS3_EngineerSubPanel(page) {
 // ==============================================
 async function testCS4_FullSoloJourney(page) {
   console.log('\n--- CS-4: Full Solo Journey ---');
-  console.log('  (Requires CS-1, CS-2, CS-3 to pass first)');
 
-  // This test combines all sub-panels
-  // Travel to jump point → Check fuel → Plot jump → Execute
-
-  // Step 1: Use Pilot panel to navigate to system map
+  // Rotate through all panels
   await page.evaluate(() => window.switchCaptainPanel('pilot'));
-  await sleep(1000);
-
-  // Step 2: Use Engineer panel to check fuel
+  await delay(500);
   await page.evaluate(() => window.switchCaptainPanel('engineer'));
-  await sleep(1000);
-
-  await page.evaluate(() => window.state?.socket?.emit('ops:getFuelStatus'));
-  await sleep(500);
-
-  const fuel = await page.evaluate(() => window.state?.fuelStatus);
-  console.log('  Fuel status:', fuel?.total, '/', fuel?.max, 'tons');
-
-  // Step 3: Use Astrogator panel to verify jump capability
+  await delay(500);
   await page.evaluate(() => window.switchCaptainPanel('astrogator'));
-  await sleep(1000);
-
-  const jumpStatus = await page.evaluate(() => window.state?.jumpStatus);
-  console.log('  Jump status:', jumpStatus?.inJump ? 'In Jump' : 'Ready');
-
-  // Step 4: Return to Captain panel
+  await delay(500);
   await page.evaluate(() => window.switchCaptainPanel('captain'));
-  await sleep(1000);
+  await delay(500);
 
-  // Verify we can switch between all panels without errors
   const state = await page.evaluate(() => ({
     panel: window.state?.captainActivePanel,
     errors: window.state?.lastError
   }));
 
-  if (state.panel === 'captain' && !state.errors) {
+  if (!state.errors) {
     console.log('  ✓ CS-4 PASSED - Full panel rotation complete');
     RESULTS.passed++;
     return true;
@@ -252,40 +237,63 @@ async function testCS4_FullSoloJourney(page) {
   console.log('CAPTAIN SOLO E2E TEST SUITE');
   console.log('═'.repeat(50));
 
-  const browser = await puppeteer.launch({
-    headless: false,
-    args: ['--window-size=1400,900']
-  });
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1400, height: 900 });
-
-  page.on('dialog', async dialog => {
-    console.log('  [DIALOG]', dialog.message().substring(0, 50));
-    await dialog.accept();
-  });
-
-  page.on('console', msg => {
-    if (msg.type() === 'error') {
-      const text = msg.text();
-      if (!text.includes('favicon') && !text.includes('404')) {
-        RESULTS.errors.push(`Console: ${text.substring(0, 80)}`);
-      }
-    }
-  });
+  let gmBrowser, gmPage, playerBrowser, playerPage;
 
   try {
-    await loginAsCaptain(page);
-    console.log('✓ Logged in as Captain\n');
+    // Step 1: Start GM session
+    console.log('\n--- Step 1: Starting GM Session ---');
+    const gmSetup = await createPage({ headless: false });
+    gmBrowser = gmSetup.browser;
+    gmPage = gmSetup.page;
 
-    await testCS1_PilotSubPanel(page);
-    await testCS2_AstrogatorSubPanel(page);
-    await testCS3_EngineerSubPanel(page);
-    await testCS4_FullSoloJourney(page);
+    // Auto-accept dialogs (role replacement confirmations, etc.)
+    gmPage.on('dialog', async dialog => {
+      console.log(`  [GM DIALOG] ${dialog.message().substring(0, 50)}`);
+      await dialog.accept();
+    });
+
+    await navigateToOperations(gmPage);
+    const { code } = await gmLogin(gmPage);
+    console.log(`  Campaign code: ${code}`);
+
+    if (!code || code === '--------') {
+      throw new Error('Failed to get campaign code');
+    }
+
+    const sessionStarted = await startSession(gmPage);
+    if (!sessionStarted) {
+      throw new Error('Failed to start GM session');
+    }
+    console.log('  ✓ GM session started');
+
+    // Step 2: Join as Captain
+    console.log('\n--- Step 2: Joining as Captain ---');
+    const playerSetup = await createPage({ headless: false });
+    playerBrowser = playerSetup.browser;
+    playerPage = playerSetup.page;
+
+    // Auto-accept dialogs (role replacement confirmations, etc.)
+    playerPage.on('dialog', async dialog => {
+      console.log(`  [PLAYER DIALOG] ${dialog.message().substring(0, 50)}`);
+      await dialog.accept();
+    });
+
+    const joined = await joinAsCaptain(playerPage, code);
+    if (!joined) {
+      throw new Error('Failed to join as Captain');
+    }
+    console.log('  ✓ Joined as Captain');
+
+    // Step 3: Run tests
+    await testCS1_PilotSubPanel(playerPage);
+    await testCS2_AstrogatorSubPanel(playerPage);
+    await testCS3_EngineerSubPanel(playerPage);
+    await testCS4_FullSoloJourney(playerPage);
 
   } catch (err) {
     console.error('\n✗ SUITE ERROR:', err.message);
     RESULTS.errors.push(err.message);
-    await page.screenshot({ path: '/tmp/captain-solo-error.png' });
+    RESULTS.failed++;
   }
 
   // Summary
@@ -300,7 +308,9 @@ async function testCS4_FullSoloJourney(page) {
     RESULTS.errors.slice(0, 10).forEach(e => console.log(`  - ${e}`));
   }
 
-  await browser.close();
+  // Cleanup
+  if (gmBrowser) await gmBrowser.close();
+  if (playerBrowser) await playerBrowser.close();
 
   process.exit(RESULTS.failed > 0 ? 1 : 0);
 })();

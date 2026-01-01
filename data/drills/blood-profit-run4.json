@@ -1,1 +1,88 @@
-{}
+{
+  "id": "blood-profit-run4",
+  "name": "Blood & Profit Run 4: Full Assault",
+  "description": "Five hostiles including a warship. Maximum threat level. All hands to battle stations!",
+  "difficulty": "hard",
+  "startConditions": {
+    "range_band": "long",
+    "alert_status": "RED"
+  },
+  "contacts": [
+    {
+      "name": "Pirate Flagship 'Bloody Profit'",
+      "type": "warship",
+      "disposition": "hostile",
+      "bearing": 0,
+      "range_km": 20000,
+      "health": 80,
+      "max_health": 80,
+      "armor": 8,
+      "gunner_skill": 3,
+      "transponder": "Bloody Profit",
+      "signature": "large",
+      "weapons": [
+        { "name": "Particle Bay", "damage": "6d6", "range": "long" },
+        { "name": "Triple Turret Beam", "damage": "4d6", "range": "medium" },
+        { "name": "Missile Bay", "damage": "5d6", "range": "long" }
+      ]
+    },
+    {
+      "name": "Corsair Alpha",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 30,
+      "range_km": 15000,
+      "health": 30,
+      "max_health": 30,
+      "armor": 2,
+      "gunner_skill": 2,
+      "weapons": [
+        { "name": "Triple Turret Laser", "damage": "3d6", "range": "medium" }
+      ]
+    },
+    {
+      "name": "Corsair Beta",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 330,
+      "range_km": 15000,
+      "health": 30,
+      "max_health": 30,
+      "armor": 2,
+      "gunner_skill": 2,
+      "weapons": [
+        { "name": "Triple Turret Laser", "damage": "3d6", "range": "medium" }
+      ]
+    },
+    {
+      "name": "Attack Boat 1",
+      "type": "ship",
+      "disposition": "hostile",
+      "bearing": 90,
+      "range_km": 10000,
+      "health": 15,
+      "max_health": 15,
+      "armor": 0,
+      "gunner_skill": 1,
+      "signature": "reduced",
+      "weapons": [
+        { "name": "Fixed Laser", "damage": "2d6", "range": "short" }
+      ]
+    },
+    {
+      "name": "Attack Boat 2",
+      "type": "ship",
+      "disposition": "hostile",
+      "bearing": 270,
+      "range_km": 10000,
+      "health": 15,
+      "max_health": 15,
+      "armor": 0,
+      "gunner_skill": 1,
+      "signature": "reduced",
+      "weapons": [
+        { "name": "Fixed Laser", "damage": "2d6", "range": "short" }
+      ]
+    }
+  ]
+}

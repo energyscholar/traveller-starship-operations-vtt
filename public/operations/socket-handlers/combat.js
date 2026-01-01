@@ -16,6 +16,8 @@ import { registerHandler } from './index.js';
 function handleCombatStarted(data, state, helpers) {
   state.inCombat = true;
   state.combatState = data;
+  state.combatPhase = data.phase || 'manoeuvre';
+  state.combatRound = data.round || 1;
   helpers.showNotification('COMBAT STATIONS! Tactical mode engaged.', 'warning');
   helpers.showCombatScreen(data);
 }
@@ -23,8 +25,16 @@ function handleCombatStarted(data, state, helpers) {
 function handleCombatEnded(data, state, helpers) {
   state.inCombat = false;
   state.combatState = null;
+  state.combatPhase = null;
+  state.combatRound = null;
   helpers.showNotification(`Combat ended: ${data.outcome}`, 'info');
   helpers.hideCombatScreen();
+}
+
+function handlePhaseChanged(data, state, helpers) {
+  state.combatPhase = data.phase;
+  state.combatRound = data.round;
+  helpers.showNotification(`Phase: ${data.phase.toUpperCase()} (Round ${data.round})`, 'info');
 }
 
 function handleCombatState(data, state, helpers) {
@@ -133,6 +143,7 @@ function handlePointDefenseStatus(data, state, helpers) {
 registerHandler('ops:combatStarted', handleCombatStarted);
 registerHandler('ops:combatEnded', handleCombatEnded);
 registerHandler('ops:combatState', handleCombatState);
+registerHandler('ops:phaseChanged', handlePhaseChanged);
 registerHandler('ops:weaponsAuthorized', handleWeaponsAuthorized);
 registerHandler('ops:fireResult', handleFireResult);
 registerHandler('ops:targetAcquired', handleTargetAcquired);
@@ -147,6 +158,7 @@ export {
   handleCombatStarted,
   handleCombatEnded,
   handleCombatState,
+  handlePhaseChanged,
   handleWeaponsAuthorized,
   handleFireResult,
   handleTargetAcquired,

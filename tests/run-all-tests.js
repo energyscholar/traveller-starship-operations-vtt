@@ -92,6 +92,7 @@ const unitTests = [
   'tests/jump.test.js',  // Jump travel and date utilities (23 tests)
   'tests/operations-refueling.test.js',  // Refueling system tests (25 tests)
   'tests/combat-engine.test.js',  // Combat engine tests (31 tests) - AUTORUN-14
+  'tests/unit/combat-display.test.js',  // Combat display ASCII renderer (29 tests)
   'tests/system-cache.test.js',  // AR-28: System cache tests (9 tests)
   'tests/captain.test.js',  // AR-29: Captain role tests (10 tests)
   'tests/gunner-training.test.js',  // AR-29: Gunner training target tests (8 tests)

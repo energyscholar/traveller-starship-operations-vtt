@@ -53,11 +53,13 @@ import './socket-handlers/fuel.js';
 import './socket-handlers/map.js';
 import './socket-handlers/misc.js';
 import './socket-handlers/conditions.js';
+import './socket-handlers/ship-damage.js';  // BD-2: Incoming fire damage
 import { initAllHandlers, getRegisteredHandlers } from './socket-handlers/index.js';
 // AR-201: Modal handler modules
 import './modals/character-import.js';
 import './modals/system-lookup.js';
 import './modals/gm-bridge-menu.js';
+import './modals/encounter-builder.js';
 import './modals/simple-modals.js';
 import './modals/ship-modals.js';
 import { getModalHandler, getRegisteredModals } from './modals/index.js';
@@ -2000,7 +2002,8 @@ const modalHelpers = {
   setRefuelMax,
   executeRefuel,
   setProcessMax,
-  executeProcessFuel
+  executeProcessFuel,
+  showModal: (templateId) => showModal(templateId)  // AR-BD-0b: Allow nested modal opening
 };
 
 // AR-201: Renderer helpers for extracted render functions

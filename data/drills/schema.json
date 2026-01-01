@@ -1,1 +1,140 @@
-{}
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Battle Drill Scenario",
+  "description": "Schema for battle drill training scenarios",
+  "type": "object",
+  "required": ["id", "name", "contacts"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique drill identifier"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Human-readable drill name"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Brief drill description"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["training", "easy", "medium", "hard", "deadly"],
+      "description": "Drill difficulty level"
+    },
+    "contacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/contact"
+      },
+      "minItems": 1,
+      "maxItems": 20,
+      "description": "Enemy contacts to spawn"
+    },
+    "startConditions": {
+      "type": "object",
+      "properties": {
+        "range_band": {
+          "type": "string",
+          "enum": ["close", "short", "medium", "long", "veryLong", "distant"]
+        },
+        "alert_status": {
+          "type": "string",
+          "enum": ["NORMAL", "YELLOW", "RED"]
+        }
+      }
+    }
+  },
+  "definitions": {
+    "contact": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "type": {
+          "type": "string",
+          "enum": ["ship", "patrol", "trader", "warship", "corsair", "station", "asteroid", "missile"]
+        },
+        "disposition": {
+          "type": "string",
+          "enum": ["hostile", "neutral", "friendly", "unknown"],
+          "default": "hostile"
+        },
+        "bearing": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 359,
+          "default": 0
+        },
+        "range_km": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 10000
+        },
+        "health": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 20
+        },
+        "max_health": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 20
+        },
+        "armor": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        },
+        "gunner_skill": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4,
+          "default": 1
+        },
+        "weapons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/weapon"
+          },
+          "default": []
+        },
+        "transponder": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string",
+          "enum": ["minimal", "reduced", "normal", "increased", "large"],
+          "default": "normal"
+        }
+      }
+    },
+    "weapon": {
+      "type": "object",
+      "required": ["name", "damage"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "damage": {
+          "type": "string",
+          "pattern": "^[0-9]+d[0-9]+([+-][0-9]+)?$"
+        },
+        "range": {
+          "type": "string",
+          "enum": ["adjacent", "close", "short", "medium", "long", "veryLong"],
+          "default": "medium"
+        }
+      }
+    }
+  }
+}

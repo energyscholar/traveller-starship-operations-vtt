@@ -473,6 +473,22 @@
         }
       }
     },
+    "combat": {
+      "type": "object",
+      "description": "Combat-related stats derived from software and systems",
+      "properties": {
+        "fireControl": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Fire Control rating (+DM to gunnery attacks)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Combat capability notes"
+        }
+      }
+    },
     "commonAreas": {
       "type": "object",
       "properties": {

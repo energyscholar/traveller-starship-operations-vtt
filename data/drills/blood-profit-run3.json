@@ -1,1 +1,55 @@
-{}
+{
+  "id": "blood-profit-run3",
+  "name": "Blood & Profit Run 3: Corsair Pack",
+  "description": "Three corsairs with missiles. Point defense and evasive maneuvers critical.",
+  "difficulty": "medium",
+  "startConditions": {
+    "range_band": "long",
+    "alert_status": "RED"
+  },
+  "contacts": [
+    {
+      "name": "Corsair Leader",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 0,
+      "range_km": 15000,
+      "health": 40,
+      "max_health": 40,
+      "armor": 4,
+      "gunner_skill": 2,
+      "weapons": [
+        { "name": "Triple Turret Beam", "damage": "4d6", "range": "long" },
+        { "name": "Missile Rack", "damage": "4d6", "range": "long" }
+      ]
+    },
+    {
+      "name": "Corsair Wing 1",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 45,
+      "range_km": 12000,
+      "health": 25,
+      "max_health": 25,
+      "armor": 2,
+      "gunner_skill": 1,
+      "weapons": [
+        { "name": "Double Turret Laser", "damage": "2d6", "range": "medium" }
+      ]
+    },
+    {
+      "name": "Corsair Wing 2",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 315,
+      "range_km": 12000,
+      "health": 25,
+      "max_health": 25,
+      "armor": 2,
+      "gunner_skill": 1,
+      "weapons": [
+        { "name": "Double Turret Laser", "damage": "2d6", "range": "medium" }
+      ]
+    }
+  ]
+}

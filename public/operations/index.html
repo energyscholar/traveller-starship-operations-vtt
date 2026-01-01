@@ -780,6 +780,24 @@
             <span class="menu-label">Report Bug / Request Feature</span>
           </button>
         </div>
+        <!--
+          TODO: MONGOOSE PUBLISHING PARTNERSHIP INTENT
+          This menu section is a placeholder to demonstrate intent to steer sales
+          toward Mongoose Publishing. When this VTT gains traction:
+          - Link should point to Mongoose store for Traveller products
+          - Potentially affiliate links or partnership arrangement
+          - Consult business/finance plan for implementation details
+          - Goal: Show Mongoose we want to support their sales, not compete
+          See: .claude/business-plan.md (when created)
+        -->
+        <div class="menu-section menu-section-shop">
+          <h4>Official Traveller Products</h4>
+          <a class="menu-item" href="https://www.mongoosepublishing.com/collections/traveller-rpg" target="_blank" rel="noopener">
+            <span class="menu-icon">🛒</span>
+            <span class="menu-label">Mongoose Publishing Store</span>
+            <span class="menu-badge external">↗</span>
+          </a>
+        </div>
       </div>
       <div class="menu-footer">
         <span class="version-info">Traveller VTT v0.6</span>
@@ -792,6 +810,7 @@
         <!-- Modal content populated dynamically -->
       </div>
     </div>
+
   </div>
 
   <!-- Character Import Modal Template -->
@@ -1504,7 +1523,41 @@ Skills: Pilot-2, Gunnery-1, Vacc Suit-1"></textarea>
           </div>
 
           <div class="god-mode-group">
-            <label>Add Contact</label>
+            <label>Add from Template</label>
+            <div class="god-mode-row">
+              <select id="god-template-select" class="input-medium">
+                <option value="">-- Select Template --</option>
+              </select>
+              <select id="god-template-disposition" class="input-small">
+                <option value="unknown" selected>Unknown</option>
+                <option value="neutral">Neutral</option>
+                <option value="friendly">Friendly</option>
+                <option value="hostile">Hostile (Battle Drill)</option>
+              </select>
+            </div>
+            <div class="god-mode-row">
+              <input type="text" id="god-template-name" placeholder="Name override (optional)" class="input-medium">
+            </div>
+            <div class="god-mode-row">
+              <label>Range:</label>
+              <select id="god-template-range-band" class="input-small" title="Select range band">
+                <option value="1">Adjacent (1 km)</option>
+                <option value="10">Close (10 km)</option>
+                <option value="500">Short (500 km)</option>
+                <option value="5000">Medium (5,000 km)</option>
+                <option value="15000">Long (15,000 km)</option>
+                <option value="50000" selected>Very Long (50,000 km)</option>
+                <option value="100000">Distant (100,000 km)</option>
+              </select>
+              <span style="margin: 0 4px;">or</span>
+              <input type="number" id="god-template-range" value="50000" class="input-small" min="1" placeholder="km">
+              <label>km</label>
+            </div>
+            <button id="btn-god-add-from-template" class="btn btn-warning btn-small">Add from Template</button>
+          </div>
+
+          <div class="god-mode-group">
+            <label>Add Custom Contact</label>
             <div class="god-mode-row">
               <input type="text" id="god-contact-name" placeholder="Contact name" class="input-medium">
               <select id="god-contact-type" class="input-small">
@@ -1521,8 +1574,20 @@ Skills: Pilot-2, Gunnery-1, Vacc Suit-1"></textarea>
             </div>
             <div class="god-mode-row">
               <label>Range:</label>
-              <input type="number" id="god-contact-range" value="50000" class="input-small">
+              <select id="god-contact-range-band" class="input-small" title="Select range band">
+                <option value="1">Adjacent (1 km)</option>
+                <option value="10">Close (10 km)</option>
+                <option value="500">Short (500 km)</option>
+                <option value="5000">Medium (5,000 km)</option>
+                <option value="15000">Long (15,000 km)</option>
+                <option value="50000" selected>Very Long (50,000 km)</option>
+                <option value="100000">Distant (100,000 km)</option>
+              </select>
+              <span style="margin: 0 4px;">or</span>
+              <input type="number" id="god-contact-range" value="50000" class="input-small" min="1" placeholder="km">
               <label>km</label>
+            </div>
+            <div class="god-mode-row">
               <label>Bearing:</label>
               <input type="number" id="god-contact-bearing" value="0" min="0" max="359" class="input-small">
               <label>°</label>
@@ -1536,6 +1601,47 @@ Skills: Pilot-2, Gunnery-1, Vacc Suit-1"></textarea>
               <button id="btn-god-repair-all" class="btn btn-success btn-small">Repair All</button>
               <button id="btn-god-refuel" class="btn btn-success btn-small">Full Refuel</button>
               <button id="btn-god-clear-contacts" class="btn btn-danger btn-small">Clear Contacts</button>
+              <button id="btn-god-encounter-builder" class="btn btn-primary btn-small">Encounter Builder</button>
+            </div>
+          </div>
+
+          <div class="god-mode-group">
+            <label>Combat Mode</label>
+            <div class="god-mode-buttons">
+              <button id="btn-god-enter-combat" class="btn btn-danger btn-small">ENTER COMBAT</button>
+              <button id="btn-god-exit-combat" class="btn btn-success btn-small" disabled>EXIT COMBAT</button>
+              <button id="btn-god-advance-phase" class="btn btn-warning btn-small" disabled>Next Phase</button>
+            </div>
+            <div id="combat-phase-display" class="god-mode-row" style="display:none">
+              <span>Round: <strong id="combat-round">1</strong></span>
+              <span style="margin-left: 16px;">Phase: <strong id="combat-phase">manoeuvre</strong></span>
+            </div>
+          </div>
+
+          <div class="god-mode-group">
+            <label>Drill Scenarios</label>
+            <div class="god-mode-row">
+              <select id="god-drill-select" class="input-medium">
+                <option value="">-- Select Drill --</option>
+              </select>
+              <button id="btn-god-load-drill" class="btn btn-primary btn-small">Load</button>
+            </div>
+            <div class="god-mode-row">
+              <span id="god-drill-status" class="drill-status">No drill active</span>
+              <button id="btn-god-reset-drill" class="btn btn-warning btn-small" disabled>Reset</button>
+            </div>
+          </div>
+
+          <div class="god-mode-group collapsible">
+            <label class="collapsible-header" data-toggle="tactical-panel">Tactical Overview <span class="collapse-icon">▼</span></label>
+            <div id="tactical-panel" class="collapsible-content">
+              <div class="tactical-sort-row">
+                <button class="btn btn-small btn-secondary tactical-sort" data-sort="range">Sort: Range</button>
+                <button class="btn btn-small btn-secondary tactical-sort" data-sort="health">Sort: Health</button>
+              </div>
+              <div id="tactical-contacts-list" class="tactical-list">
+                <div class="tactical-empty">No contacts</div>
+              </div>
             </div>
           </div>
 
@@ -1576,6 +1682,53 @@ Skills: Pilot-2, Gunnery-1, Vacc Suit-1"></textarea>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" data-close-modal>Close</button>
+    </div>
+  </template>
+
+  <!-- AR-BD-0b: Encounter Builder Modal Template -->
+  <template id="template-encounter-builder">
+    <div class="modal-header">
+      <h2>Build Encounter</h2>
+      <button class="btn-close" data-close-modal>&times;</button>
+    </div>
+    <div class="modal-body encounter-builder-body">
+      <div class="encounter-builder-layout">
+        <!-- Left Panel: Ship Templates -->
+        <div class="encounter-templates-panel">
+          <h3>Ship Templates</h3>
+          <input type="text" id="encounter-template-search" placeholder="Search templates..." class="input-full">
+          <div id="encounter-template-list" class="template-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        <!-- Right Panel: Encounter Roster -->
+        <div class="encounter-roster-panel">
+          <h3>Encounter Roster</h3>
+          <div id="encounter-roster" class="roster-list">
+            <!-- Populated by JS -->
+          </div>
+          <div class="roster-actions">
+            <button id="btn-encounter-clear" class="btn btn-small btn-secondary">Clear All</button>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom: Settings -->
+      <div class="encounter-settings">
+        <label>Default Disposition:
+          <select id="encounter-default-disposition">
+            <option value="hostile">Hostile</option>
+            <option value="neutral">Neutral</option>
+            <option value="friendly">Friendly</option>
+          </select>
+        </label>
+        <label>Range (km):
+          <input type="number" id="encounter-default-range" value="15000" class="input-small">
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button id="btn-encounter-activate" class="btn btn-primary">Activate Encounter</button>
     </div>
   </template>
 

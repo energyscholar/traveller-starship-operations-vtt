@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "sectors": {
+    "spinward-marches": {
+      "name": "Spinward Marches",
+      "file": "spinward-marches.sector",
+      "systems": 433,
+      "checksum": "sha256:9f08f9f58ad843c1",
+      "sizeBytes": 763737,
+      "generated": "2026-01-01T09:33:01.690Z"
+    }
+  },
+  "updated": "2026-01-01T09:33:01.760Z"
+}

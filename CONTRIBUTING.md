@@ -422,7 +422,8 @@ function moveShip(ship, options) {
 - **Documentation:** See `.claude/` directory
 - **Discussions:** GitHub Discussions for questions
 - **Issues:** GitHub Issues for bugs
-- **Project Plan:** See `.claude/ROADMAP.md`
+- **Architecture:** See `ARCHITECTURE.md`
+- **Project Plan:** See `docs/AR-ROADMAP.md`
 
 ### Questions?
 
@@ -447,6 +448,6 @@ Thank you for contributing! 🚀
 
 ---
 
-**Last Updated:** 2025-11-14
-**Maintainer:** [Your name/handle]
-**Contact:** [Your contact information]
+**Last Updated:** 2025-12-31
+**Maintainer:** Bruce Stephenson
+**Contact:** GitHub Issues

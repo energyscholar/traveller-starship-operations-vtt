@@ -110,11 +110,16 @@ CREATE TABLE IF NOT EXISTS contacts (
   weapons_free INTEGER DEFAULT 0,             -- Pre-authorized for weapons fire
   health INTEGER DEFAULT 0,                   -- Current health (for targetable objects)
   max_health INTEGER DEFAULT 0,               -- Max health
+  weapons TEXT,                               -- JSON array of weapons [{name, damage, range}]
+  gunner_skill INTEGER DEFAULT 1,             -- NPC gunner skill for attack rolls
+  armor INTEGER DEFAULT 0,                    -- Armor rating for damage reduction
+  disposition TEXT DEFAULT 'unknown',         -- hostile, neutral, friendly, unknown
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (campaign_id) REFERENCES campaigns(id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_contacts_campaign ON contacts(campaign_id);
+CREATE INDEX IF NOT EXISTS idx_contacts_disposition ON contacts(disposition);
 
 -- ==================== FUEL TANKS ====================
 -- Individual fuel tanks for ships (for detailed fuel management)
