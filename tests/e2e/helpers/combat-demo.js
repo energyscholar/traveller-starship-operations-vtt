@@ -401,6 +401,64 @@ async function quickEditShip(ship, demoKey) {
   });
 }
 
+function showHelp() {
+  const out = CLEAR + HOME +
+    `${CYAN}${BOLD}╔══════════════════════════════════════════════════════╗${RESET}\n` +
+    `${CYAN}${BOLD}║${RESET}  ${WHITE}${BOLD}HOTKEY REFERENCE${RESET}                                    ${CYAN}${BOLD}║${RESET}\n` +
+    `${CYAN}${BOLD}╠══════════════════════════════════════════════════════╣${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${WHITE}${BOLD}MAIN MENU${RESET}                                           ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[1-5]${RESET}  Select and run combat demo                   ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[F]${RESET}    View Fleet Rosters (ship details)            ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[S]${RESET}    Cycle starting range (Close→Distant)         ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[?]${RESET}    Show this help screen                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[Q]${RESET}    Quit application                             ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${WHITE}${BOLD}FLEET BROWSER${RESET}                                       ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[↑/↓]${RESET}  Select ship on page                          ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[←/→]${RESET}  Page through ships                           ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[E]${RESET}    Edit selected ship stats                     ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[B]${RESET}    Back to previous menu                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${WHITE}${BOLD}DURING COMBAT${RESET}                                       ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[SPACE]${RESET} Advance to next action                       ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[F]${RESET}    Fight another round (at battle end)          ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[ENTER]${RESET} End combat / Continue                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${WHITE}${BOLD}SHIP EDITOR${RESET}                                         ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[↑/↓]${RESET}  Select stat to modify                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[←/→]${RESET}  Decrease/increase value                      ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[S]${RESET}    Save changes                                 ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[C]${RESET}    Cancel (discard changes)                     ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}╠══════════════════════════════════════════════════════╣${RESET}\n` +
+    `${CYAN}║${RESET}  ${GREEN}Press any key to return to menu${RESET}                     ${CYAN}║${RESET}\n` +
+    `${CYAN}${BOLD}╚══════════════════════════════════════════════════════╝${RESET}\n`;
+
+  process.stdout.write(out);
+}
+
+async function waitForHelpDismiss() {
+  return new Promise((resolve) => {
+    if (process.stdin.isTTY) {
+      process.stdin.setRawMode(true);
+    }
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+
+    const onData = (key) => {
+      process.stdin.removeListener('data', onData);
+      if (process.stdin.isTTY) {
+        process.stdin.setRawMode(false);
+      }
+      process.stdin.pause();
+      resolve();
+    };
+
+    process.stdin.on('data', onData);
+  });
+}
+
 function showFleetMenu() {
   const d1 = DEMO_CONFIGS.demo1;
   const d2 = DEMO_CONFIGS.demo2;
@@ -626,6 +684,7 @@ function showMenu() {
     `${CYAN}║${RESET}  ${GREEN}Press 1-5 to select demo${RESET}                            ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[F]${RESET} View Fleet Rosters (detailed ship stats)        ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[S]${RESET} Starting Range: ${MAGENTA}${getSelectedRange().padEnd(10)}${RESET}                  ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[?]${RESET} Help - Show all hotkeys                         ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${DIM}Press Q or Ctrl+C to quit${RESET}                           ${CYAN}║${RESET}\n` +
     `${CYAN}${BOLD}╚══════════════════════════════════════════════════════╝${RESET}\n`;
 
@@ -674,6 +733,13 @@ async function waitForSelection() {
       if (key === 's' || key === 'S') {
         cycleRange();
         showMenu();  // Refresh menu to show new range
+        return;
+      }
+
+      // ? or H for help
+      if (key === '?' || key === 'h' || key === 'H') {
+        cleanup();
+        resolve('help');
         return;
       }
 
@@ -747,6 +813,9 @@ async function main() {
 
     if (selection === 'fleet') {
       await fleetBrowser();
+    } else if (selection === 'help') {
+      showHelp();
+      await waitForHelpDismiss();
     } else {
       await runDemo(selection);
     }
