@@ -323,7 +323,7 @@ function getRoleConfig(role) {
     },
     captain: {
       name: 'Command',
-      actions: ['setAlertStatus', 'issueOrders', 'authorizeWeapons', 'hail']
+      actions: []  // Actions moved to captain panel UI - setAlertStatus, issueOrders, authorizeWeapons, hail removed
     },
     astrogator: {
       name: 'Navigation',

@@ -5,10 +5,17 @@
  */
 
 // Default systems for any ship
+// Each system is an object with hits (damage taken) and disabled flag
 function createDefaultSystems() {
   return {
-    mDrive: 100, jDrive: 100, powerPlant: 100, sensors: 100,
-    computer: 100, lifeSupport: 100, fuel: 100, bridge: 100
+    mDrive: { hits: 0, disabled: false },
+    jDrive: { hits: 0, disabled: false },
+    powerPlant: { hits: 0, disabled: false },
+    sensors: { hits: 0, disabled: false },
+    computer: { hits: 0, disabled: false },
+    lifeSupport: { hits: 0, disabled: false },
+    fuel: { hits: 0, disabled: false },
+    bridge: { hits: 0, disabled: false }
   };
 }
 
@@ -32,9 +39,15 @@ function createKimbly() {
     // Combat modifiers - all legal bonuses
     fireControl: 1,                // Computer/5bis targeting
     sensorDM: 1,                   // Military sensors (+1 DM)
+    sensorGrade: 'military',       // AR-272: Military grade sensors
     // Crew skills (PC crew)
     pilotSkill: 1,                 // Von Sydo (Pilot-1)
+    sensorOperator: { name: 'Von Sydo', skill: 2 },  // AR-272: Electronics (Sensors)-2
     captain: { name: 'James', skill_tactics_naval: 3 },  // Tactics bonus for initiative
+    // EW state (AR-272)
+    ecmActive: false,
+    eccmActive: false,
+    ewBonus: 0,                    // Set by EW clash at combat start
     // State
     evasive: false,
     sandcasters: 20,               // 1 sandcaster × 20 canisters
@@ -54,7 +67,7 @@ function createKimbly() {
     // Crew roster for display
     crew: [
       { name: 'James', role: 'Captain', skill: 'Tactics-3' },
-      { name: 'Von Sydo', role: 'Pilot', skill: 'Pilot-1' },
+      { name: 'Von Sydo', role: 'Pilot/Sensors', skill: 'Pilot-1, Sensors-2' },
       { name: 'Marina', role: 'Gunner', skill: 'Gunner-6' },
       { name: 'Max', role: 'Engineer', skill: 'Mechanic-2' },
       { name: 'Asao', role: 'Damage Control', skill: 'Vacc Suit-2' }
@@ -77,8 +90,14 @@ function createPirateScout() {
     // Combat modifiers - basic pirate
     fireControl: 0,                // No fire control software
     sensorDM: 0,                   // Civilian sensors
+    sensorGrade: 'civilian',       // AR-272: Civilian grade sensors
     // Crew skills (inexperienced pirates)
     pilotSkill: 1,                 // Pirate pilot
+    sensorOperator: { name: 'Pirate Tech', skill: 1 },  // AR-272: Electronics (Sensors)-1
+    // EW state (AR-272)
+    ecmActive: false,
+    eccmActive: false,
+    ewBonus: 0,
     // State
     evasive: false,
     tacticalAwareness: false,
@@ -95,6 +114,13 @@ function createPirateScout() {
         gunner: 'Pirate Gunner',
         gunnerSkill: 1
       }
+    ],
+    // Crew roster for display (AR-272)
+    crew: [
+      { name: 'Pirate Captain', role: 'Captain', skill: 'Tactics-0' },
+      { name: 'Pirate Pilot', role: 'Pilot', skill: 'Pilot-1' },
+      { name: 'Pirate Tech', role: 'Sensors', skill: 'Sensors-1' },
+      { name: 'Pirate Gunner', role: 'Gunner', skill: 'Gunner-1' }
     ]
   };
 }

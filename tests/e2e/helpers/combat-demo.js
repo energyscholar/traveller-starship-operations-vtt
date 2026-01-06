@@ -15,6 +15,8 @@ const { DEMO_CONFIGS } = require('./combat-demo-ships');
 const { runDemo1 } = require('./combat-demo-1');
 const { runDemo3 } = require('./combat-demo-3');
 const { runDemo4 } = require('./combat-demo-4');
+const { runDemoEngine } = require('./combat-demo-engine');
+const { exec } = require('child_process');
 
 // ANSI
 const ESC = '\x1b';
@@ -680,8 +682,14 @@ function showMenu() {
     `${CYAN}║${RESET}  ${YELLOW}[5]${RESET} ${d4.description}                  ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}      ${DIM}8 ships vs 5 pirates - Ambush scenario${RESET}          ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[6]${RESET} Engine Demo (AR-236 architecture)              ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}      ${DIM}CombatEngine + TUI adapter - shared core${RESET}         ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[7]${RESET} ${GREEN}Solo Demo Campaign${RESET} - Spinward Marches        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}      ${DIM}Type-S Scout "Far Horizon" - explore the sector${RESET}  ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
     `${CYAN}╠══════════════════════════════════════════════════════╣${RESET}\n` +
-    `${CYAN}║${RESET}  ${GREEN}Press 1-5 to select demo${RESET}                            ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${GREEN}Press 1-7 to select demo${RESET}                            ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[F]${RESET} View Fleet Rosters (detailed ship stats)        ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[S]${RESET} Starting Range: ${MAGENTA}${getSelectedRange().padEnd(10)}${RESET}                  ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[?]${RESET} Help - Show all hotkeys                         ${CYAN}║${RESET}\n` +
@@ -715,8 +723,8 @@ async function waitForSelection() {
         process.exit(0);
       }
 
-      // 1-5 for demos
-      if (key >= '1' && key <= '5') {
+      // 1-7 for demos
+      if (key >= '1' && key <= '7') {
         cleanup();
         resolve(parseInt(key, 10));
         return;
@@ -758,13 +766,80 @@ async function waitForSelection() {
   });
 }
 
+/**
+ * AR-289: Solo Demo Campaign - Spinward Marches
+ * Opens browser to the solo demo campaign
+ */
+async function runSoloDemoCampaign() {
+  const out = CLEAR + HOME +
+    `${CYAN}${BOLD}╔══════════════════════════════════════════════════════╗${RESET}\n` +
+    `${CYAN}${BOLD}║${RESET}  ${WHITE}${BOLD}SOLO DEMO CAMPAIGN - SPINWARD MARCHES${RESET}              ${CYAN}${BOLD}║${RESET}\n` +
+    `${CYAN}${BOLD}╠══════════════════════════════════════════════════════╣${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}Ship:${RESET} Far Horizon (Type-S Scout/Courier)            ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}PC:${RESET}   Alex Ryder (Senior Scout, Pilot-2)            ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}Location:${RESET} Mora (Spinward Marches 3124)              ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${DIM}100t hull, Jump-2, Thrust 2${RESET}                         ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${DIM}Pulse laser + sandcaster, 23t fuel${RESET}                   ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${DIM}Detached duty with ship benefit${RESET}                      ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}╠══════════════════════════════════════════════════════╣${RESET}\n` +
+    `${CYAN}║${RESET}  ${GREEN}Opening browser to http://localhost:3000/operations${RESET}  ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${DIM}Click "Solo Demo Campaign" button to join${RESET}            ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${DIM}Press any key to return to menu...${RESET}                   ${CYAN}║${RESET}\n` +
+    `${CYAN}${BOLD}╚══════════════════════════════════════════════════════╝${RESET}\n`;
+
+  process.stdout.write(out);
+
+  // Open browser
+  const url = 'http://localhost:3000/operations';
+  const platform = process.platform;
+  let cmd;
+  if (platform === 'darwin') {
+    cmd = `open "${url}"`;
+  } else if (platform === 'win32') {
+    cmd = `start "" "${url}"`;
+  } else {
+    cmd = `xdg-open "${url}"`;
+  }
+  exec(cmd, (err) => {
+    if (err) {
+      process.stdout.write(`${RED}Could not open browser: ${err.message}${RESET}\n`);
+    }
+  });
+
+  // Wait for keypress
+  return new Promise((resolve) => {
+    if (process.stdin.isTTY) {
+      process.stdin.setRawMode(true);
+    }
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+
+    const onData = (key) => {
+      process.stdin.removeListener('data', onData);
+      if (process.stdin.isTTY) {
+        process.stdin.setRawMode(false);
+      }
+      process.stdin.pause();
+      resolve();
+    };
+
+    process.stdin.on('data', onData);
+  });
+}
+
 async function runDemo(demoNum) {
   const demoNames = {
     1: 'Demo 1 (Scout Duel AUTO)',
     2: 'Demo 2 (Q-Ship vs Corvette)',
     3: 'Demo 1 (Scout Duel MANUAL)',
     4: 'Demo 4 (Fleet + Marina Called Shots)',
-    5: 'Demo 5 (Fleet vs Pirates)'
+    5: 'Demo 5 (Fleet vs Pirates)',
+    6: 'Demo 6 (Engine Demo - AR-236)',
+    7: 'Solo Demo Campaign - Spinward Marches'
   };
 
   process.stdout.write(`${CLEAR}${HOME}${GREEN}Starting ${demoNames[demoNum]}...${RESET}\n`);
@@ -801,6 +876,16 @@ async function runDemo(demoNum) {
     case 5:
       // Demo 5: Fleet vs Pirates
       await runDemo4({ manualMode: false, startRange });
+      break;
+
+    case 6:
+      // Demo 6: Engine-powered demo (AR-236 architecture)
+      await runDemoEngine({ startRange });
+      break;
+
+    case 7:
+      // Demo 7: Solo Demo Campaign - Spinward Marches
+      await runSoloDemoCampaign();
       break;
   }
 }

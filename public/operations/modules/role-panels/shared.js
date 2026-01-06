@@ -1,6 +1,16 @@
 /**
  * AR-204: Shared Role Panel Functions
- * Common rendering functions used by multiple role panels.
+ * AR-250: GUI Adapter for shared role rendering.
+ *
+ * ARCHITECTURE NOTE:
+ * - State logic: lib/engine/roles/shared-state.js (CommonJS, server-side)
+ * - This file: GUI rendering (ES modules, client-side)
+ *
+ * Due to ES/CommonJS boundary, state functions are duplicated.
+ * The server-side shared-state.js is authoritative for:
+ * - TUI adapters
+ * - Unit tests
+ * - Any future shared rendering
  */
 
 /**

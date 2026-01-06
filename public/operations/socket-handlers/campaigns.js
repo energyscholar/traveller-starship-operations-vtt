@@ -15,6 +15,11 @@ import { registerHandler } from './index.js';
 function handleCampaigns(data, state, helpers) {
   state.campaigns = data.campaigns;
   helpers.renderCampaignList();
+
+  // AR-296: Show feedback alert if there's new feedback
+  if (data.newFeedbackCount > 0) {
+    handleFeedbackCount({ count: data.newFeedbackCount });
+  }
 }
 
 function handleCampaignCreated(data, state, helpers) {
@@ -103,38 +108,22 @@ function handlePlayerSlotDeleted(data, state, helpers) {
   helpers.renderPlayerSlots();
 }
 
-// ==================== Solo Explorer (AR-241) ====================
+// ==================== AR-296: Feedback ====================
 
-function handleSoloCampaignCreated(data, state, helpers) {
-  // AR-241 BUG 4 fix: Validate data before proceeding
-  if (!data || !data.campaign) {
-    helpers.showNotification('Failed to create solo campaign. Please try again.', 'error');
-    return;
+function handleFeedbackCount(data) {
+  const alert = document.getElementById('feedback-alert');
+  const countEl = document.getElementById('feedback-count');
+
+  if (!alert || !countEl) return;
+
+  const count = data.count || 0;
+  if (count > 0) {
+    countEl.textContent = count;
+    alert.classList.remove('hidden');
+    console.log('[Feedback] Showing alert banner with', count, 'items');
+  } else {
+    alert.classList.add('hidden');
   }
-
-  if (!data.ship || !data.ship.id) {
-    helpers.showNotification('Failed to create ship. Please try again.', 'error');
-    return;
-  }
-
-  state.campaign = data.campaign;
-  state.ships = [data.ship];
-  state.ship = data.ship;  // AR-FIX: Set current ship for bridge screen
-  state.isGM = true;
-  state.isSolo = true;
-
-  // Auto-select the Scout ship
-  state.selectedShipId = data.ship.id;
-  state.selectedRole = 'captain';  // Solo player starts as captain
-
-  // Go directly to bridge (skip GM setup)
-  helpers.showScreen('bridge');
-  helpers.showNotification('Welcome, Solo Explorer! Your Type S Scout awaits.', 'success');
-
-  // Save session for reconnect
-  helpers.saveSession();
-  // Request shared map state
-  state.socket.emit('ops:getMapState');
 }
 
 // ==================== Campaign Join ====================
@@ -188,7 +177,7 @@ registerHandler('ops:playerSlotCreated', handlePlayerSlotCreated);
 registerHandler('ops:playerSlotDeleted', handlePlayerSlotDeleted);
 registerHandler('ops:campaignJoined', handleCampaignJoined);
 registerHandler('ops:playerSlotSelected', handlePlayerSlotSelected);
-registerHandler('ops:soloCampaignCreated', handleSoloCampaignCreated);
+registerHandler('ops:feedbackCount', handleFeedbackCount);
 
 // Export for testing
 export {
@@ -205,5 +194,5 @@ export {
   handlePlayerSlotDeleted,
   handleCampaignJoined,
   handlePlayerSlotSelected,
-  handleSoloCampaignCreated
+  handleFeedbackCount
 };

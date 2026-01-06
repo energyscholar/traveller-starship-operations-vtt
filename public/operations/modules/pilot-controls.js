@@ -136,7 +136,8 @@ export function travel(state) {
   if (!confirm(confirmMsg)) return;
 
   state.socket.emit('ops:travel', {
-    destinationId: pendingTravelData.locationId
+    destinationId: pendingTravelData.locationId,
+    travelHours: pendingTravelData.travelHours || 4
   });
 
   // Clear pending travel after sending
@@ -192,6 +193,10 @@ export function setupPilotListeners(state, renderRolePanelFn, refreshCrewPanelFn
   });
 
   state.socket.on('ops:courseCleared', () => {
+    // AR-262: Clear course line when course is cancelled
+    if (typeof window.setMapDestination === 'function') {
+      window.setMapDestination(null);
+    }
     showNotification('Course cleared', 'info');
   });
 
@@ -230,6 +235,16 @@ export function setupPilotListeners(state, renderRolePanelFn, refreshCrewPanelFn
       animateCameraFn(data.locationId, { duration: 400, maxZoom: true });
     }
 
+    // AR-262: Clear course line on arrival
+    if (typeof window.setMapDestination === 'function') {
+      window.setMapDestination(null);
+    }
+
+    // AR-263: Update ship position on map
+    if (typeof window.refreshShipMapPosition === 'function') {
+      window.refreshShipMapPosition(data.locationId, state.ship?.name);
+    }
+
     // Re-render pilot panel to remove TRAVEL button
     if (state.role === 'pilot') {
       renderRolePanelFn('pilot');
@@ -262,6 +277,11 @@ export function setupPilotListeners(state, renderRolePanelFn, refreshCrewPanelFn
     // AR-124: Animate camera to new location
     if (animateCameraFn) {
       animateCameraFn(data.locationId);
+    }
+
+    // AR-263: Update ship position on map
+    if (typeof window.refreshShipMapPosition === 'function') {
+      window.refreshShipMapPosition(data.locationId, state.ship?.name);
     }
 
     // Show notification

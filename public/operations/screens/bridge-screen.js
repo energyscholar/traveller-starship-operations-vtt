@@ -16,7 +16,7 @@ import { registerScreen } from './index.js';
 function initBridgeScreen(state, helpers) {
   const {
     showModal, showScreen, showNotification, renderContacts, formatRoleName,
-    initShipStatusPanel, initCompactViewscreen, expandRolePanel, collapseRolePanel,
+    initShipStatusPanel, initSystemMapLight, expandRolePanel, collapseRolePanel,
     toggleBrowserFullscreen, toggleShipSystemsPanel, hideShipSystemsPanel,
     collapseExpandedPanel, togglePanelExpand, showShipStatusModal,
     openHamburgerMenu, closeHamburgerMenu, handleMenuFeature,
@@ -25,14 +25,63 @@ function initBridgeScreen(state, helpers) {
   } = helpers;
 
   // AR-164: Initialize Ship Status Panels
+  // AR-289: Pass ship type for correct diagram
   const shipStatusContainer = document.getElementById('ship-status-panel');
-  const viewscreenContainer = document.getElementById('compact-viewscreen');
   if (shipStatusContainer) {
-    initShipStatusPanel(shipStatusContainer);
+    // Ship type can be in ship_data.type, template_data.type, or template_id
+    const shipType = state.ship?.ship_data?.type ||
+                     state.ship?.template_data?.type ||
+                     state.ship?.template_id ||
+                     state.ship?.type ||
+                     'q_ship';
+    console.log('[BridgeScreen] Ship panel init:', {
+      shipName: state.ship?.name,
+      shipDataType: state.ship?.ship_data?.type,
+      templateDataType: state.ship?.template_data?.type,
+      templateId: state.ship?.template_id,
+      resolvedType: shipType
+    });
+    initShipStatusPanel(shipStatusContainer, shipType);
   }
+
+  // NUCLEAR FIX: System Map Light replaces compact-viewscreen
+  const viewscreenContainer = document.getElementById('compact-viewscreen');
   if (viewscreenContainer) {
-    // AR-167: Pass role for default panel selection
-    initCompactViewscreen(viewscreenContainer, state.selectedRole);
+    initSystemMapLight(viewscreenContainer);
+  }
+
+  // DEBUG: Monitor parent container of both panels - sends to server via socket
+  const statusPanelsRow = document.getElementById('status-panels');
+  if (statusPanelsRow) {
+    const sendLog = (level, message, meta) => {
+      console.warn(message, meta);
+      if (state.socket) {
+        state.socket.emit('client:log', { level, message, meta });
+      }
+    };
+
+    statusPanelsRow.addEventListener('scroll', () => {
+      sendLog('warn', '[BridgeScreen] STATUS PANELS ROW SCROLL', {
+        scrollTop: statusPanelsRow.scrollTop,
+        scrollLeft: statusPanelsRow.scrollLeft
+      });
+    });
+
+    const parentMutationObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'attributes') {
+          sendLog('warn', '[BridgeScreen] STATUS PANELS ROW ATTR CHANGED', {
+            attr: mutation.attributeName,
+            value: statusPanelsRow.getAttribute(mutation.attributeName)
+          });
+        }
+      }
+    });
+    parentMutationObserver.observe(statusPanelsRow, {
+      attributes: true,
+      attributeFilter: ['style', 'class']
+    });
+    sendLog('info', '[BridgeScreen] Debug monitor installed on status-panels row', {});
   }
 
   // AR-164: Sensor panel toggle handlers

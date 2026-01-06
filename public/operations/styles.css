@@ -122,7 +122,7 @@ html, body {
   border-color: var(--border-color);
 }
 
-/* AR-241: Solo Explorer accent button */
+/* AR-289: Solo Demo accent button */
 .btn-accent {
   background: linear-gradient(135deg, #8b5cf6, #6366f1);
   border-color: #8b5cf6;
@@ -535,6 +535,55 @@ input[type="checkbox"] {
 .campaign-actions .btn-delete:hover {
   color: var(--accent-red);
   border-color: var(--accent-red);
+}
+
+/* AR-296: Feedback badge */
+.feedback-badge {
+  display: inline-block;
+  background: var(--accent-red);
+  color: var(--text-bright);
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-left: 10px;
+  vertical-align: middle;
+  animation: feedback-pulse 2s ease-in-out infinite;
+}
+
+@keyframes feedback-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.feedback-badge.hidden {
+  display: none;
+}
+
+/* Feedback alert banner for GM */
+.feedback-alert-banner {
+  background: var(--bg-warning);
+  border: 1px solid var(--accent-yellow);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.feedback-alert-banner:hover {
+  background: var(--bg-warning-hover, rgba(255, 193, 7, 0.2));
+}
+
+.feedback-alert-banner .feedback-icon {
+  font-size: 1.2rem;
+}
+
+.feedback-alert-banner .feedback-text {
+  flex: 1;
+  font-size: 0.9rem;
 }
 
 .campaign-buttons {
@@ -1763,7 +1812,7 @@ input[type="checkbox"] {
   flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: minmax(0, 50vh) 1fr;  /* Row 1 fixed max, Row 2 fills rest */
   gap: var(--space-md);
   padding: var(--space-md);
   overflow: hidden;
@@ -1776,6 +1825,8 @@ input[type="checkbox"] {
   display: flex;
   gap: var(--space-md);
   position: relative;
+  max-height: 50vh;  /* Prevent unconstrained growth */
+  overflow: hidden;  /* Contain children */
 }
 
 /* Ship Status Panel (Left) */
@@ -1819,7 +1870,30 @@ input[type="checkbox"] {
   font-size: 12px;
 }
 
-/* Compact Viewscreen (Right) */
+/* AR-289: Ship ASCII art diagram */
+.ship-ascii-diagram {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+}
+
+.ship-ascii-art {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  line-height: 1.1;
+  color: var(--accent-cyan);
+  text-align: center;
+  margin: 0;
+  padding: 8px;
+  white-space: pre;
+  overflow: hidden;
+}
+
+/* Compact Viewscreen Container (Right panel) */
 .compact-viewscreen {
   flex: 1;
   background: var(--bg-panel);
@@ -1827,6 +1901,83 @@ input[type="checkbox"] {
   border-radius: var(--radius-md);
   overflow: hidden;
   min-height: 200px;
+  max-height: 250px; /* NUCLEAR FIX: Fixed height prevents slide */
+}
+
+/* System Map Light - Simple display-only map */
+.system-map-light {
+  width: 100%;
+  height: 200px;
+  background: #0a0a14;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.system-map-light canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.system-map-light-label {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 9px;
+  font-family: 'Courier New', monospace;
+  color: rgba(100, 140, 180, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+.system-map-light:hover::after {
+  content: "Click to open full map";
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: rgba(100, 180, 255, 0.8);
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Toggle button */
+.system-map-light-toggle {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  background: rgba(40, 50, 70, 0.8);
+  border: 1px solid rgba(100, 140, 180, 0.4);
+  border-radius: 4px;
+  color: rgba(150, 180, 220, 0.8);
+  font-size: 10px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.system-map-light-toggle:hover {
+  background: rgba(60, 80, 100, 0.9);
+  border-color: rgba(100, 180, 255, 0.6);
+  color: rgba(180, 210, 255, 1);
+}
+
+/* Expanded state */
+.system-map-light.expanded {
+  height: 350px;
+}
+
+.compact-viewscreen:has(.system-map-light.expanded) {
+  max-height: 400px;
 }
 
 /* Viewscreen Frame Styling */
@@ -2257,6 +2408,47 @@ input[type="checkbox"] {
   border-top: 1px solid var(--border-color);
 }
 
+/* AR-298: Helm Control Stats - left-aligned values */
+.helm-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.helm-stat-row {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  gap: 8px;
+}
+
+.helm-label {
+  color: var(--text-secondary);
+  min-width: 80px;
+}
+
+.helm-value {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.helm-nav-link {
+  font-size: 11px !important;
+  text-decoration: none;
+}
+
+.helm-nav-link:hover {
+  text-decoration: underline;
+}
+
+/* AR-298: Travel hint in Destinations header */
+.travel-hint {
+  font-size: 11px;
+  font-weight: normal;
+  color: var(--text-muted);
+  margin-left: 8px;
+}
+
 .feedback-link {
   font-size: 10px;
   color: var(--text-muted);
@@ -2289,6 +2481,47 @@ input[type="checkbox"] {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: var(--space-sm);
+}
+
+/* AR-270: Collapsible sections */
+.collapsible-section .section-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  user-select: none;
+}
+
+.collapsible-section .section-header:hover {
+  color: var(--text-primary);
+}
+
+.collapsible-section .toggle-icon {
+  font-size: 10px;
+  transition: transform 0.2s;
+  min-width: 14px;
+}
+
+.collapsible-section .section-badge {
+  margin-left: auto;
+  background: var(--accent-blue);
+  color: var(--bg-primary);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.collapsible-section .section-content {
+  transition: all 0.2s ease-out;
+}
+
+.collapsible-section.collapsed {
+  padding-bottom: var(--space-xs);
+}
+
+.collapsible-section.collapsed .section-header {
+  margin-bottom: 0;
 }
 
 .detail-stats {
@@ -2893,6 +3126,346 @@ input[type="checkbox"] {
 .astrogator-skill-note {
   text-align: center;
   color: var(--text-muted);
+}
+
+/* Jump Wizard - 5-step astrogation process */
+.jump-wizard {
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+}
+
+.jump-wizard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: bold;
+  color: var(--accent-cyan);
+}
+
+.jump-wizard-step-indicator {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.jump-wizard-content {
+  flex: 1;
+  padding: var(--space-md);
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.jump-wizard-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.jump-wizard-footer .btn {
+  min-width: 100px;
+}
+
+/* Assessment section */
+.jump-assessment-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--bg-dark);
+}
+
+.jump-assessment-row:last-child {
+  border-bottom: none;
+}
+
+.jump-assessment-label {
+  color: var(--text-secondary);
+}
+
+.jump-assessment-value {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.jump-assessment-sub {
+  padding-left: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.jump-max-result {
+  margin-top: var(--space-md);
+  padding: var(--space-sm);
+  background: var(--bg-dark);
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.jump-max-result .max-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--accent-green);
+}
+
+.jump-max-result .max-limit {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.jump-calculate-btn {
+  display: block;
+  width: 100%;
+  padding: var(--space-md);
+  margin-top: var(--space-md);
+  font-size: 14px;
+  font-weight: bold;
+  background: var(--accent-blue);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.jump-calculate-btn:hover {
+  background: var(--accent-blue-hover, #1976D2);
+}
+
+/* Distance selector buttons */
+.jump-distance-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: var(--space-sm);
+}
+
+.jump-distance-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.jump-distance-btn:hover:not(.disabled) {
+  border-color: var(--accent-cyan);
+  background: var(--bg-tertiary);
+}
+
+.jump-distance-btn.selected {
+  border-color: var(--accent-green);
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.jump-distance-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.jump-distance-btn .distance-label {
+  font-weight: bold;
+}
+
+.jump-distance-btn .distance-status {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.jump-distance-btn.disabled .distance-status {
+  color: var(--alert-red);
+}
+
+/* Destination list */
+.jump-dest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.jump-dest-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.jump-dest-item:hover {
+  border-color: var(--accent-cyan);
+}
+
+.jump-dest-item.selected {
+  border-color: var(--accent-green);
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.jump-dest-item .dest-radio {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--text-muted);
+  border-radius: 50%;
+}
+
+.jump-dest-item.selected .dest-radio {
+  border-color: var(--accent-green);
+  background: var(--accent-green);
+}
+
+.jump-dest-item .dest-name {
+  flex: 1;
+  font-weight: bold;
+}
+
+.jump-dest-item .dest-hex {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.jump-dest-item .dest-uwp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.jump-dest-item .dest-starport {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--bg-tertiary);
+}
+
+.jump-dest-item .dest-starport.starport-a { background: var(--accent-green); color: black; }
+.jump-dest-item .dest-starport.starport-b { background: var(--accent-cyan); color: black; }
+.jump-dest-item .dest-starport.starport-c { background: var(--accent-yellow); color: black; }
+.jump-dest-item .dest-starport.starport-d { background: var(--alert-orange); color: black; }
+.jump-dest-item .dest-starport.starport-e { background: var(--text-muted); }
+.jump-dest-item .dest-starport.starport-x { background: var(--alert-red); }
+
+/* Confirmation screen */
+.jump-confirm-section {
+  margin-bottom: var(--space-md);
+}
+
+.jump-confirm-section h5 {
+  margin: 0 0 var(--space-xs) 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.jump-confirm-route {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+}
+
+.jump-confirm-route .route-arrow {
+  color: var(--accent-cyan);
+}
+
+.jump-confirm-fuel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.jump-confirm-fuel .fuel-stat {
+  padding: var(--space-sm);
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.jump-confirm-fuel .fuel-value {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.jump-confirm-fuel .fuel-value.critical {
+  color: var(--alert-red);
+}
+
+.jump-confirm-fuel .fuel-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.jump-confirm-warnings {
+  padding: var(--space-sm);
+  background: rgba(255, 152, 0, 0.1);
+  border-left: 3px solid var(--alert-orange);
+  border-radius: var(--radius-sm);
+}
+
+.jump-confirm-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  font-size: 12px;
+  color: var(--alert-yellow);
+}
+
+.jump-initiate-btn {
+  width: 100%;
+  padding: var(--space-md);
+  font-size: 16px;
+  font-weight: bold;
+  background: var(--accent-green);
+  border: 2px solid var(--accent-green);
+  color: black;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.jump-initiate-btn:hover {
+  background: #66BB6A;
+  border-color: #66BB6A;
+}
+
+/* Minimap toggle */
+.jump-minimap-toggle {
+  font-size: 12px;
+  padding: 4px 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.jump-minimap-toggle:hover {
+  background: var(--bg-panel);
+}
+
+.jump-minimap-container {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+  max-height: 150px;
+  overflow: hidden;
+}
+
+.jump-minimap-container img {
+  width: 100%;
+  height: auto;
 }
 
 /* Crew List */
@@ -6441,6 +7014,48 @@ input[type="checkbox"] {
   padding: var(--space-xs) var(--space-sm);
 }
 
+/* AR-295: Campaign Status Tab */
+.campaign-status-section {
+  margin-bottom: var(--space-lg);
+}
+
+.campaign-status-section h4 {
+  margin-bottom: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.campaign-date-display {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.campaign-pc-item,
+.campaign-ship-item {
+  padding: var(--space-sm);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.campaign-pc-item .item-title,
+.campaign-ship-item .item-title {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.campaign-pc-item .item-detail,
+.campaign-ship-item .item-detail {
+  font-size: 0.85em;
+  color: var(--text-muted);
+}
+
 /* Prep Toggle Button (when panel is closed) */
 .btn-prep-toggle {
   position: fixed;
@@ -6805,6 +7420,62 @@ input[type="checkbox"] {
   color: var(--accent-red);
 }
 
+/* AR-268: Combat Phase Bar */
+.combat-phase-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(0, 100, 200, 0.15);
+  border: 1px solid var(--accent-blue);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
+
+.combat-phase-bar .phase-round {
+  font-weight: bold;
+  color: var(--accent-blue);
+  font-size: 0.9rem;
+  min-width: 80px;
+}
+
+.combat-phase-bar .phase-steps {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+
+.combat-phase-bar .phase-step {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-weight: bold;
+  font-size: 0.75rem;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.combat-phase-bar .phase-step.active {
+  background: var(--accent-blue);
+  color: var(--bg-primary);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+.combat-phase-bar .phase-current {
+  font-weight: bold;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  min-width: 100px;
+  text-align: right;
+}
+
 .combat-combatants {
   margin-bottom: var(--space-lg);
 }
@@ -6829,21 +7500,96 @@ input[type="checkbox"] {
   border-left: 3px solid var(--accent-red);
 }
 
-.combatant-name {
-  font-weight: 600;
-  min-width: 150px;
+/* AR-271: Enhanced combatant grid */
+.combatant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
 }
 
-.combatant-type {
+.combatant-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  border-left: 3px solid var(--text-muted);
+}
+
+.combatant-card.hostile {
+  border-left-color: var(--accent-red);
+}
+
+.combatant-card.friendly {
+  border-left-color: var(--accent-green);
+}
+
+.combatant-card.neutral {
+  border-left-color: var(--accent-blue);
+}
+
+.combatant-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.combatant-marking {
+  font-size: 14px;
+}
+
+.combatant-name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.combatant-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.combatant-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.combatant-row .label {
   color: var(--text-secondary);
 }
 
-.combatant-range {
-  color: var(--accent-yellow);
+.combatant-row .value {
+  color: var(--text-primary);
 }
 
-.combatant-tonnage {
-  color: var(--text-muted);
+.hull-bar {
+  position: relative;
+  width: 80px;
+  height: 14px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.hull-fill {
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.hull-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 .combat-placeholder {
@@ -8933,6 +9679,42 @@ body.role-engineer .role-panel .role-actions {
   width: 100%;
 }
 
+/* AR-242: Ruler panel styling */
+.ruler-panel .thrust-selector {
+  display: flex;
+  gap: 4px;
+  margin-top: var(--space-xs);
+}
+
+.ruler-panel .thrust-selector button {
+  flex: 1;
+  padding: 4px 8px;
+  background: var(--surface-darker);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ruler-panel .thrust-selector button:hover {
+  background: var(--surface-dark);
+  border-color: var(--primary);
+}
+
+.ruler-panel .thrust-selector button.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* AR-246: Stellar class styling */
+.system-map-info-panel .stellar-class {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
 /* Places Overlay (Destinations Sidebar) */
 .system-map-places {
   position: fixed;
@@ -9103,6 +9885,54 @@ body.role-engineer .role-panel .role-actions {
 
 .place-details-panel .detail-actions li {
   text-transform: capitalize;
+}
+
+/* AR-266: Route FROM/TO display */
+.place-details-panel .detail-route {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0;
+  padding: var(--space-sm);
+  background: rgba(0, 150, 100, 0.15);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-green);
+}
+
+.place-details-panel .detail-route.current-location {
+  background: rgba(100, 100, 200, 0.15);
+  border-left-color: var(--accent-blue);
+}
+
+.place-details-panel .detail-route .route-from,
+.place-details-panel .detail-route .route-to {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.place-details-panel .detail-route .route-icon {
+  font-size: 14px;
+}
+
+.place-details-panel .detail-route .route-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.place-details-panel .detail-route .route-value {
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.place-details-panel .detail-route .route-arrow {
+  color: var(--accent-green);
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 var(--space-xs);
 }
 
 .place-details-panel .detail-physics {

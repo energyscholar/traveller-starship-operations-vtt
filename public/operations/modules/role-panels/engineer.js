@@ -187,6 +187,7 @@ export function getEngineerPanel(shipState, template, systemStatus, damagedSyste
         ${fs.fuelProcessor && fuelBreakdown.unrefined > 0 ? `
         <button onclick="processFuel()" class="btn btn-small" title="Process unrefined fuel to remove misjump risk (takes time)">Process Fuel</button>
         ` : ''}
+        <button onclick="window.magicRefuel && window.magicRefuel()" class="btn btn-small btn-secondary" title="Magically refuel ship so you are not stranded during testing" style="margin-left: 4px;">Magic Refuel</button>
       </div>
       ${fs.processing ? `
       <div class="fuel-processing-status">

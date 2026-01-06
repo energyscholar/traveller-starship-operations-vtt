@@ -72,6 +72,13 @@ function handleTimeAdvanced(data, state, helpers) {
     state.campaign.current_date = data.newDate;
   }
   helpers.setBridgeClockDate(data.newDate);
+
+  // AR-216: Update all date displays including system map header
+  const systemMapDate = document.getElementById('system-map-date');
+  if (systemMapDate) {
+    systemMapDate.textContent = data.newDate;
+  }
+
   helpers.showNotification(`Time: ${data.newDate}${data.advancedBy ? ` (${data.advancedBy})` : ''}`, 'info');
 }
 

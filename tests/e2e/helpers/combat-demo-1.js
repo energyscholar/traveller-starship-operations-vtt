@@ -28,6 +28,7 @@ const {
   getCalledShotPenalty,
   getCalledShotMenuItems
 } = require('../../../lib/combat/turn-notification');
+const { canUseCalledShot } = require('../../../lib/combat/called-shot-ai');
 const {
   cycleControlMode,
   needsPlayerInput,
@@ -56,8 +57,8 @@ const {
  * @returns {string|null} Target system ID or null for normal attack
  */
 function getMarinaCalledShotTarget(defenderShip, defenderSystems, weapon) {
-  // Marina only uses called shots with lasers (not missiles)
-  if (weapon === 'missile_rack') return null;
+  // AR-216: Use centralized weapon validation for called shots
+  if (!canUseCalledShot(weapon)) return null;
 
   // 60% chance Marina uses called shot
   if (Math.random() > 0.6) return null;
@@ -113,6 +114,145 @@ const YELLOW = `${ESC}[33m`;
 const CYAN = `${ESC}[36m`;
 const MAGENTA = `${ESC}[35m`;
 const WHITE = `${ESC}[37m`;
+const BLUE = `${ESC}[34m`;
+
+// ============================================================================
+// AR-272: ELECTRONIC WARFARE CLASH
+// ============================================================================
+// At the start of combat, both sides' sensor operators engage in electronic
+// warfare. The winner gains a targeting advantage for the first round.
+//
+// Mongoose Traveller 2e Rules (p.163):
+// - ECM gives DM-2 to enemy sensors
+// - Sensor skill: Electronics (Sensors) + INT modifier
+// - Military sensors: +2 DM, Civilian: +0 DM
+//
+// Our Implementation:
+// - Each side rolls: 2d6 + Sensors skill + Sensor grade bonus
+// - Winner gets +1 DM to first attack (sensor lock advantage)
+// - Effect of 4+ activates ECM automatically
+// ============================================================================
+
+/**
+ * Roll 2d6 helper
+ */
+function roll2d6EW() {
+  const d1 = Math.floor(Math.random() * 6) + 1;
+  const d2 = Math.floor(Math.random() * 6) + 1;
+  return { dice: [d1, d2], total: d1 + d2 };
+}
+
+/**
+ * Calculate sensor grade bonus
+ * @param {string} grade - 'military', 'improved', or 'civilian'
+ * @returns {number} DM bonus
+ */
+function getSensorGradeBonus(grade) {
+  switch (grade) {
+    case 'military': return 2;
+    case 'improved': return 1;
+    case 'civilian':
+    default: return 0;
+  }
+}
+
+/**
+ * Perform Electronic Warfare clash between two ships
+ * @param {Object} ship1 - First ship
+ * @param {Object} ship2 - Second ship
+ * @returns {Object} { winner, loser, ship1Roll, ship2Roll, effect, narrative }
+ */
+function performEWClash(ship1, ship2) {
+  // Get sensor operator skills
+  const s1Skill = ship1.sensorOperator?.skill || 0;
+  const s2Skill = ship2.sensorOperator?.skill || 0;
+
+  // Get sensor grade bonuses
+  const s1Grade = getSensorGradeBonus(ship1.sensorGrade);
+  const s2Grade = getSensorGradeBonus(ship2.sensorGrade);
+
+  // Roll opposing sensor checks
+  const roll1 = roll2d6EW();
+  const roll2 = roll2d6EW();
+
+  const total1 = roll1.total + s1Skill + s1Grade;
+  const total2 = roll2.total + s2Skill + s2Grade;
+
+  const effect = Math.abs(total1 - total2);
+
+  const result = {
+    ship1: {
+      name: ship1.name,
+      roll: roll1,
+      skill: s1Skill,
+      gradeBonus: s1Grade,
+      total: total1
+    },
+    ship2: {
+      name: ship2.name,
+      roll: roll2,
+      skill: s2Skill,
+      gradeBonus: s2Grade,
+      total: total2
+    },
+    effect: effect
+  };
+
+  // Determine winner (ties go to ship1)
+  if (total1 >= total2) {
+    result.winner = 'ship1';
+    result.winnerName = ship1.name;
+    result.loserName = ship2.name;
+    ship1.ewBonus = effect >= 4 ? 2 : 1;  // Strong win = ECM activated
+    ship2.ewBonus = effect >= 4 ? -2 : 0; // Strong loss = jammed
+  } else {
+    result.winner = 'ship2';
+    result.winnerName = ship2.name;
+    result.loserName = ship1.name;
+    ship2.ewBonus = effect >= 4 ? 2 : 1;
+    ship1.ewBonus = effect >= 4 ? -2 : 0;
+  }
+
+  return result;
+}
+
+/**
+ * Format EW clash result for narrative display
+ * @param {Object} clash - Result from performEWClash
+ * @returns {string[]} Array of narrative lines
+ */
+function formatEWClashNarrative(clash) {
+  const lines = [];
+
+  // Header
+  lines.push(`${BLUE}${BOLD}─── ELECTRONIC WARFARE ───${RESET}`);
+
+  // Ship 1 breakdown
+  const s1 = clash.ship1;
+  let s1Breakdown = `2d6=[${s1.roll.dice.join(',')}]=${s1.roll.total}`;
+  if (s1.skill > 0) s1Breakdown += ` +Sensors=${s1.skill}`;
+  if (s1.gradeBonus > 0) s1Breakdown += ` +MilSpec=${s1.gradeBonus}`;
+  lines.push(`${GREEN}${s1.name}: ${s1Breakdown} = ${BOLD}${s1.total}${RESET}`);
+
+  // Ship 2 breakdown
+  const s2 = clash.ship2;
+  let s2Breakdown = `2d6=[${s2.roll.dice.join(',')}]=${s2.roll.total}`;
+  if (s2.skill > 0) s2Breakdown += ` +Sensors=${s2.skill}`;
+  if (s2.gradeBonus > 0) s2Breakdown += ` +MilSpec=${s2.gradeBonus}`;
+  lines.push(`${RED}${s2.name}: ${s2Breakdown} = ${BOLD}${s2.total}${RESET}`);
+
+  // Result
+  if (clash.effect >= 4) {
+    lines.push(`${BOLD}${clash.winnerName} DOMINATES EW!${RESET} (Effect ${clash.effect})`);
+    lines.push(`${CYAN}ECM active - ${clash.loserName} sensors jammed (-2 DM)${RESET}`);
+  } else if (clash.effect >= 1) {
+    lines.push(`${clash.winnerName} gains targeting advantage (+1 DM)`);
+  } else {
+    lines.push(`${DIM}EW standoff - no advantage${RESET}`);
+  }
+
+  return lines;
+}
 
 // ============================================================================
 // BATTLE SUMMARY (displayed at end of combat)
@@ -294,7 +434,8 @@ function resetState(options = {}) {
     currentActor: 'player',
     turretFlash: null,
     // AR-223: 3-way control mode (AUTO/CAPTAIN/ROLE)
-    controlMode: options.controlMode || 'AUTO',
+    // manualMode: true from menu sets ROLE mode for gunner prompts
+    controlMode: options.controlMode || (options.manualMode ? 'ROLE' : 'AUTO'),
     activeRole: 'ALL',  // Role filter (only in ROLE mode)
     speed: 'NORMAL',    // INSTANT/FAST/NORMAL/SLOW
     fightMode: 'NORMAL', // NORMAL or FIGHT_TO_END
@@ -434,8 +575,10 @@ function getTurretDM(ship, turret, range, defender) {
   const weaponDM = getWeaponDM(turret.weapons[0]);
   // Evasive target: -Pilot skill to hit (MT2E p.165)
   const evasiveDM = defender?.evasive ? -(defender.pilotSkill || 0) : 0;
-  const total = fc + gunner + sensor + rangeDM + weaponDM + evasiveDM;
-  return { fc, gunner, sensor, rangeDM, weaponDM, evasiveDM, total };
+  // AR-272: EW bonus from electronic warfare clash (first round only)
+  const ewDM = ship.ewBonus || 0;
+  const total = fc + gunner + sensor + rangeDM + weaponDM + evasiveDM + ewDM;
+  return { fc, gunner, sensor, rangeDM, weaponDM, evasiveDM, ewDM, total };
 }
 
 // Critical hit location table (MT2E p.169)
@@ -993,6 +1136,7 @@ async function resolveAttack(attacker, defender, attackerShip, defenderShip, tur
   const col = attacker === 'player' ? GREEN : RED;
   let breakdown = `2d6=${roll.total} +FC=${mods.fc} +Gun=${mods.gunner} +Sns=${mods.sensor} +Rng=${mods.rangeDM} +Wpn=${mods.weaponDM}`;
   if (mods.evasiveDM !== 0) breakdown += ` ${YELLOW}Evasive=${mods.evasiveDM}${DIM}`;
+  if (mods.ewDM !== 0) breakdown += ` ${BLUE}EW=${mods.ewDM > 0 ? '+' : ''}${mods.ewDM}${DIM}`;
   if (calledShotPenalty !== 0) breakdown += ` ${YELLOW}Called=${calledShotPenalty}${DIM}`;
 
   // Narrative for called shot
@@ -1021,7 +1165,8 @@ async function resolveAttack(attacker, defender, attackerShip, defenderShip, tur
 
       // Point Defense: Defender attempts to shoot down missile with lasers
       // MT2E: 2D + Gunner vs 8, cumulative -1 per attempt
-      if (attacker === 'enemy' && defenderShip.turrets?.length > 0) {
+      // Both sides can use point defense (AR-288: Fix NPC point defense)
+      if (defenderShip.turrets?.length > 0) {
         const pdTurret = defenderShip.turrets.find(t => t.weapons?.includes('pulse_laser'));
         if (pdTurret) {
           // Track point defense attempts (cumulative penalty)
@@ -1032,14 +1177,17 @@ async function resolveAttack(attacker, defender, attackerShip, defenderShip, tur
           const pdTotal = pdRoll.total + pdGunnerSkill + pdPenalty;
           const pdSuccess = pdTotal >= 8;
 
-          // Flash turret as READY (point defense)
-          flashTurretReady('player', 1);
+          // Flash turret as READY (point defense) - defender's turret
+          const defenderSide = attacker === 'player' ? 'enemy' : 'player';
+          flashTurretReady(defenderSide, 1);
           render();
           await delay(400);
 
+          // Color based on whose side is defending
+          const pdColor = attacker === 'player' ? RED : GREEN;
           if (pdSuccess) {
             addNarrative(`${CYAN}${BOLD}★ POINT DEFENSE ★${RESET}`);
-            addNarrative(`${GREEN}${pdTurret.gunner} shoots down missile! (${pdRoll.total}+${pdGunnerSkill}${pdPenalty < 0 ? pdPenalty : ''}=${pdTotal} vs 8)${RESET}`);
+            addNarrative(`${pdColor}${pdTurret.gunner} shoots down missile! (${pdRoll.total}+${pdGunnerSkill}${pdPenalty < 0 ? pdPenalty : ''}=${pdTotal} vs 8)${RESET}`);
             render();
             await delay(800);
             return { hit: false, pointDefense: true }; // Missile destroyed
@@ -1058,9 +1206,11 @@ async function resolveAttack(attacker, defender, attackerShip, defenderShip, tur
     }
 
     // Apply sandcaster defense at close/adjacent range (MT2E p.271)
-    if (canUseSandcaster() && defenderShip.sandcasters > 0 && attacker === 'enemy') {
-      // Flash player turret as READY (point defense)
-      flashTurretReady('player', 1);
+    // Both sides can use sandcasters (AR-288: Fix NPC sandcasters)
+    if (canUseSandcaster() && defenderShip.sandcasters > 0) {
+      // Flash defender turret as READY (sandcaster defense)
+      const defenderSide = attacker === 'player' ? 'enemy' : 'player';
+      flashTurretReady(defenderSide, 1);
       render();
       await delay(400);
 
@@ -1070,11 +1220,13 @@ async function resolveAttack(attacker, defender, attackerShip, defenderShip, tur
       const sandRoll = roll2d6();
       const sandTotal = sandRoll.total + sandGunnerSkill;
       const sandSuccess = sandTotal >= 8;
+      // Color based on whose side is defending
+      const sandColor = attacker === 'player' ? RED : GREEN;
       if (sandSuccess) {
         const sandEffect = sandTotal - 8;
         const sandBonus = roll1d6() + sandEffect;
         damage = Math.max(0, damage - sandBonus);
-        addNarrative(`${GREEN}SANDCASTER (${sandRoll.total}+${sandGunnerSkill}=${sandTotal}) blocks ${sandBonus}!${RESET} → ${damage} damage`);
+        addNarrative(`${sandColor}SANDCASTER (${sandRoll.total}+${sandGunnerSkill}=${sandTotal}) blocks ${sandBonus}!${RESET} → ${damage} damage`);
       } else {
         addNarrative(`${YELLOW}Sandcaster miss (${sandTotal} vs 8)${RESET} ${damage} damage`);
       }
@@ -1142,6 +1294,18 @@ async function runDemo() {
   addNarrative(`${state.player.name} engages ${state.enemy.name} at ${YELLOW}${state.range}${RESET} range`);
   render();
   await delay(1000);
+
+  // === AR-272: ELECTRONIC WARFARE PHASE ===
+  // Sensor operators clash to establish EW dominance
+  addNarrative('');
+  const ewClash = performEWClash(state.player, state.enemy);
+  const ewNarrative = formatEWClashNarrative(ewClash);
+  ewNarrative.forEach(line => addNarrative(line));
+  render();
+  await delay(2500);
+
+  // Store EW result in state for attack modifier application
+  state.ewClash = ewClash;
 
   // === INITIATIVE PHASE (MT2E p.167) ===
   state.phase = 'initiative';
@@ -1240,7 +1404,9 @@ async function runDemo() {
       addNarrative(`${DIM}${firstTurret.gunner} holds fire${RESET}`);
       render();
     } else {
-      await resolveAttack(firstAttacker, secondAttacker, firstShip, firstTarget, firstTurret);
+      // Use called shot target if player selected one
+      const targetSys = turnAction?.action?.targetSystem || null;
+      await resolveAttack(firstAttacker, secondAttacker, firstShip, firstTarget, firstTurret, targetSys);
     }
   } else {
     await resolveAttack(firstAttacker, secondAttacker, firstShip, firstTarget, firstTurret);
@@ -1269,7 +1435,9 @@ async function runDemo() {
       addNarrative(`${DIM}${secondTurret.gunner} holds fire${RESET}`);
       render();
     } else {
-      await resolveAttack(secondAttacker, firstAttacker, secondShip, secondTarget, secondTurret);
+      // Use called shot target if player selected one
+      const targetSys2 = turnAction2?.action?.targetSystem || null;
+      await resolveAttack(secondAttacker, firstAttacker, secondShip, secondTarget, secondTurret, targetSys2);
     }
   } else {
     await resolveAttack(secondAttacker, firstAttacker, secondShip, secondTarget, secondTurret);
@@ -1293,6 +1461,9 @@ async function runDemo() {
   state.enemy.thrustUsed = 0;
   state.player.evasive = false;
   state.enemy.evasive = false;
+  // AR-272: Clear EW bonus after first round (it fades as both sides adapt)
+  state.player.ewBonus = 0;
+  state.enemy.ewBonus = 0;
 
   state.phase = 'manoeuvre';
   addNarrative(`${WHITE}${BOLD}─── ROUND 2: MANOEUVRE ───${RESET}`);

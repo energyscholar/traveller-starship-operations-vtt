@@ -35,11 +35,7 @@ export const ROLE_ACTION_MESSAGES = {
   evasiveAction: (name) => `${name} initiating evasive maneuvers`,
   dock: (name) => `${name} beginning docking sequence`,
   undock: (name) => `${name} releasing docking clamps`,
-  // Captain
-  setAlertStatus: (name) => `${name} adjusting alert status`,
-  issueOrders: (name) => `Captain ${name} issuing bridge orders`,
-  authorizeWeapons: (name) => `${name} authorizing weapons release`,
-  hail: (name) => `${name} opening communications channel`,
+  // Captain - actions removed (served no purpose)
   // Astrogator
   plotJump: (name) => `${name} calculating jump coordinates`,
   calculateIntercept: (name) => `${name} plotting intercept course`,

@@ -423,6 +423,153 @@ function narrateEvasive(shipName, enabled) {
   return `${shipName} resumes normal flight`;
 }
 
+// ========================================
+// VERBOSE MODE - AR-254
+// Streams narrative to console when VERBOSE=1
+// ========================================
+
+/**
+ * Check if verbose mode is enabled
+ * @returns {boolean}
+ */
+function isVerbose() {
+  return process.env.VERBOSE === '1' || process.env.VERBOSE === 'true';
+}
+
+/**
+ * Log narrative if verbose mode is enabled
+ * @param {string} text - Narrative text
+ * @param {string} prefix - Optional prefix
+ */
+function verboseLog(text, prefix = '  📖 ') {
+  if (isVerbose() && text) {
+    console.log(prefix + text.split('\n').join('\n' + prefix));
+  }
+}
+
+/**
+ * Create a combat narrator that streams events
+ * @returns {object} Narrator with event methods
+ */
+function createNarrator() {
+  const events = [];
+
+  return {
+    /**
+     * Record and optionally log a combat start
+     * @param {number} combatantCount
+     */
+    combatStart(combatantCount) {
+      const text = narrateCombatStart(combatantCount);
+      events.push({ type: 'combat_start', text, timestamp: Date.now() });
+      verboseLog(text, '\n⚔️  ');
+    },
+
+    /**
+     * Record and optionally log a phase change
+     * @param {string} phase
+     * @param {number} round
+     */
+    phaseChange(phase, round) {
+      const text = narratePhaseChange(phase, round);
+      events.push({ type: 'phase', phase, round, text, timestamp: Date.now() });
+      verboseLog(text, '\n🔄 ');
+    },
+
+    /**
+     * Record and optionally log an attack
+     * @param {object} result
+     */
+    attack(result) {
+      const text = narrateAttack(result);
+      events.push({ type: 'attack', result, text, timestamp: Date.now() });
+      verboseLog(text, result.hit ? '💥 ' : '💨 ');
+    },
+
+    /**
+     * Record and optionally log damage
+     * @param {string} targetName
+     * @param {object} damage
+     */
+    damage(targetName, damage) {
+      const text = narrateDamage(targetName, damage);
+      if (text) {
+        events.push({ type: 'damage', targetName, damage, text, timestamp: Date.now() });
+        verboseLog(text, '🔥 ');
+      }
+    },
+
+    /**
+     * Record and optionally log a critical hit
+     * @param {object} critEffect
+     */
+    critical(critEffect) {
+      const text = narrateCritical(critEffect);
+      if (text) {
+        events.push({ type: 'critical', critEffect, text, timestamp: Date.now() });
+        verboseLog(text, '⚠️  ');
+      }
+    },
+
+    /**
+     * Record and optionally log a reaction
+     * @param {string} type
+     * @param {object} result
+     */
+    reaction(type, result) {
+      const text = narrateReaction(type, result);
+      if (text) {
+        events.push({ type: 'reaction', reactionType: type, result, text, timestamp: Date.now() });
+        verboseLog(text, '🛡️  ');
+      }
+    },
+
+    /**
+     * Record and optionally log evasive action
+     * @param {string} shipName
+     * @param {boolean} enabled
+     */
+    evasive(shipName, enabled) {
+      const text = narrateEvasive(shipName, enabled);
+      events.push({ type: 'evasive', shipName, enabled, text, timestamp: Date.now() });
+      verboseLog(text, '🚀 ');
+    },
+
+    /**
+     * Record and optionally log combat end
+     * @param {string} outcome
+     */
+    combatEnd(outcome) {
+      const text = narrateCombatEnd(outcome);
+      events.push({ type: 'combat_end', text, timestamp: Date.now() });
+      verboseLog(text, '\n🏁 ');
+    },
+
+    /**
+     * Get all recorded events
+     * @returns {array}
+     */
+    getEvents() {
+      return events;
+    },
+
+    /**
+     * Get full narrative as text
+     * @returns {string}
+     */
+    getFullNarrative() {
+      return events.map(e => e.text).filter(Boolean).join('\n');
+    },
+
+    /**
+     * Clear all events
+     */
+    clear() {
+      events.length = 0;
+    }
+  };
+}
+
 module.exports = {
   // Display functions
   renderCombatDisplay,
@@ -438,5 +585,9 @@ module.exports = {
   narrateReaction,
   narrateCombatStart,
   narrateCombatEnd,
-  narrateEvasive
+  narrateEvasive,
+  // Verbose mode (AR-254)
+  isVerbose,
+  verboseLog,
+  createNarrator
 };

@@ -25,11 +25,16 @@ const RED = `${ESC}[31m`;
 const YELLOW = `${ESC}[33m`;
 const CYAN = `${ESC}[36m`;
 
+const WHITE = `${ESC}[37m`;
+const MAGENTA = `${ESC}[35m`;
+
 // State
 let engine = null;
 let adapter = null;
 let narrativeLog = [];
 let isPaused = false;
+let showingHelp = false;
+let returnToMenuCallback = null;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SETUP
@@ -78,11 +83,29 @@ function setupCombat(config = DEMO_CONFIGS.demo3) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// DELAY HELPER
+// DELAY HELPER (pause-aware)
 // ─────────────────────────────────────────────────────────────────────────────
 
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => {
+    const check = () => {
+      if (isPaused) {
+        setTimeout(check, 100);
+      } else {
+        setTimeout(resolve, ms);
+      }
+    };
+    check();
+  });
+}
+
+function togglePause() {
+  isPaused = !isPaused;
+  if (isPaused) {
+    console.log(`\n${YELLOW}${BOLD}[PAUSED]${RESET} ${DIM}Press ESC to resume, ? for help${RESET}`);
+  } else {
+    console.log(`${GREEN}[RESUMED]${RESET}`);
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -304,10 +327,134 @@ async function runDemo() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// HELP SCREEN
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderHelp() {
+  const w = 52;
+  let out = CLEAR + HOME;
+  out += `${CYAN}${BOLD}+${'-'.repeat(w-2)}+${RESET}\n`;
+  out += `${CYAN}|${RESET} ${WHITE}${BOLD}COMBAT DEMO HELP (ENGINE MODE)${RESET}${' '.repeat(w - 35)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}+${'-'.repeat(w-2)}+${RESET}\n`;
+  out += `${CYAN}|${RESET} ${WHITE}CONTROLS${RESET}${' '.repeat(w - 12)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${YELLOW}ESC${RESET}  - Toggle pause${' '.repeat(w - 24)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${YELLOW}?/h${RESET}  - Show this help${' '.repeat(w - 25)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${YELLOW}r${RESET}    - Restart demo${' '.repeat(w - 24)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${YELLOW}b${RESET}    - Back to menu${' '.repeat(w - 24)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${YELLOW}q${RESET}    - Quit program${' '.repeat(w - 24)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}+${'-'.repeat(w-2)}+${RESET}\n`;
+  out += `${CYAN}|${RESET} ${WHITE}COMBAT PHASES${RESET}${' '.repeat(w - 17)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${MAGENTA}Initiative${RESET} - Roll tactics${' '.repeat(w - 31)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${CYAN}Manoeuvre${RESET}  - Thrust & evasion${' '.repeat(w - 35)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${RED}Attack${RESET}     - Weapons fire${' '.repeat(w - 30)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${RED}Reaction${RESET}   - Point defense${' '.repeat(w - 31)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}|${RESET}  ${YELLOW}Actions${RESET}    - Repairs & damage${' '.repeat(w - 34)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}+${'-'.repeat(w-2)}+${RESET}\n`;
+  out += `${CYAN}|${RESET} ${DIM}Press any key to continue...${RESET}${' '.repeat(w - 32)}${CYAN}|${RESET}\n`;
+  out += `${CYAN}${BOLD}+${'-'.repeat(w-2)}+${RESET}\n`;
+  process.stdout.write(out);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// KEYBOARD INPUT
+// ─────────────────────────────────────────────────────────────────────────────
+
+function setupKeyboardInput() {
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(true);
+  }
+  process.stdin.resume();
+  process.stdin.setEncoding('utf8');
+
+  process.stdin.on('data', (key) => {
+    // Ctrl+C - always quit
+    if (key === '\u0003') {
+      cleanupKeyboard();
+      process.stdout.write(CLEAR + HOME);
+      process.exit(0);
+    }
+
+    // ESC key toggles pause
+    if (key === '\x1b' || key === '\u001b') {
+      togglePause();
+      return;
+    }
+
+    // Help dismissal
+    if (showingHelp) {
+      showingHelp = false;
+      return;
+    }
+
+    // ? or h for help
+    if (key === '?' || key === 'h' || key === 'H') {
+      showingHelp = true;
+      renderHelp();
+      return;
+    }
+
+    // Don't process other keys while paused
+    if (isPaused) return;
+
+    // q - quit
+    if (key === 'q' || key === 'Q') {
+      cleanupKeyboard();
+      process.stdout.write(CLEAR + HOME + `${GREEN}Demo ended.${RESET}\n`);
+      process.exit(0);
+    }
+
+    // b - back to menu
+    if (key === 'b' || key === 'B') {
+      if (returnToMenuCallback) {
+        cleanupKeyboard();
+        returnToMenuCallback();
+      }
+      return;
+    }
+
+    // r - restart
+    if (key === 'r' || key === 'R') {
+      process.stdout.write(CLEAR + HOME + `${YELLOW}Restarting...${RESET}\n`);
+      isPaused = false;
+      runDemo().catch(console.error);
+      return;
+    }
+  });
+}
+
+function cleanupKeyboard() {
+  process.stdin.removeAllListeners('data');
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(false);
+  }
+  process.stdin.pause();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EXPORTED API
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function runDemoEngine(options = {}) {
+  return new Promise((resolve) => {
+    returnToMenuCallback = resolve;
+    setupKeyboardInput();
+    runDemo().then(() => {
+      setTimeout(() => {
+        cleanupKeyboard();
+        resolve();
+      }, 3000);
+    }).catch(console.error);
+  });
+}
+
+module.exports = { runDemoEngine, runDemo, setupCombat };
+
+// ─────────────────────────────────────────────────────────────────────────────
 // ENTRY POINT
 // ─────────────────────────────────────────────────────────────────────────────
 
 if (require.main === module) {
+  setupKeyboardInput();
   runDemo()
     .then(() => {
       console.log('');
@@ -318,5 +465,3 @@ if (require.main === module) {
       process.exit(1);
     });
 }
-
-module.exports = { runDemo, setupCombat };

@@ -81,31 +81,42 @@ export function getPilotPanel(shipState, template, campaign, jumpStatus = {}, fl
   const pendingTravel = typeof window.getPendingTravel === 'function' ? window.getPendingTravel() : null;
   const isDocked = (shipState.locationId || '').includes('dock');
 
+  // AR-298: Format location with star system
+  const currentSystem = campaign?.current_system || 'Unknown System';
+  const fullLocation = `${currentSystem} System, ${shipLocation}`;
+  const maxThrust = shipState.currentThrust || template.thrust || 2;
+  const courseStatus = shipState.heading || shipState.vector || 'Holding';
+
   return `
     <div class="detail-section">
-      <h4>Helm Control</h4>
-      <div class="detail-stats">
-        <div class="stat-row">
-          <span>Location:</span>
-          <span class="stat-value">${escapeHtml(shipLocation)}</span>
+      <h4 style="display: flex; justify-content: space-between; align-items: center;">
+        Helm Control
+        <a href="#" onclick="event.preventDefault(); window.openSystemMapMaximized && window.openSystemMapMaximized()"
+           class="helm-nav-link" style="font-size: 12px; font-weight: normal; color: var(--accent-blue);"
+           title="Open maximized System Map for navigation">NAVIGATE FROM SYSTEM MAP</a>
+      </h4>
+      <div class="detail-stats helm-stats">
+        <div class="helm-stat-row">
+          <span class="helm-label">Location:</span>
+          <span class="helm-value">${escapeHtml(fullLocation)}</span>
           ${isDocked ? '<button class="btn btn-small btn-warning" onclick="undock()" style="margin-left: 10px;">UNDOCK</button>' : ''}
         </div>
-        <div class="stat-row">
-          <span>Speed:</span>
-          <span class="stat-value">${shipState.currentThrust || template.thrust || 2}G</span>
+        <div class="helm-stat-row">
+          <span class="helm-label">Speed:</span>
+          <span class="helm-value">Max acceleration ${maxThrust}G</span>
         </div>
-        <div class="stat-row">
-          <span>Course:</span>
-          <span class="stat-value">${shipState.heading || shipState.vector || 'Holding'}</span>
+        <div class="helm-stat-row">
+          <span class="helm-label">Course:</span>
+          <span class="helm-value">${courseStatus}</span>
         </div>
-        <div class="stat-row">
-          <span>Destination:</span>
-          <span class="stat-value">${destination}</span>
+        <div class="helm-stat-row">
+          <span class="helm-label">Destination:</span>
+          <span class="helm-value">${destination}</span>
         </div>
         ${eta ? `
-        <div class="stat-row">
-          <span>ETA:</span>
-          <span class="stat-value eta-display">${eta}</span>
+        <div class="helm-stat-row">
+          <span class="helm-label">ETA:</span>
+          <span class="helm-value eta-display">${eta}</span>
         </div>
         ` : ''}
       </div>

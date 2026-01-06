@@ -75,7 +75,11 @@ function handleJumpCompleted(data, state, helpers) {
     }
     const hexEl = document.getElementById('bridge-hex');
     if (hexEl) {
-      hexEl.textContent = data.hex;
+      if (data.arrivedAt) {
+        hexEl.textContent = `${data.hex} · ${data.arrivedAt}`;
+      } else {
+        hexEl.textContent = data.hex;
+      }
       hexEl.title = data.arrivedAt || 'Current parsec';
     }
   }
@@ -124,10 +128,14 @@ function handlePositionVerified(data, state, helpers) {
     if (state.shipState) {
       state.shipState.systemHex = data.currentHex;
     }
-    // AR-168: Update bridge-hex DOM element (was missing!)
+    // AR-168: Update bridge-hex DOM element with hex + system name
     const hexEl = document.getElementById('bridge-hex');
     if (hexEl) {
-      hexEl.textContent = data.currentHex;
+      if (data.currentSystem) {
+        hexEl.textContent = `${data.currentHex} · ${data.currentSystem}`;
+      } else {
+        hexEl.textContent = data.currentHex;
+      }
       hexEl.title = data.currentSystem || 'Current parsec';
     }
   }

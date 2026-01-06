@@ -73,11 +73,18 @@ export function renderBridge() {
     locationEl.textContent = locationDisplay;
   }
 
-  // AR-103: Hex coordinate display with system name tooltip
+  // AR-103: Hex coordinate display with system name
+  // AR-FIX: Show both hex AND system name (not just tooltip)
   const hexEl = document.getElementById('bridge-hex');
   if (hexEl) {
-    hexEl.textContent = state.campaign?.current_hex || '----';
-    hexEl.title = state.campaign?.current_system || 'Current parsec';
+    const hex = state.campaign?.current_hex || '----';
+    const systemName = state.campaign?.current_system;
+    if (systemName) {
+      hexEl.textContent = `${hex} · ${systemName}`;
+    } else {
+      hexEl.textContent = hex;
+    }
+    hexEl.title = systemName || 'Current parsec';
   }
 
   // Guest indicator with skill level
@@ -707,13 +714,13 @@ export function initGMControls() {
 
   // Alert status buttons
   document.getElementById('btn-alert-normal').addEventListener('click', () => {
-    state.socket.emit('ops:setAlertStatus', { status: 'NORMAL' });
+    state.socket.emit('ops:setAlertStatus', { alertStatus: 'NORMAL' });
   });
   document.getElementById('btn-alert-yellow').addEventListener('click', () => {
-    state.socket.emit('ops:setAlertStatus', { status: 'YELLOW' });
+    state.socket.emit('ops:setAlertStatus', { alertStatus: 'YELLOW' });
   });
   document.getElementById('btn-alert-red').addEventListener('click', () => {
-    state.socket.emit('ops:setAlertStatus', { status: 'RED' });
+    state.socket.emit('ops:setAlertStatus', { alertStatus: 'RED' });
   });
 
   // Time advance

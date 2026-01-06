@@ -1,5 +1,6 @@
 /**
  * AR-204: Captain Role Panel
+ * AR-270: UI cleanup with collapsible sections
  * Extracted from role-panels.js for maintainability.
  */
 
@@ -7,6 +8,59 @@ import { escapeHtml } from '../utils.js';
 import { getPilotPanel } from './pilot.js';
 import { getEngineerPanel } from './engineer.js';
 import { getAstrogatorPanel } from './astrogator.js';
+
+/**
+ * AR-270: Helper to create collapsible section
+ * @param {string} id - Unique section ID
+ * @param {string} title - Section title
+ * @param {string} content - Section HTML content
+ * @param {boolean} defaultOpen - Whether section starts open (default true)
+ * @param {string} badge - Optional badge text
+ */
+function collapsibleSection(id, title, content, defaultOpen = true, badge = '') {
+  const storageKey = `captain-section-${id}`;
+  // Check localStorage for saved state
+  const savedState = localStorage.getItem(storageKey);
+  const isOpen = savedState !== null ? savedState === 'open' : defaultOpen;
+  const badgeHtml = badge ? `<span class="section-badge">${badge}</span>` : '';
+
+  return `
+    <div class="detail-section captain-section-${id} collapsible-section ${isOpen ? 'open' : 'collapsed'}">
+      <h4 class="section-header" onclick="window.toggleCaptainSection('${id}')">
+        <span class="toggle-icon">${isOpen ? '▼' : '▶'}</span>
+        ${title}
+        ${badgeHtml}
+      </h4>
+      <div class="section-content" style="${isOpen ? '' : 'display: none;'}">
+        ${content}
+      </div>
+    </div>
+  `;
+}
+
+// Expose toggle function
+window.toggleCaptainSection = function(id) {
+  const section = document.querySelector(`.captain-section-${id}`);
+  if (!section) return;
+
+  const content = section.querySelector('.section-content');
+  const icon = section.querySelector('.toggle-icon');
+  const isOpen = section.classList.contains('open');
+
+  if (isOpen) {
+    section.classList.remove('open');
+    section.classList.add('collapsed');
+    content.style.display = 'none';
+    icon.textContent = '▶';
+    localStorage.setItem(`captain-section-${id}`, 'closed');
+  } else {
+    section.classList.remove('collapsed');
+    section.classList.add('open');
+    content.style.display = '';
+    icon.textContent = '▼';
+    localStorage.setItem(`captain-section-${id}`, 'open');
+  }
+};
 
 /**
  * Generate Captain role panel HTML
@@ -65,93 +119,11 @@ export function getCaptainPanel(shipState, template, ship, crewOnline, contacts,
   }
 
   // Captain panel content below
-  // Filter to targetable contacts only
-  const targetableContacts = contacts?.filter(c => c.is_targetable) || [];
-  const authorizedTargets = targetableContacts.filter(c => c.weapons_free);
-  const unauthorizedTargets = targetableContacts.filter(c => !c.weapons_free);
-
-  // Alert status colors
-  const alertColors = {
-    'NORMAL': '#28a745',
-    'GREEN': '#28a745',
-    'YELLOW': '#ffc107',
-    'RED': '#dc3545'
-  };
-  const alertStatus = shipState.alertStatus || 'NORMAL';
-  const alertColor = alertColors[alertStatus] || '#28a745';
-
   // Count contacts by marking
   const hostileCount = contacts?.filter(c => c.marking === 'hostile').length || 0;
   const unknownCount = contacts?.filter(c => !c.marking || c.marking === 'unknown').length || 0;
 
-  // Hailable contacts (have transponder and are ships/stations)
-  const hailableContacts = contacts?.filter(c =>
-    c.transponder && c.transponder !== 'NONE' &&
-    !c.celestial && c.type &&
-    ['Ship', 'Station', 'Starport', 'Base', 'Patrol', 'Free Trader', 'Far Trader', 'System Defense Boat'].includes(c.type)
-  ) || [];
-
   return tabBar + `
-    <div class="detail-section captain-alert-section">
-      <h4>Alert Status</h4>
-      <div class="alert-status-display" style="border-left: 4px solid ${alertColor}; padding-left: 10px;">
-        <span class="alert-status-text" style="color: ${alertColor}; font-weight: bold; font-size: 1.2em;">
-          ${alertStatus === 'NORMAL' ? 'GREEN' : alertStatus}
-        </span>
-      </div>
-      <div class="alert-controls" style="margin-top: 10px; display: flex; gap: 5px;">
-        <button onclick="window.captainSetAlert('GREEN')" class="btn btn-small ${alertStatus === 'NORMAL' || alertStatus === 'GREEN' ? 'btn-success' : 'btn-secondary'}" title="Normal operations">
-          Green
-        </button>
-        <button onclick="window.captainSetAlert('YELLOW')" class="btn btn-small ${alertStatus === 'YELLOW' ? 'btn-warning' : 'btn-secondary'}" title="Battle stations - combat readiness">
-          Yellow
-        </button>
-        <button onclick="window.captainSetAlert('RED')" class="btn btn-small ${alertStatus === 'RED' ? 'btn-danger' : 'btn-secondary'}" title="Emergency - all hands">
-          Red
-        </button>
-      </div>
-    </div>
-
-    <div class="detail-section captain-orders-section">
-      <h4>Issue Orders</h4>
-      <div class="quick-orders" style="margin-bottom: 8px; display: flex; gap: 5px; flex-wrap: wrap;">
-        <button onclick="window.captainQuickOrder('Evade')" class="btn btn-small btn-secondary" title="Order evasive maneuvers">Evade</button>
-        <button onclick="window.captainQuickOrder('Hold Position')" class="btn btn-small btn-secondary" title="Maintain current position">Hold</button>
-        <button onclick="window.captainQuickOrder('Engage')" class="btn btn-small btn-secondary" title="Engage hostiles">Engage</button>
-        <button onclick="window.captainQuickOrder('Stand Down')" class="btn btn-small btn-secondary" title="Return to normal ops">Stand Down</button>
-      </div>
-      <div class="nav-orders" style="margin-bottom: 8px; display: flex; gap: 5px; flex-wrap: wrap;">
-        <button onclick="window.captainNavOrder('Emergency Stop')" class="btn btn-small btn-danger" title="All stop - emergency">E-Stop</button>
-        <button onclick="window.captainNavOrder('Pursue')" class="btn btn-small btn-warning" title="Pursue target">Pursue</button>
-        <button onclick="window.captainNavOrder('Run Silent')" class="btn btn-small btn-secondary" title="Minimize emissions">Silent</button>
-        <button onclick="window.captainNavOrder('Full Thrust')" class="btn btn-small btn-primary" title="Maximum acceleration">Full</button>
-      </div>
-      ${contacts?.length > 0 ? `
-      <div class="contact-orders" style="margin-bottom: 8px; display: flex; gap: 5px; align-items: center;">
-        <select id="order-contact-select" class="order-select" style="flex: 1; max-width: 150px;">
-          ${contacts.map(c => `
-            <option value="${c.id}">${escapeHtml(c.transponder || c.name || 'Contact')}</option>
-          `).join('')}
-        </select>
-        <button onclick="window.captainContactOrder('intercept')" class="btn btn-small btn-warning" title="Intercept contact">Intercept</button>
-        <button onclick="window.captainContactOrder('track')" class="btn btn-small btn-secondary" title="Track contact">Track</button>
-        <button onclick="window.captainContactOrder('avoid')" class="btn btn-small btn-secondary" title="Avoid contact">Avoid</button>
-      </div>
-      ` : ''}
-      <div class="order-input-row" style="display: flex; gap: 5px;">
-        <select id="order-target-select" class="order-select" style="flex: 0 0 100px;">
-          <option value="all">All Crew</option>
-          <option value="pilot">Pilot</option>
-          <option value="gunner">Gunner</option>
-          <option value="engineer">Engineer</option>
-          <option value="sensor_operator">Sensors</option>
-        </select>
-        <input type="text" id="order-text-input" class="order-input" placeholder="Enter order..." maxlength="200" style="flex: 1;">
-        <button onclick="window.captainIssueOrder()" class="btn btn-small btn-primary" title="Send order to selected crew">Send</button>
-      </div>
-      <div id="pending-orders" class="pending-orders" style="margin-top: 10px; max-height: 100px; overflow-y: auto;"></div>
-    </div>
-
     <div class="detail-section captain-contacts-section">
       <h4>Tactical Overview</h4>
       <div class="detail-stats">
@@ -183,28 +155,6 @@ export function getCaptainPanel(shipState, template, ship, crewOnline, contacts,
           </div>
         </div>
       ` : ''}
-    </div>
-
-    <div class="detail-section captain-weapons-section">
-      <h4>Weapons Authorization</h4>
-      <div class="weapons-auth-master" style="margin-bottom: 10px;">
-        <button onclick="window.captainWeaponsAuth('hold')" class="btn btn-small ${shipState.weaponsAuth?.mode !== 'free' ? 'btn-warning' : 'btn-secondary'}" title="Gunners cannot fire">
-          Weapons Hold
-        </button>
-        <button onclick="window.captainWeaponsAuth('free')" class="btn btn-small ${shipState.weaponsAuth?.mode === 'free' ? 'btn-danger' : 'btn-secondary'}" title="Gunners may engage">
-          Weapons Free
-        </button>
-      </div>
-      ${targetableContacts.length === 0 ? `
-        <div class="placeholder">No targetable contacts</div>
-      ` : `
-        <div class="weapons-auth-status">
-          <div class="stat-row">
-            <span>Authorized:</span>
-            <span class="stat-value ${authorizedTargets.length > 0 ? 'text-warning' : ''}">${authorizedTargets.length}</span>
-          </div>
-        </div>
-      `}
     </div>
 
     <div class="detail-section captain-crew-section">
@@ -295,35 +245,6 @@ export function getCaptainPanel(shipState, template, ship, crewOnline, contacts,
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="detail-section captain-comms-section">
-      <h4>Communications</h4>
-      ${hailableContacts.length === 0 ? `
-        <div class="placeholder">No hailable contacts in range</div>
-      ` : `
-        <div class="hail-controls">
-          <select id="hail-contact-select" class="hail-select" style="width: 100%; margin-bottom: 8px;">
-            ${hailableContacts.map(c => `
-              <option value="${c.id}">${escapeHtml(c.transponder || c.name || 'Unknown')} (${c.type})</option>
-            `).join('')}
-          </select>
-          <div class="hail-buttons" style="display: flex; gap: 5px; margin-bottom: 8px;">
-            <button onclick="window.hailSelectedContact()" class="btn btn-small btn-primary" title="Open channel to selected contact">
-              Hail
-            </button>
-            <button onclick="window.broadcastMessage()" class="btn btn-small btn-secondary" title="Broadcast to all contacts">
-              Broadcast
-            </button>
-          </div>
-          <div class="message-input-row" style="display: flex; gap: 5px;">
-            <input type="text" id="comms-message-input" class="comms-input" placeholder="Enter message..." maxlength="500" style="flex: 1;">
-            <button onclick="window.sendCommsMessage()" class="btn btn-small btn-success" title="Send message to selected contact">
-              Send
-            </button>
-          </div>
-        </div>
-      `}
     </div>
   `;
 }

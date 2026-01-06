@@ -420,7 +420,7 @@ async function selectPlayerSlot(page, slotName = null) {
   let slot;
   if (slotName) {
     slot = await page.evaluateHandle((name) => {
-      const slots = document.querySelectorAll('#player-slot-list .slot-card, #player-slot-list button');
+      const slots = document.querySelectorAll('#player-slot-list .slot-item, #player-slot-list .slot-card, #player-slot-list button');
       for (const s of slots) {
         if (s.textContent?.includes(name)) {
           return s;
@@ -429,7 +429,7 @@ async function selectPlayerSlot(page, slotName = null) {
       return slots[0];
     }, slotName);
   } else {
-    slot = await page.$('#player-slot-list .slot-card, #player-slot-list button, #player-slot-list > div:first-child');
+    slot = await page.$('#player-slot-list .slot-item, #player-slot-list .slot-card, #player-slot-list button, #player-slot-list > div:first-child');
   }
 
   if (slot && (slot.asElement ? slot.asElement() : slot)) {

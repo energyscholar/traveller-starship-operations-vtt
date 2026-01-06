@@ -17,6 +17,67 @@ export function initSetupRenderers(appState, appHelpers) {
 }
 
 /**
+ * AR-294: Format character data as hover tooltip
+ * @param {Object} char - Character data object
+ * @returns {string} Formatted character sheet text
+ */
+function formatCharacterTooltip(char) {
+  const lines = [];
+
+  // Name and basic info
+  lines.push(`${char.name || 'Unknown'}`);
+  if (char.species) lines.push(`Species: ${char.species}`);
+  if (char.homeworld) lines.push(`Homeworld: ${char.homeworld}`);
+  if (char.age) lines.push(`Age: ${char.age}`);
+
+  // UPP
+  if (char.upp) {
+    lines.push(`UPP: ${char.upp}`);
+  } else if (char.stats) {
+    const s = char.stats;
+    const upp = `${s.str || 0}${s.dex || 0}${s.end || 0}${s.int || 0}${s.edu || 0}${s.soc || 0}`;
+    lines.push(`UPP: ${upp}`);
+  }
+
+  // Careers
+  if (char.careers?.length > 0) {
+    lines.push('---');
+    char.careers.forEach(c => {
+      lines.push(`${c.name}${c.specialty ? ` (${c.specialty})` : ''}: ${c.terms} terms`);
+      if (c.rankTitle) lines.push(`  Rank: ${c.rankTitle}`);
+    });
+  }
+
+  // Skills
+  if (char.skills && Object.keys(char.skills).length > 0) {
+    lines.push('---');
+    lines.push('Skills:');
+    Object.entries(char.skills)
+      .filter(([, v]) => v > 0)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .forEach(([k, v]) => lines.push(`  ${k}: ${v}`));
+  }
+
+  // Equipment
+  if (char.equipment?.length > 0) {
+    lines.push('---');
+    lines.push('Equipment:');
+    char.equipment.slice(0, 5).forEach(e => lines.push(`  ${e}`));
+    if (char.equipment.length > 5) {
+      lines.push(`  ...and ${char.equipment.length - 5} more`);
+    }
+  }
+
+  // Credits
+  if (char.credits !== undefined) {
+    lines.push(`---`);
+    lines.push(`Credits: Cr${char.credits.toLocaleString()}`);
+  }
+
+  return lines.join('\n');
+}
+
+/**
  * Render GM setup screen
  */
 export function renderGMSetup() {
@@ -110,12 +171,23 @@ export function renderPlayerSetup() {
       .map(([k, v]) => `<span class="skill-badge">${k}: ${v}</span>`)
       .join('');
 
+    // Build full character sheet for hover tooltip
+    const tooltip = formatCharacterTooltip(char);
+
     charDisplay.innerHTML = `
-      <div class="char-name">${escapeHtml(char.name)}</div>
+      <div class="char-name" title="${escapeHtml(tooltip)}">${escapeHtml(char.name)}</div>
       <div class="char-skills">${skills || 'No skills defined'}</div>
     `;
+
+    // Hide import buttons when character exists
+    const importSection = document.getElementById('character-import-section');
+    if (importSection) importSection.style.display = 'none';
   } else {
     charDisplay.innerHTML = '<p class="placeholder">No character imported</p>';
+
+    // Show import buttons when no character
+    const importSection = document.getElementById('character-import-section');
+    if (importSection) importSection.style.display = '';
   }
 
   // Ship selection

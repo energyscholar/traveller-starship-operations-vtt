@@ -38,7 +38,9 @@
     "validate-adventure": "node scripts/validate-adventure.js",
     "validate:systems": "node scripts/generate-star-systems-v2.js --validate",
     "generate:system": "node scripts/generate-star-systems-v2.js --system",
-    "generate:subsector": "node scripts/generate-star-systems-v2.js --subsector"
+    "generate:subsector": "node scripts/generate-star-systems-v2.js --subsector",
+    "tui": "node bin/tui-menu.js",
+    "demo": "node tests/e2e/helpers/combat-demo.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",

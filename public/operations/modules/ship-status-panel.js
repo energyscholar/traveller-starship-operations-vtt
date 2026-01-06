@@ -67,6 +67,27 @@ const SHIP_SVG_PATHS = {
 };
 
 /**
+ * Resolve ship type to SVG path with fallbacks
+ * @param {string} normalizedType - Normalized ship type
+ * @returns {string|null} SVG path or null
+ */
+function resolveSvgPath(normalizedType) {
+  // Direct match
+  if (SHIP_SVG_PATHS[normalizedType]) {
+    return SHIP_SVG_PATHS[normalizedType];
+  }
+  // Q-ship variants use q_ship SVG
+  if (normalizedType.startsWith('q_ship')) {
+    return SHIP_SVG_PATHS['q_ship'];
+  }
+  // Scout variants
+  if (normalizedType === 'scout_courier' || normalizedType === 'type_s') {
+    return SHIP_SVG_PATHS['scout'] || null;
+  }
+  return null;
+}
+
+/**
  * Load ship diagram (SVG or ASCII art fallback)
  * @param {string} shipType - Ship type identifier
  */
@@ -75,7 +96,7 @@ async function loadShipDiagram(shipType) {
   if (!container) return;
 
   const normalizedType = shipType?.toLowerCase().replace(/[- /]/g, '_') || 'q_ship';
-  const svgPath = SHIP_SVG_PATHS[normalizedType];
+  const svgPath = resolveSvgPath(normalizedType);
 
   // Try SVG first if available
   if (svgPath) {

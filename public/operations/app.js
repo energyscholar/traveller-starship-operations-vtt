@@ -156,9 +156,9 @@ import { expandRolePanel as _expandRolePanel, collapseRolePanel as _collapseRole
 // AR-153: Phase 3 modules
 import { openRefuelModal as _openRefuelModal, processFuel as _processFuel, populateRefuelModal as _populateRefuelModal, updateRefuelAmountPreview as _updateRefuelAmountPreview, updateRefuelPreview, executeRefuel as _executeRefuel, setRefuelMax as _setRefuelMax, executeProcessFuel as _executeProcessFuel, setProcessMax as _setProcessMax, requestFuelStatus as _requestFuelStatus } from './modules/refueling-operations.js';
 // AR-153: Phase 4 modules
-import { captainSetAlert as _captainSetAlert, captainQuickOrder as _captainQuickOrder, captainNavOrder as _captainNavOrder, captainContactOrder as _captainContactOrder, captainIssueOrder as _captainIssueOrder, captainMarkContact as _captainMarkContact, captainWeaponsAuth as _captainWeaponsAuth, captainRequestStatus as _captainRequestStatus, captainLeadershipCheck as _captainLeadershipCheck, captainTacticsCheck as _captainTacticsCheck, acknowledgeOrder as _acknowledgeOrder, captainSoloCommand as _captainSoloCommand } from './modules/captain-operations.js';
+import { captainMarkContact as _captainMarkContact, captainRequestStatus as _captainRequestStatus, captainLeadershipCheck as _captainLeadershipCheck, captainTacticsCheck as _captainTacticsCheck, acknowledgeOrder as _acknowledgeOrder, captainSoloCommand as _captainSoloCommand } from './modules/captain-operations.js';
 // AR-153: Phase 5 modules
-import { getStarPopupContent, getShipPopupContent, getStationPopupContent, showContactTooltip as _showContactTooltip, hideContactTooltip as _hideContactTooltip, scanContact as _scanContact, hailContact as _hailContact, hailSelectedContact as _hailSelectedContact, broadcastMessage as _broadcastMessage } from './modules/contact-tooltip.js';
+import { getStarPopupContent, getShipPopupContent, getStationPopupContent, showContactTooltip as _showContactTooltip, hideContactTooltip as _hideContactTooltip, scanContact as _scanContact, hailContact as _hailContact } from './modules/contact-tooltip.js';
 // AR-153: Phase 6 modules
 import { getEditorState, setEditorData, openShipEditor as _openShipEditor, populateShipEditor as _populateShipEditor, populateEditorFields, loadTemplateForEditor as _loadTemplateForEditor, renderWeaponsList, renderSystemsList, addWeaponToEditor, addSystemToEditor, updateValidationSummary, collectEditorData, saveEditedShip as _saveEditedShip, switchEditorTab } from './modules/ship-template-editor.js';
 // AR-153: Phase 7 modules
@@ -319,13 +319,7 @@ const executeProcessFuel = () => _executeProcessFuel(state, closeModal);
 const setProcessMax = () => _setProcessMax(state);
 const requestFuelStatus = () => _requestFuelStatus(state);
 // AR-153: Phase 4 wrappers
-const captainSetAlert = (alertStatus) => _captainSetAlert(state, alertStatus);
-const captainQuickOrder = (order) => _captainQuickOrder(state, order);
-const captainNavOrder = (orderType) => _captainNavOrder(state, orderType);
-const captainContactOrder = (action) => _captainContactOrder(state, action);
-const captainIssueOrder = () => _captainIssueOrder(state);
 const captainMarkContact = (marking) => _captainMarkContact(state, marking);
-const captainWeaponsAuth = (mode) => _captainWeaponsAuth(state, mode);
 const captainRequestStatus = () => _captainRequestStatus(state);
 const captainLeadershipCheck = () => _captainLeadershipCheck(state);
 const captainTacticsCheck = () => _captainTacticsCheck(state);
@@ -336,8 +330,6 @@ const showContactTooltip = (contactId, targetElement) => _showContactTooltip(sta
 const hideContactTooltip = () => _hideContactTooltip(state);
 const scanContact = (contactId, scanType) => _scanContact(state, contactId, scanType);
 const hailContact = (contactId) => _hailContact(state, hideContactTooltip, contactId);
-const hailSelectedContact = () => _hailSelectedContact(state, hailContact);
-const broadcastMessage = () => _broadcastMessage(state);
 // AR-153: Phase 6 wrappers
 const openShipEditor = (shipId) => _openShipEditor(state, showModal, shipId);
 const populateShipEditor = () => _populateShipEditor(state);
@@ -549,6 +541,16 @@ function initSocket() {
       if (data.campaign?.current_system) {
         loadCurrentSystem(data.campaign.current_system);
       }
+      // AR-XXX: Reinitialize ship panel with correct ship type after reconnect
+      const shipStatusContainer = document.getElementById('ship-status-panel');
+      if (shipStatusContainer && state.ship) {
+        const shipType = state.ship.ship_data?.type ||
+                         state.ship.template_data?.type ||
+                         state.ship.template_id ||
+                         'q_ship';
+        console.log('[Reconnect] Reinit ship panel with:', shipType);
+        initShipStatusPanel(shipStatusContainer, shipType);
+      }
     } else if (data.screen === 'player-setup') {
       showScreen('player-setup');
       renderPlayerSetup();
@@ -691,10 +693,14 @@ function initSocket() {
       state.campaign.current_system = systemName;
     }
 
-    // Update bridge header if visible
+    // Update bridge header if visible (show hex + system name)
     const bridgeHex = document.getElementById('bridge-hex');
     if (bridgeHex) {
-      bridgeHex.textContent = systemHex;
+      if (systemName) {
+        bridgeHex.textContent = `${systemHex} · ${systemName}`;
+      } else {
+        bridgeHex.textContent = systemHex;
+      }
       bridgeHex.title = systemName;
     }
     const bridgeLoc = document.getElementById('bridge-location');
@@ -728,6 +734,13 @@ function initSocket() {
 
   // ==================== AR-48: Medical Records Events ====================
   state.socket.on('ops:medicalRecords', handleMedicalRecords);
+
+  // ==================== AR-299: Destinations Events ====================
+  state.socket.on('ops:destinations', (data) => {
+    if (window.handleServerDestinations) {
+      window.handleServerDestinations(data);
+    }
+  });
 
   // ==================== AR-49: Environmental Monitoring Events ====================
   // AR-201: Conditions events moved to socket-handlers/conditions.js
@@ -1370,6 +1383,15 @@ function switchCaptainPanel(panel) {
   state.captainActivePanel = panel;
   renderRoleDetailPanel('captain');
   console.log(`[Captain] Switched to ${panel} panel`);
+
+  // AR-289: Initialize jump map when captain switches to astrogator panel
+  if (panel === 'astrogator' && state.campaign?.current_sector) {
+    setTimeout(() => {
+      updateJumpMap();
+      initMapInteractions();
+      restoreMapSize();
+    }, 100);
+  }
 }
 
 // AR-125L: Pirate encounter lite - scripted comms encounter
@@ -2449,36 +2471,6 @@ function closeModal() {
 
 // AR-153: Contact Tooltip moved to modules/contact-tooltip.js
 
-/**
- * Send message to selected contact
- */
-function sendCommsMessage() {
-  const select = document.getElementById('hail-contact-select');
-  const messageInput = document.getElementById('comms-message-input');
-
-  if (!select || !select.value) {
-    showNotification('No contact selected', 'warning');
-    return;
-  }
-
-  const message = messageInput?.value?.trim();
-  if (!message) {
-    showNotification('Enter a message to send', 'warning');
-    return;
-  }
-
-  const contact = state.contacts.find(c => c.id === select.value);
-  const contactName = contact?.transponder || contact?.name || 'Unknown';
-
-  state.socket.emit('ops:sendMessage', {
-    contactId: select.value,
-    message
-  });
-
-  messageInput.value = '';
-  showNotification(`Message sent to ${contactName}`, 'info');
-}
-
 // AR-151e: Bridge Chat System moved to modules/bridge-chat.js
 
 // ============================================
@@ -2706,7 +2698,7 @@ function showSystemMap() {
         <button id="btn-close-system-map" class="btn btn-secondary" onclick="window.closeSystemMap()">Close</button>
       </div>
     </div>
-    <div id="system-map-container" class="system-map-container">
+    <div id="system-map-canvas-wrapper" class="system-map-container">
       <!-- Canvas will be inserted here by initSystemMap -->
     </div>
     <div class="system-map-time-controls">
@@ -2741,8 +2733,8 @@ function showSystemMap() {
   // Initialize canvas after layout is complete (using double rAF to ensure layout)
   requestAnimationFrame(() => {
     requestAnimationFrame(async () => {
-      // Use scoped query - there's another system-map-container in HTML that's hidden
-      const container = overlay.querySelector('#system-map-container');
+      // Find the canvas wrapper inside this overlay
+      const container = overlay.querySelector('#system-map-canvas-wrapper');
       if (container) {
         initSystemMap(container);
 
@@ -3268,29 +3260,100 @@ async function loadCurrentSystem(systemName) {
     return;
   }
 
-  // Convert system name to ID (lowercase, remove parenthetical sector info, no spaces or dashes)
-  const systemId = systemName.toLowerCase()
-    .replace(/\s*\([^)]*\)\s*/g, '')  // Remove "(Spinward Marches 0931)" etc
-    .replace(/\s+/g, '')
-    .replace(/-/g, '');
+  // Parse system name - extract sector info if present
+  // Format: "SystemName (Sector Hex)" e.g., "Gulistan (Deneb 0124)"
+  let baseName = systemName;
+  let sector = 'Spinward Marches';
+  let hex = null;
 
-  try {
-    const res = await fetch(`/data/star-systems/${systemId}.json`);
-    if (!res.ok) {
-      console.error(`[loadCurrentSystem] Failed to fetch ${systemId}.json: HTTP ${res.status}`);
-      return;
-    }
-    const systemData = await res.json();
+  const sectorMatch = systemName.match(/^(.+?)\s*\(([^)]+)\s+(\d{4})\)$/);
+  if (sectorMatch) {
+    baseName = sectorMatch[1].trim();
+    sector = sectorMatch[2].trim();
+    hex = sectorMatch[3];
+  }
 
-    // Use global loadSystemFromJSON exposed from system-map.js
-    if (typeof window.loadSystemFromJSON === 'function') {
-      window.loadSystemFromJSON(systemData);
-      console.log(`[loadCurrentSystem] Loaded system: ${systemName} (${systemData.celestialObjects?.length || 0} objects)`);
-    } else {
-      console.error('[loadCurrentSystem] window.loadSystemFromJSON not available');
+  // AR-224: Use socket API to get system data from sector pack
+  // Individual JSON files were removed in favor of sector pack architecture
+  const sock = state.socket;
+  if (!sock || !sock.connected) {
+    console.warn(`[loadCurrentSystem] Socket not connected, showing placeholder for ${baseName}`);
+    showUnavailableSystem(baseName, sector, hex);
+    return;
+  }
+
+  return new Promise((resolve) => {
+    const timeout = setTimeout(() => {
+      console.warn(`[loadCurrentSystem] Timeout waiting for ${baseName}`);
+      showUnavailableSystem(baseName, sector, hex);
+      resolve();
+    }, 5000);
+
+    // Listen for response
+    const handler = (response) => {
+      clearTimeout(timeout);
+      sock.off('ops:starSystemData', handler);
+
+      if (response.error || !response.system) {
+        console.warn(`[loadCurrentSystem] No data for ${baseName}: ${response.error || 'not found'}`);
+        showUnavailableSystem(baseName, sector, hex);
+        resolve();
+        return;
+      }
+
+      // Use global loadSystemFromJSON exposed from system-map.js
+      if (typeof window.loadSystemFromJSON === 'function') {
+        window.loadSystemFromJSON(response.system);
+        console.log(`[loadCurrentSystem] Loaded system: ${baseName} (${response.system.celestialObjects?.length || 0} objects)`);
+      } else {
+        console.error('[loadCurrentSystem] window.loadSystemFromJSON not available');
+      }
+      resolve();
+    };
+
+    sock.on('ops:starSystemData', handler);
+
+    // Request system data via socket
+    sock.emit('ops:getStarSystem', {
+      name: baseName,
+      sector: sector,
+      hex: hex
+    });
+  });
+}
+
+/**
+ * Show placeholder when system data is unavailable (e.g., non-Spinward-Marches sector)
+ */
+function showUnavailableSystem(name, sector, hex) {
+  // Create a minimal placeholder system so the map shows the correct name
+  const placeholderSystem = {
+    name: name,
+    hex: hex || '0000',
+    sector: sector,
+    uwp: '???????-?',
+    stellar: { primary: 'G2 V' },
+    celestialObjects: [
+      {
+        id: 'star-1',
+        name: `${name} Primary`,
+        type: 'Star',
+        stellarClass: 'G2 V',
+        orbitAU: 0
+      }
+    ],
+    locations: [],
+    dataUnavailable: true
+  };
+
+  if (typeof window.loadSystemFromJSON === 'function') {
+    window.loadSystemFromJSON(placeholderSystem);
+    console.log(`[loadCurrentSystem] Showing placeholder for ${name} (${sector} ${hex}) - detailed data unavailable`);
+
+    // Show notification to user
+    if (typeof showNotification === 'function') {
+      showNotification(`${name} (${sector}) - detailed system data not yet available`, 'info');
     }
-  } catch (err) {
-    console.error(`[loadCurrentSystem] Error loading ${systemName}:`, err);
   }
 }
 window.loadCurrentSystem = loadCurrentSystem;
@@ -3399,12 +3462,61 @@ function showPilotDestinations() {
   showPlacesOverlay();
 }
 
+/**
+ * AR-298: Open system map maximized with Destinations panel
+ * Called from Pilot's "NAVIGATE FROM SYSTEM MAP" link
+ */
+function openSystemMapMaximized() {
+  showSystemMap();
+  // Auto-open Destinations panel after a short delay to allow map to render
+  setTimeout(() => {
+    if (typeof showPlacesOverlay === 'function') {
+      showPlacesOverlay();
+    }
+  }, 300);
+}
+
 // Expose AR-94 functions globally
 window.showEmbeddedSystemMap = showEmbeddedSystemMap;
 window.hideEmbeddedSystemMap = hideEmbeddedSystemMap;
 window.zoomEmbeddedMap = zoomEmbeddedMap;
 window.expandEmbeddedMap = expandEmbeddedMap;
 window.showPilotDestinations = showPilotDestinations;
+window.openSystemMapMaximized = openSystemMapMaximized;
+
+/**
+ * AR-298: GM Free Refuel - instantly refuel ship to max with refined fuel
+ * Called from GM Controls in Engineer observation panel
+ */
+function gmFreeRefuel() {
+  if (!state.isGM) {
+    showNotification('GM privileges required', 'error');
+    return;
+  }
+  if (!state.ship?.id) {
+    showNotification('No ship selected', 'error');
+    return;
+  }
+  state.socket.emit('ops:godModeRefuel', { shipId: state.ship.id });
+  showNotification('Ship fully refueled (refined)', 'success');
+  renderRoleDetailPanel(state.selectedRole);
+}
+window.gmFreeRefuel = gmFreeRefuel;
+
+/**
+ * AR-298: Magic Refuel - player testing feature to refuel when stranded
+ * Allows refueling regardless of location
+ */
+function magicRefuel() {
+  if (!state.ship?.id) {
+    showNotification('No ship selected', 'error');
+    return;
+  }
+  state.socket.emit('ops:godModeRefuel', { shipId: state.ship.id });
+  showNotification('Magic refuel complete! Ship at max fuel.', 'success');
+  renderRoleDetailPanel(state.selectedRole);
+}
+window.magicRefuel = magicRefuel;
 
 function updateSharedMapButtons() {
   const shareBtn = document.getElementById('btn-share-map');
@@ -3556,12 +3668,64 @@ function loadPrepData() {
   }
   // Render all prep tabs
   renderPrepReveals();
+  renderCampaignStatus();
   renderPrepNpcs();
   renderPrepLocations();
   renderPrepEvents();
   renderPrepEmails();
   renderPrepHandouts();
   renderPrepModules();
+}
+
+// AR-295: Campaign Status Tab
+function renderCampaignStatus() {
+  const dateEl = document.getElementById('campaign-current-date');
+  const pcList = document.getElementById('campaign-pc-list');
+  const shipList = document.getElementById('campaign-ship-list');
+
+  if (!dateEl || !pcList || !shipList) return;
+
+  // Campaign date
+  const campaign = state.campaign;
+  if (campaign) {
+    dateEl.textContent = campaign.current_date || 'Date not set';
+  }
+
+  // Player characters
+  const players = state.players || [];
+  if (players.length === 0) {
+    pcList.innerHTML = '<p class="placeholder">No player characters</p>';
+  } else {
+    pcList.innerHTML = players.map(p => {
+      const charName = p.character_data?.name || p.slot_name || 'Unknown';
+      const charInfo = p.character_data ? `${p.character_data.species || ''} ${p.character_data.careers?.[0]?.name || ''}`.trim() : '';
+      return `
+        <div class="prep-item campaign-pc-item">
+          <div class="item-title">${escapeHtml(charName)}</div>
+          ${charInfo ? `<div class="item-detail">${escapeHtml(charInfo)}</div>` : ''}
+          <div class="item-detail">Role: ${formatRoleName(p.role) || 'None'}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Ships
+  const ships = state.ships || [];
+  if (ships.length === 0) {
+    shipList.innerHTML = '<p class="placeholder">No ships</p>';
+  } else {
+    shipList.innerHTML = ships.map(s => {
+      const shipType = s.ship_data?.type || 'Unknown type';
+      const location = s.current_state?.locationName || state.campaign?.current_system || 'Unknown';
+      return `
+        <div class="prep-item campaign-ship-item">
+          <div class="item-title">${escapeHtml(s.name)}</div>
+          <div class="item-detail">${escapeHtml(shipType)}</div>
+          <div class="item-detail">Location: ${escapeHtml(location)}</div>
+        </div>
+      `;
+    }).join('');
+  }
 }
 
 // AR-151-5: Reveals, NPCs, Locations moved to modules/gm-reveals.js, modules/gm-prep-npcs.js, modules/gm-prep-locations.js
@@ -3923,9 +4087,6 @@ window.showAddNPCContactForm = showAddNPCContactForm;
 window.submitNPCContact = submitNPCContact;
 window.hailContact = hailContact;
 window.scanContact = scanContact;  // AR-70
-window.hailSelectedContact = hailSelectedContact;
-window.broadcastMessage = broadcastMessage;
-window.sendCommsMessage = sendCommsMessage;
 window.sendBridgeChatMessage = sendBridgeChatMessage;
 // Panel copy functions
 window.copyShipLog = copyShipLog;
@@ -4036,13 +4197,7 @@ window.executeProcessFuel = executeProcessFuel;
 window.setProcessMax = setProcessMax;
 window.requestFuelStatus = requestFuelStatus;
 // AR-153: Captain Operations exports
-window.captainSetAlert = captainSetAlert;
-window.captainQuickOrder = captainQuickOrder;
-window.captainNavOrder = captainNavOrder;
-window.captainContactOrder = captainContactOrder;
-window.captainIssueOrder = captainIssueOrder;
 window.captainMarkContact = captainMarkContact;
-window.captainWeaponsAuth = captainWeaponsAuth;
 window.captainRequestStatus = captainRequestStatus;
 window.captainLeadershipCheck = captainLeadershipCheck;
 window.captainTacticsCheck = captainTacticsCheck;
@@ -4053,8 +4208,6 @@ window.showContactTooltip = showContactTooltip;
 window.hideContactTooltip = hideContactTooltip;
 window.scanContact = scanContact;
 window.hailContact = hailContact;
-window.hailSelectedContact = hailSelectedContact;
-window.broadcastMessage = broadcastMessage;
 // AR-153: Phase 6 Ship Template Editor exports
 window.openShipEditor = openShipEditor;
 window.populateShipEditor = populateShipEditor;

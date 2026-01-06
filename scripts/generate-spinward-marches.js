@@ -282,7 +282,8 @@ function generateFullSystem(secData) {
     secData.hex,
     secData.uwp,
     secData.stellar,
-    secData.gasGiants
+    secData.gasGiants,
+    secData.name  // Pass system name for mainworld naming
   );
 
   const systemCamera = calculateOptimalCamera(celestialObjects, seed);

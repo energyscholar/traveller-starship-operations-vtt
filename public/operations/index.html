@@ -23,13 +23,17 @@
           <button id="btn-player-login" class="btn btn-secondary btn-large" title="Player login - Join a campaign as crew member. Requires campaign code from GM.">
             Player Login
           </button>
-          <button id="btn-solo-explorer" class="btn btn-accent btn-large" title="Solo Explorer - Pilot a Type S Scout through the Spinward Marches">
-            Solo Explorer
+          <button id="btn-solo-demo" class="btn btn-accent btn-large" title="Solo Demo Campaign - Join a pre-built scout ship, explore the Spinward Marches">
+            Solo Demo Campaign
           </button>
         </div>
 
         <div id="campaign-select" class="hidden">
           <h2>Select Campaign</h2>
+          <div id="feedback-alert" class="feedback-alert-banner hidden" title="Click to view feedback">
+            <span class="feedback-icon">📬</span>
+            <span class="feedback-text"><span id="feedback-count">0</span> player feedback item(s) awaiting review</span>
+          </div>
           <div id="campaign-list" class="campaign-list">
             <!-- Populated dynamically -->
           </div>
@@ -47,26 +51,19 @@
 
         <div id="player-select" class="hidden">
           <h2>Join Campaign</h2>
+          <div id="campaign-codes-hint" class="campaign-codes-hint" style="background: var(--bg-tertiary, #1a1a2e); padding: 12px; border-radius: 6px; margin-bottom: 16px; font-size: 0.9em;">
+            <div style="color: var(--text-muted, #888); margin-bottom: 8px;">Available Campaigns:</div>
+            <div id="campaign-codes-list" style="font-family: monospace;">
+              <!-- Populated by login-screen.js -->
+              <div style="color: #666;">Loading...</div>
+            </div>
+          </div>
           <div class="form-group">
             <label for="campaign-code">Campaign Code:</label>
             <input type="text" id="campaign-code" placeholder="Enter campaign code">
           </div>
-          <div class="join-options">
-            <button id="btn-join-campaign" class="btn btn-primary" title="Join with a reserved player slot - Your character data is saved">Join as Player</button>
-            <button id="btn-join-guest" class="btn btn-secondary" title="Quick join - No permanent character, skill 0 in all roles">Join as Guest</button>
-          </div>
-          <p class="guest-info">Guests can take any role with skill 0. GM can override skill level.</p>
+          <button id="btn-join-campaign" class="btn btn-primary" title="Join with a reserved player slot - Your character data is saved">Join as Player</button>
           <button id="btn-back-player" class="btn btn-link">Back</button>
-        </div>
-
-        <div id="guest-name-select" class="hidden">
-          <h2>Guest Login</h2>
-          <div class="form-group">
-            <label for="guest-name">Your Name:</label>
-            <input type="text" id="guest-name" placeholder="Enter your name">
-          </div>
-          <button id="btn-confirm-guest" class="btn btn-primary">Join as Guest</button>
-          <button id="btn-back-guest" class="btn btn-link">Back</button>
         </div>
 
         <div id="player-slot-select" class="hidden">
@@ -205,7 +202,7 @@
             <div id="character-display" class="character-card-compact">
               <p class="placeholder">No character imported</p>
             </div>
-            <div class="character-actions-compact">
+            <div id="character-import-section" class="character-actions-compact">
               <button id="btn-import-character" class="btn btn-secondary btn-sm" title="Import character from JSON, text, or paste from character sheet">Import</button>
               <button id="btn-quick-character" class="btn btn-link btn-sm" title="Create a basic character with default skills">Quick Create</button>
             </div>
@@ -501,6 +498,7 @@
         </div>
         <nav class="prep-tabs">
           <button class="prep-tab active" data-tab="reveals">Reveals</button>
+          <button class="prep-tab" data-tab="campaign">Campaign</button>
           <button class="prep-tab" data-tab="npcs">NPCs</button>
           <button class="prep-tab" data-tab="locations">Locations</button>
           <button class="prep-tab" data-tab="events">Events</button>
@@ -518,6 +516,30 @@
           </div>
           <div id="reveals-list" class="prep-list">
             <p class="placeholder">No reveals prepared</p>
+          </div>
+        </div>
+
+        <!-- Campaign Status Tab (AR-295) -->
+        <div id="prep-tab-campaign" class="prep-tab-content">
+          <div class="campaign-status-section">
+            <h4>Campaign Date</h4>
+            <div class="campaign-date-display">
+              <span id="campaign-current-date">---</span>
+              <button id="btn-advance-day" class="btn btn-small btn-secondary" title="Advance campaign date by one day">+1 Day</button>
+              <button id="btn-advance-week" class="btn btn-small btn-secondary" title="Advance campaign date by one week">+1 Week</button>
+            </div>
+          </div>
+          <div class="campaign-status-section">
+            <h4>Player Characters</h4>
+            <div id="campaign-pc-list" class="prep-list">
+              <p class="placeholder">Loading PCs...</p>
+            </div>
+          </div>
+          <div class="campaign-status-section">
+            <h4>Ships</h4>
+            <div id="campaign-ship-list" class="prep-list">
+              <p class="placeholder">Loading ships...</p>
+            </div>
           </div>
         </div>
 
@@ -771,7 +793,7 @@
             <span class="menu-icon">📜</span>
             <span class="menu-label">Ship Log</span>
           </button>
-          <button class="menu-item" id="menu-library" data-feature="library">
+          <button class="menu-item" id="menu-ships-library" data-feature="library">
             <span class="menu-icon">📚</span>
             <span class="menu-label">Ship's Library</span>
           </button>

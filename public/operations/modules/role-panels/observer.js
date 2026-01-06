@@ -111,7 +111,22 @@ function getWatchedRolePanel(watchRole, context) {
   }
 
   // AR-128: Strip all buttons and interactive elements completely (not gray)
-  return stripInteractiveElements(panelHtml);
+  let stripped = stripInteractiveElements(panelHtml);
+
+  // AR-298: Add GM-only "Free GM Refuel" button when observing Engineer
+  if (watchRole === 'engineer' && window.state?.isGM) {
+    const gmRefuelButton = `
+      <div class="detail-section gm-controls" style="margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+        <h4 style="color: var(--gm-accent, #ffc107);">GM Controls</h4>
+        <button onclick="window.gmFreeRefuel && window.gmFreeRefuel()" class="btn btn-warning" title="Instantly refuel ship to maximum with refined fuel">
+          Free GM Refuel
+        </button>
+      </div>
+    `;
+    stripped += gmRefuelButton;
+  }
+
+  return stripped;
 }
 
 /**

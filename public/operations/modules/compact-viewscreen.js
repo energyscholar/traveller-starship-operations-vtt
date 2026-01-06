@@ -108,6 +108,12 @@ function initCompactViewscreen(container, role) {
     syncWithSystemMap();
   }
 
+  // AR-261b: Setup ResizeObserver for dynamic sizing
+  setupResizeObserver();
+
+  // DEBUG: Monitor for layout issues
+  setupViewscreenDebugMonitor(container);
+
   console.log('[CompactViewscreen] Initialized with panel:', viewscreenState.currentPanel);
 }
 
@@ -448,9 +454,36 @@ function resizeViewscreen() {
   canvas.width = rect.width;
   canvas.height = rect.height;
 
+  // AR-261b: Reset "too small" flag when resized - allows re-logging if issue recurs
+  viewscreenState._loggedTooSmall = false;
+
   if (viewscreenState.currentPanel === PANEL_TYPES.SYSTEM_MAP) {
     renderViewscreen();
   }
+}
+
+/**
+ * AR-261b: Setup ResizeObserver for dynamic canvas sizing
+ * Throttled to prevent resize loops
+ */
+function setupResizeObserver() {
+  const content = viewscreenState.container?.querySelector('#viewscreen-content');
+  if (!content || viewscreenState._resizeObserver) return;
+
+  let resizeTimeout = null;
+  viewscreenState._resizeObserver = new ResizeObserver((entries) => {
+    // Throttle to prevent resize loop
+    if (resizeTimeout) clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+          resizeViewscreen();
+        }
+      }
+    }, 100);  // 100ms throttle
+  });
+
+  viewscreenState._resizeObserver.observe(content);
 }
 
 /**
@@ -587,11 +620,16 @@ function drawSystem(ctx, width, height) {
   const objects = viewscreenState.celestialObjects || system.celestialObjects || [];
 
   // AR-166: Auto-scale to fit all objects in small panel
-  // Guard against zero/small canvas
+  // Guard against zero/small canvas - log only once to prevent spam
   if (width < 50 || height < 50) {
-    console.log('[CompactViewscreen] drawSystem: canvas too small', width, height);
+    if (!viewscreenState._loggedTooSmall) {
+      console.log('[CompactViewscreen] drawSystem: canvas too small', width, height, '(waiting for resize)');
+      viewscreenState._loggedTooSmall = true;
+    }
     return;
   }
+  // Reset flag when canvas becomes valid
+  viewscreenState._loggedTooSmall = false;
 
   // Debug: log once when we first successfully draw
   if (!viewscreenState._debugDrawn) {
@@ -829,6 +867,192 @@ window.addEventListener('resize', () => {
     resizeViewscreen();
   }
 });
+
+/**
+ * DEBUG: Introspect element and return profile object
+ * Built-in JS introspection - no framework needed
+ */
+function introspectElement(el, label = '') {
+  if (!el) return { error: 'Element is null' };
+
+  const rect = el.getBoundingClientRect();
+  const computed = getComputedStyle(el);
+
+  return {
+    label,
+    tag: el.tagName,
+    id: el.id,
+    className: el.className,
+    // Geometry
+    rect: {
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
+      top: rect.top,
+      left: rect.left,
+      bottom: rect.bottom,
+      right: rect.right
+    },
+    // Offset properties
+    offset: {
+      parent: el.offsetParent?.id || el.offsetParent?.tagName || null,
+      top: el.offsetTop,
+      left: el.offsetLeft,
+      width: el.offsetWidth,
+      height: el.offsetHeight
+    },
+    // Scroll state
+    scroll: {
+      top: el.scrollTop,
+      left: el.scrollLeft,
+      width: el.scrollWidth,
+      height: el.scrollHeight
+    },
+    // Key computed styles that could cause sliding
+    computed: {
+      position: computed.position,
+      display: computed.display,
+      top: computed.top,
+      left: computed.left,
+      bottom: computed.bottom,
+      right: computed.right,
+      transform: computed.transform,
+      margin: computed.margin,
+      padding: computed.padding,
+      overflow: computed.overflow,
+      flex: computed.flex,
+      flexGrow: computed.flexGrow,
+      flexShrink: computed.flexShrink,
+      gridRow: computed.gridRow,
+      gridColumn: computed.gridColumn,
+      maxHeight: computed.maxHeight,
+      minHeight: computed.minHeight,
+      height: computed.height,
+      transition: computed.transition,
+      animation: computed.animation
+    },
+    // Inline style (might be set by JS)
+    inlineStyle: el.getAttribute('style') || '(none)'
+  };
+}
+
+/**
+ * DEBUG: Capture full introspection profile of viewscreen hierarchy
+ */
+function captureViewscreenProfile(container) {
+  const profile = {
+    timestamp: new Date().toISOString(),
+    viewscreen: introspectElement(container, 'compact-viewscreen'),
+    parent: introspectElement(container.parentElement, 'parent (status-panels-row)'),
+    grandparent: introspectElement(container.parentElement?.parentElement, 'grandparent (bridge-main)'),
+    frame: introspectElement(container.querySelector('.viewscreen-frame'), 'viewscreen-frame'),
+    bezel: introspectElement(container.querySelector('.viewscreen-bezel'), 'viewscreen-bezel'),
+    display: introspectElement(container.querySelector('.viewscreen-display'), 'viewscreen-display'),
+    canvas: introspectElement(container.querySelector('canvas'), 'canvas')
+  };
+  return profile;
+}
+
+/**
+ * DEBUG: Monitor for layout issues - sends to server via socket
+ */
+function setupViewscreenDebugMonitor(container) {
+  // Helper to send log to server
+  const sendLog = (level, message, meta) => {
+    console.warn(message, meta);
+    if (window.state?.socket) {
+      window.state.socket.emit('client:log', { level, message, meta });
+    }
+  };
+
+  // Track position continuously to catch the slide
+  let lastY = null;
+  let checkCount = 0;
+  const maxChecks = 20;  // Check for 10 seconds (every 500ms)
+
+  const slideCheckInterval = setInterval(() => {
+    checkCount++;
+    const rect = container.getBoundingClientRect();
+    const currentY = rect.y;
+
+    if (lastY !== null && Math.abs(currentY - lastY) > 1) {
+      sendLog('error', '[CompactViewscreen] SLIDE DETECTED!', {
+        checkNumber: checkCount,
+        previousY: lastY,
+        currentY: currentY,
+        delta: currentY - lastY,
+        profile: captureViewscreenProfile(container)
+      });
+    }
+
+    lastY = currentY;
+
+    if (checkCount >= maxChecks) {
+      clearInterval(slideCheckInterval);
+      sendLog('info', '[CompactViewscreen] Slide monitoring complete - no slide detected', {
+        finalY: currentY
+      });
+    }
+  }, 500);
+
+  // Send initial profile
+  setTimeout(() => {
+    const profile = captureViewscreenProfile(container);
+    sendLog('info', '[CompactViewscreen] INTROSPECTION PROFILE (initial)', profile);
+  }, 100);
+
+  // Monitor scroll events
+  container.addEventListener('scroll', () => {
+    sendLog('warn', '[CompactViewscreen] SCROLL EVENT', {
+      scrollTop: container.scrollTop,
+      scrollLeft: container.scrollLeft
+    });
+  });
+
+  // Monitor parent scroll
+  const parent = container.parentElement;
+  if (parent) {
+    parent.addEventListener('scroll', () => {
+      sendLog('warn', '[CompactViewscreen] PARENT SCROLL', {
+        scrollTop: parent.scrollTop,
+        scrollLeft: parent.scrollLeft
+      });
+    });
+  }
+
+  // MutationObserver to detect DOM changes
+  const mutationObserver = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+        const profile = captureViewscreenProfile(container);
+        sendLog('warn', '[CompactViewscreen] STYLE CHANGED - FULL PROFILE', profile);
+      }
+    }
+  });
+  mutationObserver.observe(container, {
+    attributes: true,
+    attributeFilter: ['style', 'class']
+  });
+
+  // Also watch parent for style changes
+  if (parent) {
+    mutationObserver.observe(parent, {
+      attributes: true,
+      attributeFilter: ['style', 'class']
+    });
+  }
+
+  // Expose introspection globally for console debugging
+  window.debugViewscreen = () => {
+    const profile = captureViewscreenProfile(container);
+    console.table(profile.viewscreen.computed);
+    console.table(profile.parent.computed);
+    return profile;
+  };
+
+  sendLog('info', '[CompactViewscreen] Debug monitor installed with introspection', {});
+}
 
 // Exports
 export {

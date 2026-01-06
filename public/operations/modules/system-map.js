@@ -43,6 +43,9 @@ const systemMapState = {
   sector: 'Spinward Marches',  // Current sector
   hex: null,                    // Current hex (e.g., "1910")
 
+  // AR-299: Server-provided destinations (authoritative IDs)
+  serverDestinations: null,     // Array of destinations from server
+
   // Selection state
   selectedBody: null,          // Currently selected planet/moon
   hoveredBody: null,           // Body under mouse cursor
@@ -615,7 +618,7 @@ function findBodyAtPosition(x, y) {
     }
   }
 
-  // Check planets
+  // Check planets (includes gas giants, ice giants)
   if (systemMapState.system?.planets) {
     for (const planet of systemMapState.system.planets) {
       const orbitRadius = planet.orbitAU * auToPixels;
@@ -629,6 +632,35 @@ function findBodyAtPosition(x, y) {
 
       if (dist < planetSize + 5) {
         return planet;
+      }
+    }
+  }
+
+  // Check asteroid belts
+  if (systemMapState.system?.asteroidBelts) {
+    for (const belt of systemMapState.system.asteroidBelts) {
+      const innerRadius = belt.innerRadius * auToPixels;
+      const outerRadius = belt.outerRadius * auToPixels;
+      const avgRadius = (innerRadius + outerRadius) / 2;
+      const distFromCenter = Math.sqrt((x - centerX) ** 2 + ((y - centerY) / getYScale()) ** 2);
+
+      // Click anywhere in belt annulus
+      if (distFromCenter >= innerRadius - 10 && distFromCenter <= outerRadius + 10) {
+        return { ...belt, isBelt: true, name: belt.name || 'Asteroid Belt', type: 'Belt' };
+      }
+    }
+  }
+
+  // Check other celestial objects (stations, bases, highports)
+  if (systemMapState.celestialObjects) {
+    for (const obj of systemMapState.celestialObjects) {
+      if (['Station', 'Highport', 'Naval Base', 'Scout Base'].includes(obj.type)) {
+        const objX = centerX + (obj.currentX || 0) * auToPixels;
+        const objY = centerY + (obj.currentY || 0) * auToPixels;
+        const dist = Math.sqrt((x - objX) ** 2 + (y - objY) ** 2);
+        if (dist < 12) {
+          return { ...obj, isStation: true };
+        }
       }
     }
   }
@@ -727,6 +759,55 @@ function showBodyInfoPanel(body) {
           <button class="btn btn-sm btn-primary" onclick="window.setContactDestination('${body.id}')">Plot Intercept</button>
           <button class="btn btn-sm btn-secondary" onclick="window.hailContact('${body.id}')">Hail</button>
         </div>
+      </div>
+    `;
+  } else if (body.isBelt) {
+    // Asteroid belt info
+    const avgOrbit = ((body.innerRadius || 2) + (body.outerRadius || 2.5)) / 2;
+    const travelTime = formatTravelTimeFromAU(avgOrbit);
+    panel.innerHTML = `
+      <div class="info-panel-header">
+        <h3>${body.name || 'Asteroid Belt'}</h3>
+        <button class="info-panel-close" onclick="window.hideSystemMapInfoPanel()">×</button>
+      </div>
+      <div class="info-panel-content">
+        <div class="info-row"><span class="info-label">Type:</span> <span class="info-value">Planetoid Belt</span></div>
+        <div class="info-row"><span class="info-label">Inner Edge:</span> <span class="info-value">${(body.innerRadius || 2).toFixed(2)} AU</span></div>
+        <div class="info-row"><span class="info-label">Outer Edge:</span> <span class="info-value">${(body.outerRadius || 2.5).toFixed(2)} AU</span></div>
+        <div class="info-row"><span class="info-label">Travel:</span> <span class="info-value">${travelTime}</span></div>
+        ${body.canMine ? `<div class="info-row"><span class="info-label">Mining:</span> <span class="info-value">Possible</span></div>` : ''}
+        <div class="info-section">
+          <div class="info-section-title">Resources</div>
+          <div class="info-row"><span class="info-label">Prospecting:</span> <span class="info-value">Requires Profession (Belter)</span></div>
+        </div>
+      </div>
+    `;
+  } else if (body.isStation) {
+    // Station/base/highport info
+    const travelTime = body.orbitAU ? formatTravelTimeFromAU(body.orbitAU) : 'Varies';
+    panel.innerHTML = `
+      <div class="info-panel-header">
+        <h3>${body.name || body.type}</h3>
+        <button class="info-panel-close" onclick="window.hideSystemMapInfoPanel()">×</button>
+      </div>
+      <div class="info-panel-content">
+        <div class="info-row"><span class="info-label">Type:</span> <span class="info-value">${body.type}</span></div>
+        ${body.orbitAU ? `<div class="info-row"><span class="info-label">Orbit:</span> <span class="info-value">${body.orbitAU.toFixed(2)} AU</span></div>` : ''}
+        <div class="info-row"><span class="info-label">Travel:</span> <span class="info-value">${travelTime}</span></div>
+        ${body.parent ? `<div class="info-row"><span class="info-label">Parent:</span> <span class="info-value">${body.parent}</span></div>` : ''}
+        ${body.type === 'Highport' ? `
+        <div class="info-section">
+          <div class="info-section-title">Facilities</div>
+          <div class="info-row"><span class="info-label">Fuel:</span> <span class="info-value">Refined</span></div>
+          <div class="info-row"><span class="info-label">Repairs:</span> <span class="info-value">Available</span></div>
+        </div>
+        ` : ''}
+        ${['Naval Base', 'Scout Base'].includes(body.type) ? `
+        <div class="info-section">
+          <div class="info-section-title">Military Facility</div>
+          <div class="info-row"><span class="info-label">Access:</span> <span class="info-value">Restricted</span></div>
+        </div>
+        ` : ''}
       </div>
     `;
   } else {
@@ -846,27 +927,70 @@ Max velocity: ${formatVelocity(maxVelocityKms)}`;
 
 /**
  * Show places overlay (destinations sidebar)
+ * AR-299: Request destinations from server to ensure IDs match
  */
 function showPlacesOverlay() {
   hidePlacesOverlay();
-
-  if (!systemMapState.system?.places) return;
 
   const overlay = document.createElement('div');
   overlay.id = 'system-map-places';
   overlay.className = 'system-map-places';
 
-  const placesHtml = systemMapState.system.places.map(place => {
+  // AR-299: Request destinations from server if socket available
+  const socket = window.state?.socket;
+  if (socket && socket.connected) {
+    // Show loading state
+    overlay.innerHTML = `
+      <div class="places-header">
+        <h4>Destinations <span class="travel-hint">(Right Click to Travel)</span></h4>
+        <button class="places-close" onclick="window.hidePlacesOverlay()">×</button>
+      </div>
+      <div class="places-list">
+        <div class="place-item loading">Loading destinations...</div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    // Request from server
+    socket.emit('ops:getDestinations');
+    return;
+  }
+
+  // Fallback to locally-generated places if no socket
+  renderPlacesOverlay(overlay, systemMapState.system?.places || []);
+  document.body.appendChild(overlay);
+}
+
+/**
+ * AR-299: Render places/destinations into overlay
+ */
+function renderPlacesOverlay(overlay, places) {
+  if (!places || places.length === 0) {
+    overlay.innerHTML = `
+      <div class="places-header">
+        <h4>Destinations <span class="travel-hint">(Right Click to Travel)</span></h4>
+        <button class="places-close" onclick="window.hidePlacesOverlay()">×</button>
+      </div>
+      <div class="places-list">
+        <div class="place-item">No destinations available</div>
+      </div>
+    `;
+    return;
+  }
+
+  const placesHtml = places.map(place => {
     const tooltip = generateTrajectoryTooltip(place.id);
+    const icon = place.icon || getPlaceIconForType(place.type);
+    const desc = place.description || place.type || '';
     return `
     <div class="place-item" data-place-id="${place.id}"
          title="${tooltip}"
          onclick="window.goToPlace('${place.id}')"
          oncontextmenu="event.preventDefault(); window.showPlaceDetails('${place.id}')">
-      <span class="place-icon">${place.icon}</span>
+      <span class="place-icon">${icon}</span>
       <div class="place-info">
         <div class="place-name">${place.name}</div>
-        <div class="place-desc">${place.description}</div>
+        <div class="place-desc">${desc}</div>
       </div>
     </div>
   `;
@@ -874,17 +998,58 @@ function showPlacesOverlay() {
 
   overlay.innerHTML = `
     <div class="places-header">
-      <h4>Destinations</h4>
+      <h4>Destinations <span class="travel-hint">(Right Click to Travel)</span></h4>
       <button class="places-close" onclick="window.hidePlacesOverlay()">×</button>
     </div>
     <div class="places-list">
       ${placesHtml}
     </div>
-    <div class="places-footer">Right-click to travel</div>
   `;
-
-  document.body.appendChild(overlay);
 }
+
+/**
+ * AR-299: Handle server destinations response
+ */
+function handleServerDestinations(data) {
+  const overlay = document.getElementById('system-map-places');
+  if (!overlay) return;
+
+  if (data.error) {
+    console.warn('[SystemMap] Server destinations error:', data.error);
+    // Fall back to local places
+    renderPlacesOverlay(overlay, systemMapState.system?.places || []);
+    return;
+  }
+
+  // Store server destinations
+  systemMapState.serverDestinations = data.destinations;
+  console.log(`[SystemMap] Received ${data.destinations?.length || 0} destinations from server for ${data.systemName}`);
+
+  // Render server destinations
+  renderPlacesOverlay(overlay, data.destinations);
+}
+
+/**
+ * AR-299: Get icon for place type
+ */
+function getPlaceIconForType(type) {
+  const icons = {
+    'orbit': '🪐',
+    'surface': '🏠',
+    'station': '🛰️',
+    'highport': '🛰️',
+    'starport': '🚀',
+    'naval_base': '⚓',
+    'scout_base': '🔭',
+    'belt': '💎',
+    'jump_point': '✨',
+    'lagrange': '◯'
+  };
+  return icons[type] || '📍';
+}
+
+// AR-299: Export handler for socket listener registration
+window.handleServerDestinations = handleServerDestinations;
 
 /**
  * Hide places overlay
@@ -960,7 +1125,11 @@ function getShipThrust() {
 }
 
 function showPlaceDetails(placeId) {
-  const place = systemMapState.system?.places?.find(p => p.id === placeId);
+  // AR-299: Check server destinations first (authoritative IDs), then fall back to local
+  let place = systemMapState.serverDestinations?.find(p => p.id === placeId);
+  if (!place) {
+    place = systemMapState.system?.places?.find(p => p.id === placeId);
+  }
   if (!place) return;
 
   // Remove any existing details panel
@@ -1737,6 +1906,7 @@ function animateToCinematicView(targetId, options = {}) {
 
 // Global access for UI
 window.hideSystemMapInfoPanel = hideBodyInfoPanel;
+window.showPlacesOverlay = showPlacesOverlay; // AR-293: Fix missing export
 window.hidePlacesOverlay = hidePlacesOverlay;
 window.goToPlace = goToPlace;
 window.setDestination = setDestination;
@@ -2491,6 +2661,259 @@ function generatePlaces(planets, asteroidBelts, starportClass, systemName) {
 }
 
 /**
+ * AR-XXX: Generate places from celestial objects for loaded sector systems
+ * This creates destination entries for all navigable locations:
+ * - Jump point (100-diameter safe distance)
+ * - Planet orbits (all planets)
+ * - Gas giant skim points (wilderness refueling)
+ * - Gas giant jump points (AR-136: 100-diameter safe distance from gas giant)
+ * - Highports and downports
+ * - Asteroid belts
+ * - Moons
+ * - Naval/Scout bases
+ *
+ * @param {Array} celestialObjects - Celestial objects from sector data
+ * @param {Object} systemData - System metadata (hasNaval, hasScout, starportClass, systemName)
+ * @returns {Array} Array of place objects for the Places overlay
+ */
+
+/**
+ * AR-FIX: Generate places from server-generated planet array
+ * Simpler version for procedurally generated systems
+ */
+function generatePlacesFromPlanets(planets, systemData) {
+  const places = [];
+  const { starportClass, systemName } = systemData;
+
+  // 1. System Jump Point (always present)
+  places.push({
+    id: 'jump_point',
+    name: 'Jump Point',
+    type: 'navigation',
+    description: '100-diameter safe jump distance from primary',
+    icon: '⚡'
+  });
+
+  // 2. Process each planet
+  planets.forEach((planet, i) => {
+    const planetId = planet.id || `planet_${i}`;
+    const planetName = planet.name || `Planet ${i + 1}`;
+
+    // All planets get an orbit destination
+    places.push({
+      id: `orbit-${planetId}`,
+      name: `Orbit - ${planetName}`,
+      type: 'orbit',
+      linkedTo: planetId,
+      orbitAU: planet.orbitAU,
+      radiusKm: planet.radiusKm || planet.size,
+      icon: planet.isMainworld ? '🌍' : '🪐',
+      description: planet.isMainworld ? 'Mainworld' : 'Planetary orbit'
+    });
+
+    // Gas giants get skim points
+    if (planet.type === 'Gas' || planet.type === 'Ice' || planet.type === 'GasGiant') {
+      places.push({
+        id: `skim-${planetId}`,
+        name: `${planetName} - Skim Point`,
+        type: 'fuel',
+        linkedTo: planetId,
+        orbitAU: planet.orbitAU,
+        radiusKm: planet.radiusKm || planet.size,
+        icon: '⛽',
+        description: 'Wilderness refueling (Pilot check required)'
+      });
+    }
+  });
+
+  // 3. Mainworld highport if starport exists
+  if (starportClass && starportClass !== 'X') {
+    const mainworld = planets.find(p => p.isMainworld) || planets[0];
+    if (mainworld) {
+      places.push({
+        id: 'dock-highport',
+        name: `${systemName || 'System'} Highport`,
+        type: 'station',
+        linkedTo: mainworld.id || 'planet_0',
+        orbitAU: mainworld.orbitAU,
+        icon: '🛸',
+        description: `Class ${starportClass} Starport`
+      });
+    }
+  }
+
+  return places;
+}
+
+function generatePlacesFromCelestial(celestialObjects, systemData) {
+  const places = [];
+  const { hasNaval, hasScout, starportClass, systemName } = systemData;
+
+  // 1. System Jump Point (always present)
+  places.push({
+    id: 'jump_point',
+    name: 'Jump Point',
+    type: 'navigation',
+    description: '100-diameter safe jump distance from primary',
+    icon: '⚡'
+  });
+
+  // 2. Process each celestial object
+  celestialObjects.forEach(obj => {
+    const objType = obj.type;
+
+    switch (objType) {
+      case 'Planet':
+        // All planets get an orbit destination
+        places.push({
+          id: `orbit-${obj.id}`,
+          name: `Orbit - ${obj.name}`,
+          type: 'orbit',
+          linkedTo: obj.id,
+          orbitAU: obj.orbitAU,
+          radiusKm: obj.radiusKm,
+          icon: obj.uwp ? '🌍' : '🪐',  // Mainworld vs other planet
+          description: obj.uwp ? 'Mainworld' : 'Planetary orbit'
+        });
+        break;
+
+      case 'Gas Giant':
+      case 'Ice Giant':
+        // Orbit around gas giant
+        places.push({
+          id: `orbit-${obj.id}`,
+          name: `Orbit - ${obj.name}`,
+          type: 'orbit',
+          linkedTo: obj.id,
+          orbitAU: obj.orbitAU,
+          radiusKm: obj.radiusKm,
+          icon: '🪐',
+          description: objType
+        });
+        // Skim point (upper atmosphere - wilderness refueling)
+        places.push({
+          id: `skim-${obj.id}`,
+          name: `${obj.name} - Skim Point`,
+          type: 'fuel',
+          linkedTo: obj.id,
+          orbitAU: obj.orbitAU,
+          radiusKm: obj.radiusKm,
+          icon: '⛽',
+          description: 'Wilderness refueling (Pilot check required)'
+        });
+        // Jump point (100 diameters out) - AR-136
+        places.push({
+          id: `jump-${obj.id}`,
+          name: `${obj.name} - Jump Point`,
+          type: 'navigation',
+          linkedTo: obj.id,
+          orbitAU: obj.orbitAU,
+          radiusKm: obj.radiusKm,
+          icon: '⚡',
+          description: '100-diameter safe jump distance'
+        });
+        break;
+
+      case 'Highport':
+      case 'Station':
+        places.push({
+          id: `dock-${obj.id}`,
+          name: obj.name,
+          type: 'dock',
+          linkedTo: obj.id,
+          orbitAU: obj.orbitAU,
+          radiusKm: obj.radiusKm,
+          icon: '🛸',
+          description: obj.notes || `Class ${starportClass || '?'} orbital facility`
+        });
+        break;
+
+      case 'Moon':
+        // Moons get orbit destinations
+        places.push({
+          id: `orbit-${obj.id}`,
+          name: `Orbit - ${obj.name}`,
+          type: 'orbit',
+          linkedTo: obj.id,
+          orbitAU: obj.orbitAU,
+          radiusKm: obj.radiusKm,
+          icon: '🌙',
+          description: 'Lunar orbit'
+        });
+        break;
+
+      case 'Belt':
+      case 'Asteroid Belt':
+      case 'Planetoid Belt':
+        places.push({
+          id: `belt-${obj.id}`,
+          name: obj.name || 'Asteroid Belt',
+          type: 'mining',
+          linkedTo: obj.id,
+          orbitAU: obj.orbitAU,
+          icon: '⛏️',
+          description: 'Asteroid mining opportunities'
+        });
+        break;
+    }
+  });
+
+  // 3. Add Naval Base if present
+  if (hasNaval) {
+    places.push({
+      id: 'naval-base',
+      name: `${systemName} Naval Base`,
+      type: 'military',
+      icon: '⚓',
+      description: 'Imperial Naval Base (restricted access)'
+    });
+  }
+
+  // 4. Add Scout Base if present
+  if (hasScout) {
+    places.push({
+      id: 'scout-base',
+      name: `${systemName} Scout Base`,
+      type: 'military',
+      icon: '🔭',
+      description: 'Imperial Scout Service Base'
+    });
+  }
+
+  // 5. Add starport facilities based on class
+  // A/B: Highport + Downport, C: Maybe Highport + Downport, D/E: Downport only
+  const mainworld = celestialObjects.find(obj => obj.uwp);
+  if (mainworld && starportClass && starportClass !== 'X') {
+    // Check if Highport already exists in celestialObjects
+    const hasHighportInObjects = celestialObjects.some(obj => obj.type === 'Highport');
+
+    // Add Highport for A/B class (and high-pop C class)
+    if (!hasHighportInObjects && ['A', 'B'].includes(starportClass)) {
+      places.push({
+        id: 'highport',
+        name: `${systemName} Highport`,
+        type: 'dock',
+        linkedTo: mainworld.id,
+        icon: '🛸',
+        description: `Class ${starportClass} orbital starport - refined fuel available`
+      });
+    }
+
+    // Add Downport for all starports except X (A, B, C, D, E all have surface facilities)
+    places.push({
+      id: 'downport',
+      name: `${systemName} Downport`,
+      type: 'dock',
+      linkedTo: mainworld.id,
+      icon: '🏗️',
+      description: `Class ${starportClass} surface starport`
+    });
+  }
+
+  return places;
+}
+
+/**
  * Seeded random number generator
  */
 function seededRandom(seed) {
@@ -2770,33 +3193,100 @@ function loadTestSystem(systemKey) {
 }
 
 /**
- * Load a star system directly from JSON data (from data/star-systems/*.json)
+ * Load a star system directly from JSON data (from data/star-systems/*.json or generated)
  * @param {Object} jsonData - The parsed JSON system data
  * @returns {Object} The loaded system
  */
 function loadSystemFromJSON(jsonData) {
-  if (!jsonData || !jsonData.celestialObjects) {
-    console.warn('[SystemMap] Invalid system JSON data');
+  if (!jsonData) {
+    console.warn('[SystemMap] Invalid system JSON data - null');
+    return null;
+  }
+
+  // AR-FIX: Handle both hand-crafted format (celestialObjects) and generated format (stars/planets)
+  const isGenerated = jsonData.generated === true || (jsonData.stars && jsonData.planets);
+
+  if (!jsonData.celestialObjects && !isGenerated) {
+    console.warn('[SystemMap] Invalid system JSON data - no celestialObjects or generated data');
     return null;
   }
 
   // Convert celestialObjects to the expected planet format
   const celestialObjects = jsonData.celestialObjects || [];
 
-  // Extract stars
-  const stars = celestialObjects
-    .filter(obj => obj.type === 'Star')
-    .map(star => ({
-      type: star.stellarClass?.[0] || 'G',
-      subtype: parseInt(star.stellarClass?.slice(1)) || 2,
-      luminosity: star.stellarClass?.split(' ')[1] || 'V',
-      radius: getStarRadiusFromClass(star.stellarClass || 'G2 V'),
-      position: { x: star.orbitAU || 0, y: 0 }
+  let stars, planets, asteroidBelts;
+
+  if (isGenerated) {
+    // AR-FIX: Use pre-parsed data from server-generated systems
+    stars = jsonData.stars || [];
+    planets = (jsonData.planets || []).map((planet, i) => ({
+      id: planet.id || `planet_${i}`,
+      name: planet.name || `Planet ${i + 1}`,
+      type: planet.type || 'Rocky',
+      orbitAU: planet.orbitAU || 1,
+      orbitPeriod: Math.sqrt(Math.pow(planet.orbitAU || 1, 3)) * 365,
+      size: planet.radius || planet.size || 5000,
+      isMainworld: planet.isMainworld || false,
+      hasRings: planet.hasRings || false,
+      moons: planet.moons || [],
+      inGoldilocks: planet.inGoldilocks || false,
+      radiusKm: planet.radius
     }));
+    asteroidBelts = (jsonData.asteroidBelts || []).map((belt, i) => ({
+      id: belt.id || `belt_${i}`,
+      innerRadius: belt.innerRadius || 1.5,
+      outerRadius: belt.outerRadius || 2.5,
+      density: belt.density || 0.4,
+      canMine: true
+    }));
+  } else {
+    // Extract stars from celestialObjects
+    stars = celestialObjects
+      .filter(obj => obj.type === 'Star')
+      .map(star => ({
+        type: star.stellarClass?.[0] || 'G',
+        subtype: parseInt(star.stellarClass?.slice(1)) || 2,
+        luminosity: star.stellarClass?.split(' ')[1] || 'V',
+        radius: getStarRadiusFromClass(star.stellarClass || 'G2 V'),
+        position: { x: star.orbitAU || 0, y: 0 }
+      }));
+
+    // Extract planets (include Planet, Moon, Gas Giant, Ice Giant as renderable bodies)
+    // AR-102: Include radiusKm for size-based zoom calculation (unified with places)
+    planets = celestialObjects
+      .filter(obj => ['Planet', 'Moon', 'Gas Giant', 'Ice Giant'].includes(obj.type))
+      .map((planet, i) => {
+        const size = estimatePlanetSize(planet);
+        return {
+          id: planet.id || `planet_${i}`,
+          name: planet.name,
+          type: getPlanetType(planet),
+          orbitAU: planet.orbitAU || 1,
+          orbitPeriod: Math.sqrt(Math.pow(planet.orbitAU || 1, 3)) * 365,
+          size: isFinite(size) && size > 0 ? size : 5000,  // Ensure valid size
+          isMainworld: !!planet.uwp,
+          hasRings: planet.hasRings || false,
+          moons: [],
+          inGoldilocks: planet.inGoldilocks || false,
+          radiusKm: planet.radiusKm  // AR-102: Pass through for size-based zoom
+        };
+      });
+
+    // Extract asteroid belts (Planetoid Belt in JSON)
+    asteroidBelts = celestialObjects
+      .filter(obj => obj.type === 'Belt' || obj.type === 'Asteroid Belt' || obj.type === 'Planetoid Belt')
+      .map((belt, i) => ({
+        id: belt.id || `belt_${i}`,
+        innerRadius: belt.innerAU || ((belt.orbitAU || 2) * 0.8),
+        outerRadius: belt.outerAU || ((belt.orbitAU || 2) * 1.2),
+        density: belt.density || 0.4,
+        canMine: true
+      }));
+  }
 
   // Default star if none found
   if (stars.length === 0) {
-    const stellarClass = jsonData.stellar?.primary || 'G2 V';
+    const stellarClass = jsonData.stellarClass || jsonData.stellar?.primary || 'G2 V';
     stars.push({
       type: stellarClass[0] || 'G',
       subtype: parseInt(stellarClass.slice(1)) || 2,
@@ -2806,54 +3296,45 @@ function loadSystemFromJSON(jsonData) {
     });
   }
 
-  // Extract planets (include Planet, Moon, Gas Giant, Ice Giant as renderable bodies)
-  // AR-102: Include radiusKm for size-based zoom calculation (unified with places)
-  const planets = celestialObjects
-    .filter(obj => ['Planet', 'Moon', 'Gas Giant', 'Ice Giant'].includes(obj.type))
-    .map((planet, i) => {
-      const size = estimatePlanetSize(planet);
-      return {
-        id: planet.id || `planet_${i}`,
-        name: planet.name,
-        type: getPlanetType(planet),
-        orbitAU: planet.orbitAU || 1,
-        orbitPeriod: Math.sqrt(Math.pow(planet.orbitAU || 1, 3)) * 365,
-        size: isFinite(size) && size > 0 ? size : 5000,  // Ensure valid size
-        isMainworld: !!planet.uwp,
-        hasRings: planet.hasRings || false,
-        moons: [],
-        inGoldilocks: planet.inGoldilocks || false,
-        radiusKm: planet.radiusKm  // AR-102: Pass through for size-based zoom
-      };
+  // AR-XXX: Generate places dynamically from celestial objects
+  // This provides complete destination coverage for all 440+ systems
+  let places;
+  if (isGenerated && celestialObjects.length === 0) {
+    // AR-FIX: Generate basic places from generated planets
+    places = generatePlacesFromPlanets(planets, {
+      starportClass: jsonData.uwp?.[0],
+      systemName: jsonData.name
     });
+  } else {
+    places = generatePlacesFromCelestial(celestialObjects, {
+      hasNaval: jsonData.hasNaval,
+      hasScout: jsonData.hasScout,
+      starportClass: jsonData.uwp?.[0],
+      systemName: jsonData.name
+    });
+  }
 
-  // Extract asteroid belts (Planetoid Belt in JSON)
-  const asteroidBelts = celestialObjects
-    .filter(obj => obj.type === 'Belt' || obj.type === 'Asteroid Belt' || obj.type === 'Planetoid Belt')
-    .map((belt, i) => ({
-      id: belt.id || `belt_${i}`,
-      innerRadius: belt.innerAU || ((belt.orbitAU || 2) * 0.8),
-      outerRadius: belt.outerAU || ((belt.orbitAU || 2) * 1.2),
-      density: belt.density || 0.4,
-      canMine: true
-    }));
-
-  // Generate places array from locations (server IDs) for Places overlay
-  // Each location links to a celestialObject via linkedTo field
-  const places = (jsonData.locations || []).map(loc => {
-    // Find linked celestial object for position/radius data
-    const linkedObj = celestialObjects.find(obj => obj.id === loc.linkedTo);
-    return {
-      id: loc.id,  // Use server location ID (loc-dock-highport, etc.)
-      name: loc.name,
-      icon: getPlaceIcon(loc.type),
-      description: loc.type || 'Location',
-      orbitAU: linkedObj?.orbitAU || 1,
-      type: loc.type,
-      radiusKm: linkedObj?.radiusKm,  // AR-102: Get from linked celestial object
-      linkedTo: loc.linkedTo  // Keep reference to celestial object
-    };
-  });
+  // Merge in any pre-defined artistic/custom locations from sector file
+  // These can have camera presets and special properties
+  if (jsonData.locations) {
+    const generatedIds = new Set(places.map(p => p.id));
+    jsonData.locations.forEach(loc => {
+      if (!generatedIds.has(loc.id)) {
+        const linkedObj = celestialObjects.find(obj => obj.id === loc.linkedTo);
+        places.push({
+          id: loc.id,
+          name: loc.name,
+          icon: getPlaceIcon(loc.type),
+          description: loc.type || 'Location',
+          orbitAU: linkedObj?.orbitAU || 1,
+          type: loc.type,
+          radiusKm: linkedObj?.radiusKm,
+          linkedTo: loc.linkedTo,
+          cam: loc.cam  // Preserve artistic camera presets
+        });
+      }
+    });
+  }
 
   // Build system object
   const system = {

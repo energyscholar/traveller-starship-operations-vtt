@@ -34,6 +34,10 @@ function handleCombatEnded(data, state, helpers) {
 function handlePhaseChanged(data, state, helpers) {
   state.combatPhase = data.phase;
   state.combatRound = data.round;
+  // AR-268: Update phase bar UI
+  if (helpers.updateCombatPhaseBar) {
+    helpers.updateCombatPhaseBar(data.phase, data.round);
+  }
   helpers.showNotification(`Phase: ${data.phase.toUpperCase()} (Round ${data.round})`, 'info');
 }
 

@@ -70,11 +70,12 @@ export async function fetchJumpDestinations(sector, hex, range) {
           const hexX = world.HexX || world.Hex?.substring(0, 2) || '??';
           const hexY = world.HexY || world.Hex?.substring(2, 4) || '??';
           const worldHex = `${hexX}${String(hexY).padStart(2, '0')}`;
+          const distance = world.Distance || 1;
           return `
-          <div class="destination-item" data-name="${escapeHtml(world.Name)}" data-sector="${escapeHtml(world.Sector || sector)}" data-hex="${worldHex}" onclick="selectJumpDestination(this)">
+          <div class="destination-item" data-name="${escapeHtml(world.Name)}" data-sector="${escapeHtml(world.Sector || sector)}" data-hex="${worldHex}" data-distance="${distance}" onclick="selectJumpDestination(this)">
             <span class="dest-name">${escapeHtml(world.Name)}</span>
             <span class="dest-uwp">${world.Uwp || '???????-?'}</span>
-            <span class="dest-distance">J-${world.Distance || '?'}</span>
+            <span class="dest-distance">J-${distance}</span>
           </div>
         `;
         }).join('')}
@@ -95,6 +96,7 @@ export function selectJumpDestination(element) {
   const name = element.dataset.name;
   const sector = element.dataset.sector;
   const hex = element.dataset.hex;
+  const distance = parseInt(element.dataset.distance) || 1;
 
   // Fill in the destination input - AR-168: Store hex/sector as data attributes for UID lookup
   const destInput = document.getElementById('jump-destination');
@@ -105,11 +107,17 @@ export function selectJumpDestination(element) {
     destInput.dataset.name = name;
   }
 
+  // Auto-set distance dropdown to match actual parsec distance
+  const distanceSelect = document.getElementById('jump-distance');
+  if (distanceSelect) {
+    distanceSelect.value = String(distance);
+  }
+
   // Highlight selected
   document.querySelectorAll('.destination-item').forEach(el => el.classList.remove('selected'));
   element.classList.add('selected');
 
-  showNotification(`Selected ${name} as destination`, 'info');
+  showNotification(`Selected ${name} (J-${distance})`, 'info');
 }
 
 /**

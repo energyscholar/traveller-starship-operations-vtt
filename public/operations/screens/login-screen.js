@@ -4,7 +4,7 @@
  * Handles login screen initialization:
  * - GM/Player login selection
  * - Campaign code entry
- * - Guest login flow
+ * - Solo Demo quick start
  * - Campaign import
  */
 
@@ -24,6 +24,7 @@ function initLoginScreen(state, helpers) {
     state.isGM = true;
     document.querySelector('.login-options').classList.add('hidden');
     document.getElementById('campaign-select').classList.remove('hidden');
+    // AR-296: Campaigns response now includes feedback count
     state.socket.emit('ops:getCampaigns');
   });
 
@@ -32,19 +33,48 @@ function initLoginScreen(state, helpers) {
     state.isGM = false;
     document.querySelector('.login-options').classList.add('hidden');
     document.getElementById('player-select').classList.remove('hidden');
+    // Request campaign list to show join codes
+    state.socket.emit('ops:getCampaigns');
   });
 
-  // AR-241: Solo Explorer
-  const btnSoloExplorer = document.getElementById('btn-solo-explorer');
-  if (btnSoloExplorer) {
-    btnSoloExplorer.addEventListener('click', () => {
-      // Create solo campaign with Type S Scout
-      state.socket.emit('ops:createSoloCampaign', {
-        campaignType: 'solo_explorer',
-        shipType: 'scout',  // Type S Scout
-        startSystem: 'Regina',
-        explorerName: 'Solo Explorer'
-      });
+  // Handle campaign list for player join screen
+  state.socket.on('ops:campaigns', (data) => {
+    const codesList = document.getElementById('campaign-codes-list');
+    if (!codesList) return;
+
+    const campaigns = data.campaigns || [];
+    if (campaigns.length === 0) {
+      codesList.innerHTML = '<div style="color: #666;">No campaigns available</div>';
+      return;
+    }
+
+    // Sort: Solo Demo first, then by name
+    campaigns.sort((a, b) => {
+      if (a.name.includes('Solo Demo')) return -1;
+      if (b.name.includes('Solo Demo')) return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    // Display each campaign with its join code (first 8 chars of ID)
+    codesList.innerHTML = campaigns.map(c => {
+      const code = c.id.substring(0, 8);
+      const displayName = c.name.includes('Solo Demo') ? 'Solo Demo Campaign' :
+                          c.name.includes('Spinward') ? 'Tuesday Spinward Marches Campaign' : c.name;
+      return `<div style="margin: 4px 0;">
+        <span style="color: var(--text-primary, #fff);">${displayName}:</span>
+        <span style="color: var(--accent, #4ecdc4); cursor: pointer;"
+              onclick="document.getElementById('campaign-code').value='${code}'"
+              title="Click to use this code">${code}</span>
+      </div>`;
+    }).join('');
+  });
+
+  // AR-289: Solo Demo Campaign - Join pre-built demo campaign
+  const btnSoloDemo = document.getElementById('btn-solo-demo');
+  if (btnSoloDemo) {
+    btnSoloDemo.addEventListener('click', () => {
+      // Join the persistent solo demo campaign directly
+      state.socket.emit('ops:joinSoloDemoCampaign');
     });
   }
 
@@ -114,43 +144,6 @@ function initLoginScreen(state, helpers) {
     }
   });
 
-  // Guest login flow (Stage 13.5 - completed)
-  const btnJoinGuest = document.getElementById('btn-join-guest');
-  if (btnJoinGuest) {
-    btnJoinGuest.addEventListener('click', () => {
-      const code = document.getElementById('campaign-code').value.trim();
-      if (code) {
-        state.guestCampaignCode = code;
-        document.getElementById('player-select').classList.add('hidden');
-        document.getElementById('guest-name-select').classList.remove('hidden');
-      } else {
-        showNotification('Please enter a campaign code first', 'error');
-      }
-    });
-  }
-
-  const btnConfirmGuest = document.getElementById('btn-confirm-guest');
-  if (btnConfirmGuest) {
-    btnConfirmGuest.addEventListener('click', () => {
-      const guestName = document.getElementById('guest-name').value.trim();
-      if (guestName && state.guestCampaignCode) {
-        state.socket.emit('ops:joinAsGuest', {
-          campaignId: state.guestCampaignCode,
-          guestName: guestName
-        });
-      } else {
-        showNotification('Please enter your name', 'error');
-      }
-    });
-  }
-
-  const btnBackGuest = document.getElementById('btn-back-guest');
-  if (btnBackGuest) {
-    btnBackGuest.addEventListener('click', () => {
-      document.getElementById('guest-name-select').classList.add('hidden');
-      document.getElementById('player-select').classList.remove('hidden');
-    });
-  }
 }
 
 registerScreen('login', initLoginScreen);

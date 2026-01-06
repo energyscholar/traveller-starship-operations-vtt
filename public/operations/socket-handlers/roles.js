@@ -3,7 +3,6 @@
  *
  * Handles all role and player-related socket events:
  * - Player join/leave
- * - Guest access
  * - Role assignment/clearing
  * - Character import
  * - Crew updates
@@ -15,21 +14,6 @@ import { registerHandler } from './index.js';
 
 function handlePlayerJoined(data, state, helpers) {
   helpers.showNotification(`${data.slotName} joined the campaign`, 'info');
-}
-
-function handleGuestJoined(data, state, helpers) {
-  state.campaign = data.campaign;
-  state.ships = data.ships;
-  state.isGuest = true;
-  state.guestName = data.guestName;
-  state.guestSkill = data.defaultSkill;
-  state.player = {
-    slot_name: data.guestName,
-    character_data: null
-  };
-  helpers.showScreen('player-setup');
-  helpers.renderPlayerSetup();
-  helpers.showNotification(`Joined as guest "${data.guestName}" (skill 0)`, 'info');
 }
 
 function handleSkillOverride(data, state, helpers) {
@@ -190,7 +174,6 @@ function handleCrewUpdate(data, state, helpers) {
 // ==================== Register All Handlers ====================
 
 registerHandler('ops:playerJoined', handlePlayerJoined);
-registerHandler('ops:guestJoined', handleGuestJoined);
 registerHandler('ops:skillOverride', handleSkillOverride);
 registerHandler('ops:roleCleared', handleRoleCleared);
 registerHandler('ops:relievedFromDuty', handleRelievedFromDuty);
@@ -207,7 +190,6 @@ registerHandler('ops:crewUpdate', handleCrewUpdate);
 // Export for testing
 export {
   handlePlayerJoined,
-  handleGuestJoined,
   handleSkillOverride,
   handleRoleCleared,
   handleRelievedFromDuty,

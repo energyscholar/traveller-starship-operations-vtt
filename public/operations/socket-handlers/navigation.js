@@ -18,10 +18,14 @@ function handleCurrentSystemUpdated(data, state, helpers) {
   if (locationEl) {
     locationEl.textContent = data.locationDisplay;
   }
-  // AR-103: Update hex coordinate display in top bar with system name tooltip
+  // AR-103: Update hex coordinate display in top bar with system name
   const hexEl = document.getElementById('bridge-hex');
   if (hexEl) {
-    hexEl.textContent = data.hex || '----';
+    if (data.locationDisplay) {
+      hexEl.textContent = `${data.hex || '----'} · ${data.locationDisplay}`;
+    } else {
+      hexEl.textContent = data.hex || '----';
+    }
     hexEl.title = data.locationDisplay || 'Current parsec';
   }
   // Update campaign state with sector/hex for jump map
@@ -92,10 +96,14 @@ function handleLocationChanged(data, state, helpers) {
     if (state.shipState) {
       state.shipState.systemHex = data.hex;
     }
-    // AR-168: Update bridge-hex DOM element
+    // AR-168: Update bridge-hex DOM element with system name
     const hexEl = document.getElementById('bridge-hex');
     if (hexEl) {
-      hexEl.textContent = data.hex;
+      if (data.newLocation) {
+        hexEl.textContent = `${data.hex} · ${data.newLocation}`;
+      } else {
+        hexEl.textContent = data.hex;
+      }
       hexEl.title = data.newLocation || 'Current parsec';
     }
   }
