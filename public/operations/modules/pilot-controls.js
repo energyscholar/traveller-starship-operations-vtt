@@ -202,12 +202,11 @@ export function setupPilotListeners(state, renderRolePanelFn, refreshCrewPanelFn
 
   // AR-64: Travel complete - ship arrived at destination
   state.socket.on('ops:travelComplete', (data) => {
-    // Update ship state with new location
-    if (state.shipState) {
-      state.shipState.systemHex = data.systemHex;
-      state.shipState.locationId = data.locationId;
-      state.shipState.locationName = data.locationName;
-    }
+    // Update ship state with new location (ensure shipState exists)
+    if (!state.shipState) state.shipState = {};
+    state.shipState.systemHex = data.systemHex;
+    state.shipState.locationId = data.locationId;
+    state.shipState.locationName = data.locationName;
 
     // Update campaign date
     if (state.campaign && data.newDate) {

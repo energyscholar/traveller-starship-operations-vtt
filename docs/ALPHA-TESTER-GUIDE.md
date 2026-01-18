@@ -12,7 +12,8 @@
 
 ---
 
-**Important:** There is currently NO authentication. Anyone with the URL can access campaigns. This is intentional for alpha testing - treat all data as public/temporary.
+**Important:** There is currently NO authentication. Anyone with the URL can access campaigns. 
+This is intentional for alpha testing - treat all data as public/temporary.
 
 Two pre-built campaigns are available:
 - **Solo Demo** - Single-player scout ship experience
@@ -22,7 +23,9 @@ Two pre-built campaigns are available:
 
 ## What Is This?
 
-A virtual tabletop (VTT) for running Traveller RPG starship operations. Players take on crew roles (Captain, Pilot, Astrogator, Engineer, Gunner, Sensors) and collaboratively operate a starship through jump travel, system exploration, and space combat.
+A virtual tabletop (VTT) for running Traveller RPG starship operations. Players take on crew roles 
+(Captain, Pilot, Astrogator, Engineer, Gunner, Sensors) and collaboratively operate a starship through 
+jump travel, system exploration, and space combat.
 
 ---
 

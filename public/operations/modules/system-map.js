@@ -3345,6 +3345,8 @@ function loadSystemFromJSON(jsonData) {
     planets,
     asteroidBelts,
     places,
+    celestialObjects: jsonData.celestialObjects || [], // Preserve for ship positioning
+    locations: jsonData.locations || [],               // Preserve for ship positioning
     fromJSON: true
   };
 
@@ -3799,14 +3801,17 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
   const auToPixels = getAuToPixels(zoom);
 
   for (const loc of system.locations) {
-    if (!loc.linkedTo) continue;
+    // Support both linkedTo (legacy) and parentId (canonical) field names
+    const parentRef = loc.linkedTo || loc.parentId;
+    if (!parentRef) continue;
 
     // AR-113 Phase 3: Use getBodyWorldPosition to follow parent chains
     // This handles stations orbiting planets correctly
-    const bodyPos = getBodyWorldPosition(loc.linkedTo);
+    const bodyPos = getBodyWorldPosition(parentRef);
 
     // Location offset from body (in km -> AU)
-    const locationOrbitKm = loc.orbitKm || 0;
+    // Support orbitKm (jump points), orbitalAltitudeKm (stations), or surface locations
+    const locationOrbitKm = loc.orbitKm || loc.orbitalAltitudeKm || 0;
     const locationBearing = (loc.bearing || 0) * Math.PI / 180;
     const locationOrbitAU = locationOrbitKm / 149597870.7;
 
@@ -3820,9 +3825,13 @@ function drawLocationMarkers(ctx, centerX, centerY, zoom) {
     // AR-113 Phase 4: Draw markers for all location types (not just jump_point)
     // Color by type: green for jump, cyan for orbit/dock, gray for other
     const colors = {
+      'jump-point': '#00ff00',
       jump_point: '#00ff00',
       orbit: '#00cccc',
       dock: '#00aaff',
+      station: '#00ccff',
+      highport: '#ffaa00',
+      downport: '#ff8800',
       hide: '#888888',
       space: '#666666'
     };
@@ -4264,24 +4273,87 @@ function refreshShipMapPosition(locationId, shipName = 'Party Ship') {
     heading: 0
   };
 
-  // Find location in system
-  if (locationId && system.locations) {
-    const location = system.locations.find(l => l.id === locationId);
-    if (location?.linkedTo) {
-      // Find linked celestial body
-      const body = system.celestialObjects?.find(o => o.id === location.linkedTo);
-      if (body) {
-        const bodyOrbitAU = body.orbitAU || 0;
-        const locationOrbitKm = location.orbitKm || 0;
-        const locationOrbitAU = locationOrbitKm / 149597870.7;
+  // Find location in system - check static locations first
+  let location = system.locations?.find(l => l.id === locationId);
+  let parentRef = location?.linkedTo || location?.parentId;
+  let locationOrbitKm = 0;
+  let locationBearing = 0;
 
-        shipData.locationInfo = {
-          linkedBodyOrbitAU: bodyOrbitAU,
-          offsetAU: locationOrbitAU,
-          offsetBearing: location.bearing || 0
-        };
-        console.log(`[AR-263] Ship moved to ${locationId}: tracking body at ${bodyOrbitAU.toFixed(2)}AU`);
+  // If not in static locations, try to parse generated destination IDs
+  // Generated IDs follow patterns: orbit-{bodyId}, skim-{bodyId}, jump-{bodyId}, belt-{bodyId}
+  if (!parentRef && locationId) {
+    const match = locationId.match(/^(orbit|skim|jump|belt)-(.+)$/);
+    if (match) {
+      const [, destType, bodyId] = match;
+      // Find the linked body - try exact match first, then try matching by name or isMainworld
+      let body = system.celestialObjects?.find(o => o.id === bodyId);
+      if (!body && bodyId.includes('-mainworld')) {
+        // Try finding mainworld by isMainworld flag or uwp
+        body = system.celestialObjects?.find(o => o.isMainworld || o.uwp);
       }
+      if (!body) {
+        // Try fuzzy match: bodyId like "nadrin-mainworld" → find "3123-mainworld"
+        const baseName = bodyId.split('-')[0]; // "nadrin"
+        body = system.celestialObjects?.find(o =>
+          o.id?.toLowerCase().includes(baseName) ||
+          o.name?.toLowerCase() === baseName
+        );
+      }
+      if (body) {
+        parentRef = body.id; // Use actual ID for lookup
+        // Different destination types have different offsets
+        if (destType === 'skim') {
+          locationOrbitKm = 50000; // Skim point ~50,000km from gas giant
+        } else if (destType === 'jump') {
+          // Jump point at 100-diameter distance
+          locationOrbitKm = (body.radiusKm || 50000) * 200;
+        }
+        console.log(`[AR-263] Parsed generated destination ${locationId} → body ${body.id}`);
+      }
+    } else if (locationId === 'jump_point') {
+      // System-wide jump point - position at outer edge
+      const outerBody = system.celestialObjects?.reduce((outer, obj) => {
+        if (!outer || (obj.orbitAU || 0) > (outer.orbitAU || 0)) return obj;
+        return outer;
+      }, null);
+      if (outerBody) {
+        shipData.locationInfo = {
+          linkedBodyOrbitAU: (outerBody.orbitAU || 5) * 1.5, // Beyond outermost body
+          offsetAU: 0,
+          offsetBearing: 0
+        };
+        console.log(`[AR-263] Ship at system jump point: ${shipData.locationInfo.linkedBodyOrbitAU.toFixed(2)}AU`);
+      }
+    }
+  }
+
+  if (parentRef) {
+    // Find linked celestial body
+    const body = system.celestialObjects?.find(o => o.id === parentRef);
+    if (body) {
+      const bodyOrbitAU = body.orbitAU || 0;
+      // Use location orbit from static data if available, else from parsed destination
+      const finalOrbitKm = location?.orbitKm || location?.orbitalAltitudeKm || locationOrbitKm;
+      const finalBearing = location?.bearing || locationBearing;
+      const locationOrbitAU = finalOrbitKm / 149597870.7;
+
+      shipData.locationInfo = {
+        linkedBodyOrbitAU: bodyOrbitAU,
+        offsetAU: locationOrbitAU,
+        offsetBearing: finalBearing
+      };
+      console.log(`[AR-263] Ship moved to ${locationId}: tracking body at ${bodyOrbitAU.toFixed(2)}AU + offset ${locationOrbitAU.toFixed(4)}AU`);
+    }
+  } else if (location?.surface) {
+    // Surface locations (downports) - ship is on the mainworld surface
+    const mainworld = system.celestialObjects?.find(o => o.isMainworld);
+    if (mainworld) {
+      shipData.locationInfo = {
+        linkedBodyOrbitAU: mainworld.orbitAU || 0,
+        offsetAU: 0,
+        offsetBearing: 0
+      };
+      console.log(`[AR-263] Ship landed at ${locationId}: on surface at ${mainworld.orbitAU?.toFixed(2) || 0}AU`);
     }
   }
 
