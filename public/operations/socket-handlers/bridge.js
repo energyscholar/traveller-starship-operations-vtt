@@ -10,6 +10,7 @@
  */
 
 import { registerHandler } from './index.js';
+import { initChatDrawer, setGMStatus } from '../modules/chat-drawer.js';
 
 // ==================== Bridge Join ====================
 
@@ -41,6 +42,17 @@ function handleBridgeJoined(data, state, helpers) {
     const sensorPanel = document.getElementById('sensor-display');
     if (statusPanels) statusPanels.classList.add('hidden');
     if (sensorPanel) sensorPanel.classList.remove('sensor-panel-hidden');
+  }
+
+  // AR-XX: Initialize chat drawer
+  initChatDrawer(state);
+
+  // Set up GM identity dropdown with available characters
+  if (data.isGM || state.isGM) {
+    const chars = (data.crew || [])
+      .filter(c => c.slot_name && c.id)
+      .map(c => ({ id: c.id, name: c.slot_name }));
+    setGMStatus(true, chars);
   }
 }
 
