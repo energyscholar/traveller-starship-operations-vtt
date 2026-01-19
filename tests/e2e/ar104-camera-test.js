@@ -3,6 +3,7 @@
  * Takes screenshots of various celestial objects with different camera angles
  */
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 
 (async () => {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
@@ -12,7 +13,7 @@ const puppeteer = require('puppeteer');
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
 
-  await page.goto('http://localhost:3000/operations');
+  await page.goto(fullUrl);
   await page.waitForSelector('#gm-btn', { timeout: 8000 });
   await page.click('#gm-btn');
   await page.waitForSelector('.role-panel', { timeout: 5000 });

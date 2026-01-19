@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -9,7 +10,7 @@ const puppeteer = require('puppeteer');
   await page.setViewport({ width: 1400, height: 900 });
 
   console.log('Opening localhost:3000...');
-  await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
+  await page.goto(fullUrl, { waitUntil: 'networkidle2' });
   await new Promise(r => setTimeout(r, 2000));
 
   // Click Player button

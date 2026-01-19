@@ -13,6 +13,11 @@
 
 const { spawn } = require('child_process');
 const path = require('path');
+const { runOperationsMenu } = require('../lib/tui/operations-menu');
+const { runCampaignMenu } = require('../lib/tui/campaign-menu');
+const { runEmailMenu } = require('../lib/tui/email-menu');
+const { runNPCMenu } = require('../lib/tui/npc-menu');
+const { runBattleMenu } = require('../lib/tui/battle-viewer');
 
 // ANSI escape codes
 const ESC = '\x1b';
@@ -41,9 +46,23 @@ function showMainMenu() {
     `${CYAN}${BOLD}║${RESET}      ${DIM}v${VERSION}${RESET}                                                ${CYAN}${BOLD}║${RESET}\n` +
     `${CYAN}${BOLD}╠══════════════════════════════════════════════════════════════╣${RESET}\n` +
     `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[A]${RESET} ${WHITE}Campaign${RESET}                                             ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}      ${DIM}Select campaign and ship for session${RESET}                    ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[O]${RESET} ${WHITE}Operations${RESET}                                           ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}      ${DIM}Travel status, jump status, ship operations${RESET}            ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[L]${RESET} ${WHITE}Mail${RESET}                                                 ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}      ${DIM}Inbox, compose, drafts${RESET}                                  ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[N]${RESET} ${WHITE}NPC Contacts${RESET}                                         ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}      ${DIM}AI-powered NPC dialogue, GM review queue${RESET}               ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[C]${RESET} ${WHITE}Combat Demos${RESET}                                         ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}      ${DIM}6 combat scenarios - AUTO and MANUAL modes${RESET}             ${CYAN}║${RESET}\n` +
-    `${CYAN}║${RESET}      ${DIM}Fleet battles, called shots, engine architecture${RESET}       ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[S]${RESET} ${WHITE}Battle Simulation${RESET}                                    ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}      ${DIM}Run experiments with Captain AI${RESET}                        ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[E]${RESET} ${DIM}Ship Editor${RESET}                                          ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}      ${DIM}Coming soon - Design and modify ships${RESET}                  ${CYAN}║${RESET}\n` +
@@ -165,10 +184,45 @@ async function waitForMainSelection() {
         process.exit(0);
       }
 
+      // A for Campaign
+      if (key === 'a' || key === 'A') {
+        cleanup();
+        resolve('campaign');
+        return;
+      }
+
+      // O for Operations
+      if (key === 'o' || key === 'O') {
+        cleanup();
+        resolve('operations');
+        return;
+      }
+
+      // L for Mail
+      if (key === 'l' || key === 'L') {
+        cleanup();
+        resolve('mail');
+        return;
+      }
+
+      // N for NPC Contacts
+      if (key === 'n' || key === 'N') {
+        cleanup();
+        resolve('npc');
+        return;
+      }
+
       // C for Combat Demos
       if (key === 'c' || key === 'C') {
         cleanup();
         resolve('combat');
+        return;
+      }
+
+      // S for Battle Simulation
+      if (key === 's' || key === 'S') {
+        cleanup();
+        resolve('simulation');
         return;
       }
 
@@ -211,8 +265,28 @@ async function main() {
     const selection = await waitForMainSelection();
 
     switch (selection) {
+      case 'campaign':
+        await runCampaignMenu();
+        break;
+
+      case 'operations':
+        await runOperationsMenu();
+        break;
+
+      case 'mail':
+        await runEmailMenu();
+        break;
+
+      case 'npc':
+        await runNPCMenu();
+        break;
+
       case 'combat':
         await launchCombatDemo();
+        break;
+
+      case 'simulation':
+        await runBattleMenu();
         break;
 
       case 'editor':

@@ -96,6 +96,16 @@ export function getStarPopupContent(contact) {
 export function getShipPopupContent(contact) {
   let content = '';
 
+  // AR-200: Ship class/type display
+  if (contact.ship_type || contact.ship_class) {
+    content += `
+      <div class="tooltip-row ship-info">
+        <span class="label">Class:</span>
+        <span class="value">${escapeHtml(contact.ship_type || contact.ship_class)}</span>
+      </div>
+    `;
+  }
+
   if (contact.tonnage) {
     content += `
       <div class="tooltip-row ship-info">
@@ -105,11 +115,50 @@ export function getShipPopupContent(contact) {
     `;
   }
 
+  // AR-200: Jump and thrust ratings
+  if (contact.jump_rating !== undefined) {
+    content += `
+      <div class="tooltip-row ship-info">
+        <span class="label">Jump:</span>
+        <span class="value">J-${contact.jump_rating}</span>
+      </div>
+    `;
+  }
+
+  if (contact.thrust !== undefined) {
+    content += `
+      <div class="tooltip-row ship-info">
+        <span class="label">Thrust:</span>
+        <span class="value">${contact.thrust}G</span>
+      </div>
+    `;
+  }
+
+  // AR-200: Armor if present
+  if (contact.armour !== undefined && contact.armour > 0) {
+    content += `
+      <div class="tooltip-row ship-info">
+        <span class="label">Armour:</span>
+        <span class="value">${contact.armour}</span>
+      </div>
+    `;
+  }
+
   if (contact.crew_count) {
     content += `
       <div class="tooltip-row ship-info">
         <span class="label">Crew:</span>
         <span class="value">${contact.crew_count}</span>
+      </div>
+    `;
+  }
+
+  // AR-200: Allegiance/flag if present
+  if (contact.allegiance || contact.flag) {
+    content += `
+      <div class="tooltip-row ship-info">
+        <span class="label">Flag:</span>
+        <span class="value">${escapeHtml(contact.allegiance || contact.flag)}</span>
       </div>
     `;
   }

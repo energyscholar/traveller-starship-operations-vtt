@@ -16,6 +16,7 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 const {
   clickOrHotkey,
   clickSelector,
@@ -56,7 +57,7 @@ const DESTINATION = 'Asteltine';
     console.log('--- PHASE 1: JOIN AS CAPTAIN ---');
 
     console.log('1.1 Navigating to Operations...');
-    await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
+    await page.goto(fullUrl, { waitUntil: 'networkidle2' });
     await sleep(2000);
 
     console.log('1.2 Joining campaign as player...');

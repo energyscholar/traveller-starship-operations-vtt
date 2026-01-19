@@ -90,8 +90,10 @@ async function runGMPlayerMapSync() {
     // === PHASE 3: GM Opens and Shares Map ===
     console.log('\n--- Phase 3: GM Shares Map ---');
 
-    // Open menu and click shared map
-    await clickButton(gmPage, 'btn-menu');
+    // Open menu and click shared map (use evaluate for button that may have layout issues)
+    await gmPage.evaluate(() => {
+      document.getElementById('btn-menu')?.click();
+    });
     await delay(DELAYS.SHORT);
     await gmPage.evaluate(() => {
       document.querySelector('#menu-shared-map')?.click();

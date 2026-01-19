@@ -13,13 +13,14 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 const { sleep } = require('./helpers/click-or-hotkey');
 
 const CAMPAIGN_CODE = 'DFFFC87E';
 const RESULTS = { passed: 0, failed: 0, skipped: 0, errors: [] };
 
 async function loginAsCaptain(page) {
-  await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
+  await page.goto(fullUrl, { waitUntil: 'networkidle2' });
   await sleep(2000);
 
   await page.evaluate(() => {

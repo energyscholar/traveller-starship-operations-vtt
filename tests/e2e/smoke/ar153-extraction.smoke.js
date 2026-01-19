@@ -6,6 +6,7 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('../config');
 
 const PHASE1_EXPORTS = [
   // Phase 1A: Power Management
@@ -141,7 +142,7 @@ async function runTest() {
     const jsErrors = [];
     page.on('pageerror', err => jsErrors.push(err.message));
 
-    await page.goto('http://localhost:3000/operations', {
+    await page.goto(fullUrl, {
       waitUntil: 'networkidle0',
       timeout: 10000
     });

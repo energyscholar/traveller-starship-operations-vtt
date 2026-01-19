@@ -187,19 +187,36 @@ export function getSensorOperatorPanel(shipState, contacts, environmentalData = 
 
     <div class="detail-section">
       <h4>Sensor Controls</h4>
-      <div class="sensor-scan-buttons">
-        <button onclick="performScan('passive')" class="btn btn-small" title="Passive Scan: Detect transponders and celestials only. Does not reveal your position.">
-          Passive Scan
+      <!-- AR-208: Scan Mode Indicator -->
+      <div class="scan-mode-indicator" style="margin-bottom: 8px; padding: 6px 10px; background: var(--bg-secondary); border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.85em; color: var(--text-muted);">Current Mode:</span>
+        <span id="scan-mode-display" class="scan-mode ${shipState?.scanMode || 'passive'}" style="font-weight: bold; padding: 2px 8px; border-radius: 3px; ${
+          (shipState?.scanMode === 'active') ? 'background: var(--warning); color: var(--bg-dark);' :
+          (shipState?.scanMode === 'deep') ? 'background: var(--danger); color: white;' :
+          'background: var(--success); color: var(--bg-dark);'
+        }">
+          ${(shipState?.scanMode === 'active') ? '📡 ACTIVE' :
+            (shipState?.scanMode === 'deep') ? '🔬 DEEP SCAN' :
+            '👁 PASSIVE'}
+        </span>
+      </div>
+      <div class="sensor-scan-buttons" style="display: flex; gap: 6px; flex-wrap: wrap;">
+        <button onclick="setScanMode('passive')" class="btn btn-small ${(shipState?.scanMode || 'passive') === 'passive' ? 'btn-success active' : ''}" title="Passive Mode: Listen only. Detects transponders and large objects. Does NOT reveal your position.">
+          👁 Passive
         </button>
-        <button onclick="performScan('active')" class="btn btn-small btn-warning" title="Active Scan: Full sensor sweep. WARNING: May reveal your position to other ships!">
-          Active Scan
+        <button onclick="setScanMode('active')" class="btn btn-small ${shipState?.scanMode === 'active' ? 'btn-warning active' : 'btn-warning'}" title="Active Mode: Full sensor sweep. Detects all contacts with detailed info. WARNING: Reveals your position to other ships!">
+          📡 Active
         </button>
-        <button onclick="performScan('deep')" class="btn btn-small btn-danger" title="Deep Scan: Detailed analysis of contacts. CAUTION: Definitely reveals your position!">
-          Deep Scan
+        <button onclick="performScan('deep')" class="btn btn-small btn-danger" title="Deep Scan: One-time detailed analysis of all contacts. Gets maximum info but DEFINITELY reveals position.">
+          🔬 Deep Scan
         </button>
       </div>
-      <div class="sensor-scan-note">
-        <small>Active/Deep scans reveal our position to other ships</small>
+      <div class="scan-mode-info" style="margin-top: 6px; font-size: 0.8em; padding: 6px; background: var(--bg-tertiary); border-radius: 4px;">
+        ${(shipState?.scanMode === 'active') ?
+          '<span class="text-warning">⚠ ACTIVE: Your position is being broadcast. Other ships can detect you.</span>' :
+          (shipState?.scanMode === 'deep') ?
+          '<span class="text-danger">⚠ DEEP SCAN: Maximum emissions. All ships in range can locate you.</span>' :
+          '<span class="text-success">✓ PASSIVE: Listening only. Position hidden unless actively scanned.</span>'}
       </div>
     </div>
 
@@ -236,6 +253,22 @@ export function getSensorOperatorPanel(shipState, contacts, environmentalData = 
           Click a contact below to acquire sensor lock (+2 Attack DM)
         </div>
       `}
+      <!-- AR-208: ECM Reaction capability -->
+      <div class="ecm-reaction-section" style="margin-top: 12px; padding: 8px; background: var(--bg-secondary); border-radius: 4px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.85em; font-weight: 500;">ECM Reaction</span>
+          <span class="ecm-reaction-status" style="font-size: 0.75em; color: ${shipState?.ecmReactionReady ? 'var(--success)' : 'var(--text-muted)'};">
+            ${shipState?.ecmReactionReady ? '✓ READY' : '○ Not Prepared'}
+          </span>
+        </div>
+        <div style="font-size: 0.75em; color: var(--text-muted); margin: 4px 0;">
+          When attacked, use ECM as a reaction (-2 to incoming attack)
+        </div>
+        <button onclick="window.prepareECMReaction()" class="btn btn-small ${shipState?.ecmReactionReady ? 'btn-success active' : 'btn-secondary'}" style="width: 100%; margin-top: 4px;" title="Prepare to use ECM as a reaction when attacked. Uses your reaction for the round.">
+          ${shipState?.ecmReactionReady ? '⚡ ECM Reaction READY' : 'Prepare ECM Reaction'}
+        </button>
+        ${shipState?.ecmReactionUsed ? '<div style="font-size: 0.75em; color: var(--warning); margin-top: 4px;">Used this round - resets next round</div>' : ''}
+      </div>
     </div>
     <div class="detail-section sensor-contacts-section">
       <h4>Contacts (${contacts?.length || 0})</h4>

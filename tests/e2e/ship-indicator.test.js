@@ -5,7 +5,7 @@
 
 const { withBrowser } = require('./helpers/browser-with-cleanup');
 
-const BASE_URL = 'http://localhost:3000';
+// BASE_URL from config
 
 async function runTest() {
   console.log('=== Ship Indicator E2E Test ===\n');

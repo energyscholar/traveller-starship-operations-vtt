@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer');
 
   page.on('requestfailed', req => console.log('FAILED:', req.url(), req.failure().errorText));
 
-  await page.goto('http://localhost:3000/', { waitUntil: 'networkidle0' });
+  await page.goto(fullUrl + '/', { waitUntil: 'networkidle0' });
   await page.evaluate(async () => {
     await fetch('/api/test/gm-login', { method: 'POST' });
   });

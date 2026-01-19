@@ -10,8 +10,7 @@
  */
 
 const io = require('socket.io-client');
-
-const SERVER_URL = 'http://localhost:3000';
+const { BASE_URL: SERVER_URL } = require('./config');
 const TEST_TIMEOUT = 10000;
 
 // Test campaign data (created during test)

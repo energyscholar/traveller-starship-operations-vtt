@@ -9,7 +9,7 @@
 const { withBrowser } = require('./helpers/browser-with-cleanup');
 
 // Test configuration
-const BASE_URL = 'http://localhost:3000';
+// BASE_URL from config
 
 // =====================================================
 // PHASE 1: DATA FIXES

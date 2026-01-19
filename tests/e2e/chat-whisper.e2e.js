@@ -5,11 +5,12 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 const path = require('path');
 const fs = require('fs');
 
 const SCREENSHOT_DIR = '/tmp/claude/-home-bruce-software-traveller-starship-operations-vtt/9bea24c4-8723-46e1-888d-c97b8abf0330/scratchpad/chat-whisper';
-const BASE_URL = 'http://localhost:3000/operations/';
+const BASE_URL = fullUrl + '/';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 

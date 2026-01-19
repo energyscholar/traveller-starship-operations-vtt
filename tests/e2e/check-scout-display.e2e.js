@@ -5,8 +5,9 @@
 
 const { withBrowser, wait } = require('./helpers/browser-with-cleanup');
 const path = require('path');
+const { fullUrl } = require('./config');
 
-const BASE_URL = 'http://localhost:3000/operations';
+const BASE_URL = fullUrl;
 
 async function checkScoutDisplay() {
   console.log('Checking Scout ship display...\n');

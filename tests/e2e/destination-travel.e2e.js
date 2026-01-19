@@ -16,8 +16,7 @@
  */
 
 const { withBrowser } = require('./helpers/browser-with-cleanup');
-
-const BASE_URL = process.env.TEST_URL || 'http://localhost:3000';
+const { BASE_URL } = require('./config');
 const HEADED = process.env.HEADED === '1';
 
 // Test results

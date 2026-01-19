@@ -7484,6 +7484,110 @@ input[type="checkbox"] {
   margin-bottom: var(--space-md);
 }
 
+/* AR-208: Combat layout with initiative sidebar */
+.combat-layout {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.combat-main-content {
+  flex: 1;
+}
+
+/* AR-208: Initiative sidebar */
+.initiative-sidebar {
+  width: 200px;
+  min-width: 180px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  flex-shrink: 0;
+}
+
+.initiative-sidebar h4 {
+  margin: 0 0 var(--space-md) 0;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.initiative-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.initiative-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.initiative-entry.active {
+  background: rgba(40, 167, 69, 0.2);
+  border: 1px solid var(--accent-green);
+  transform: scale(1.02);
+}
+
+.initiative-entry.hostile {
+  border-left: 3px solid var(--accent-red);
+}
+
+.initiative-entry.friendly {
+  border-left: 3px solid var(--accent-green);
+}
+
+.initiative-entry.unknown {
+  border-left: 3px solid var(--accent-yellow);
+}
+
+.init-rank {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  min-width: 16px;
+  text-align: center;
+}
+
+.init-indicator {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  min-width: 16px;
+}
+
+.init-indicator.current-turn {
+  color: var(--accent-green);
+  animation: pulse-turn 1.5s infinite;
+}
+
+@keyframes pulse-turn {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.init-name {
+  flex: 1;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.init-value {
+  font-size: 0.75rem;
+  color: var(--accent-blue);
+  font-weight: bold;
+  min-width: 24px;
+  text-align: right;
+}
+
 .combatant-list {
   display: flex;
   flex-direction: column;
@@ -7577,7 +7681,40 @@ input[type="checkbox"] {
 
 .hull-fill {
   height: 100%;
-  transition: width 0.3s;
+  transition: width 0.5s ease-out, background-color 0.3s;
+}
+
+/* AR-208: Damage animation classes */
+.hull-bar.taking-damage {
+  animation: damage-shake 0.3s ease-in-out;
+}
+
+.hull-fill.damage-flash {
+  animation: damage-flash 0.4s ease-out;
+}
+
+@keyframes damage-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes damage-flash {
+  0% { filter: brightness(2) saturate(1.5); }
+  100% { filter: brightness(1) saturate(1); }
+}
+
+/* Power bar damage animation */
+.power-bar-container.draining {
+  animation: power-drain-pulse 0.6s ease-out;
+}
+
+@keyframes power-drain-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+  50% { box-shadow: 0 0 8px 4px rgba(255, 193, 7, 0.4); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
 }
 
 .hull-text {
@@ -8677,6 +8814,56 @@ body.role-engineer .role-panel .role-actions {
 .weapon-type-badge.missile {
   background: var(--accent-orange);
   color: var(--bg-dark);
+}
+
+/* AR-208: Ion weapon badge */
+.weapon-type-badge.ion {
+  background: var(--accent-cyan, #00bcd4);
+  color: var(--bg-dark);
+}
+
+.ion-damage {
+  color: var(--accent-cyan, #00bcd4) !important;
+}
+
+.ion-effect {
+  color: var(--accent-cyan, #00bcd4);
+  font-weight: bold;
+}
+
+/* AR-208: Fire Control badge */
+.fire-control-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  background: var(--accent-blue);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+}
+
+.gunner-header-badges {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+/* AR-208: Weapon out of range */
+.weapon-card.weapon-out-of-range {
+  opacity: 0.5;
+  filter: grayscale(0.7);
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.weapon-out-of-range-notice {
+  font-size: 0.7rem;
+  color: var(--danger);
+  font-weight: bold;
+  text-align: center;
+  padding: 2px 4px;
+  background: rgba(220, 53, 69, 0.15);
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
 }
 
 .ammo-ready {

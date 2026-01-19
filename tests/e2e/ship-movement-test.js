@@ -9,9 +9,10 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 const path = require('path');
 
-const BASE_URL = 'http://localhost:3000/operations';
+const BASE_URL = fullUrl;
 const SCREENSHOT_DIR = path.join(__dirname, '../../Screenshots');
 
 async function sleep(ms) {

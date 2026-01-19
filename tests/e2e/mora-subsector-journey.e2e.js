@@ -13,9 +13,10 @@
 
 const { withBrowser, wait } = require('./helpers/browser-with-cleanup');
 const path = require('path');
+const { fullUrl, BASE_URL } = require('./config');
 const fs = require('fs');
 
-const BASE_URL = 'http://localhost:3000/operations';
+const INTERFACE_URL = fullUrl;
 const HEADED = process.env.HEADED === '1';
 const SCREENSHOT_DIR = path.join(__dirname, 'screenshots');
 
@@ -390,7 +391,7 @@ async function runMoraSubsectorJourney() {
   // Reset Solo Demo via HTTP endpoint before test
   const http = require('http');
   await new Promise((resolve) => {
-    const req = http.get('http://localhost:3000/api/reset-solo-demo', (res) => {
+    const req = http.get(`${BASE_URL}/api/reset-solo-demo`, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
@@ -423,7 +424,7 @@ async function runMoraSubsectorJourney() {
 
     log('═══ PHASE 1: JOIN SOLO DEMO ═══');
 
-    await page.goto(BASE_URL, { waitUntil: 'networkidle0', timeout: 15000 });
+    await page.goto(INTERFACE_URL, { waitUntil: 'networkidle0', timeout: 15000 });
     await wait(1000);
 
     // Click Solo Demo button

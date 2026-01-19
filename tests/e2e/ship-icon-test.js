@@ -8,8 +8,9 @@
 
 const { withBrowser, wait } = require('./helpers/browser-with-cleanup');
 const path = require('path');
+const { fullUrl } = require('./config');
 
-const BASE_URL = 'http://localhost:3000/operations';
+const BASE_URL = fullUrl;
 const SCREENSHOT_DIR = path.join(__dirname, '../../Screenshots');
 
 async function joinSoloDemoAsCaptain(page) {

@@ -794,7 +794,7 @@ async function runSoloDemoCampaign() {
   process.stdout.write(out);
 
   // Open browser
-  const url = 'http://localhost:3000/operations';
+  const url = fullUrl;
   const platform = process.platform;
   let cmd;
   if (platform === 'darwin') {

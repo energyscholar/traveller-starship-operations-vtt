@@ -1,3 +1,4 @@
+const { fullUrl } = require('./config');
 #!/usr/bin/env node
 /**
  * Extended Multi-System Journey UI E2E Test
@@ -104,7 +105,7 @@ function recordDiscovery(system, object, type) {
 
 async function setupGMSession(page) {
   // Navigate to operations
-  await page.goto('http://localhost:3000/operations');
+  await page.goto(fullUrl);
   await sleep(1500);
 
   // Click GM Login using direct selector
@@ -153,7 +154,7 @@ async function setupGMSession(page) {
 
 async function joinAsCrewRole(browser, role) {
   const page = await browser.newPage();
-  await page.goto('http://localhost:3000/operations');
+  await page.goto(fullUrl);
   await sleep(800);
 
   // Click Player Login

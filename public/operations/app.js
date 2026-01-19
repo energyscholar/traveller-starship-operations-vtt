@@ -151,7 +151,7 @@ import { copyShipLog, copySensorPanel as _copySensorPanel, copyRolePanel as _cop
 import { requestJumpStatus as _requestJumpStatus, updateFuelEstimate as _updateFuelEstimate, plotJumpCourse as _plotJumpCourse, verifyPosition as _verifyPosition, handleJumpPlotted, initiateJumpFromPlot as _initiateJumpFromPlot, initiateJump as _initiateJump, completeJump as _completeJump, skipToJumpExit as _skipToJumpExit } from './modules/jump-travel.js';
 // AR-153: Phase 2 modules
 import { updateJumpMap as _updateJumpMap, fetchJumpDestinations, selectJumpDestination, initJumpMapIfNeeded as _initJumpMapIfNeeded, setMapSize, restoreMapSize, initMapInteractions } from './modules/jump-map.js';
-import { performScan as _performScan, toggleECM as _toggleECM, toggleECCM as _toggleECCM, acquireSensorLock as _acquireSensorLock, breakSensorLock as _breakSensorLock, toggleStealth as _toggleStealth, setSensorLock as _setSensorLock, toggleSensorPanelMode as _toggleSensorPanelMode, checkSensorThreats as _checkSensorThreats, renderMiniRadar } from './modules/sensor-operations.js';
+import { performScan as _performScan, toggleECM as _toggleECM, toggleECCM as _toggleECCM, acquireSensorLock as _acquireSensorLock, breakSensorLock as _breakSensorLock, toggleStealth as _toggleStealth, setSensorLock as _setSensorLock, toggleSensorPanelMode as _toggleSensorPanelMode, checkSensorThreats as _checkSensorThreats, renderMiniRadar, setScanMode as _setScanMode, prepareECMReaction as _prepareECMReaction } from './modules/sensor-operations.js';
 import { expandRolePanel as _expandRolePanel, collapseRolePanel as _collapseRolePanel, togglePanelExpand as _togglePanelExpand, expandPanel as _expandPanel, collapseExpandedPanel as _collapseExpandedPanel, updateRoleClass as _updateRoleClass } from './modules/panel-management.js';
 // AR-153: Phase 3 modules
 import { openRefuelModal as _openRefuelModal, processFuel as _processFuel, populateRefuelModal as _populateRefuelModal, updateRefuelAmountPreview as _updateRefuelAmountPreview, updateRefuelPreview, executeRefuel as _executeRefuel, setRefuelMax as _setRefuelMax, executeProcessFuel as _executeProcessFuel, setProcessMax as _setProcessMax, requestFuelStatus as _requestFuelStatus } from './modules/refueling-operations.js';
@@ -278,6 +278,8 @@ const toggleStealth = () => _toggleStealth(state, renderRoleDetailPanel);
 const setSensorLock = (contactId) => _setSensorLock(state, renderRoleDetailPanel, contactId);
 const toggleSensorPanelMode = (mode) => _toggleSensorPanelMode(state, renderRoleDetailPanel, mode);
 const checkSensorThreats = () => _checkSensorThreats(state, renderRoleDetailPanel);
+const setScanMode = (mode) => _setScanMode(state, renderRoleDetailPanel, mode);
+const prepareECMReaction = () => _prepareECMReaction(state, renderRoleDetailPanel);
 // AR-153: Phase 2C wrappers
 const expandRolePanel = (mode) => _expandRolePanel(state, showEmbeddedSystemMap, mode);
 const collapseRolePanel = () => _collapseRolePanel(state, hideEmbeddedSystemMap);
@@ -860,17 +862,49 @@ function showCombatScreen(combatState) {
     `<span class="phase-step ${p === currentPhase ? 'active' : ''}" title="${p}">${p.charAt(0).toUpperCase()}</span>`
   ).join('');
 
+  // AR-208: Build initiative sidebar
+  const activeShipId = combatState.activeShipId || (combatants[0]?.id);
+  const initiativeOrder = combatState.initiativeOrder || combatants.map((c, i) => ({
+    id: c.id,
+    name: c.name || c.transponder || '???',
+    initiative: c.initiative ?? (10 - i),
+    marking: c.marking
+  })).sort((a, b) => (b.initiative || 0) - (a.initiative || 0));
+
+  const initiativeSidebar = `
+    <div class="initiative-sidebar" id="initiative-sidebar">
+      <h4>Initiative Order</h4>
+      <div class="initiative-list">
+        ${initiativeOrder.map((ship, idx) => {
+          const isActive = ship.id === activeShipId;
+          const markingClass = ship.marking === 'hostile' ? 'hostile' : ship.marking === 'friendly' ? 'friendly' : 'unknown';
+          return `
+            <div class="initiative-entry ${isActive ? 'active' : ''} ${markingClass}" data-ship-id="${ship.id}">
+              <span class="init-rank">${idx + 1}</span>
+              <span class="init-indicator ${isActive ? 'current-turn' : ''}">${isActive ? '▶' : '○'}</span>
+              <span class="init-name">${ship.name}</span>
+              <span class="init-value">${ship.initiative ?? '--'}</span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+
   combatMain.innerHTML = `
-    <div class="combat-indicator">
-      <span class="combat-status-icon">⚔️</span>
-      <span class="combat-status-text">TACTICAL COMBAT MODE</span>
-    </div>
-    <div class="combat-phase-bar" id="combat-phase-bar">
-      <span class="phase-round">Round ${currentRound}</span>
-      <div class="phase-steps">${phaseIndicators}</div>
-      <span class="phase-current">${currentPhase.toUpperCase()}</span>
-    </div>
-    <div class="combat-combatants">
+    <div class="combat-layout">
+      ${initiativeSidebar}
+      <div class="combat-main-content">
+        <div class="combat-indicator">
+          <span class="combat-status-icon">⚔️</span>
+          <span class="combat-status-text">TACTICAL COMBAT MODE</span>
+        </div>
+        <div class="combat-phase-bar" id="combat-phase-bar">
+          <span class="phase-round">Round ${currentRound}</span>
+          <div class="phase-steps">${phaseIndicators}</div>
+          <span class="phase-current">${currentPhase.toUpperCase()}</span>
+        </div>
+        <div class="combat-combatants">
       <h3>Engaged Ships (${combatants.length})</h3>
       <div class="combatant-grid">
         ${combatants.map(c => {
@@ -923,15 +957,17 @@ function showCombatScreen(combatState) {
         }).join('')}
       </div>
     </div>
-    <div class="combat-placeholder">
-      <p>Full tactical combat system integration in progress...</p>
-      <p><em>This screen will link to the existing space combat VTT</em></p>
-    </div>
-    ${state.isGM ? `
-      <div class="combat-gm-controls">
-        <button class="btn btn-danger" onclick="document.getElementById('btn-exit-combat').click()">End Combat</button>
+        <div class="combat-placeholder">
+          <p>Full tactical combat system integration in progress...</p>
+          <p><em>This screen will link to the existing space combat VTT</em></p>
+        </div>
+        ${state.isGM ? `
+          <div class="combat-gm-controls">
+            <button class="btn btn-danger" onclick="document.getElementById('btn-exit-combat').click()">End Combat</button>
+          </div>
+        ` : ''}
       </div>
-    ` : ''}
+    </div>
   `;
 }
 
@@ -4008,6 +4044,8 @@ window.performScan = performScan;
 window.toggleECM = toggleECM;
 window.toggleECCM = toggleECCM;
 window.toggleStealth = toggleStealth;
+window.setScanMode = setScanMode;  // AR-208
+window.prepareECMReaction = prepareECMReaction;  // AR-208
 window.setSensorLock = setSensorLock;
 window.acquireSensorLock = acquireSensorLock;
 window.breakSensorLock = breakSensorLock;
@@ -4174,6 +4212,8 @@ window.toggleECCM = toggleECCM;
 window.acquireSensorLock = acquireSensorLock;
 window.breakSensorLock = breakSensorLock;
 window.toggleStealth = toggleStealth;
+window.setScanMode = setScanMode;  // AR-208
+window.prepareECMReaction = prepareECMReaction;  // AR-208
 window.setSensorLock = setSensorLock;
 window.toggleSensorPanelMode = toggleSensorPanelMode;
 window.checkSensorThreats = checkSensorThreats;

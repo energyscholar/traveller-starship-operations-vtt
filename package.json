@@ -40,7 +40,13 @@
     "generate:system": "node scripts/generate-star-systems-v2.js --system",
     "generate:subsector": "node scripts/generate-star-systems-v2.js --subsector",
     "tui": "node bin/tui-menu.js",
-    "demo": "node tests/e2e/helpers/combat-demo.js"
+    "demo": "node tests/e2e/helpers/combat-demo.js",
+    "test:e2e:v1": "INTERFACE_PATH=/operations tests/e2e/run-with-cleanup.sh",
+    "test:e2e:v2": "INTERFACE_PATH=/operations/v2 tests/e2e/run-with-cleanup.sh",
+    "test:parity": "npm run test:e2e:v1 && npm run test:e2e:v2",
+    "swap:to-v2": "node scripts/url-swap.js forward",
+    "swap:rollback": "node scripts/url-swap.js rollback",
+    "swap:status": "node scripts/url-swap.js status"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",

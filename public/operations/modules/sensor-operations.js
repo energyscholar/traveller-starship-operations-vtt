@@ -17,6 +17,28 @@ export function performScan(state, renderPanel, scanType = 'passive') {
 }
 
 /**
+ * AR-208: Set sensor mode (passive/active)
+ * Passive: Listen only, position hidden
+ * Active: Full sweep, reveals position
+ * @param {Object} state - Application state
+ * @param {Function} renderPanel - Panel render function
+ * @param {string} mode - Scan mode (passive/active)
+ */
+export function setScanMode(state, renderPanel, mode = 'passive') {
+  if (!state.shipState) state.shipState = {};
+  state.shipState.scanMode = mode;
+  state.socket.emit('ops:setScanMode', { mode });
+
+  const messages = {
+    passive: 'PASSIVE MODE: Listening only. Position hidden.',
+    active: 'ACTIVE MODE: Full sensor sweep. Position revealed!'
+  };
+
+  showNotification(messages[mode] || 'Scan mode changed', mode === 'passive' ? 'success' : 'warning');
+  renderPanel('sensor_operator');
+}
+
+/**
  * Toggle ECM (Electronic Counter Measures)
  * @param {Object} state - Application state
  * @param {Function} renderPanel - Panel render function
@@ -41,6 +63,28 @@ export function toggleECCM(state, renderPanel) {
   if (!state.shipState) state.shipState = {};
   state.shipState.eccm = newState;
   showNotification(`ECCM ${newState ? 'ACTIVATED' : 'DEACTIVATED'} - ${newState ? 'Countering enemy ECM' : 'Vulnerable to jamming'}`, newState ? 'success' : 'info');
+  renderPanel('sensor_operator');
+}
+
+/**
+ * AR-208: Prepare ECM Reaction
+ * Allows using ECM as a reaction when attacked (-2 to incoming attack)
+ * @param {Object} state - Application state
+ * @param {Function} renderPanel - Panel render function
+ */
+export function prepareECMReaction(state, renderPanel) {
+  if (!state.shipState) state.shipState = {};
+
+  // Toggle the reaction preparation
+  const newState = !state.shipState.ecmReactionReady;
+  state.shipState.ecmReactionReady = newState;
+  state.socket.emit('ops:prepareECMReaction', { ready: newState });
+
+  if (newState) {
+    showNotification('ECM Reaction READY - Will apply -2 DM to next incoming attack', 'warning');
+  } else {
+    showNotification('ECM Reaction cancelled', 'info');
+  }
   renderPanel('sensor_operator');
 }
 

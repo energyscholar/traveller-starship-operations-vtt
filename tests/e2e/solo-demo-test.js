@@ -12,7 +12,7 @@
 
 const { withBrowser } = require('./helpers/browser-with-cleanup');
 
-const BASE_URL = 'http://localhost:3000/operations';
+const BASE_URL = fullUrl;
 
 async function runTest() {
   console.log('[SoloDemoTest] Starting Solo Demo Campaign E2E test...');

@@ -8,6 +8,7 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 const {
   clickOrHotkey,
   clickSelector,
@@ -42,7 +43,7 @@ const CAMPAIGN_CODE = 'DFFFC87E';
   try {
     // --- SETUP: Login as Captain (UC-2 abbreviated) ---
     console.log('--- Setup: Login as Captain ---');
-    await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
+    await page.goto(fullUrl, { waitUntil: 'networkidle2' });
     await sleep(2000);
 
     await clickButtonText(page, 'Player', 'Player Login');

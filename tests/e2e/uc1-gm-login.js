@@ -7,6 +7,7 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 const {
   clickOrHotkey,
   clickSelector,
@@ -37,7 +38,7 @@ const {
   try {
     // Step 1.1: Navigate
     console.log('1.1 Navigating to Operations...');
-    await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
+    await page.goto(fullUrl, { waitUntil: 'networkidle2' });
     await sleep(2000);
 
     // Step 1.2: Click GM Login

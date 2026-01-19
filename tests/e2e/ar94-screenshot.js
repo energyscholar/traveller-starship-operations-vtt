@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 
 (async () => {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
@@ -12,7 +13,7 @@ const puppeteer = require('puppeteer');
   });
 
   // Navigate to operations and login as GM (same flow as gm-happy-path.smoke.js)
-  await page.goto('http://localhost:3000/operations');
+  await page.goto(fullUrl);
   await page.waitForSelector('#btn-gm-login', { timeout: 10000 });
   await page.click('#btn-gm-login');
 

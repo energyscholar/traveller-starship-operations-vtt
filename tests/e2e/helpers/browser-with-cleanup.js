@@ -93,7 +93,7 @@ async function withBrowser(fn, options = {}) {
  */
 async function withBrowserAndServer(fn, options = {}) {
   const {
-    url = 'http://localhost:3000/operations',
+    url = fullUrl,
     waitFor = '#btn-gm-login',
     ...browserOptions
   } = options;

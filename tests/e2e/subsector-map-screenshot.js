@@ -2,6 +2,7 @@
  * Quick test: Screenshot subsector map
  */
 const puppeteer = require('puppeteer');
+const { BASE_URL } = require('./config');
 const path = require('path');
 const fs = require('fs');
 
@@ -12,7 +13,7 @@ async function takeSubsectorScreenshot() {
 
   try {
     // Go to login
-    await page.goto('http://localhost:3000', { waitUntil: 'networkidle2' });
+    await page.goto(BASE_URL, { waitUntil: 'networkidle2' });
     await page.waitForSelector('#btn-gm-login', { timeout: 5000 });
 
     // GM Login via evaluate

@@ -14,7 +14,7 @@ async function testIframe() {
   page.on('console', msg => console.log('BROWSER:', msg.text()));
 
   console.log('1. Loading page...');
-  await page.goto('http://localhost:3000/', { waitUntil: 'networkidle0' });
+  await page.goto(fullUrl + '/', { waitUntil: 'networkidle0' });
 
   console.log('2. GM login via UI...');
   await page.click('#btn-gm-login');

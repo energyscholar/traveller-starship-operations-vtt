@@ -12,7 +12,7 @@ async function testSharedMap() {
   const page = await browser.newPage();
 
   console.log('1. Navigate and use test API...');
-  await page.goto('http://localhost:3000/', { waitUntil: 'networkidle0' });
+  await page.goto(fullUrl + '/', { waitUntil: 'networkidle0' });
 
   // Use test API to login
   const resp = await page.evaluate(async () => {

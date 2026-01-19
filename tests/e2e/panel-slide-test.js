@@ -7,7 +7,7 @@
 
 const puppeteer = require('puppeteer');
 
-const BASE_URL = 'http://localhost:3000';
+// BASE_URL from config
 
 // Introspect an element and return profile
 async function introspectElement(page, selector, label) {

@@ -9,6 +9,7 @@
  */
 
 const { DEMO_CONFIGS, createDefaultSystems } = require('./combat-demo-ships');
+const { captainDecision } = require('../../../lib/combat/captain-ai');
 
 // Dice helpers
 function roll1d6() { return Math.floor(Math.random() * 6) + 1; }
@@ -139,8 +140,18 @@ async function simulateBattle(config = {}) {
     maxRounds = 10
   } = config;
 
-  // Load scenario
-  const demoConfig = DEMO_CONFIGS.demo3;  // Q-Ship fleet vs Destroyer
+  // Scenario lookup map
+  const SCENARIO_MAP = {
+    'qship-vs-destroyer': 'demo3',
+    'qship-vs-pirates': 'demo4',
+    'amishi-vs-bloodprofit': 'demo5',
+    'kimbly-vs-pirate': 'demo1',
+    'astral-vs-corvette': 'demo2'
+  };
+
+  // Load scenario - lookup by name or use direct demo number
+  const demoKey = SCENARIO_MAP[scenario] || scenario;
+  const demoConfig = DEMO_CONFIGS[demoKey] || DEMO_CONFIGS.demo3;
 
   // Clone ships
   const playerFleet = demoConfig.playerFleet.map(s => ({
@@ -170,6 +181,8 @@ async function simulateBattle(config = {}) {
     powerPlantsDisabled: 0,
     knockouts: 0,
     missilesLaunched: 0,
+    flees: 0,
+    surrenders: 0,
     attacks: []
   };
 
@@ -178,6 +191,40 @@ async function simulateBattle(config = {}) {
   // Simulate rounds
   for (let round = 1; round <= maxRounds; round++) {
     results.rounds = round;
+
+    // Captain AI decisions for each enemy ship
+    for (const ship of enemyFleet) {
+      if (ship.destroyed || ship.fled || ship.surrendered) continue;
+
+      const decision = captainDecision(
+        {
+          hull: ship.hull,
+          maxHull: ship.maxHull,
+          power: ship.power ?? ship.maxPower ?? 100,
+          maxPower: ship.maxPower ?? 100,
+          fleeThreshold: ship.fleeThreshold
+        },
+        {
+          friendlyFleet: enemyFleet.filter(s => !s.destroyed && !s.fled && !s.surrendered),
+          enemyFleet: playerFleet.filter(s => !s.destroyed)
+        }
+      );
+
+      if (decision === 'flee') {
+        ship.fled = true;
+        results.flees++;
+      } else if (decision === 'surrender') {
+        ship.surrendered = true;
+        results.surrenders++;
+      }
+    }
+
+    // Check if all enemies fled/surrendered/destroyed
+    const activeEnemies = enemyFleet.filter(s => !s.destroyed && !s.fled && !s.surrendered);
+    if (activeEnemies.length === 0) {
+      results.winner = 'player';
+      break;
+    }
 
     // Fighter alpha strike (missiles)
     const fighters = playerFleet.filter(s => s.shipType === 'Fighter' && !s.destroyed);
@@ -222,8 +269,8 @@ async function simulateBattle(config = {}) {
       break;
     }
 
-    // Enemy counterattack on Q-Ship
-    if (!enemy.destroyed && !qship.destroyed) {
+    // Enemy counterattack on Q-Ship (skip if fled/surrendered)
+    if (!enemy.destroyed && !enemy.fled && !enemy.surrendered && !qship.destroyed) {
       for (let t = 0; t < 3 && !qship.destroyed; t++) {
         const atkResult = simulateAttack(enemy, qship,
           { gunnerSkill: 2, type: 'beam_laser' },
@@ -279,6 +326,8 @@ async function runExperiment(config = {}) {
   const calledShotsHit = results.reduce((sum, r) => sum + r.calledShotsHit, 0);
   const avgRounds = results.reduce((sum, r) => sum + r.rounds, 0) / runs;
   const avgPlayerHull = results.reduce((sum, r) => sum + r.playerHullPct, 0) / runs;
+  const totalFlees = results.reduce((sum, r) => sum + r.flees, 0);
+  const totalSurrenders = results.reduce((sum, r) => sum + r.surrenders, 0);
 
   return {
     name,
@@ -289,6 +338,12 @@ async function runExperiment(config = {}) {
     calledShotAccuracy: calledShotsAttempted > 0 ? Math.round((calledShotsHit / calledShotsAttempted) * 100) : 0,
     avgRounds: Math.round(avgRounds * 10) / 10,
     avgPlayerHull: Math.round(avgPlayerHull),
+    flees: totalFlees,
+    surrenders: totalSurrenders,
+    avgFlees: Math.round((totalFlees / runs) * 10) / 10,
+    avgSurrenders: Math.round((totalSurrenders / runs) * 10) / 10,
+    fleeRate: Math.round((results.filter(r => r.flees > 0).length / runs) * 100),
+    surrenderRate: Math.round((results.filter(r => r.surrenders > 0).length / runs) * 100),
     rawResults: results
   };
 }

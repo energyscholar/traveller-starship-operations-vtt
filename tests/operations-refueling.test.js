@@ -330,6 +330,60 @@ test('getJumpFuelPenalties predicts unrefined usage', () => {
   assertEqual(penalties.misjumpRisk, 0.05);
 });
 
+// ==================== Skill Check Tests (AR-193) ====================
+
+console.log('\nFuel Skill Checks (6 tests):');
+
+test('Wilderness refueling requires survival check', () => {
+  const source = refueling.FUEL_SOURCES.wilderness;
+  assertTrue(source.skillCheck !== null, 'wilderness should have skillCheck');
+  assertEqual(source.skillCheck.skill, 'survival');
+  assertEqual(source.skillCheck.difficulty, 6); // Routine
+});
+
+test('Gas giant skimming requires pilot check', () => {
+  const source = refueling.FUEL_SOURCES.gasGiant;
+  assertTrue(source.skillCheck !== null, 'gasGiant should have skillCheck');
+  assertEqual(source.skillCheck.skill, 'pilot');
+  assertEqual(source.skillCheck.difficulty, 8); // Average
+});
+
+test('Starport refueling does not require skill check', () => {
+  assertEqual(refueling.FUEL_SOURCES.starportRefined.skillCheck, null);
+  assertEqual(refueling.FUEL_SOURCES.starportUnrefined.skillCheck, null);
+});
+
+test('performRefuelSkillCheck returns required:false for starport', () => {
+  const result = refueling.performRefuelSkillCheck('starportRefined');
+  assertEqual(result.required, false);
+});
+
+test('performRefuelSkillCheck performs check for wilderness', () => {
+  const result = refueling.performRefuelSkillCheck('wilderness', {
+    skillLevel: 2,
+    characteristic: 1
+  });
+  assertTrue(result.required);
+  assertEqual(result.skill, 'survival');
+  assertEqual(result.difficulty, 6);
+  assertTrue(result.result !== undefined);
+  assertTrue(typeof result.result.success === 'boolean');
+  assertTrue(typeof result.result.total === 'number');
+});
+
+test('performRefuelSkillCheck performs check for gasGiant', () => {
+  const result = refueling.performRefuelSkillCheck('gasGiant', {
+    skillLevel: 1,
+    characteristic: 2,
+    boon: true
+  });
+  assertTrue(result.required);
+  assertEqual(result.skill, 'pilot');
+  assertEqual(result.difficulty, 8);
+  assertTrue(result.result !== undefined);
+  assertTrue(result.result.boon === true);
+});
+
 // ==================== Summary ====================
 
 console.log('\n' + '='.repeat(50));

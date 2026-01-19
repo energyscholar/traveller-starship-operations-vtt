@@ -262,6 +262,131 @@ test('jDrive any damage disables jump', () => {
   assertTrue(statuses.jDrive.disabled);
 });
 
+// ==================== AR-194 Failure Registry Tests ====================
+
+console.log('\n--- AR-194: Failure Registry ---\n');
+
+test('FAILURE_REGISTRY has entries for all major systems', () => {
+  assertTrue(shipSystems.FAILURE_REGISTRY.mDrive.length > 0, 'mDrive');
+  assertTrue(shipSystems.FAILURE_REGISTRY.jDrive.length > 0, 'jDrive');
+  assertTrue(shipSystems.FAILURE_REGISTRY.powerPlant.length > 0, 'powerPlant');
+  assertTrue(shipSystems.FAILURE_REGISTRY.sensors.length > 0, 'sensors');
+  assertTrue(shipSystems.FAILURE_REGISTRY.computer.length > 0, 'computer');
+});
+
+test('Failure reasons have required fields', () => {
+  const reason = shipSystems.FAILURE_REGISTRY.mDrive[0];
+  assertTrue(reason.id !== undefined, 'id');
+  assertTrue(reason.name !== undefined, 'name');
+  assertTrue(reason.description !== undefined, 'description');
+  assertTrue(reason.flavorText !== undefined, 'flavorText');
+});
+
+test('getRandomFailureReason returns valid reason', () => {
+  const reason = shipSystems.getRandomFailureReason('mDrive');
+  assertTrue(reason !== null);
+  assertTrue(reason.id.startsWith('mdrive-'));
+});
+
+test('getFailureReasonById finds correct reason', () => {
+  const reason = shipSystems.getFailureReasonById('mdrive-bearing');
+  assertTrue(reason !== null);
+  assertEqual(reason.name, 'Bearing Failure');
+});
+
+test('getFailureReasonById returns null for invalid ID', () => {
+  const reason = shipSystems.getFailureReasonById('invalid-id');
+  assertEqual(reason, null);
+});
+
+// ==================== AR-194 Random Failure Tests ====================
+
+console.log('\n--- AR-194: Random Failures ---\n');
+
+test('triggerRandomFailure creates damage with failure reason', () => {
+  shipSystems.clearSystemDamage(testShipId, 'all');
+  const result = shipSystems.triggerRandomFailure(testShipId, { system: 'mDrive' });
+
+  assertTrue(result.success);
+  assertEqual(result.location, 'mDrive');
+  assertTrue(result.severity >= 1 && result.severity <= 2);
+  assertTrue(result.failureReason !== null);
+});
+
+test('triggerRandomFailure with specific severity', () => {
+  shipSystems.clearSystemDamage(testShipId, 'all');
+  const result = shipSystems.triggerRandomFailure(testShipId, { system: 'sensors', severity: 2 });
+
+  assertTrue(result.success);
+  assertEqual(result.severity, 2);
+});
+
+test('triggerRandomFailure random system selection works', () => {
+  shipSystems.clearSystemDamage(testShipId, 'all');
+  const result = shipSystems.triggerRandomFailure(testShipId);
+
+  assertTrue(result.success);
+  assertTrue(shipSystems.SHIP_SYSTEMS.includes(result.location));
+});
+
+// ==================== AR-194 Status Level Tests ====================
+
+console.log('\n--- AR-194: Status Levels ---\n');
+
+test('getSystemStatusLevel returns GREEN for undamaged', () => {
+  shipSystems.clearSystemDamage(testShipId, 'all');
+  const ship = campaign.getShip(testShipId);
+  const level = shipSystems.getSystemStatusLevel(ship, 'mDrive');
+
+  assertEqual(level, 'GREEN');
+});
+
+test('getSystemStatusLevel returns YELLOW for severity 1-2', () => {
+  shipSystems.clearSystemDamage(testShipId, 'all');
+  shipSystems.applySystemDamage(testShipId, 'mDrive', 1);
+
+  const ship = campaign.getShip(testShipId);
+  assertEqual(shipSystems.getSystemStatusLevel(ship, 'mDrive'), 'YELLOW');
+
+  shipSystems.applySystemDamage(testShipId, 'mDrive', 1);
+  const ship2 = campaign.getShip(testShipId);
+  assertEqual(shipSystems.getSystemStatusLevel(ship2, 'mDrive'), 'YELLOW');
+});
+
+test('getSystemStatusLevel returns RED for severity 3+', () => {
+  shipSystems.clearSystemDamage(testShipId, 'all');
+  shipSystems.applySystemDamage(testShipId, 'mDrive', 3);
+
+  const ship = campaign.getShip(testShipId);
+  assertEqual(shipSystems.getSystemStatusLevel(ship, 'mDrive'), 'RED');
+});
+
+test('getAllSystemStatusLevels returns all systems', () => {
+  shipSystems.clearSystemDamage(testShipId, 'all');
+  const ship = campaign.getShip(testShipId);
+  const levels = shipSystems.getAllSystemStatusLevels(ship);
+
+  assertEqual(levels.mDrive, 'GREEN');
+  assertEqual(levels.jDrive, 'GREEN');
+  assertEqual(levels.powerPlant, 'GREEN');
+});
+
+test('getSystemsNeedingAttention returns damaged systems', () => {
+  shipSystems.clearSystemDamage(testShipId, 'all');
+  shipSystems.applySystemDamage(testShipId, 'mDrive', 1);
+  shipSystems.applySystemDamage(testShipId, 'sensors', 3);
+
+  const ship = campaign.getShip(testShipId);
+  const attention = shipSystems.getSystemsNeedingAttention(ship);
+
+  assertEqual(attention.length, 2);
+  // Should be sorted by severity (highest first)
+  assertEqual(attention[0].system, 'sensors');
+  assertEqual(attention[0].level, 'RED');
+  assertEqual(attention[1].system, 'mDrive');
+  assertEqual(attention[1].level, 'YELLOW');
+});
+
 // ==================== Cleanup ====================
 
 shipSystems.clearSystemDamage(testShipId, 'all');

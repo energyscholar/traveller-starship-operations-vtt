@@ -88,7 +88,8 @@ const unitTests = [
   'tests/unit/characters.test.js',  // Characters CRUD and parsers (17 tests) - AUTORUN-9
   'tests/operations-handlers.test.js',  // Operations handler smoke tests (27 tests)
   'tests/contacts.test.js',  // Contacts CRUD and visibility tests
-  'tests/ship-systems.test.js',  // Ship systems damage and repair (18 tests)
+  'tests/ship-systems.test.js',  // Ship systems damage and repair (31 tests with AR-194)
+  'tests/encounters.test.js',  // AR-197 encounters module (20 tests)
   'tests/jump.test.js',  // Jump travel and date utilities (23 tests)
   'tests/operations-refueling.test.js',  // Refueling system tests (25 tests)
   'tests/combat-engine.test.js',  // Combat engine tests (31 tests) - AUTORUN-14
@@ -97,7 +98,48 @@ const unitTests = [
   'tests/captain.test.js',  // AR-29: Captain role tests (10 tests)
   'tests/gunner-training.test.js',  // AR-29: Gunner training target tests (8 tests)
   'tests/unit/travellermap-proxy.test.js',  // AR-121: TravellerMap proxy tests (17 tests)
-  'tests/engine/starsystem-generator.test.js'  // AR-240: Star system generator (39 tests)
+  'tests/engine/starsystem-generator.test.js',  // AR-240: Star system generator (39 tests)
+  'tests/combat/captain-ai.test.js',  // BATCH 3.B: Combat Captain AI (29 tests)
+  'tests/combat/called-shot-ai.test.js',  // AR-223: Called shot AI (20 tests)
+  'tests/combat/escape-mechanics.test.js',  // AR-223: Escape mechanics (15 tests)
+  // Factory tests
+  'tests/factories/CrewFactory.test.js',
+  'tests/factories/ShipFactory.test.js',
+  'tests/factories/NPCCrewFactory.test.js',
+  'tests/factories/ContactFactory.test.js',
+  'tests/factories/index.test.js',
+  // ViewModel tests
+  'tests/viewmodels/engineer-viewmodel.test.js',
+  'tests/viewmodels/pilot-viewmodel.test.js',
+  'tests/viewmodels/sensors-viewmodel.test.js',
+  'tests/viewmodels/captain-viewmodel.test.js',
+  'tests/viewmodels/astrogator-viewmodel.test.js',
+  'tests/viewmodels/damage-control-viewmodel.test.js',
+  'tests/viewmodels/medic-viewmodel.test.js',
+  'tests/viewmodels/marines-viewmodel.test.js',
+  'tests/viewmodels/comms-viewmodel.test.js',
+  'tests/viewmodels/steward-viewmodel.test.js',
+  // TUI Formatter tests
+  'tests/tui/formatters/travel-formatter.test.js',
+  'tests/tui/formatters/jump-formatter.test.js',
+  'tests/tui/formatters/campaign-formatter.test.js',
+  'tests/tui/formatters/fuel-formatter.test.js',
+  'tests/tui/formatters/contacts-formatter.test.js',
+  'tests/tui/formatters/time-formatter.test.js',
+  'tests/tui/formatters/email-formatter.test.js',
+  'tests/tui/formatters/npc-formatter.test.js',
+  'tests/tui/formatters/battle-formatter.test.js',
+  // TUI Menu tests
+  'tests/tui/menus/operations-menu.test.js',
+  'tests/tui/menus/campaign-menu.test.js',
+  'tests/tui/menus/email-menu.test.js',
+  'tests/tui/menus/npc-menu.test.js',
+  'tests/tui/menus/battle-viewer.test.js',
+  // TUI Integration tests
+  'tests/tui/integration/tui-flow.test.js',
+  // V2 Bug Fix tests
+  'tests/v2/v2-bugs.test.js',
+  'tests/v2/modals.test.js'  // V2 modal system tests
 ];
 
 // Integration tests

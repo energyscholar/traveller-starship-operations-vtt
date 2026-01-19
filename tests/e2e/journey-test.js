@@ -5,8 +5,9 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 
-const BASE_URL = 'http://localhost:3000/operations';
+const BASE_URL = fullUrl;
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 async function runJourneyTest() {

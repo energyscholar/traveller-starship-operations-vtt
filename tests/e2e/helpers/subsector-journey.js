@@ -9,10 +9,11 @@
 
 const { withBrowser, wait } = require('./browser-with-cleanup');
 const path = require('path');
+const { fullUrl, BASE_URL } = require('../config');
 const fs = require('fs');
 
 // Constants
-const BASE_URL = 'http://localhost:3000/operations';
+const INTERFACE_URL = fullUrl;
 const SCREENSHOT_DIR = path.join(__dirname, '..', 'screenshots');
 
 // Scout ship constants
@@ -419,7 +420,7 @@ async function undockShip(page) {
 async function resetSoloDemo() {
   const http = require('http');
   return new Promise((resolve) => {
-    const req = http.get('http://localhost:3000/api/reset-solo-demo', (res) => {
+    const req = http.get(`${BASE_URL}/api/reset-solo-demo`, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
@@ -436,7 +437,7 @@ async function resetSoloDemo() {
  * Join Solo Demo as Captain
  */
 async function joinSoloDemoAsCaptain(page) {
-  await page.goto(BASE_URL, { waitUntil: 'networkidle0', timeout: 15000 });
+  await page.goto(INTERFACE_URL, { waitUntil: 'networkidle0', timeout: 15000 });
   await wait(1000);
 
   // Click Solo Demo button
@@ -824,5 +825,6 @@ module.exports = {
   FUEL_PER_JUMP_2,
   JUMP_DURATION_HOURS,
   BASE_URL,
+  INTERFACE_URL,
   SCREENSHOT_DIR
 };

@@ -5,7 +5,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 
-const BASE_URL = 'http://localhost:3000';
+// BASE_URL from config
 const SCREENSHOT_DIR = path.join(__dirname, '../../Screenshots');
 
 // Helper for waiting (replaces deprecated waitForTimeout)

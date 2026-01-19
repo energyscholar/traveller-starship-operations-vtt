@@ -14,6 +14,7 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 
 const CAMPAIGN_CODE = 'DFFFC87E';
 const PLAYER_SLOT = 'Max'; // Engineer slot
@@ -31,7 +32,7 @@ const PLAYER_SLOT = 'Max'; // Engineer slot
 
   // Step 1: Navigate to Operations
   console.log('1. Opening localhost:3000/operations...');
-  await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
+  await page.goto(fullUrl, { waitUntil: 'networkidle2' });
   await new Promise(r => setTimeout(r, 2000));
 
   // Step 2: Click Player button

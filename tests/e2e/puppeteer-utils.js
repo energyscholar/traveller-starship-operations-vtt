@@ -4,8 +4,10 @@
  */
 
 const puppeteer = require('puppeteer');
+const config = require('./config');
 
-const BASE_URL = 'http://localhost:3000/';
+// Use config module for all URLs
+const BASE_URL = config.fullUrl + '/';
 const TIMEOUT = 30000;
 
 // Common delays - use FAST_TEST=1 for quicker runs

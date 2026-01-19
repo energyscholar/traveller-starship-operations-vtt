@@ -6,8 +6,9 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 
-const BASE_URL = 'http://localhost:3000/operations/';
+const BASE_URL = fullUrl + '/';
 const TIMEOUT = 30000;
 // First 8 chars of the Dorannia campaign ID (from seed)
 const CAMPAIGN_CODE = 'dorannia'.substring(0, 8);

@@ -7,6 +7,7 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 const {
   clickOrHotkey,
   clickSelector,
@@ -40,7 +41,7 @@ const CAMPAIGN_CODE = 'DFFFC87E';
   try {
     // Step 2.1: Navigate
     console.log('2.1 Navigating to Operations...');
-    await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
+    await page.goto(fullUrl, { waitUntil: 'networkidle2' });
     await sleep(2000);
 
     // Step 2.2: Click Player

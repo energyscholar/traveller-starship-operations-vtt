@@ -21,6 +21,14 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
   const weapons = shipWeapons.length > 0 ? shipWeapons : (template.weapons || []);
   const ammo = shipState.ammo || {};
 
+  // AR-208: Fire Control rating from ship software/combat data
+  const fireControl = template.combat?.fireControl ||
+                      template.software?.fireControl ||
+                      (Array.isArray(template.software) ?
+                        template.software.find(s => typeof s === 'string' && s.toLowerCase().includes('fire control'))?.match(/\/(\d+)/)?.[1] || 0 :
+                        0);
+  const fireControlDM = parseInt(fireControl, 10) || 0;
+
   // Determine turret assignment based on roleInstance
   const turretCount = weapons.filter(w => w.mount === 'turret' || w.type === 'turret' || !w.mount).length;
   const assignedTurret = roleInstance <= turretCount ? roleInstance : null;
@@ -60,11 +68,49 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
 
   const formatRangeDM = (dm) => dm >= 0 ? `+${dm}` : `${dm}`;
 
-  // AR-15.6: Calculate hit probability
-  const calculateHitProbability = (weapon, target, gunnerySkill = 0) => {
+  // AR-208: Check if weapon is in range for target
+  const rangeBandOrder = ['adjacent', 'close', 'short', 'medium', 'long', 'extreme', 'distant'];
+
+  const isWeaponInRange = (weapon, targetRangeBand) => {
+    if (!weapon || !targetRangeBand) return true; // Default to usable if unknown
+    const weaponType = (weapon.weapon_type || weapon.type || weapon.name || '').toLowerCase();
+    const weaponRange = (weapon.range || '').toLowerCase();
+
+    // Sandcasters are defensive/close range only (adjacent to short)
+    if (weaponType.includes('sandcaster') || weaponType.includes('sand')) {
+      const maxRange = 'short';
+      const targetIdx = rangeBandOrder.indexOf(targetRangeBand.toLowerCase());
+      const maxIdx = rangeBandOrder.indexOf(maxRange);
+      return targetIdx <= maxIdx;
+    }
+
+    // Missiles have long range
+    if (weaponType.includes('missile')) {
+      return true; // Missiles can reach any range
+    }
+
+    // Map weapon range string to max band
+    const rangeToMaxBand = {
+      'close': 'close',
+      'short': 'short',
+      'medium': 'medium',
+      'long': 'long',
+      'extreme': 'extreme',
+      'distant': 'distant'
+    };
+
+    const maxBand = rangeToMaxBand[weaponRange] || 'long'; // Default weapons to long range
+    const targetIdx = rangeBandOrder.indexOf(targetRangeBand.toLowerCase());
+    const maxIdx = rangeBandOrder.indexOf(maxBand);
+
+    return targetIdx <= maxIdx;
+  };
+
+  // AR-15.6: Calculate hit probability (AR-208: includes fire control)
+  const calculateHitProbability = (weapon, target, gunnerySkill = 0, fc = 0) => {
     if (!weapon || !target) return null;
     const rangeDM = getRangeDM(target.range_band);
-    const totalDM = gunnerySkill + rangeDM;
+    const totalDM = gunnerySkill + rangeDM + fc;
     // 2D6 >= 8 - DM to hit
     const targetNumber = 8 - totalDM;
     // Probability calculation for 2D6
@@ -77,10 +123,10 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
     return Math.round((successCount / 36) * 100);
   };
 
-  // Calculate hit chance for selected weapon/target
+  // Calculate hit chance for selected weapon/target (AR-208: includes fire control)
   const gunnerySkill = shipState.gunnerySkill || 0;
   const hitChance = selectedWeapon && selectedTarget
-    ? calculateHitProbability(selectedWeapon, selectedTarget, gunnerySkill)
+    ? calculateHitProbability(selectedWeapon, selectedTarget, gunnerySkill, fireControlDM)
     : null;
 
   // Group weapons by type for selector
@@ -93,9 +139,14 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
   return `
     <div class="detail-section gunner-header">
       <h4>GUNNER STATION ${assignedTurret ? `- TURRET ${assignedTurret}` : ''}</h4>
-      <div class="gunner-status-badge ${weaponsFree ? 'weapons-free' : 'weapons-hold'}"
-           title="${weaponsFree ? 'Weapons authorized - engage at will' : 'Weapons secured - await authorization'}">
-        ${weaponsFree ? 'WEAPONS FREE' : 'WEAPONS HOLD'}
+      <div class="gunner-header-badges">
+        <div class="gunner-status-badge ${weaponsFree ? 'weapons-free' : 'weapons-hold'}"
+             title="${weaponsFree ? 'Weapons authorized - engage at will' : 'Weapons secured - await authorization'}">
+          ${weaponsFree ? 'WEAPONS FREE' : 'WEAPONS HOLD'}
+        </div>
+        <div class="fire-control-badge" title="Fire Control software DM applied to all gunnery attacks">
+          FC/+${fireControlDM}
+        </div>
       </div>
     </div>
 
@@ -141,9 +192,9 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
           ${hostileContacts
             .map(c => ({
               ...c,
-              hitChance: selectedWeapon ? calculateHitProbability(selectedWeapon, c, gunnerySkill) : 0,
+              hitChance: selectedWeapon ? calculateHitProbability(selectedWeapon, c, gunnerySkill, fireControlDM) : 0,
               threat: c.marking === 'hostile' ? 3 : c.marking === 'unknown' ? 2 : 1,
-              priority: (c.marking === 'hostile' ? 100 : 50) + (selectedWeapon ? calculateHitProbability(selectedWeapon, c, gunnerySkill) : 0)
+              priority: (c.marking === 'hostile' ? 100 : 50) + (selectedWeapon ? calculateHitProbability(selectedWeapon, c, gunnerySkill, fireControlDM) : 0)
             }))
             .sort((a, b) => b.priority - a.priority)
             .map((c, idx) => {
@@ -224,10 +275,11 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
       <div class="fire-solution-display">
         <div class="solution-modifiers">
           <div class="mod-row"><span>Gunnery Skill:</span><span class="dm-value ${gunnerySkill >= 0 ? 'dm-positive' : 'dm-negative'}">+${gunnerySkill}</span></div>
+          ${fireControlDM > 0 ? `<div class="mod-row"><span>Fire Control:</span><span class="dm-value dm-positive">+${fireControlDM}</span></div>` : ''}
           <div class="mod-row"><span>Range (${selectedTarget.range_band || 'Med'}):</span><span class="dm-value ${getRangeDM(selectedTarget.range_band) >= 0 ? 'dm-positive' : 'dm-negative'}">${formatRangeDM(getRangeDM(selectedTarget.range_band))}</span></div>
           ${shipState?.sensorLock?.targetId === selectedTarget.id ? '<div class="mod-row"><span>Sensor Lock:</span><span class="dm-value dm-positive">+2</span></div>' : ''}
           ${selectedTarget.dodge ? `<div class="mod-row"><span>Target Dodge:</span><span class="dm-value dm-negative">-${Math.floor((selectedTarget.thrust || 0) / 2)}</span></div>` : ''}
-          <div class="mod-row total"><span>Total DM:</span><span class="dm-value">${formatRangeDM(gunnerySkill + getRangeDM(selectedTarget.range_band) + (shipState?.sensorLock?.targetId === selectedTarget.id ? 2 : 0))}</span></div>
+          <div class="mod-row total"><span>Total DM:</span><span class="dm-value">${formatRangeDM(gunnerySkill + fireControlDM + getRangeDM(selectedTarget.range_band) + (shipState?.sensorLock?.targetId === selectedTarget.id ? 2 : 0))}</span></div>
         </div>
         <div class="solution-result">
           <div class="hit-probability" title="Chance to hit on 2D6 ≥ 8">
@@ -237,12 +289,29 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
         </div>
       </div>
       <div class="damage-prediction" style="margin-top: 8px; padding: 8px; background: var(--bg-tertiary); border-radius: 4px;">
-        <div class="stat-row"><span>Weapon Damage:</span><span class="stat-value">${selectedWeapon.damage || '2D6'}</span></div>
-        <div class="stat-row"><span>Target Armour:</span><span class="stat-value">${selectedTarget.armour || 0}</span></div>
-        <div class="stat-row"><span>Expected Damage:</span><span class="stat-value">${Math.max(0, (parseInt(selectedWeapon.damage) || 2) * 3.5 - (selectedTarget.armour || 0)).toFixed(0)}</span></div>
-        ${selectedTarget.health && selectedTarget.max_health ? `
-        <div class="stat-row"><span>Shots to Kill:</span><span class="stat-value">${Math.ceil(selectedTarget.health / Math.max(1, (parseInt(selectedWeapon.damage) || 2) * 3.5 - (selectedTarget.armour || 0)))}</span></div>
-        ` : ''}
+        ${(() => {
+          const isIonWeapon = (selectedWeapon.weapon_type || selectedWeapon.type || selectedWeapon.name || '').toLowerCase().includes('ion');
+          const diceCount = parseInt(selectedWeapon.damage) || 2;
+          const avgRoll = diceCount * 3.5;
+          if (isIonWeapon) {
+            // Ion weapons: power drain = (damage + effect) × 10
+            const avgPowerDrain = Math.round((avgRoll + 3) * 10); // avg effect ~3
+            return `
+              <div class="stat-row ion-effect"><span>⚡ ION WEAPON</span><span class="stat-value text-warning">Power Drain</span></div>
+              <div class="stat-row"><span>Weapon Dice:</span><span class="stat-value">${selectedWeapon.damage || '2D6'}</span></div>
+              <div class="stat-row"><span>Avg Power Drain:</span><span class="stat-value text-warning">${avgPowerDrain} power</span></div>
+              <div class="stat-row"><span>Formula:</span><span class="stat-value" style="font-size: 10px;">(damage + effect) × 10</span></div>
+            `;
+          }
+          return `
+            <div class="stat-row"><span>Weapon Damage:</span><span class="stat-value">${selectedWeapon.damage || '2D6'}</span></div>
+            <div class="stat-row"><span>Target Armour:</span><span class="stat-value">${selectedTarget.armour || 0}</span></div>
+            <div class="stat-row"><span>Expected Damage:</span><span class="stat-value">${Math.max(0, avgRoll - (selectedTarget.armour || 0)).toFixed(0)}</span></div>
+            ${selectedTarget.health && selectedTarget.max_health ? `
+            <div class="stat-row"><span>Shots to Kill:</span><span class="stat-value">${Math.ceil(selectedTarget.health / Math.max(1, avgRoll - (selectedTarget.armour || 0)))}</span></div>
+            ` : ''}
+          `;
+        })()}
       </div>
     </div>
     ` : ''}
@@ -272,18 +341,26 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
           const status = w.status || 'ready';
           const hasAmmo = w.ammo_max === null || (w.ammo_current > 0);
           const isMissile = (w.weapon_type || w.type || '').toLowerCase().includes('missile');
+          const isIon = (w.weapon_type || w.type || w.name || '').toLowerCase().includes('ion');
+          // AR-208: Check if weapon is in range of selected target
+          const inRange = !selectedTarget || isWeaponInRange(w, selectedTarget.range_band);
+          const outOfRangeReason = !inRange ? `OUT OF RANGE - Target at ${selectedTarget?.range_band || 'unknown'}` : '';
           return `
-            <div class="weapon-card ${isAssigned ? 'assigned' : 'unassigned'} ${isSelected ? 'selected' : ''} ${getWeaponStatusClass(status)}"
-                 onclick="selectWeaponByIndex(${i})" title="${w.name || 'Weapon ' + (i + 1)}: ${w.damage || '2d6'} damage, ${w.range || 'Medium'} range">
+            <div class="weapon-card ${isAssigned ? 'assigned' : 'unassigned'} ${isSelected ? 'selected' : ''} ${getWeaponStatusClass(status)} ${!inRange ? 'weapon-out-of-range' : ''}"
+                 onclick="${inRange ? `selectWeaponByIndex(${i})` : ''}" title="${w.name || 'Weapon ' + (i + 1)}: ${w.damage || '2d6'} damage, ${w.range || 'Medium'} range${isIon ? ' - ION: Drains power instead of hull' : ''}${outOfRangeReason ? ' - ' + outOfRangeReason : ''}">
               <div class="weapon-header">
                 <span class="weapon-select-indicator">${isSelected ? '◉' : '○'}</span>
                 <span class="weapon-name">${w.name || 'Weapon ' + (i + 1)}</span>
                 <span class="weapon-mount">${w.mount || 'Turret'}</span>
                 ${isMissile ? '<span class="weapon-type-badge missile">MSL</span>' : ''}
+                ${isIon ? '<span class="weapon-type-badge ion" title="Ion weapon: Drains target power instead of hull damage">ION</span>' : ''}
               </div>
               <div class="weapon-stats">
                 <span class="weapon-range" title="Optimal engagement range">Range: ${w.range || 'Medium'}</span>
-                <span class="weapon-damage" title="Damage on hit">Damage: ${w.damage || '2d6'}</span>
+                ${isIon ?
+                  `<span class="weapon-damage ion-damage" title="Power drain = (damage + effect) × 10">Power Drain: ${w.damage || '2d6'}</span>` :
+                  `<span class="weapon-damage" title="Damage on hit">Damage: ${w.damage || '2d6'}</span>`
+                }
               </div>
               ${w.ammo_max !== null && w.ammo_max !== undefined ? `
                 <div class="weapon-ammo" title="${w.ammo_current} rounds remaining of ${w.ammo_max}">
@@ -293,7 +370,8 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
                   ${w.ammo_current === 0 ? '<span class="ammo-depleted">DEPLETED</span>' : ''}
                 </div>
               ` : ''}
-              <div class="weapon-status-indicator">${status.toUpperCase()}</div>
+              ${!inRange ? `<div class="weapon-out-of-range-notice">OUT OF RANGE</div>` : ''}
+              <div class="weapon-status-indicator">${!inRange ? 'OUT OF RANGE' : status.toUpperCase()}</div>
             </div>
           `;
         }).join('') : '<div class="placeholder">No weapons configured</div>'}
@@ -303,7 +381,7 @@ export function getGunnerPanel(shipState, template, contacts, roleInstance = 1, 
     <div class="detail-section fire-control-section">
       ${hitChance !== null && hasTargets && selectedWeapon ? `
       <div class="fire-solution" style="background: var(--panel-bg); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
-        <div class="hit-probability-display" title="Calculated from: 2D6 + Gunnery ${gunnerySkill >= 0 ? '+' : ''}${gunnerySkill} + Range DM ${formatRangeDM(getRangeDM(selectedTarget?.range_band))} >= 8">
+        <div class="hit-probability-display" title="Calculated from: 2D6 + Gunnery ${gunnerySkill >= 0 ? '+' : ''}${gunnerySkill} + FC +${fireControlDM} + Range DM ${formatRangeDM(getRangeDM(selectedTarget?.range_band))} >= 8">
           <span class="hit-label">Hit Chance:</span>
           <span class="hit-value ${hitChance >= 70 ? 'hit-high' : hitChance >= 40 ? 'hit-medium' : 'hit-low'}">${hitChance}%</span>
         </div>

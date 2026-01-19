@@ -489,6 +489,207 @@ function createPirateTugTender() {
 }
 
 // ============================================================
+// DEMO 5 SHIPS: Blood Profit Pack (Vargr Corsairs)
+// Source: blood-profit-pack.md
+// ============================================================
+
+// Kforr Dzarrgh ("Blood Fang") - 400t Corsair (Flagship)
+function createBloodProfitFlagship() {
+  return {
+    id: 'blood_flagship',
+    name: 'Kforr Dzarrgh',
+    shipType: 'Corsair',
+    // Hull/Armor - 400t corsair
+    hull: 160, maxHull: 160,
+    armour: 6,
+    power: 160, maxPower: 160,
+    // Propulsion
+    thrust: 4, thrustUsed: 0,
+    jump: 2,
+    // Combat modifiers
+    fireControl: 1,
+    sensorDM: 1,
+    sensorGrade: 'military',
+    pilotSkill: 2,
+    captain: { name: 'Kfourrz', skill_tactics_naval: 2 },
+    // State
+    evasive: false,
+    // Ship specs
+    tonnage: 400,
+    hardpoints: 4,
+    turrets: [
+      { id: 1, type: 'barbette', weapons: ['particle_accelerator'], gunner: 'Blood Gunner 1', gunnerSkill: 3 }
+    ],
+    crew: [
+      { name: 'Kfourrz', role: 'Captain', skill: 'Tactics-2' },
+      { name: 'Vargr Pilot', role: 'Pilot', skill: 'Pilot-2' },
+      { name: 'Vargr Gunner', role: 'Gunner', skill: 'Gunner-3' }
+    ],
+    crewCount: 20,
+    systems: createDefaultSystems()
+  };
+}
+
+// Gvurrdon's Claw - 200t Armed Trader
+function createBloodProfitTrader() {
+  return {
+    id: 'blood_trader',
+    name: "Gvurrdon's Claw",
+    shipType: 'Armed Trader',
+    // Hull/Armor
+    hull: 80, maxHull: 80,
+    armour: 4,
+    power: 80, maxPower: 80,
+    // Propulsion
+    thrust: 2, thrustUsed: 0,
+    jump: 1,
+    // Combat modifiers
+    fireControl: 0,
+    sensorDM: 0,
+    sensorGrade: 'civilian',
+    pilotSkill: 1,
+    captain: { name: 'Aekhs', skill_tactics_naval: 1 },
+    // State
+    evasive: false,
+    sandcasters: 20,
+    missiles: 12,
+    // Ship specs
+    tonnage: 200,
+    hardpoints: 2,
+    turrets: [
+      { id: 1, type: 'triple', weapons: ['beam_laser', 'beam_laser', 'sandcaster'], gunner: 'Trader Gunner 1', gunnerSkill: 2 },
+      { id: 2, type: 'triple', weapons: ['beam_laser', 'missile_rack', 'sandcaster'], gunner: 'Trader Gunner 2', gunnerSkill: 2 }
+    ],
+    crew: [
+      { name: 'Aekhs', role: 'Captain', skill: 'Tactics-1' },
+      { name: 'Trader Pilot', role: 'Pilot', skill: 'Pilot-1' }
+    ],
+    crewCount: 10,
+    systems: createDefaultSystems()
+  };
+}
+
+// Swift Kill - 100t SDB (Attack Boat)
+function createBloodProfitSDB() {
+  return {
+    id: 'blood_sdb',
+    name: 'Swift Kill',
+    shipType: 'SDB',
+    // Hull/Armor - armored attack boat
+    hull: 40, maxHull: 40,
+    armour: 6,
+    power: 40, maxPower: 40,
+    // Propulsion - fast but no jump
+    thrust: 6, thrustUsed: 0,
+    jump: 0,
+    // Combat modifiers
+    fireControl: 1,
+    sensorDM: 1,
+    sensorGrade: 'military',
+    pilotSkill: 2,
+    captain: { name: 'Rroungz', skill_tactics_naval: 1 },
+    // State
+    evasive: false,
+    // Ship specs
+    tonnage: 100,
+    hardpoints: 1,
+    turrets: [
+      { id: 1, type: 'barbette', weapons: ['plasma_gun'], gunner: 'SDB Gunner', gunnerSkill: 3 }
+    ],
+    crew: [
+      { name: 'Rroungz', role: 'Captain', skill: 'Tactics-1' },
+      { name: 'SDB Pilot', role: 'Pilot', skill: 'Pilot-2' }
+    ],
+    crewCount: 5,
+    systems: createDefaultSystems()
+  };
+}
+
+// Ghost Runner - 100t Scout
+function createBloodProfitScout() {
+  return {
+    id: 'blood_scout',
+    name: 'Ghost Runner',
+    shipType: 'Scout',
+    // Hull/Armor
+    hull: 40, maxHull: 40,
+    armour: 4,
+    power: 40, maxPower: 40,
+    // Propulsion
+    thrust: 2, thrustUsed: 0,
+    jump: 2,
+    // Combat modifiers
+    fireControl: 0,
+    sensorDM: 1,
+    sensorGrade: 'military',
+    pilotSkill: 2,
+    captain: { name: 'Llokh', skill_tactics_naval: 0 },
+    // State
+    evasive: false,
+    sandcasters: 10,
+    // Ship specs
+    tonnage: 100,
+    hardpoints: 1,
+    turrets: [
+      { id: 1, type: 'double', weapons: ['pulse_laser', 'sandcaster'], gunner: 'Scout Gunner', gunnerSkill: 1 }
+    ],
+    crew: [
+      { name: 'Llokh', role: 'Captain', skill: 'Tactics-0' },
+      { name: 'Scout Pilot', role: 'Pilot', skill: 'Pilot-2' }
+    ],
+    crewCount: 4,
+    systems: createDefaultSystems()
+  };
+}
+
+// Uthka Gzae ("Prize Taker") - 600t Jump Tug
+function createBloodProfitTug() {
+  return {
+    id: 'blood_tug',
+    name: 'Uthka Gzae',
+    shipType: 'Jump Tug',
+    // Hull/Armor - big but fragile
+    hull: 240, maxHull: 240,
+    armour: 2,
+    power: 240, maxPower: 240,
+    // Propulsion - slow but has jump
+    thrust: 1, thrustUsed: 0,
+    jump: 2,
+    // Combat modifiers
+    fireControl: 0,
+    sensorDM: 0,
+    sensorGrade: 'civilian',
+    pilotSkill: 1,
+    captain: { name: 'Dzang', skill_tactics_naval: 0 },
+    // State
+    evasive: false,
+    // Ship specs
+    tonnage: 600,
+    hardpoints: 1,
+    turrets: [
+      { id: 1, type: 'single', weapons: ['pulse_laser'], gunner: 'Tug Gunner', gunnerSkill: 1 }
+    ],
+    crew: [
+      { name: 'Dzang', role: 'Captain', skill: 'Tactics-0' },
+      { name: 'Tug Pilot', role: 'Pilot', skill: 'Pilot-1' }
+    ],
+    crewCount: 8,
+    // Special: Should flee immediately when threatened
+    fleeThreshold: 0.9,
+    systems: createDefaultSystems()
+  };
+}
+
+// Blood Profit Fleet - all 5 ships
+const BLOOD_PROFIT_FLEET = [
+  createBloodProfitFlagship,
+  createBloodProfitTrader,
+  createBloodProfitSDB,
+  createBloodProfitScout,
+  createBloodProfitTug
+];
+
+// ============================================================
 // DEMO CONFIGURATIONS
 // ============================================================
 
@@ -565,6 +766,34 @@ const DEMO_CONFIGS = {
     // Legacy single-ship format for compatibility
     player: createAstralDawn(),
     enemy: createPirateCorsair(1)
+  },
+
+  // Demo 5: Amishi Fleet vs Blood Profit Pack
+  // Q-Ship fleet ambushes Vargr corsairs!
+  demo5: {
+    description: 'Amishi Fleet vs Blood Profit Pack',
+    startRange: 'Long',
+    // Player fleet: Q-Ship + 6 fighters
+    playerFleet: [
+      createAstralDawn(),
+      createTlatlFighter(1),
+      createTlatlFighter(2),
+      createTlatlFighter(3),
+      createTlatlFighter(4),
+      createTlatlFighter(5),
+      createTlatlFighter(6)
+    ],
+    // Blood Profit Pack: 5 ships
+    enemyFleet: [
+      createBloodProfitFlagship(),
+      createBloodProfitTrader(),
+      createBloodProfitSDB(),
+      createBloodProfitScout(),
+      createBloodProfitTug()
+    ],
+    // Legacy single-ship format for compatibility
+    player: createAstralDawn(),
+    enemy: createBloodProfitFlagship()
   }
 };
 
@@ -581,5 +810,11 @@ module.exports = {
   createPirateCorsair,
   createPirateShuttle,
   createPirateTugTender,
+  createBloodProfitFlagship,
+  createBloodProfitTrader,
+  createBloodProfitSDB,
+  createBloodProfitScout,
+  createBloodProfitTug,
+  BLOOD_PROFIT_FLEET,
   DEMO_CONFIGS
 };

@@ -12,7 +12,7 @@ const puppeteer = require('puppeteer');
   });
   
   // Go to operations
-  await page.goto('http://localhost:3000/operations/', { waitUntil: 'networkidle0' });
+  await page.goto(fullUrl + '/', { waitUntil: 'networkidle0' });
   
   // Open system map directly (before login, uses demo system)
   await page.evaluate(() => {

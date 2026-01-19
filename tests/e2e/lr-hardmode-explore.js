@@ -10,6 +10,7 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 const { sleep, verifyState } = require('./helpers/click-or-hotkey');
 
 const CAMPAIGN_CODE = 'DFFFC87E';
@@ -54,7 +55,7 @@ const FINDINGS = {
     // PHASE 1: LOGIN AS CAPTAIN
     // ============================================
     console.log('--- PHASE 1: LOGIN ---');
-    await page.goto('http://localhost:3000/operations', { waitUntil: 'networkidle2' });
+    await page.goto(fullUrl, { waitUntil: 'networkidle2' });
     await sleep(2000);
 
     // Explore login screen buttons

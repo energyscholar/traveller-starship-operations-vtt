@@ -11,6 +11,51 @@
 
 import { registerHandler } from './index.js';
 
+// ==================== AR-208: Damage Animation Helpers ====================
+
+/**
+ * Trigger damage shake animation on target's hull bar
+ */
+function triggerDamageAnimation(targetId) {
+  // Find hull bars for the target (may be in combatant cards or ship status)
+  const hullBars = document.querySelectorAll(
+    `[data-contact-id="${targetId}"] .hull-bar, [data-ship-id="${targetId}"] .hull-bar, .target-health-bar`
+  );
+
+  hullBars.forEach(bar => {
+    bar.classList.add('taking-damage');
+    const fill = bar.querySelector('.hull-fill, .health-fill');
+    if (fill) fill.classList.add('damage-flash');
+
+    // Remove animation classes after animation completes
+    setTimeout(() => {
+      bar.classList.remove('taking-damage');
+      if (fill) fill.classList.remove('damage-flash');
+    }, 400);
+  });
+
+  // Also animate ship status panel if visible
+  const shipHullBar = document.querySelector('#ship-status-panel .hull-bar');
+  if (shipHullBar && !targetId) {  // If no targetId, it's our ship being hit
+    shipHullBar.classList.add('taking-damage');
+    setTimeout(() => shipHullBar.classList.remove('taking-damage'), 400);
+  }
+}
+
+/**
+ * Trigger power drain animation for ion weapons
+ */
+function triggerPowerDrainAnimation(targetId) {
+  const powerBars = document.querySelectorAll(
+    `[data-contact-id="${targetId}"] .power-bar-container, [data-ship-id="${targetId}"] .power-bar-container`
+  );
+
+  powerBars.forEach(bar => {
+    bar.classList.add('draining');
+    setTimeout(() => bar.classList.remove('draining'), 600);
+  });
+}
+
 // ==================== Combat Mode ====================
 
 function handleCombatStarted(data, state, helpers) {
@@ -111,10 +156,15 @@ function handleCombatAction(data, state, helpers) {
   // Show notification for combat events
   if (type === 'hit') {
     helpers.showNotification(`${attacker} HIT ${target} for ${damage} damage!`, 'warning');
+    // AR-208: Trigger damage animation on hull/power bars
+    triggerDamageAnimation(data.targetId);
   } else if (type === 'miss') {
     helpers.showNotification(`${attacker} missed ${target}`, 'info');
   } else if (type === 'pointDefense') {
     helpers.showNotification(message, 'info');
+  } else if (type === 'powerDrain') {
+    helpers.showNotification(`${attacker} drained ${damage} power from ${target}!`, 'warning');
+    triggerPowerDrainAnimation(data.targetId);
   }
 
   // Refresh gunner panel to update combat log

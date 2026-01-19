@@ -10,7 +10,7 @@
 
 const { withBrowser } = require('./helpers/browser-with-cleanup');
 
-const BASE_URL = 'http://localhost:3000';
+// BASE_URL from config
 const OPERATIONS_URL = `${BASE_URL}/operations`;
 
 let testsPassed = 0;

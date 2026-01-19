@@ -14,7 +14,7 @@
 
 const { withBrowser } = require('./helpers/browser-with-cleanup');
 
-const BASE_URL = 'http://localhost:3000/operations';
+const BASE_URL = fullUrl;
 
 // Test configuration
 const TEST_CONFIG = {

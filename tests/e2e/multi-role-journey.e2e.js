@@ -12,9 +12,10 @@
 
 const { withBrowser, wait } = require('./helpers/browser-with-cleanup');
 const fs = require('fs');
+const { fullUrl } = require('./config');
 const path = require('path');
 
-const BASE_URL = 'http://localhost:3000/operations';
+const BASE_URL = fullUrl;
 const SCREENSHOT_DIR = path.join(__dirname, 'screenshots');
 
 if (!fs.existsSync(SCREENSHOT_DIR)) {

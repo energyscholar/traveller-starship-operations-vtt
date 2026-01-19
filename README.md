@@ -28,15 +28,15 @@ Traveller VTT is a web-based virtual tabletop for **Mongoose Traveller 2nd Editi
 
 | Metric | Value |
 |--------|-------|
-| **Total Lines of Code** | ~117,000 |
-| JavaScript (production) | 68,000 |
-| JavaScript (test) | 48,000 |
-| **Total Files** | 500+ |
-| JavaScript files | 493 |
+| **Total Lines of Code** | ~160,000 |
+| JavaScript (production) | 86,000 |
+| JavaScript (test) | 74,000 |
+| **Total Files** | 620+ |
+| JavaScript files | 623 |
 | **Git Stats** | |
-| Total commits | 457 |
+| Total commits | 491 |
 | Contributors | 3 |
-| Project age | ~7 weeks |
+| Project age | ~8 weeks |
 | **Dependencies** | |
 | Runtime | 7 |
 | Dev | 4 |
@@ -61,7 +61,7 @@ npm install
 
 # Run tests
 npm test
-# Expected: 339/339 tests passing
+# Expected: 392/392 tests passing
 
 # Start server
 npm start

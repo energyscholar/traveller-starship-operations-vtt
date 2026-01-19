@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('./config');
 
 (async () => {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] });
@@ -9,7 +10,7 @@ const puppeteer = require('puppeteer');
   const logs = [];
   page.on('console', msg => logs.push(msg.text()));
 
-  await page.goto('http://localhost:3000/operations');
+  await page.goto(fullUrl);
   await page.waitForSelector('#btn-gm-login', { timeout: 5000 });
   await page.click('#btn-gm-login');
 

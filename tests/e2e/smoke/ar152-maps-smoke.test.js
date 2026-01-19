@@ -8,6 +8,7 @@
  */
 
 const puppeteer = require('puppeteer');
+const { fullUrl } = require('../config');
 
 const MAP_EXPORTS = [
   // Shared Map (AR-27)
@@ -37,7 +38,7 @@ async function runTest() {
     page.on('pageerror', err => jsErrors.push(err.message));
 
     // Navigate to operations page
-    await page.goto('http://localhost:3000/operations', {
+    await page.goto(fullUrl, {
       waitUntil: 'networkidle0',
       timeout: 10000
     });

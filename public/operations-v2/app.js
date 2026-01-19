@@ -19,7 +19,8 @@ const state = {
   sharedMapSettings: { scale: 64, style: 'atlas' },
   sharedMapActive: false,
   sharedMapView: null,
-  roleViewModel: null
+  roleViewModel: null,
+  debug: false  // Set to true to enable action logging
 };
 
 
@@ -224,6 +225,26 @@ function handlePlayerSlotSelected(data) {
     joinBtn.disabled = false;
   }
 
+  // BUG FIX: Solo mode should auto-join bridge
+  if (state.mode === 'solo') {
+    // Auto-select ship if not already set
+    if (!state.shipId && state.ships.length > 0) {
+      state.shipId = state.ships[0].id;
+    }
+    // Auto-select role: prefer captain, or first available
+    if (!state.role && state.availableRoles.length > 0) {
+      state.role = state.availableRoles.includes('captain')
+        ? 'captain'
+        : state.availableRoles[0];
+    }
+    // Auto-join bridge if we have ship and role
+    if (state.shipId && state.role) {
+      console.log('[OPS-V2] Solo mode: auto-joining bridge as', state.role);
+      joinBridge();
+      return;
+    }
+  }
+
   state.adapter.showScreen('player-setup-screen');
 }
 
@@ -370,7 +391,137 @@ const actionHandlers = {
   sendEmail: () => EmailPanel.sendEmail(state),
   saveDraft: () => EmailPanel.saveDraft(state),
   backToInbox: () => EmailPanel.backToInbox(),
-  openSettings: () => showToast('Settings not yet implemented')
+  openSettings: () => showToast('Settings not yet implemented'),
+
+  // === Combat Actions (TASK 1) ===
+  fireWeapon: (d) => {
+    if (state.debug) console.log('[OPS-V2] fireWeapon', d);
+    state.socket.emit('ops:fireWeapon', {
+      targetId: d.targetId,
+      weaponId: d.weaponId,
+      targetSystem: d.targetSystem
+    });
+  },
+  authorizeWeapons: (d) => {
+    if (state.debug) console.log('[OPS-V2] authorizeWeapons', d);
+    state.socket.emit('ops:authorizeWeapons', { mode: d.mode });
+  },
+
+  // === Engineering Actions (TASK 2) ===
+  repairSystem: (d) => {
+    if (state.debug) console.log('[OPS-V2] repairSystem', d);
+    state.socket.emit('ops:repairSystem', { systemId: d.systemId });
+  },
+  applySystemDamage: (d) => {
+    if (state.debug) console.log('[OPS-V2] applySystemDamage', d);
+    state.socket.emit('ops:applySystemDamage', {
+      systemId: d.systemId,
+      damageLevel: d.damageLevel
+    });
+  },
+  clearSystemDamage: (d) => {
+    if (state.debug) console.log('[OPS-V2] clearSystemDamage', d);
+    state.socket.emit('ops:clearSystemDamage', { systemId: d.systemId });
+  },
+  godModeRefuel: (d) => {
+    if (state.debug) console.log('[OPS-V2] godModeRefuel', d);
+    state.socket.emit('ops:godModeRefuel', { amount: d?.amount });
+  },
+
+  // === Navigation Actions (TASK 3) ===
+  travelToSystem: (d) => {
+    if (state.debug) console.log('[OPS-V2] travelToSystem', d);
+    state.socket.emit('ops:travelToSystem', {
+      destinationId: d.destinationId,
+      thrust: d.thrust
+    });
+  },
+  setCurrentSystem: (d) => {
+    if (state.debug) console.log('[OPS-V2] setCurrentSystem', d);
+    state.socket.emit('ops:setCurrentSystem', { systemId: d.systemId });
+  },
+  gmRelocateShip: (d) => {
+    if (state.debug) console.log('[OPS-V2] gmRelocateShip', d);
+    state.socket.emit('ops:gmRelocateShip', {
+      shipId: d.shipId,
+      hex: d.hex,
+      systemId: d.systemId
+    });
+  },
+
+  // === Sensor Actions (TASK 4) ===
+  addContact: (d) => {
+    if (state.debug) console.log('[OPS-V2] addContact', d);
+    state.socket.emit('ops:addContact', {
+      designation: d.designation,
+      type: d.type,
+      bearing: d.bearing,
+      range: d.range
+    });
+  },
+  shareStarSystem: (d) => {
+    if (state.debug) console.log('[OPS-V2] shareStarSystem', d);
+    state.socket.emit('ops:shareStarSystem', {
+      systemId: d.systemId,
+      targetShipId: d.targetShipId
+    });
+  },
+  getSystemStatus: (d) => {
+    if (state.debug) console.log('[OPS-V2] getSystemStatus', d);
+    state.socket.emit('ops:getSystemStatus', { systemId: d.systemId });
+  },
+
+  // === Time/Comms Actions (TASK 5) ===
+  advanceTime: (d) => {
+    if (state.debug) console.log('[OPS-V2] advanceTime', d);
+    state.socket.emit('ops:advanceTime', {
+      hours: d.hours,
+      days: d.days,
+      minutes: d.minutes
+    });
+  },
+  bridgeTransmission: (d) => {
+    if (state.debug) console.log('[OPS-V2] bridgeTransmission', d);
+    state.socket.emit('ops:bridgeTransmission', {
+      message: d.message,
+      channel: d.channel,
+      targetId: d.targetId
+    });
+  },
+
+  // === Module Actions (TASK 6) ===
+  importModule: (d) => {
+    if (state.debug) console.log('[OPS-V2] importModule', d);
+    state.socket.emit('ops:importModule', {
+      moduleType: d.moduleType,
+      data: d.data
+    });
+  },
+  deleteModule: (d) => {
+    if (state.debug) console.log('[OPS-V2] deleteModule', d);
+    state.socket.emit('ops:deleteModule', { moduleId: d.moduleId });
+  },
+  toggleModule: (d) => {
+    if (state.debug) console.log('[OPS-V2] toggleModule', d);
+    state.socket.emit('ops:toggleModule', {
+      moduleId: d.moduleId,
+      enabled: d.enabled
+    });
+  },
+  getModuleSummary: (d) => {
+    if (state.debug) console.log('[OPS-V2] getModuleSummary', d);
+    state.socket.emit('ops:getModuleSummary', { moduleType: d.moduleType });
+  },
+
+  // === GM Actions (TASK 7) ===
+  getPrepData: (d) => {
+    if (state.debug) console.log('[OPS-V2] getPrepData', d);
+    state.socket.emit('ops:getPrepData', {});
+  },
+  getShipSystems: (d) => {
+    if (state.debug) console.log('[OPS-V2] getShipSystems', d);
+    state.socket.emit('ops:getShipSystems', { shipId: d.shipId });
+  }
 };
 function handleAction(action, data) {
   console.log('[OPS-V2] Action:', action, data);
@@ -552,6 +703,33 @@ function toggleMenu() {
 
 // Expose showToast globally for modules
 window.showToast = showToast;
+
+// === Debug Tooling (TASK 8) ===
+window.v2Debug = {
+  enable: () => { state.debug = true; console.log('[OPS-V2] Debug mode enabled'); },
+  disable: () => { state.debug = false; console.log('[OPS-V2] Debug mode disabled'); },
+  state: () => console.log('[OPS-V2] State:', state),
+  actions: () => console.log('[OPS-V2] Actions:', Object.keys(actionHandlers)),
+  checkParity: () => {
+    const v1Actions = [
+      'fireWeapon', 'authorizeWeapons',
+      'repairSystem', 'applySystemDamage', 'clearSystemDamage', 'godModeRefuel',
+      'travelToSystem', 'setCurrentSystem', 'gmRelocateShip',
+      'addContact', 'shareStarSystem', 'getSystemStatus',
+      'advanceTime', 'bridgeTransmission',
+      'importModule', 'deleteModule', 'toggleModule', 'getModuleSummary',
+      'getPrepData', 'getShipSystems'
+    ];
+    const wired = v1Actions.filter(a => actionHandlers[a]);
+    const missing = v1Actions.filter(a => !actionHandlers[a]);
+    console.log(`[OPS-V2] Parity: ${wired.length}/${v1Actions.length} (${(wired.length/v1Actions.length*100).toFixed(1)}%)`);
+    if (missing.length) console.log('[OPS-V2] Missing:', missing);
+    return { wired: wired.length, total: v1Actions.length, missing };
+  }
+};
+
+// Shortcut for checkParity
+window.checkParity = window.v2Debug.checkParity;
 
 
 // Initialize on DOM ready
