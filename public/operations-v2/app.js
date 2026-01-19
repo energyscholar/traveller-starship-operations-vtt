@@ -1,18 +1,4 @@
-/**
- * Operations VTT V2 - Main Application
- *
- * Orchestrates socket communication and GUI adapter.
- * Target: <500 LOC
- *
- * @module public/operations-v2/app
- */
-
-/* global io, GUIAdapter, renderers */
-
-// ============================================
-// STATE
-// ============================================
-
+/* global io, GUIAdapter, renderers, SharedMap */
 const state = {
   socket: null,
   adapter: null,
@@ -29,12 +15,13 @@ const state = {
   availableRoles: [],
   crew: [],
   contacts: [],
-  connected: false
+  connected: false,
+  sharedMapSettings: { scale: 64, style: 'atlas' },
+  sharedMapActive: false,
+  sharedMapView: null,
+  roleViewModel: null
 };
 
-// ============================================
-// INITIALIZATION
-// ============================================
 
 function init() {
   console.log('[OPS-V2] Initializing V2 interface...');
@@ -51,9 +38,6 @@ function init() {
   console.log('[OPS-V2] V2 interface ready');
 }
 
-// ============================================
-// SOCKET CONNECTION
-// ============================================
 
 function connectSocket() {
   state.socket = io({
@@ -91,6 +75,19 @@ function connectSocket() {
   state.socket.on('ops:crewOnBridge', handleCrewUpdate);
   state.socket.on('ops:contacts', handleContacts);
   state.socket.on('ops:sessionStarted', handleSessionStarted);
+  state.socket.on('ops:alertStatusChanged', handleAlertStatusChanged);
+  state.socket.on('ops:timeAdvanced', handleTimeAdvanced);
+  state.socket.on('ops:crewMemberRelieved', handleCrewMemberRelieved);
+  state.socket.on('ops:mapShared', (d) => SharedMap.handleMapShared(d, state));
+  state.socket.on('ops:mapUnshared', (d) => SharedMap.handleMapUnshared(d, state));
+  state.socket.on('ops:mapViewUpdated', (d) => SharedMap.handleMapViewUpdated(d, state));
+  state.socket.on('ops:mapState', (d) => SharedMap.handleMapState(d, state));
+
+  // Mail events
+  state.socket.on('ops:mailList', (d) => EmailPanel.handleMailData({ messages: d.mail, unreadCount: d.unreadCount }));
+  state.socket.on('ops:mailSent', () => { showToast('Message sent'); state.socket.emit('ops:getMail'); });
+  state.socket.on('ops:newMail', (d) => { EmailPanel.updateBadge(d.unreadCount || 1); });
+  state.socket.on('ops:mailUpdated', () => { state.socket.emit('ops:getMail'); });
 }
 
 function handleConnect() {
@@ -118,9 +115,6 @@ function handleConnectError(err) {
   showError('Connection failed: ' + err.message);
 }
 
-// ============================================
-// SOCKET HANDLERS
-// ============================================
 
 function handleCampaigns(data) {
   console.log('[OPS-V2] Received campaigns:', data.campaigns?.length || 0);
@@ -259,26 +253,100 @@ function handleBridgeUpdate(data) {
   if (data.crew) state.adapter.setHtml('crew-list', data.crew.map(c => renderers.renderCrewMember(c)).join(''));
   if (data.contacts) state.adapter.setHtml('contact-list', data.contacts.map(c => renderers.renderContactItem(c)).join(''));
 }
-function handleRoleUpdate(data) { /* Role panel via ViewModel - not yet implemented */ }
+function handleRoleUpdate(data) {
+  if (data && data.viewModel) {
+    console.log('[OPS-V2] ViewModel received:', data.viewModel.type);
+    state.roleViewModel = data.viewModel;
+    renderRolePanel();
+  }
+}
 function handleError(error) { console.error('[OPS-V2] Server error:', error.message); showError(error.message); }
 
 function handleBridgeJoined(data) {
   console.log('[OPS-V2] Bridge joined:', data.ship?.name);
-  state.crew = [...(data.crew || []), ...(data.npcCrew || [])].filter(c => c.role !== 'gm' && !c.isGM);
+  // Combine player accounts and NPC crew
+  const allCrew = [];
+  // Add player accounts (filtered to exclude GM)
+  (data.crew || []).forEach(c => {
+    if (c.role === 'gm' || c.isGM) return;
+    allCrew.push({ ...c, name: c.character_name || c.slot_name || c.name || 'Unknown', isNPC: false });
+  });
+  // Add NPC crew for roles not filled by players
+  const filledRoles = new Set(allCrew.map(c => c.role));
+  (data.npcCrew || []).forEach(npc => {
+    if (!filledRoles.has(npc.role)) {
+      allCrew.push({ ...npc, isNPC: true });
+    }
+  });
+  state.crew = allCrew;
   state.contacts = data.contacts || [];
   state.shipId = data.ship?.id || state.shipId;
-  renderCrewList(); renderContacts(); state.adapter.showScreen('bridge-screen');
+  // Store campaign location for shared map
+  state.sharedMapView = {
+    sector: data.campaign?.current_sector || 'Spinward Marches',
+    hex: data.campaign?.current_hex || '1910',
+    system: data.campaign?.current_system || 'Unknown'
+  };
+  // Update header with ship/campaign data
+  state.adapter.setText('bridge-ship-name', data.ship?.name || 'Unknown Ship');
+  state.adapter.setText('bridge-location', data.campaign?.current_system || 'Unknown');
+  state.adapter.setText('bridge-date', data.campaign?.current_date || '---');
+  state.adapter.setText('bridge-user-role', data.role || 'GM');
+  state.adapter.setText('bridge-user-name', data.isGM ? 'GM' : (state.userName || 'Player'));
+  renderCrewList(); renderContacts(); renderRolePanel(); state.adapter.showScreen('bridge-screen');
 }
 
-function handleCrewUpdate(data) { state.crew = (data.crew || []).filter(c => c.role !== 'gm' && !c.isGM); renderCrewList(); }
+function handleCrewUpdate(data) {
+  // ops:crewOnBridge sends a single crew member joining, not the full list
+  // Only add/update if this is a non-GM crew member
+  if (data.role === 'gm' || data.isGM) return;
+  if (data.accountId) {
+    const existing = state.crew.findIndex(c => c.id === data.accountId || c.accountId === data.accountId);
+    if (existing >= 0) {
+      state.crew[existing] = { ...state.crew[existing], ...data, name: data.name || state.crew[existing].name };
+    } else {
+      state.crew.push({ ...data, name: data.name || 'Unknown', isNPC: false });
+    }
+    renderCrewList();
+  }
+}
 function handleContacts(data) { state.contacts = data.contacts || []; renderContacts(); }
 function handleSessionStarted(data) { console.log('[OPS-V2] Session started:', data.currentSystem); }
-function renderCrewList() { const el = document.getElementById('crew-list'); if (el) el.innerHTML = state.crew.length ? state.crew.map(c => renderers.renderCrewMember(c)).join('') : ''; }
-function renderContacts() { const el = document.getElementById('contacts-panel'); if (el) el.innerHTML = state.contacts.length ? state.contacts.map(c => renderers.renderContactItem(c)).join('') : ''; }
+function renderCrewList() {
+  const el = document.getElementById('crew-list');
+  if (!el) return;
+  el.innerHTML = state.crew.length
+    ? state.crew.map(c => renderers.renderCrewMember(c)).join('')
+    : '<div class="empty-list">No crew on bridge</div>';
+}
+function renderRolePanel() {
+  const el = document.getElementById('role-panel');
+  if (!el) return;
+  const role = state.role || 'gm';
+  if (state.roleViewModel && renderers.renderRole) {
+    el.innerHTML = renderers.renderRole(state.roleViewModel);
+  } else {
+    el.innerHTML = `<div class="panel-header"><span class="panel-title">${role.toUpperCase()}</span></div><div class="panel-body">Awaiting data...</div>`;
+  }
+}
+function renderContacts() { const el = document.getElementById('contact-list'); if (el) el.innerHTML = state.contacts.length ? state.contacts.map(c => renderers.renderContactItem(c)).join('') : '<div class="empty-list">No contacts</div>'; }
 
-// ============================================
-// ACTION HANDLERS
-// ============================================
+function handleAlertStatusChanged(data) {
+  const status = data.alertStatus || data.status || 'NORMAL';
+  const alertEl = document.getElementById('alert-status');
+  if (alertEl) { alertEl.className = `alert-status alert-${status.toLowerCase()}`; const t = alertEl.querySelector('.alert-text'); if (t) t.textContent = status === 'RED' ? 'Red Alert' : status === 'YELLOW' ? 'Yellow Alert' : 'Normal'; }
+  const bridge = document.getElementById('bridge-screen');
+  if (bridge) bridge.className = `screen active alert-border-${status.toLowerCase()}`;
+  showToast(`Alert: ${status}`);
+}
+function handleTimeAdvanced(data) {
+  if (data.newDate) { state.adapter.setText('bridge-date', data.newDate); const el = document.getElementById('system-map-date'); if (el) el.textContent = data.newDate; showToast(`Time: ${data.newDate}`); }
+}
+function handleCrewMemberRelieved(data) {
+  const idx = state.crew.findIndex(c => c.id === data.accountId || c.accountId === data.accountId);
+  if (idx >= 0) state.crew[idx].role = null; renderCrewList(); showToast(`${data.slotName || 'Crew member'} has been relieved`);
+}
+
 
 const actionHandlers = {
   gmLogin: startGMLogin, playerLogin: startPlayerLogin, soloDemo: startSoloDemo,
@@ -288,7 +356,21 @@ const actionHandlers = {
   selectSlot: (d) => selectSlot(d.slotId),
   selectShip: (d) => selectShip(d.shipId),
   selectRole: (d) => selectRole(d.roleId),
-  closeToast: () => state.adapter.setVisible('error-toast', false)
+  closeToast: () => state.adapter.setVisible('error-toast', false),
+  openMenu: toggleMenu,
+  setAlert: (d) => state.socket.emit('ops:setAlertStatus', { status: d.alert }),
+  openSharedMap: () => { toggleMenu(); SharedMap.show(state); },
+  closeMap: () => SharedMap.close(),
+  shareMap: () => SharedMap.share(state),
+  unshareMap: () => SharedMap.unshare(state),
+  recenterPlayers: () => SharedMap.recenter(state),
+  gotoHex: () => SharedMap.gotoHex(state),
+  openEmail: () => { toggleMenu(); EmailPanel.show(state); },
+  closeEmail: () => EmailPanel.close(),
+  sendEmail: () => EmailPanel.sendEmail(state),
+  saveDraft: () => EmailPanel.saveDraft(state),
+  backToInbox: () => EmailPanel.backToInbox(),
+  openSettings: () => showToast('Settings not yet implemented')
 };
 function handleAction(action, data) {
   console.log('[OPS-V2] Action:', action, data);
@@ -296,9 +378,6 @@ function handleAction(action, data) {
   if (handler) handler(data); else console.log('[OPS-V2] Unknown action:', action);
 }
 
-// ============================================
-// LOGIN FLOWS
-// ============================================
 
 function startGMLogin() {
   state.mode = 'gm';
@@ -427,9 +506,6 @@ function logout() {
   backToLogin();
 }
 
-// ============================================
-// UI HELPERS
-// ============================================
 
 function updateBridgeHeader(data) {
   if (data.shipName) state.adapter.setText('bridge-ship-name', data.shipName);
@@ -469,9 +545,14 @@ function showToast(message) {
   }, 2000);
 }
 
-// ============================================
-// BOOTSTRAP
-// ============================================
+function toggleMenu() {
+  const menu = document.getElementById('hamburger-menu');
+  if (menu) menu.classList.toggle('hidden');
+}
+
+// Expose showToast globally for modules
+window.showToast = showToast;
+
 
 // Initialize on DOM ready
 if (document.readyState === 'loading') {

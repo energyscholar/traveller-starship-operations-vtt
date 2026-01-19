@@ -149,10 +149,15 @@
         <div id="alert-status" class="alert-status alert-green">
           <span class="alert-text">Normal</span>
         </div>
+        <div class="alert-controls">
+          <button id="btn-alert-green" class="btn btn-small" data-action="setAlert" data-alert="NORMAL">Green</button>
+          <button id="btn-alert-yellow" class="btn btn-small" data-action="setAlert" data-alert="YELLOW">Yellow</button>
+          <button id="btn-alert-red" class="btn btn-small" data-action="setAlert" data-alert="RED">Red</button>
+        </div>
         <div class="header-actions">
           <span id="bridge-user-role" class="user-role">Role</span>
           <span id="bridge-user-name" class="user-name">User</span>
-          <button id="btn-bridge-menu" class="btn btn-icon" data-action="openMenu">☰</button>
+          <button id="btn-menu" class="btn btn-icon" data-action="openMenu">☰</button>
         </div>
       </header>
 
@@ -160,7 +165,10 @@
         <!-- Viewscreen -->
         <div id="viewscreen" class="viewscreen">
           <div id="viewscreen-content" class="viewscreen-content">
-            <!-- Map or scene rendered here -->
+            <div class="viewscreen-placeholder">
+              <div class="viewscreen-label">VIEWSCREEN</div>
+              <div class="viewscreen-hint">Sensor view will appear here</div>
+            </div>
           </div>
         </div>
 
@@ -198,11 +206,106 @@
           </div>
         </div>
       </div>
+
+      <!-- Hamburger Menu -->
+      <nav id="hamburger-menu" class="hamburger-menu hidden">
+        <button class="menu-item" id="menu-shared-map" data-action="openSharedMap">
+          <span class="menu-icon">🗺️</span>
+          <span class="menu-label">Shared Map</span>
+          <span class="menu-badge shared-map-badge hidden" id="shared-map-badge">LIVE</span>
+        </button>
+        <button class="menu-item" id="menu-email" data-action="openEmail">
+          <span class="menu-icon">📧</span>
+          <span class="menu-label">Mail</span>
+          <span class="menu-badge email-badge hidden" id="email-badge">0</span>
+        </button>
+        <button class="menu-item" id="menu-settings" data-action="openSettings">
+          <span class="menu-icon">⚙️</span>
+          <span class="menu-label">Settings</span>
+        </button>
+        <button class="menu-item" id="menu-logout" data-action="logout">
+          <span class="menu-icon">🚪</span>
+          <span class="menu-label">Leave Bridge</span>
+        </button>
+      </nav>
     </div>
 
     <!-- Connection Status -->
     <div id="connection-status" class="connection-status hidden">
       <span id="connection-text">Connecting...</span>
+    </div>
+
+    <!-- Shared Map Overlay -->
+    <div id="shared-map-overlay" class="shared-map-overlay hidden">
+      <div class="shared-map-header">
+        <h2>Shared Map <span id="map-live-badge" class="live-badge hidden">LIVE</span></h2>
+        <div class="shared-map-controls">
+          <span id="map-location-display">Centered on: ...</span>
+          <input type="text" id="map-hex-input" class="gm-only hidden" placeholder="Hex">
+          <button id="btn-goto-hex" class="btn btn-small gm-only hidden" data-action="gotoHex">Go</button>
+          <button id="btn-share-map" class="btn btn-primary gm-only hidden" data-action="shareMap">Share</button>
+          <button id="btn-recenter-players" class="btn btn-secondary gm-only hidden" data-action="recenterPlayers">Re-center</button>
+          <button id="btn-unshare-map" class="btn btn-danger gm-only hidden" data-action="unshareMap">Stop</button>
+          <button id="btn-close-map" class="btn btn-secondary" data-action="closeMap">Close</button>
+        </div>
+      </div>
+      <div class="shared-map-container">
+        <iframe id="shared-map-iframe" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- Email Overlay -->
+    <div id="email-overlay" class="email-overlay hidden">
+      <div class="email-header">
+        <h2>Mail</h2>
+        <div class="email-tabs">
+          <button class="email-tab active" data-tab="inbox">Inbox</button>
+          <button class="email-tab" data-tab="compose">Compose</button>
+          <button class="email-tab" data-tab="drafts">Drafts</button>
+        </div>
+        <button id="btn-close-email" class="btn btn-secondary" data-action="closeEmail">Close</button>
+      </div>
+      <div class="email-content">
+        <div id="email-inbox" class="email-tab-content active">
+          <div id="email-list" class="email-list">
+            <!-- Messages rendered here -->
+          </div>
+        </div>
+        <div id="email-compose" class="email-tab-content hidden">
+          <div class="compose-form">
+            <div class="form-row">
+              <label for="compose-to">To:</label>
+              <input type="text" id="compose-to" placeholder="Recipient">
+            </div>
+            <div class="form-row">
+              <label for="compose-subject">Subject:</label>
+              <input type="text" id="compose-subject" placeholder="Subject">
+            </div>
+            <div class="form-row">
+              <label for="compose-body">Message:</label>
+              <textarea id="compose-body" rows="6" placeholder="Message body"></textarea>
+            </div>
+            <div class="form-row">
+              <span id="delivery-estimate">Delivery: ~2 weeks</span>
+            </div>
+            <div class="compose-actions">
+              <button class="btn btn-primary" data-action="sendEmail">Send</button>
+              <button class="btn btn-secondary" data-action="saveDraft">Save Draft</button>
+            </div>
+          </div>
+        </div>
+        <div id="email-drafts" class="email-tab-content hidden">
+          <div id="drafts-list" class="drafts-list">
+            <!-- Drafts rendered here -->
+          </div>
+        </div>
+        <div id="email-view" class="email-tab-content hidden">
+          <div id="message-content">
+            <!-- Message detail rendered here -->
+          </div>
+          <button class="btn btn-secondary" data-action="backToInbox">Back</button>
+        </div>
+      </div>
     </div>
 
     <!-- Error Toast -->
@@ -218,6 +321,8 @@
   <!-- V2 Modules -->
   <script src="adapters/gui-renderers.js"></script>
   <script src="adapters/gui-adapter.js"></script>
+  <script src="modules/shared-map.js"></script>
+  <script src="modules/email-panel.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

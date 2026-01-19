@@ -30,7 +30,11 @@ const STATUS_CLASSES = {
   'damage-present': 'status-warning',
   'alert-green': 'status-success',
   'alert-yellow': 'status-warning',
-  'alert-red': 'status-danger'
+  'alert-red': 'status-danger',
+  'observer-active': 'status-info',
+  'on-call': 'status-success',
+  'ready': 'status-success',
+  'active': 'status-success'
 };
 
 /**
@@ -327,6 +331,90 @@ function renderObserver(vm) {
   </div>`;
 }
 
+/**
+ * Render Comms panel
+ * @param {object} vm - Comms ViewModel
+ * @returns {string} HTML string
+ */
+function renderComms(vm) {
+  const d = vm.derived;
+
+  return `<div class="role-panel comms-panel" data-role="comms">
+    ${panelHeader('comms', d.statusBadge, d.statusClass)}
+    <div class="panel-body">
+      ${kvRow('Channel', d.channelText)}
+      ${kvRow('Messages', d.messageCountText)}
+    </div>
+    <div class="panel-actions">
+      ${actionButton('hail', 'Hail', vm.actions.hail)}
+      ${actionButton('broadcast', 'Broadcast', vm.actions.broadcast)}
+    </div>
+  </div>`;
+}
+
+/**
+ * Render Medic panel
+ * @param {object} vm - Medic ViewModel
+ * @returns {string} HTML string
+ */
+function renderMedic(vm) {
+  const d = vm.derived;
+
+  return `<div class="role-panel medic-panel" data-role="medic">
+    ${panelHeader('medic', d.statusBadge, d.statusClass)}
+    <div class="panel-body">
+      ${kvRow('Patients', d.patientCountText)}
+      ${kvRow('Supplies', d.suppliesText)}
+    </div>
+    <div class="panel-actions">
+      ${actionButton('treatPatient', 'Treat', vm.actions.treatPatient)}
+      ${actionButton('checkSupplies', 'Supplies', vm.actions.checkSupplies)}
+    </div>
+  </div>`;
+}
+
+/**
+ * Render Marines panel
+ * @param {object} vm - Marines ViewModel
+ * @returns {string} HTML string
+ */
+function renderMarines(vm) {
+  const d = vm.derived;
+
+  return `<div class="role-panel marines-panel" data-role="marines">
+    ${panelHeader('marines', d.statusBadge, d.statusClass)}
+    <div class="panel-body">
+      ${kvRow('Squad', d.squadStatusText)}
+      ${kvRow('Armor', d.armorText)}
+    </div>
+    <div class="panel-actions">
+      ${actionButton('deploy', 'Deploy', vm.actions.deploy)}
+      ${actionButton('drill', 'Drill', vm.actions.drill)}
+    </div>
+  </div>`;
+}
+
+/**
+ * Render Steward panel
+ * @param {object} vm - Steward ViewModel
+ * @returns {string} HTML string
+ */
+function renderSteward(vm) {
+  const d = vm.derived;
+
+  return `<div class="role-panel steward-panel" data-role="steward">
+    ${panelHeader('steward', d.statusBadge, d.statusClass)}
+    <div class="panel-body">
+      ${kvRow('Passengers', d.passengerCountText)}
+      ${kvRow('Supplies', d.suppliesText)}
+    </div>
+    <div class="panel-actions">
+      ${actionButton('servePassengers', 'Serve', vm.actions.servePassengers)}
+      ${actionButton('checkInventory', 'Inventory', vm.actions.checkInventory)}
+    </div>
+  </div>`;
+}
+
 // Renderer registry (internal - use roleRenderers to avoid global scope conflict)
 const roleRenderers = {
   gunner: renderGunner,
@@ -336,7 +424,11 @@ const roleRenderers = {
   captain: renderCaptain,
   'damage-control': renderDamageControl,
   astrogator: renderAstrogator,
-  observer: renderObserver
+  observer: renderObserver,
+  comms: renderComms,
+  medic: renderMedic,
+  marines: renderMarines,
+  steward: renderSteward
 };
 
 /**
@@ -428,6 +520,10 @@ if (typeof module !== 'undefined' && module.exports) {
     renderDamageControl,
     renderAstrogator,
     renderObserver,
+    renderComms,
+    renderMedic,
+    renderMarines,
+    renderSteward,
     renderCampaignItem,
     renderPlayerSlot,
     renderCrewMember,
@@ -454,6 +550,10 @@ if (typeof window !== 'undefined') {
     renderDamageControl,
     renderAstrogator,
     renderObserver,
+    renderComms,
+    renderMedic,
+    renderMarines,
+    renderSteward,
     renderCampaignItem,
     renderPlayerSlot,
     renderCrewMember,
