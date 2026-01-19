@@ -11002,3 +11002,21 @@ body.show-ui-status [data-status-note] {
   padding: 8px 16px;
   white-space: nowrap;
 }
+
+/* AR-189: Hotkey hints on buttons */
+.hotkey-hint {
+  font-size: 0.75em;
+  font-weight: normal;
+  opacity: 0.7;
+  margin-right: 4px;
+  font-family: monospace;
+  vertical-align: baseline;
+}
+
+.btn .hotkey-hint {
+  color: inherit;
+}
+
+.btn:hover .hotkey-hint {
+  opacity: 1;
+}

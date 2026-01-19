@@ -187,6 +187,19 @@ function initBridgeScreen(state, helpers) {
       showNotification(`UI Status Indicators: ${isVisible ? 'ON' : 'OFF'}`, 'info');
       if (isVisible) applyStatusIndicators();
     }
+
+    // AR-189: Role action hotkeys
+    const roleHotkeys = {
+      'p': () => document.querySelector('[onclick*="plotJumpCourse"]')?.click(),
+      'c': () => document.querySelector('#btn-set-course, [onclick*="showPlacesOverlay"]')?.click(),
+      't': () => document.querySelector('#btn-travel')?.click(),
+      'r': () => document.querySelector('[onclick*="attemptRepair"]')?.click()
+    };
+    const key = e.key.toLowerCase();
+    if (roleHotkeys[key] && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      roleHotkeys[key]();
+      e.preventDefault();
+    }
   });
 
   // Panel expand button click handlers

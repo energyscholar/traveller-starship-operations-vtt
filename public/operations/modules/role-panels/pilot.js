@@ -121,12 +121,12 @@ export function getPilotPanel(shipState, template, campaign, jumpStatus = {}, fl
         ` : ''}
       </div>
       <div class="pilot-nav-controls" style="margin-top: 10px;">
-        <button id="btn-set-course" class="btn btn-secondary" onclick="showPlacesOverlay()" title="Open Places panel to select destination">
-          Set Course
+        <button id="btn-set-course" class="btn btn-secondary" onclick="showPlacesOverlay()" title="Open Places panel to select destination [C]">
+          <span class="hotkey-hint">[C]</span> Set Course
         </button>
         ${hasDestination && pendingTravel ? `
-        <button id="btn-travel" class="btn btn-primary btn-travel" onclick="travel()" title="Execute transit to destination">
-          Travel (${pendingTravel.travelHours || '?'}h)
+        <button id="btn-travel" class="btn btn-primary btn-travel" onclick="travel()" title="Execute transit to destination [T]">
+          <span class="hotkey-hint">[T]</span> Travel (${pendingTravel.travelHours || '?'}h)
         </button>
         <button class="btn btn-small btn-secondary" onclick="clearCourse()" title="Cancel course">Clear</button>
         ` : ''}

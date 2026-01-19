@@ -122,7 +122,7 @@ export function getEngineerPanel(shipState, template, systemStatus, damagedSyste
         <select id="repair-target" class="repair-select">
           ${damagedSystems.map(s => `<option value="${s}">${formatSystemName(s)}</option>`).join('')}
         </select>
-        <button onclick="attemptRepair()" class="btn btn-small" title="Roll Engineer check (8+) to repair selected system. DM penalty equals damage severity.">Attempt Repair</button>
+        <button onclick="attemptRepair()" class="btn btn-small" title="Roll Engineer check (8+) to repair selected system. DM penalty equals damage severity. [R]"><span class="hotkey-hint">[R]</span> Repair</button>
       </div>
       <div class="repair-info">
         <small>Engineer check (8+) with DM = -Severity</small>

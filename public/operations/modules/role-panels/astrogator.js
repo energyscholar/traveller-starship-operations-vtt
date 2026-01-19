@@ -174,8 +174,8 @@ export function getAstrogatorPanel(shipState, template, jumpStatus, campaign, sy
           </select>
         </div>
         <button onclick="plotJumpCourse()" class="btn btn-secondary ${jDriveDisabled || maxJumpWithFuel === 0 ? 'disabled' : ''}"
-                title="${jDriveDisabled ? 'Jump drive damaged' : maxJumpWithFuel === 0 ? 'Insufficient fuel for any jump' : 'Calculate jump coordinates and verify fuel requirements'}"
-                ${jDriveDisabled || maxJumpWithFuel === 0 ? 'disabled' : ''}>Plot Course</button>
+                title="${jDriveDisabled ? 'Jump drive damaged' : maxJumpWithFuel === 0 ? 'Insufficient fuel for any jump' : 'Calculate jump coordinates and verify fuel requirements [P]'}"
+                ${jDriveDisabled || maxJumpWithFuel === 0 ? 'disabled' : ''}><span class="hotkey-hint">[P]</span> Plot Course</button>
       </div>
       <div id="jump-plot-result" class="jump-plot-result" style="display: none;">
         <!-- Populated by plotJumpCourse() -->
