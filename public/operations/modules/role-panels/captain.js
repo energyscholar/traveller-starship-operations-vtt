@@ -215,6 +215,38 @@ export function getCaptainPanel(shipState, template, ship, crewOnline, contacts,
       <div id="nav-order-status" style="margin-top: 8px; font-size: 0.85em; color: var(--text-muted);"></div>
     </div>
 
+    <div class="detail-section captain-orders-section">
+      <h4>Standard Orders</h4>
+      <div class="order-template-controls" style="display: flex; gap: 5px; align-items: center;">
+        <select id="order-template-select" class="order-template-select" style="flex: 1;">
+          <option value="battle_stations" data-target="all" data-priority="high">All hands to battle stations!</option>
+          <option value="stand_down" data-target="all" data-priority="normal">Stand down. Resume normal operations.</option>
+          <option value="hold_fire" data-target="gunner" data-priority="high">Hold fire! Weapons tight!</option>
+          <option value="weapons_free" data-target="gunner" data-priority="high">Weapons free! Engage at will!</option>
+        </select>
+        <button onclick="window.captainIssueOrder()" class="btn btn-small btn-primary" title="Issue selected order">
+          Issue
+        </button>
+      </div>
+      <div class="custom-order" style="margin-top: 8px;">
+        <input type="text" id="custom-order-text" placeholder="Custom order..." style="width: 100%; padding: 6px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-secondary);">
+        <div style="display: flex; gap: 5px; margin-top: 5px;">
+          <select id="custom-order-target" style="flex: 1;">
+            <option value="all">All Crew</option>
+            <option value="pilot">Pilot</option>
+            <option value="engineer">Engineer</option>
+            <option value="gunner">Gunner</option>
+            <option value="sensors">Sensors</option>
+            <option value="medic">Medic</option>
+          </select>
+          <button onclick="window.captainIssueCustomOrder()" class="btn btn-small btn-secondary" title="Issue custom order">
+            Send
+          </button>
+        </div>
+      </div>
+      <div id="order-status" style="margin-top: 8px; font-size: 0.85em; color: var(--text-muted);"></div>
+    </div>
+
     ${rescueTargets.length > 0 ? `
     <div class="detail-section captain-rescue-section">
       <h4>Rescue Priorities (${rescueTargets.length})</h4>

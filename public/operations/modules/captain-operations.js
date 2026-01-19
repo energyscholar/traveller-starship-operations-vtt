@@ -227,3 +227,94 @@ export function captainNavOrder(state, navType) {
     actor: 'Captain'
   });
 }
+
+/**
+ * AR-35: Issue standard order from template dropdown
+ * @param {Object} state - Application state
+ */
+export function captainIssueOrder(state) {
+  if (!hasCaptainPermission(state)) {
+    showNotification('Only Captain can issue orders', 'error');
+    return;
+  }
+
+  const select = document.getElementById('order-template-select');
+  if (!select) {
+    showNotification('Order template not found', 'error');
+    return;
+  }
+
+  const selectedOption = select.options[select.selectedIndex];
+  const orderData = {
+    templateId: select.value,
+    text: selectedOption.textContent,
+    targetRole: selectedOption.dataset.target || 'all',
+    priority: selectedOption.dataset.priority || 'normal',
+    requiresAck: true
+  };
+
+  // Emit the order
+  state.socket.emit('ops:issueOrder', orderData);
+
+  // Display status
+  const statusEl = document.getElementById('order-status');
+  if (statusEl) {
+    statusEl.textContent = `Order issued: ${orderData.text}`;
+    setTimeout(() => { statusEl.textContent = ''; }, 5000);
+  }
+
+  showNotification(`Order issued to ${orderData.targetRole === 'all' ? 'all crew' : orderData.targetRole}`, 'info');
+
+  // Log the order
+  state.socket.emit('ops:addLogEntry', {
+    entryType: 'order',
+    message: `Captain orders: ${orderData.text}`,
+    actor: 'Captain'
+  });
+}
+
+/**
+ * AR-35: Issue custom order with free text
+ * @param {Object} state - Application state
+ */
+export function captainIssueCustomOrder(state) {
+  if (!hasCaptainPermission(state)) {
+    showNotification('Only Captain can issue orders', 'error');
+    return;
+  }
+
+  const textInput = document.getElementById('custom-order-text');
+  const targetSelect = document.getElementById('custom-order-target');
+
+  if (!textInput || !textInput.value.trim()) {
+    showNotification('Enter an order first', 'warning');
+    return;
+  }
+
+  const orderData = {
+    text: textInput.value.trim(),
+    targetRole: targetSelect?.value || 'all',
+    priority: 'normal',
+    requiresAck: true
+  };
+
+  // Emit the order
+  state.socket.emit('ops:issueOrder', orderData);
+
+  // Clear input and display status
+  textInput.value = '';
+  const statusEl = document.getElementById('order-status');
+  if (statusEl) {
+    statusEl.textContent = `Order issued: ${orderData.text}`;
+    setTimeout(() => { statusEl.textContent = ''; }, 5000);
+  }
+
+  showNotification(`Custom order issued to ${orderData.targetRole === 'all' ? 'all crew' : orderData.targetRole}`, 'info');
+
+  // Log the order
+  state.socket.emit('ops:addLogEntry', {
+    entryType: 'order',
+    message: `Captain orders: ${orderData.text}`,
+    actor: 'Captain'
+  });
+}
