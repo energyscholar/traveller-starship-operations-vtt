@@ -393,7 +393,7 @@ const actionHandlers = {
   selectRole: (d) => selectRole(d.roleId),
   closeToast: () => state.adapter.setVisible('error-toast', false),
   openMenu: toggleMenu,
-  setAlert: (d) => state.socket.emit('ops:setAlertStatus', { status: d.alert }),
+  setAlert: (d) => state.socket.emit('ops:setAlertStatus', { alertStatus: d.alert }),
   openSharedMap: () => { toggleMenu(); SharedMap.show(state); },
   closeMap: () => SharedMap.close(),
   shareMap: () => SharedMap.share(state),
