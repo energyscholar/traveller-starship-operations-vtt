@@ -173,3 +173,57 @@ export function captainSoloCommand(state, showPlacesOverlayFn, command) {
     actor: 'Captain'
   });
 }
+
+/**
+ * AR-35: Navigation Quick Order
+ * Issues a navigation order to the pilot with tracking
+ * @param {Object} state - Application state
+ * @param {string} navType - Order type: emergency_break, pursue, run_silent, full_speed
+ */
+export function captainNavOrder(state, navType) {
+  if (!hasCaptainPermission(state)) {
+    showNotification('Only Captain can issue navigation orders', 'error');
+    return;
+  }
+
+  // Build order data
+  const orderData = { navType };
+
+  // For pursue orders, get the selected contact
+  if (navType === 'pursue') {
+    const contactSelect = document.getElementById('pursue-contact-select');
+    if (!contactSelect || !contactSelect.value) {
+      showNotification('No contact selected for pursuit', 'warning');
+      return;
+    }
+    orderData.contactId = contactSelect.value;
+  }
+
+  // Emit the nav order
+  state.socket.emit('ops:navOrder', orderData);
+
+  // Display status
+  const statusEl = document.getElementById('nav-order-status');
+  const messages = {
+    emergency_break: 'Emergency braking ordered!',
+    pursue: 'Pursuit order issued!',
+    run_silent: 'Running silent ordered!',
+    full_speed: 'Full speed ordered!'
+  };
+
+  if (statusEl) {
+    statusEl.textContent = messages[navType] || 'Order issued';
+    statusEl.style.color = navType === 'emergency_break' ? 'var(--danger)' : 'var(--text-muted)';
+    // Clear after 5 seconds
+    setTimeout(() => { statusEl.textContent = ''; }, 5000);
+  }
+
+  showNotification(messages[navType] || 'Navigation order issued', navType === 'emergency_break' ? 'warning' : 'info');
+
+  // Log the order
+  state.socket.emit('ops:addLogEntry', {
+    entryType: 'order',
+    message: `Navigation order: ${navType}${orderData.contactId ? ` (contact: ${orderData.contactId})` : ''}`,
+    actor: 'Captain'
+  });
+}

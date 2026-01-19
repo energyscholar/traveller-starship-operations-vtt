@@ -187,6 +187,34 @@ export function getCaptainPanel(shipState, template, ship, crewOnline, contacts,
       <div id="leadership-result" class="leadership-result" style="margin-top: 10px;"></div>
     </div>
 
+    <div class="detail-section captain-nav-orders-section">
+      <h4>Navigation Quick Orders</h4>
+      <div class="nav-order-buttons" style="display: flex; gap: 5px; flex-wrap: wrap;">
+        <button onclick="window.captainNavOrder('emergency_break')" class="btn btn-small btn-danger" title="Emergency braking! All hands brace!">
+          Emergency Break
+        </button>
+        <button onclick="window.captainNavOrder('full_speed')" class="btn btn-small btn-warning" title="Full speed ahead! Maximum thrust!">
+          Full Speed
+        </button>
+        <button onclick="window.captainNavOrder('run_silent')" class="btn btn-small btn-secondary" title="Running silent. Minimize emissions.">
+          Run Silent
+        </button>
+      </div>
+      ${contacts?.length > 0 ? `
+        <div class="pursue-order" style="margin-top: 8px; display: flex; gap: 5px; align-items: center;">
+          <select id="pursue-contact-select" class="pursue-select" style="flex: 1;">
+            ${contacts.filter(c => c.marking !== 'friendly').map(c => `
+              <option value="${c.id}">${escapeHtml(c.name || 'Unknown')} - ${c.marking || 'unknown'}</option>
+            `).join('')}
+          </select>
+          <button onclick="window.captainNavOrder('pursue')" class="btn btn-small btn-warning" title="Pursue designated contact">
+            Pursue
+          </button>
+        </div>
+      ` : ''}
+      <div id="nav-order-status" style="margin-top: 8px; font-size: 0.85em; color: var(--text-muted);"></div>
+    </div>
+
     ${rescueTargets.length > 0 ? `
     <div class="detail-section captain-rescue-section">
       <h4>Rescue Priorities (${rescueTargets.length})</h4>

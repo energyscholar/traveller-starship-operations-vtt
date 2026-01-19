@@ -156,7 +156,7 @@ import { expandRolePanel as _expandRolePanel, collapseRolePanel as _collapseRole
 // AR-153: Phase 3 modules
 import { openRefuelModal as _openRefuelModal, processFuel as _processFuel, populateRefuelModal as _populateRefuelModal, updateRefuelAmountPreview as _updateRefuelAmountPreview, updateRefuelPreview, executeRefuel as _executeRefuel, setRefuelMax as _setRefuelMax, executeProcessFuel as _executeProcessFuel, setProcessMax as _setProcessMax, requestFuelStatus as _requestFuelStatus } from './modules/refueling-operations.js';
 // AR-153: Phase 4 modules
-import { captainMarkContact as _captainMarkContact, captainRequestStatus as _captainRequestStatus, captainLeadershipCheck as _captainLeadershipCheck, captainTacticsCheck as _captainTacticsCheck, acknowledgeOrder as _acknowledgeOrder, captainSoloCommand as _captainSoloCommand } from './modules/captain-operations.js';
+import { captainMarkContact as _captainMarkContact, captainRequestStatus as _captainRequestStatus, captainLeadershipCheck as _captainLeadershipCheck, captainTacticsCheck as _captainTacticsCheck, acknowledgeOrder as _acknowledgeOrder, captainSoloCommand as _captainSoloCommand, captainNavOrder as _captainNavOrder } from './modules/captain-operations.js';
 // AR-153: Phase 5 modules
 import { getStarPopupContent, getShipPopupContent, getStationPopupContent, showContactTooltip as _showContactTooltip, hideContactTooltip as _hideContactTooltip, scanContact as _scanContact, hailContact as _hailContact } from './modules/contact-tooltip.js';
 // AR-153: Phase 6 modules
@@ -327,6 +327,7 @@ const captainLeadershipCheck = () => _captainLeadershipCheck(state);
 const captainTacticsCheck = () => _captainTacticsCheck(state);
 const acknowledgeOrder = (orderId) => _acknowledgeOrder(state, orderId);
 const captainSoloCommand = (command) => _captainSoloCommand(state, showPlacesOverlay, command);
+const captainNavOrder = (navType) => _captainNavOrder(state, navType);
 // AR-153: Phase 5 wrappers
 const showContactTooltip = (contactId, targetElement) => _showContactTooltip(state, contactId, targetElement);
 const hideContactTooltip = () => _hideContactTooltip(state);
@@ -4243,6 +4244,7 @@ window.captainLeadershipCheck = captainLeadershipCheck;
 window.captainTacticsCheck = captainTacticsCheck;
 window.acknowledgeOrder = acknowledgeOrder;
 window.captainSoloCommand = captainSoloCommand;
+window.captainNavOrder = captainNavOrder;
 // AR-153: Phase 5 Contact Tooltip exports
 window.showContactTooltip = showContactTooltip;
 window.hideContactTooltip = hideContactTooltip;
