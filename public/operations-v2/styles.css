@@ -853,3 +853,115 @@ body {
   justify-content: flex-end;
   margin-top: 15px;
 }
+
+/* ==================== Role Panel Enhancements ==================== */
+
+.role-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.role-panel-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+}
+
+.status-ok { background: #2d5a27; color: #7bed7b; }
+.status-casualties { background: #5a4a27; color: #edcf7b; }
+.status-critical { background: #5a2727; color: #ed7b7b; }
+.status-jammed { background: #5a2727; color: #ed7b7b; }
+.status-priority { background: #5a4a27; color: #edcf7b; }
+.status-messages { background: #27415a; color: #7bc1ed; }
+.status-clear { background: #2d5a27; color: #7bed7b; }
+.status-healthy { background: #2d5a27; color: #7bed7b; }
+.status-ready { background: #2d5a27; color: #7bed7b; }
+.status-boarding { background: #5a4a27; color: #edcf7b; }
+.status-stand-down { background: var(--bg-tertiary); color: var(--text-secondary); }
+.status-nominal { background: #2d5a27; color: #7bed7b; }
+.status-complaints { background: #5a4a27; color: #edcf7b; }
+.status-low-supplies { background: #5a2727; color: #ed7b7b; }
+
+.role-panel-content {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.role-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.role-panel-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==================== Modal Option Styles ==================== */
+
+.modal-option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.modal-option {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-option:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-blue);
+}
+
+.order-form label {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.order-form select,
+.order-form input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+}
+
+/* ==================== Responsive Enhancements ==================== */
+
+@media (max-width: 768px) {
+  .role-panel-actions {
+    flex-direction: column;
+  }
+
+  .role-panel-actions button {
+    width: 100%;
+  }
+
+  .modal-content {
+    margin: 1rem;
+    min-width: auto;
+    width: calc(100% - 2rem);
+  }
+}
