@@ -315,6 +315,19 @@ function handleBridgeJoined(data) {
   state.adapter.setText('bridge-user-role', data.role || 'GM');
   state.adapter.setText('bridge-user-name', data.isGM ? 'GM' : (state.userName || 'Player'));
   renderCrewList(); renderContacts(); renderRolePanel(); state.adapter.showScreen('bridge-screen');
+
+  // Store system data for viewscreen
+  if (data.systemData && window.v2SystemMap) {
+    window.v2SystemMap.system = data.systemData;
+    window.v2SystemMap.celestialObjects = data.systemData?.celestialObjects || data.systemData?.planets || [];
+  }
+
+  // Initialize viewscreen
+  const viewscreenEl = document.getElementById('viewscreen-content');
+  if (viewscreenEl && window.initV2Viewscreen) {
+    window.initV2Viewscreen(viewscreenEl, state.role);
+  }
+
   // Start ViewModel polling after successful bridge join
   startViewModelPolling();
 }
