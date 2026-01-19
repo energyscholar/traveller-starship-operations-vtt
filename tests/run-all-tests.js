@@ -119,6 +119,12 @@ const unitTests = [
   'tests/viewmodels/marines-viewmodel.test.js',
   'tests/viewmodels/comms-viewmodel.test.js',
   'tests/viewmodels/steward-viewmodel.test.js',
+  // Operations module tests
+  'tests/operations/ai-npc.test.js',
+  'tests/operations/crew-health.test.js',
+  'tests/operations/passenger-manifest.test.js',
+  'tests/operations/npc-dossiers.test.js',
+  'tests/operations/locations.test.js',
   // TUI Formatter tests
   'tests/tui/formatters/travel-formatter.test.js',
   'tests/tui/formatters/jump-formatter.test.js',
