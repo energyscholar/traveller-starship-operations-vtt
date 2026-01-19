@@ -2616,11 +2616,23 @@ input[type="checkbox"] {
 .system-status-item.damaged {
   border-left-color: var(--accent-orange);
   background: rgba(255, 152, 0, 0.1);
+  animation: pulse-system-yellow 2s infinite;
 }
 
 .system-status-item.critical {
   border-left-color: var(--accent-red);
   background: rgba(255, 61, 61, 0.1);
+  animation: pulse-system-red 1s infinite;
+}
+
+@keyframes pulse-system-yellow {
+  0%, 100% { background: rgba(255, 152, 0, 0.1); }
+  50% { background: rgba(255, 152, 0, 0.2); }
+}
+
+@keyframes pulse-system-red {
+  0%, 100% { background: rgba(255, 61, 61, 0.1); }
+  50% { background: rgba(255, 61, 61, 0.25); }
 }
 
 .system-name {
