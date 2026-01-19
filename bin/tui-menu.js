@@ -61,7 +61,7 @@ function showMainMenu() {
     `${CYAN}║${RESET}  ${YELLOW}[C]${RESET} ${WHITE}Combat Demos${RESET}                                         ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}      ${DIM}6 combat scenarios - AUTO and MANUAL modes${RESET}             ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
-    `${CYAN}║${RESET}  ${YELLOW}[S]${RESET} ${WHITE}Battle Simulation${RESET}                                    ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[B/S]${RESET} ${WHITE}Battle Simulation${RESET}                                  ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}      ${DIM}Run experiments with Captain AI${RESET}                        ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[E]${RESET} ${DIM}Ship Editor${RESET}                                          ${CYAN}║${RESET}\n` +
@@ -220,7 +220,7 @@ async function waitForMainSelection() {
       }
 
       // S for Battle Simulation
-      if (key === 's' || key === 'S') {
+      if (key === 's' || key === 'S' || key === 'b' || key === 'B') {
         cleanup();
         resolve('simulation');
         return;

@@ -125,6 +125,9 @@ const unitTests = [
   'tests/operations/passenger-manifest.test.js',
   'tests/operations/npc-dossiers.test.js',
   'tests/operations/locations.test.js',
+  'tests/operations/fuel-warnings.test.js',  // AR-190 Low fuel warnings
+  'tests/unit/gm-modifier.test.js',  // AR-186 GM roll modifier
+  'tests/tui/tui-battle.test.js',  // BETA: TUI battle [B] alias
   // TUI Formatter tests
   'tests/tui/formatters/travel-formatter.test.js',
   'tests/tui/formatters/jump-formatter.test.js',
