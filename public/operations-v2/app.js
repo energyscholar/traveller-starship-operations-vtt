@@ -315,6 +315,20 @@ function handleBridgeJoined(data) {
   state.adapter.setText('bridge-user-role', data.role || 'GM');
   state.adapter.setText('bridge-user-name', data.isGM ? 'GM' : (state.userName || 'Player'));
   renderCrewList(); renderContacts(); renderRolePanel(); state.adapter.showScreen('bridge-screen');
+  // Start ViewModel polling after successful bridge join
+  startViewModelPolling();
+}
+
+// TASK 2: ViewModel polling for continuous updates
+let viewModelPollInterval = null;
+function startViewModelPolling() {
+  // Prevent duplicate intervals
+  if (viewModelPollInterval) return;
+  viewModelPollInterval = setInterval(() => {
+    if (state.role && state.shipId && state.socket && state.connected) {
+      state.socket.emit('ops:getRoleUpdate', { role: state.role });
+    }
+  }, 5000);
 }
 
 function handleCrewUpdate(data) {
@@ -828,8 +842,16 @@ function toggleMenu() {
   if (menu) menu.classList.toggle('hidden');
 }
 
-// Expose showToast globally for modules
+// TASK 1: showModal dispatches event for modal system
+function showModal(modalId) {
+  const event = new CustomEvent('v2:showModal', { detail: { modalId } });
+  document.dispatchEvent(event);
+}
+
+// Expose showToast, showModal, and state globally for modules
 window.showToast = showToast;
+window.showModal = showModal;
+window.v2State = state;
 
 // === Debug Tooling (TASK 8) ===
 window.v2Debug = {
