@@ -521,6 +521,133 @@ const actionHandlers = {
   getShipSystems: (d) => {
     if (state.debug) console.log('[OPS-V2] getShipSystems', d);
     state.socket.emit('ops:getShipSystems', { shipId: d.shipId });
+  },
+
+  // === Additional Combat Actions ===
+  fire: (d) => {
+    if (state.debug) console.log('[OPS-V2] fire', d);
+    state.socket.emit('ops:fireWeapon', { weaponId: d.weaponId, targetId: d.targetId });
+  },
+  selectTarget: (d) => {
+    if (state.debug) console.log('[OPS-V2] selectTarget', d);
+    state.socket.emit('ops:selectTarget', { targetId: d.targetId });
+  },
+  evasiveManeuvers: (d) => {
+    if (state.debug) console.log('[OPS-V2] evasiveManeuvers', d);
+    state.socket.emit('ops:evasiveManeuvers', { enabled: d.enabled !== false });
+  },
+
+  // === Sensor Actions ===
+  scan: (d) => {
+    if (state.debug) console.log('[OPS-V2] scan', d);
+    state.socket.emit('ops:scanContact', { contactId: d.contactId, scanType: d.scanType || 'active' });
+  },
+  lock: (d) => {
+    if (state.debug) console.log('[OPS-V2] lock', d);
+    state.socket.emit('ops:lockTarget', { contactId: d.contactId });
+  },
+  unlock: (d) => {
+    if (state.debug) console.log('[OPS-V2] unlock', d);
+    state.socket.emit('ops:unlockTarget', { contactId: d.contactId });
+  },
+
+  // === Engineering Actions ===
+  adjustPower: (d) => {
+    if (state.debug) console.log('[OPS-V2] adjustPower', d);
+    state.socket.emit('ops:adjustPower', { systemId: d.systemId, level: d.level });
+  },
+  repair: (d) => {
+    if (state.debug) console.log('[OPS-V2] repair', d);
+    state.socket.emit('ops:repairSystem', { systemId: d.systemId });
+  },
+  processFuel: (d) => {
+    if (state.debug) console.log('[OPS-V2] processFuel', d);
+    state.socket.emit('ops:startFuelProcessing', { tons: d.tons || 'all' });
+  },
+
+  // === Damage Control Actions ===
+  repairHull: (d) => {
+    if (state.debug) console.log('[OPS-V2] repairHull', d);
+    state.socket.emit('ops:repairHull', { amount: d.amount });
+  },
+  firefighting: (d) => {
+    if (state.debug) console.log('[OPS-V2] firefighting', d);
+    state.socket.emit('ops:firefighting', { compartmentId: d.compartmentId });
+  },
+  sealBreach: (d) => {
+    if (state.debug) console.log('[OPS-V2] sealBreach', d);
+    state.socket.emit('ops:sealBreach', { compartmentId: d.compartmentId });
+  },
+
+  // === Captain/Order Actions ===
+  issueOrder: (d) => {
+    if (state.debug) console.log('[OPS-V2] issueOrder', d);
+    state.socket.emit('ops:issueOrder', { text: d.text, targetRole: d.targetRole, priority: d.priority });
+  },
+
+  // === Navigation/Jump Actions ===
+  setDestination: (d) => {
+    if (state.debug) console.log('[OPS-V2] setDestination', d);
+    state.socket.emit('ops:setDestination', { destinationId: d.destinationId, hex: d.hex });
+  },
+  plotJump: (d) => {
+    if (state.debug) console.log('[OPS-V2] plotJump', d);
+    state.socket.emit('ops:plotJump', { destination: d.destination, sector: d.sector, hex: d.hex });
+  },
+  initiateJump: (d) => {
+    if (state.debug) console.log('[OPS-V2] initiateJump', d);
+    state.socket.emit('ops:initiateJump', {});
+  },
+  cancelJump: (d) => {
+    if (state.debug) console.log('[OPS-V2] cancelJump', d);
+    state.socket.emit('ops:cancelJump', {});
+  },
+
+  // === Comms Actions ===
+  hail: (d) => {
+    if (state.debug) console.log('[OPS-V2] hail', d);
+    state.socket.emit('ops:hailContact', { contactId: d.contactId });
+  },
+  broadcast: (d) => {
+    if (state.debug) console.log('[OPS-V2] broadcast', d);
+    state.socket.emit('ops:broadcast', { message: d.message, channel: d.channel });
+  },
+
+  // === Medic Actions ===
+  treatPatient: (d) => {
+    if (state.debug) console.log('[OPS-V2] treatPatient', d);
+    state.socket.emit('ops:treatPatient', { patientId: d.patientId, treatmentType: d.treatmentType });
+  },
+  checkSupplies: (d) => {
+    if (state.debug) console.log('[OPS-V2] checkSupplies', d);
+    state.socket.emit('ops:checkMedicalSupplies', {});
+  },
+
+  // === Marines Actions ===
+  deploy: (d) => {
+    if (state.debug) console.log('[OPS-V2] deploy', d);
+    state.socket.emit('ops:deployMarines', { location: d.location, missionType: d.missionType });
+  },
+  drill: (d) => {
+    if (state.debug) console.log('[OPS-V2] drill', d);
+    state.socket.emit('ops:marineDrill', { drillType: d.drillType });
+  },
+
+  // === Steward Actions ===
+  servePassengers: (d) => {
+    if (state.debug) console.log('[OPS-V2] servePassengers', d);
+    state.socket.emit('ops:servePassengers', { serviceType: d.serviceType });
+  },
+  checkInventory: (d) => {
+    if (state.debug) console.log('[OPS-V2] checkInventory', d);
+    state.socket.emit('ops:checkInventory', { category: d.category });
+  },
+
+  // === Role Switching ===
+  switchRole: (d) => {
+    if (state.debug) console.log('[OPS-V2] switchRole', d);
+    state.role = d.roleId;
+    state.socket.emit('ops:switchRole', { newRole: d.roleId });
   }
 };
 function handleAction(action, data) {
@@ -712,13 +839,34 @@ window.v2Debug = {
   actions: () => console.log('[OPS-V2] Actions:', Object.keys(actionHandlers)),
   checkParity: () => {
     const v1Actions = [
-      'fireWeapon', 'authorizeWeapons',
+      // Combat
+      'fireWeapon', 'authorizeWeapons', 'fire', 'selectTarget', 'evasiveManeuvers',
+      // Engineering
       'repairSystem', 'applySystemDamage', 'clearSystemDamage', 'godModeRefuel',
-      'travelToSystem', 'setCurrentSystem', 'gmRelocateShip',
-      'addContact', 'shareStarSystem', 'getSystemStatus',
-      'advanceTime', 'bridgeTransmission',
+      'adjustPower', 'repair', 'processFuel',
+      // Damage Control
+      'repairHull', 'firefighting', 'sealBreach',
+      // Navigation
+      'travelToSystem', 'setCurrentSystem', 'gmRelocateShip', 'setDestination',
+      'plotJump', 'initiateJump', 'cancelJump',
+      // Sensors
+      'addContact', 'shareStarSystem', 'getSystemStatus', 'scan', 'lock', 'unlock',
+      // Comms
+      'advanceTime', 'bridgeTransmission', 'hail', 'broadcast',
+      // Captain
+      'issueOrder',
+      // Medic
+      'treatPatient', 'checkSupplies',
+      // Marines
+      'deploy', 'drill',
+      // Steward
+      'servePassengers', 'checkInventory',
+      // Modules
       'importModule', 'deleteModule', 'toggleModule', 'getModuleSummary',
-      'getPrepData', 'getShipSystems'
+      // GM
+      'getPrepData', 'getShipSystems',
+      // Role
+      'switchRole'
     ];
     const wired = v1Actions.filter(a => actionHandlers[a]);
     const missing = v1Actions.filter(a => !actionHandlers[a]);
