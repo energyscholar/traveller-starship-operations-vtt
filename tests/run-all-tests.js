@@ -150,7 +150,10 @@ const unitTests = [
   // V2 Bug Fix tests
   'tests/v2/v2-bugs.test.js',
   'tests/v2/modals.test.js',  // V2 modal system tests
-  'tests/v2/alert-status.test.js'  // V2 alert status fix
+  'tests/v2/alert-status.test.js',  // V2 alert status fix
+  // AR-194/199/200 tests
+  'tests/unit/ship-failures-ui.test.js',  // AR-194 Ship failures UI
+  'tests/unit/map-labels.test.js'  // AR-199/200 Map labels and tooltips
 ];
 
 // Integration tests
