@@ -247,4 +247,237 @@
     };
   });
 
+  // ==================== Target Picker Modal ====================
+
+  Modals.register('target-picker', (context) => {
+    const { contacts = [], onSelect } = context;
+
+    const content = contacts.length === 0
+      ? '<p style="color: var(--text-muted);">No contacts available</p>'
+      : contacts.map(c => `
+          <button class="modal-option" data-id="${c.id}">
+            ${c.name || c.designation || 'Unknown'} - ${c.range || '?'}km
+          </button>
+        `).join('');
+
+    return {
+      title: 'Select Target',
+      size: 'medium',
+      content: `
+        <div class="modal-option-list">${content}</div>
+        <div class="button-row">
+          <button class="btn btn-secondary" data-action="cancel">Cancel</button>
+        </div>
+      `,
+      onSetup: (modal) => {
+        modal.querySelectorAll('.modal-option').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            Modals.close();
+            if (onSelect) onSelect(id);
+            else if (window.v2State?.socket) {
+              window.v2State.socket.emit('ops:lockTarget', { contactId: id });
+            }
+          });
+        });
+        modal.querySelector('[data-action="cancel"]').addEventListener('click', () => Modals.close());
+      }
+    };
+  });
+
+  // ==================== Destination Picker Modal ====================
+
+  Modals.register('destination-picker', (context) => {
+    const { destinations = [], onSelect } = context;
+    const defaultDests = destinations.length > 0 ? destinations : [
+      { id: 'orbit', name: 'Orbit', distance: 0 },
+      { id: 'mainworld', name: 'Mainworld', distance: 1 }
+    ];
+
+    const content = defaultDests.map(d => `
+      <button class="modal-option" data-id="${d.id}">
+        ${d.name} ${d.distance ? `- ${d.distance} AU` : ''}
+      </button>
+    `).join('');
+
+    return {
+      title: 'Select Destination',
+      size: 'medium',
+      content: `
+        <div class="modal-option-list">${content}</div>
+        <div class="button-row">
+          <button class="btn btn-secondary" data-action="cancel">Cancel</button>
+        </div>
+      `,
+      onSetup: (modal) => {
+        modal.querySelectorAll('.modal-option').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            Modals.close();
+            if (onSelect) onSelect(id);
+            else if (window.v2State?.socket) {
+              window.v2State.socket.emit('ops:setDestination', { destinationId: id });
+            }
+          });
+        });
+        modal.querySelector('[data-action="cancel"]').addEventListener('click', () => Modals.close());
+      }
+    };
+  });
+
+  // ==================== Order Modal ====================
+
+  Modals.register('order-modal', (context) => {
+    const { roles = ['pilot', 'gunner', 'engineer', 'sensors', 'all'], onSubmit } = context;
+    const roleOptions = roles.map(r => `<option value="${r}">${r.charAt(0).toUpperCase() + r.slice(1)}</option>`).join('');
+
+    return {
+      title: 'Issue Order',
+      size: 'medium',
+      content: `
+        <div class="form-group">
+          <label for="order-target">To:</label>
+          <select id="order-target">${roleOptions}</select>
+        </div>
+        <div class="form-group">
+          <label for="order-text">Order:</label>
+          <input type="text" id="order-text" placeholder="Enter order...">
+        </div>
+        <div class="button-row">
+          <button class="btn btn-secondary" data-action="cancel">Cancel</button>
+          <button class="btn btn-primary" data-action="issue">Issue Order</button>
+        </div>
+      `,
+      onSetup: (modal) => {
+        const issue = () => {
+          const target = modal.querySelector('#order-target').value;
+          const text = modal.querySelector('#order-text').value.trim();
+          if (text) {
+            Modals.close();
+            if (onSubmit) onSubmit({ target, text });
+            else if (window.v2State?.socket) {
+              window.v2State.socket.emit('ops:issueOrder', { targetRole: target, text });
+            }
+          }
+        };
+
+        modal.querySelector('[data-action="issue"]').addEventListener('click', issue);
+        modal.querySelector('[data-action="cancel"]').addEventListener('click', () => Modals.close());
+        modal.querySelector('#order-text').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); issue(); }
+        });
+      }
+    };
+  });
+
+  // ==================== Role Picker Modal ====================
+
+  Modals.register('role-picker', (context) => {
+    const { roles = ['pilot', 'gunner', 'engineer', 'sensors', 'captain', 'observer'], onSelect } = context;
+
+    const content = roles.map(r => `
+      <button class="modal-option" data-role="${r}">
+        ${r.charAt(0).toUpperCase() + r.slice(1)}
+      </button>
+    `).join('');
+
+    return {
+      title: 'Switch Role',
+      size: 'medium',
+      content: `
+        <div class="modal-option-list">${content}</div>
+        <div class="button-row">
+          <button class="btn btn-secondary" data-action="cancel">Cancel</button>
+        </div>
+      `,
+      onSetup: (modal) => {
+        modal.querySelectorAll('.modal-option').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const role = btn.dataset.role;
+            Modals.close();
+            if (onSelect) onSelect(role);
+            else if (window.v2State?.socket) {
+              window.v2State.socket.emit('ops:switchRole', { newRole: role });
+            }
+          });
+        });
+        modal.querySelector('[data-action="cancel"]').addEventListener('click', () => Modals.close());
+      }
+    };
+  });
+
+  // ==================== Placeholder Modals ====================
+
+  // Jump Planner (placeholder)
+  Modals.register('jump-planner', () => ({
+    title: 'Jump Planner',
+    size: 'large',
+    content: '<p style="color: var(--text-muted); padding: 20px;">Jump planning interface - Coming soon</p>',
+    onSetup: () => {}
+  }));
+
+  // Hail Modal (placeholder)
+  Modals.register('hail-modal', () => ({
+    title: 'Hail Contact',
+    size: 'medium',
+    content: '<p style="color: var(--text-muted); padding: 20px;">Hailing interface - Coming soon</p>',
+    onSetup: () => {}
+  }));
+
+  // Broadcast Modal (placeholder)
+  Modals.register('broadcast-modal', () => ({
+    title: 'Broadcast',
+    size: 'medium',
+    content: '<p style="color: var(--text-muted); padding: 20px;">Broadcast interface - Coming soon</p>',
+    onSetup: () => {}
+  }));
+
+  // Power Adjust (placeholder)
+  Modals.register('power-adjust', () => ({
+    title: 'Adjust Power',
+    size: 'medium',
+    content: '<p style="color: var(--text-muted); padding: 20px;">Power adjustment interface - Coming soon</p>',
+    onSetup: () => {}
+  }));
+
+  // Repair Picker (placeholder)
+  Modals.register('repair-picker', () => ({
+    title: 'Select System to Repair',
+    size: 'medium',
+    content: '<p style="color: var(--text-muted); padding: 20px;">Repair picker interface - Coming soon</p>',
+    onSetup: () => {}
+  }));
+
+  // Patient Picker (placeholder)
+  Modals.register('patient-picker', () => ({
+    title: 'Select Patient',
+    size: 'medium',
+    content: '<p style="color: var(--text-muted); padding: 20px;">Patient picker interface - Coming soon</p>',
+    onSetup: () => {}
+  }));
+
+  // Deploy Marines (placeholder)
+  Modals.register('deploy-modal', () => ({
+    title: 'Deploy Marines',
+    size: 'medium',
+    content: '<p style="color: var(--text-muted); padding: 20px;">Marine deployment interface - Coming soon</p>',
+    onSetup: () => {}
+  }));
+
+  // ==================== Modal Event Handler ====================
+
+  // Listen for v2:showModal events from app.js
+  document.addEventListener('v2:showModal', (e) => {
+    const modalId = e.detail?.modalId;
+    if (modalId && Modals.registry[modalId]) {
+      Modals.show(modalId, {
+        socket: window.v2State?.socket,
+        contacts: window.v2State?.contacts || [],
+        destinations: window.v2State?.destinations || []
+      });
+    } else {
+      console.warn('[V2] Unknown modal:', modalId);
+    }
+  });
+
 })(window);
