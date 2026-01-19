@@ -149,7 +149,8 @@ const unitTests = [
   'tests/tui/integration/tui-flow.test.js',
   // V2 Bug Fix tests
   'tests/v2/v2-bugs.test.js',
-  'tests/v2/modals.test.js'  // V2 modal system tests
+  'tests/v2/modals.test.js',  // V2 modal system tests
+  'tests/v2/alert-status.test.js'  // V2 alert status fix
 ];
 
 // Integration tests
