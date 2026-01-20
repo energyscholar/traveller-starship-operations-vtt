@@ -148,3 +148,38 @@ export function appendNarration(text) {
   // Auto-scroll to bottom
   consoleLog.scrollTop = consoleLog.scrollHeight;
 }
+
+/**
+ * Get current selected role
+ * @returns {string|null} Current role id or null
+ */
+export function getCurrentRole() {
+  return currentRole;
+}
+
+/**
+ * Show turn prompt for role-specific actions
+ * @param {string} role - Role this prompt is for ('pilot', 'gunner', 'all')
+ * @param {string} message - Prompt message to display
+ */
+export function showTurnPrompt(role, message) {
+  const consolePrompt = document.getElementById('console-prompt');
+  if (!consolePrompt) return;
+
+  // Only show if user's role matches or role is 'all'
+  if (currentRole && role !== 'all' && role !== currentRole) {
+    return;
+  }
+
+  // Highlight the prompt area
+  consolePrompt.classList.add('prompt-active');
+  consolePrompt.innerHTML = `
+    <div class="prompt-role">${role.toUpperCase()}</div>
+    <div class="prompt-message">${message}</div>
+  `;
+
+  // Remove highlight after a few seconds
+  setTimeout(() => {
+    consolePrompt.classList.remove('prompt-active');
+  }, 5000);
+}

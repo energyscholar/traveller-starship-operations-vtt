@@ -11331,3 +11331,28 @@ body.show-ui-status [data-status-note] {
 .btn-back:hover {
   background: rgba(0, 255, 255, 0.1);
 }
+
+/* Turn prompt active state */
+.console-prompt.prompt-active {
+  border-color: #0f0;
+  background: rgba(0, 255, 0, 0.1);
+  animation: prompt-pulse 1s ease-in-out 3;
+}
+
+@keyframes prompt-pulse {
+  0%, 100% { border-color: #ff0; }
+  50% { border-color: #0f0; }
+}
+
+.prompt-role {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #0ff;
+  margin-bottom: 0.5rem;
+}
+
+.prompt-message {
+  font-family: monospace;
+  color: #0f0;
+  font-size: 1.1rem;
+}
