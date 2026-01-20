@@ -6,6 +6,20 @@
 // Current selected role
 let currentRole = null;
 
+// Console state for role actions
+const consoleState = {
+  role: null,
+  phase: null,
+  evasive: false,
+  targets: [],
+  weapons: [],
+  selectedTarget: null,
+  selectedWeapon: 0
+};
+
+// Reference to keydown handler for cleanup
+let keyHandler = null;
+
 /**
  * Convert ANSI escape codes to HTML spans
  * @param {string} text - Text with ANSI codes
