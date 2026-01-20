@@ -11,6 +11,7 @@ import { formatSkillName, formatCharacterTooltip, initCharacterTooltips } from '
 import tooltipStrategy from './modules/tooltips-strategy.js';
 import { getRoleDetailContent, getActionMessage, renderSystemStatusItem } from './modules/role-panels.js';
 import * as combat from './modules/combat.js';
+import { showBattleConsole, hideBattleConsole, appendNarration } from './modules/battle-console.js';
 import { show, hide, toggle, setText, getValue } from './modules/dom-helpers.js';
 import { copyWithFeedback } from './modules/clipboard.js';
 import {
@@ -234,9 +235,11 @@ const showAddCrewModal = () => _showAddCrewModal(state, showModalContent, showNo
 const showEditCrewModal = (crew) => _showEditCrewModal(state, showModalContent, showNotification, crew);
 // AR-151-8: Hamburger Menu + Email App wrappers
 const showLogModal = () => _showLogModal(state);
+const _showBattleConsole = () => showBattleConsole(state);
 const handleMenuFeature = (feature) => _handleMenuFeature(state, {
   showLogModal, showNotification, showCrewRoster, showMedicalRecords,
-  showFeedbackForm, showFeedbackReview, showSharedMap, showSystemMap
+  showFeedbackForm, showFeedbackReview, showSharedMap, showSystemMap,
+  showBattleConsole: _showBattleConsole
 }, feature);
 const openEmailApp = (mailList, unread) => _openEmailApp(state, updateMailBadge, mailList, unread);
 const renderEmailInbox = (mailList) => _renderEmailInbox(state, updateMailBadge, mailList);
@@ -740,6 +743,9 @@ function initSocket() {
 
   // ==================== AR-48: Medical Records Events ====================
   state.socket.on('ops:medicalRecords', handleMedicalRecords);
+
+  // ==================== Battle Console Events ====================
+  state.socket.on('ops:combatNarration', (data) => appendNarration(data.text));
 
   // ==================== AR-299: Destinations Events ====================
   state.socket.on('ops:destinations', (data) => {
