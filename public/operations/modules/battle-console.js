@@ -110,6 +110,25 @@ export function showBattleConsole(state) {
     consoleScreen.style.display = 'block';
     consoleScreen.innerHTML = renderRolePicker();
 
+    // Set up socket listeners for combat narration
+    if (state.socket) {
+      state.socket.on('ops:combatNarration', (data) => {
+        appendNarration(data.message);
+      });
+      state.socket.on('ops:combatStarted', () => {
+        appendNarration('COMBAT STARTED');
+      });
+      state.socket.on('ops:phaseChanged', (data) => {
+        appendNarration('Phase: ' + data.phase);
+      });
+      state.socket.on('ops:turnPrompt', (data) => {
+        appendNarration(data.role + ': ' + data.message);
+      });
+      state.socket.on('ops:combatEnded', () => {
+        appendNarration('COMBAT ENDED');
+      });
+    }
+
     // Add role picker event listeners
     consoleScreen.querySelectorAll('.btn-role').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -165,6 +184,15 @@ export function hideBattleConsole(state) {
   if (keyHandler) {
     document.removeEventListener('keydown', keyHandler);
     keyHandler = null;
+  }
+
+  // Clean up socket listeners
+  if (state.socket) {
+    state.socket.off('ops:combatNarration');
+    state.socket.off('ops:combatStarted');
+    state.socket.off('ops:phaseChanged');
+    state.socket.off('ops:turnPrompt');
+    state.socket.off('ops:combatEnded');
   }
 
   currentRole = null;
