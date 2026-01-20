@@ -115,13 +115,31 @@ export function showBattleConsole(state) {
       btn.addEventListener('click', () => {
         const role = btn.dataset.role;
         currentRole = role;
+        consoleState.role = role;
         consoleScreen.innerHTML = renderConsole(role);
+
+        // Wire keydown handler for role actions
+        if (keyHandler) {
+          document.removeEventListener('keydown', keyHandler);
+        }
+        keyHandler = (e) => handleConsoleKey(e, state.socket);
+        document.addEventListener('keydown', keyHandler);
+
+        // Request targets for gunner
+        if (role === 'gunner' && state.socket) {
+          state.socket.emit('ops:getTargetableContacts');
+        }
 
         // Add back button listener
         const backBtn = document.getElementById('btn-console-back');
         if (backBtn) {
           backBtn.addEventListener('click', () => {
             currentRole = null;
+            consoleState.role = null;
+            if (keyHandler) {
+              document.removeEventListener('keydown', keyHandler);
+              keyHandler = null;
+            }
             consoleScreen.innerHTML = renderRolePicker();
             // Re-attach role picker listeners
             showBattleConsole(state);
@@ -143,7 +161,14 @@ export function hideBattleConsole(state) {
   if (consoleScreen) consoleScreen.style.display = 'none';
   if (bridgeScreen) bridgeScreen.style.display = 'block';
 
+  // Clean up keydown handler
+  if (keyHandler) {
+    document.removeEventListener('keydown', keyHandler);
+    keyHandler = null;
+  }
+
   currentRole = null;
+  consoleState.role = null;
 }
 
 /**

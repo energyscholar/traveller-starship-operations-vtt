@@ -1,0 +1,30 @@
+{
+  "id": "amishi-surprise",
+  "name": "Surprise Attack: Single Corsair",
+  "description": "Amishi catches a lone Blood Profit corsair at close range. Surprise achieved - easy victory expected.",
+  "difficulty": "easy",
+  "startConditions": {
+    "range_band": "close",
+    "alert_status": "YELLOW"
+  },
+  "contacts": [
+    {
+      "name": "BP Corsair 'Razor Claw'",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 15,
+      "range_km": 5,
+      "health": 30,
+      "max_health": 30,
+      "armor": 2,
+      "gunner_skill": 0,
+      "pilot_skill": 0,
+      "transponder": "Razor Claw",
+      "signature": "normal",
+      "surprised": true,
+      "weapons": [
+        { "name": "Triple Turret Laser", "damage": "3d6", "range": "medium" }
+      ]
+    }
+  ]
+}

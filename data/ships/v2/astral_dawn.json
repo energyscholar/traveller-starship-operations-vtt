@@ -1,0 +1,264 @@
+{
+  "$schema": "../schemas/ship-template-v2.schema.json",
+  "id": "astral_dawn",
+  "type": "x_carrier",
+  "name": "Astral Dawn",
+  "designation": "Q-Ship/Auxiliary Carrier",
+  "className": "Trojan Horse (Type-R Conversion)",
+  "tonnage": 600,
+  "techLevel": 13,
+  "role": "military",
+  "thrust": 3,
+  "jump": 3,
+
+  "hull": {
+    "tonnage": 600,
+    "configuration": "streamlined",
+    "hullPoints": 240,
+    "baseDesign": "Subsidized Merchant (Type-R) Conversion"
+  },
+
+  "armour": {
+    "type": "Bonded Superdense",
+    "rating": 1,
+    "tonnage": 8
+  },
+
+  "drives": {
+    "manoeuvre": {
+      "thrust": 3,
+      "tonnage": 18
+    },
+    "jump": {
+      "rating": 3,
+      "tonnage": 60
+    }
+  },
+
+  "power": {
+    "type": "fusion_tl13",
+    "output": 548,
+    "tonnage": 37
+  },
+
+  "fuel": {
+    "total": 125,
+    "jump": 120,
+    "powerPlant": 5,
+    "weeks": 4
+  },
+
+  "bridge": {
+    "type": "military",
+    "tonnage": 20
+  },
+
+  "computer": {
+    "model": "Computer/25",
+    "processing": 25
+  },
+
+  "sensors": {
+    "grade": "improved",
+    "tonnage": 3,
+    "dm": 1
+  },
+
+  "turrets": [
+    {
+      "id": "turret_1",
+      "type": "triple",
+      "popup": true,
+      "weapons": ["sandcaster", "sandcaster", "sandcaster"],
+      "role": "point_defense",
+      "operator": "AI Gunner"
+    },
+    {
+      "id": "turret_2",
+      "type": "triple",
+      "popup": true,
+      "weapons": ["sandcaster", "sandcaster", "sandcaster"],
+      "role": "point_defense",
+      "operator": "AI Gunner"
+    },
+    {
+      "id": "turret_3",
+      "type": "triple",
+      "popup": true,
+      "weapons": ["beam_laser", "missile_rack", "missile_rack"],
+      "role": "strike",
+      "operator": "AI Gunner"
+    },
+    {
+      "id": "turret_4",
+      "type": "triple",
+      "popup": true,
+      "weapons": ["beam_laser", "missile_rack", "missile_rack"],
+      "role": "strike",
+      "operator": "AI Gunner"
+    }
+  ],
+
+  "barbettes": [
+    {
+      "id": "barbette_ion",
+      "type": "ion",
+      "range": "medium",
+      "tonnage": 5,
+      "power": 10,
+      "operator": "Marina (Gunner-6)"
+    },
+    {
+      "id": "barbette_particle",
+      "type": "particle",
+      "range": "very_long",
+      "tonnage": 5,
+      "power": 15,
+      "operator": "Marina (Gunner-6)"
+    }
+  ],
+
+  "hardpoints": 6,
+  "hardpointsUsed": 6,
+
+  "smallCraft": [
+    {
+      "id": "fighter_squadron",
+      "type": "light_fighter",
+      "name": "Light Fighter",
+      "tonnage": 10,
+      "quantity": 6,
+      "hangarTonnage": 66
+    },
+    {
+      "id": "launch",
+      "type": "armed_launch",
+      "name": "Armed/Armoured Launch",
+      "tonnage": 24,
+      "quantity": 1,
+      "hangarTonnage": 26
+    },
+    {
+      "id": "pinnace",
+      "type": "armored_pinnace",
+      "name": "Armored Pinnace (Pirate Salvage)",
+      "tonnage": 40,
+      "quantity": 1,
+      "external": true,
+      "hangarTonnage": 4,
+      "cargo": {
+        "gCarrier": {"type": "armored_gcarrier", "tonnage": 10},
+        "fuelBladder": {"capacity": 50, "storedTonnage": 10}
+      }
+    }
+  ],
+
+  "crew": {
+    "minimum": {
+      "pilot": 1,
+      "engineer": 1,
+      "gunner": 1
+    },
+    "standard": {
+      "pilot": 3,
+      "astrogator": 1,
+      "engineer": 2,
+      "gunner": 1,
+      "sensors": 1,
+      "steward": 0,
+      "medic": 1,
+      "marines": 8,
+      "fighterPilots": 6
+    },
+    "description": "Captain James, Marina (Gunner-6), Max (Engineer), Asao (Marines), Von Sydo (Sensors), Wellen Stova (Medic), 6 Fighter Pilots, 8 Marines. AI Gunners handle turrets. Engineering and Steward droids."
+  },
+
+  "crewRequirements": {
+    "pilot": 3,
+    "astrogator": 1,
+    "engineer": 2,
+    "gunner": 1,
+    "sensors": 1,
+    "steward": 0,
+    "medic": 1,
+    "marines": 8,
+    "fighterPilots": 6
+  },
+
+  "crewMinimum": {
+    "pilot": 1,
+    "engineer": 1,
+    "gunner": 1
+  },
+
+  "staterooms": {
+    "standard": {
+      "count": 10,
+      "tonnage": 40
+    },
+    "barracks": {
+      "count": 8,
+      "tonnage": 16
+    }
+  },
+
+  "software": [
+    {"name": "Jump Control", "rating": 3},
+    {"name": "Manoeuvre", "rating": 0},
+    {"name": "Library", "rating": 0},
+    {"name": "Fire Control", "rating": 4}
+  ],
+
+  "combat": {
+    "fireControl": 4,
+    "notes": "FC/4 from Computer/25 with Fire Control/4 software"
+  },
+
+  "drones": {
+    "probe": 5,
+    "repair": 5,
+    "mining": 10
+  },
+
+  "specialFeatures": {
+    "qShipDisguise": true,
+    "popUpTurrets": true,
+    "jumpNet": true,
+    "fuelScoops": true,
+    "fuelProcessor": 200,
+    "collapsibleTanks": 5,
+    "aiGunners": 5,
+    "engineeringDroid": true,
+    "stewardDroid": true,
+    "miningDrones": true,
+    "breachingTube": true,
+    "armoury": true,
+    "medicalBay": true,
+    "workshop": true,
+    "luxuries": true,
+    "biosphere": true
+  },
+
+  "cargo": {
+    "tonnage": 79
+  },
+
+  "costs": {
+    "base": 290000000,
+    "maintenance": 24000
+  },
+
+  "description": "The Amishi is a Q-ship operated by JSI under Letter of Marque. Built on a converted Type-R hull, she's externally indistinguishable from a battered freighter. Her equally battered armored pinnace rides on external clamps. Six light fighters, ion and particle barbettes (operated by Marina at Gunner-6), and pop-up turrets (AI-controlled) provide formidable firepower. Captain James Delleron commands, with Asao Ora leading marines for boarding ops.",
+
+  "notes": {
+    "operator": "JSI (Joint Services Initiative)",
+    "captain": "James Delleron",
+    "gunneryChief": "Marina (Gunner-6)",
+    "leadEngineer": "Max Planck",
+    "marineCommander": "Asao Ora",
+    "sensorOperator": "Von Sydo",
+    "medic": "Wellen Stova",
+    "mission": "Commerce raiding, prize-taking, convoy escort",
+    "highguardLegal": true
+  }
+}

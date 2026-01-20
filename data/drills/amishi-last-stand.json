@@ -1,0 +1,82 @@
+{
+  "id": "amishi-last-stand",
+  "name": "Last Stand: Four Corsairs",
+  "description": "Blood Profit Pack catches Amishi in an ambush. Four corsairs close from multiple bearings. Survival unlikely - make every shot count.",
+  "difficulty": "lethal",
+  "startConditions": {
+    "range_band": "medium",
+    "alert_status": "RED"
+  },
+  "contacts": [
+    {
+      "name": "BP Corsair 'Blood Fang'",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 0,
+      "range_km": 6000,
+      "health": 35,
+      "max_health": 35,
+      "armor": 3,
+      "gunner_skill": 2,
+      "pilot_skill": 1,
+      "transponder": "Blood Fang",
+      "signature": "normal",
+      "weapons": [
+        { "name": "Triple Turret Beam Laser", "damage": "4d6", "range": "medium" },
+        { "name": "Missile Rack", "damage": "4d6", "range": "long" }
+      ]
+    },
+    {
+      "name": "BP Corsair 'Throat Ripper'",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 90,
+      "range_km": 7000,
+      "health": 30,
+      "max_health": 30,
+      "armor": 2,
+      "gunner_skill": 1,
+      "pilot_skill": 1,
+      "transponder": "Throat Ripper",
+      "signature": "normal",
+      "weapons": [
+        { "name": "Triple Turret Laser", "damage": "3d6", "range": "medium" }
+      ]
+    },
+    {
+      "name": "BP Corsair 'Profit Seeker'",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 180,
+      "range_km": 8000,
+      "health": 30,
+      "max_health": 30,
+      "armor": 2,
+      "gunner_skill": 1,
+      "pilot_skill": 0,
+      "transponder": "Profit Seeker",
+      "signature": "normal",
+      "weapons": [
+        { "name": "Triple Turret Laser", "damage": "3d6", "range": "medium" }
+      ]
+    },
+    {
+      "name": "BP Corsair 'Carrion Eater'",
+      "type": "corsair",
+      "disposition": "hostile",
+      "bearing": 270,
+      "range_km": 7500,
+      "health": 28,
+      "max_health": 28,
+      "armor": 2,
+      "gunner_skill": 1,
+      "pilot_skill": 1,
+      "transponder": "Carrion Eater",
+      "signature": "normal",
+      "weapons": [
+        { "name": "Double Turret Laser", "damage": "2d6", "range": "medium" },
+        { "name": "Sandcaster", "damage": "0", "range": "close" }
+      ]
+    }
+  ]
+}
