@@ -26,7 +26,7 @@ export function openHamburgerMenu() {
     }
 
     // Show GM section only for GMs (uses window.state from app.js)
-    const gmSection = document.getElementById('menu-section-gm');
+    const gmSection = document.getElementById('gm-menu-section');
     if (gmSection && typeof window.state !== 'undefined') {
       gmSection.style.display = window.state.isGM ? 'block' : 'none';
     }
