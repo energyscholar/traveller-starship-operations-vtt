@@ -11,7 +11,7 @@ import { formatSkillName, formatCharacterTooltip, initCharacterTooltips } from '
 import tooltipStrategy from './modules/tooltips-strategy.js';
 import { getRoleDetailContent, getActionMessage, renderSystemStatusItem } from './modules/role-panels.js';
 import * as combat from './modules/combat.js';
-import { showBattleConsole, hideBattleConsole, appendNarration } from './modules/battle-console.js';
+import { showBattleConsole, hideBattleConsole, appendNarration, showTurnPrompt } from './modules/battle-console.js';
 import { show, hide, toggle, setText, getValue } from './modules/dom-helpers.js';
 import { copyWithFeedback } from './modules/clipboard.js';
 import {
@@ -746,6 +746,7 @@ function initSocket() {
 
   // ==================== Battle Console Events ====================
   state.socket.on('ops:combatNarration', (data) => appendNarration(data.text));
+  state.socket.on('ops:turnPrompt', (data) => showTurnPrompt(data.role, data.message));
 
   // ==================== AR-299: Destinations Events ====================
   state.socket.on('ops:destinations', (data) => {
