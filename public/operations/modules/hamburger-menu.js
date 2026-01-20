@@ -129,6 +129,12 @@ export function handleMenuFeature(state, handlers, feature) {
       }
       break;
 
+    case 'battle-console':
+      if (state.isGM) {
+        handlers.showBattleConsole();
+      }
+      break;
+
     default:
       handlers.showNotification(`Feature "${feature}" not yet implemented`, 'info');
   }
