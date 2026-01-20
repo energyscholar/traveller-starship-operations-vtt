@@ -18,6 +18,7 @@ const { runCampaignMenu } = require('../lib/tui/campaign-menu');
 const { runEmailMenu } = require('../lib/tui/email-menu');
 const { runNPCMenu } = require('../lib/tui/npc-menu');
 const { runBattleMenu } = require('../lib/tui/battle-viewer');
+const { runRoleMenu } = require('../lib/tui/role-menu');
 
 // ANSI escape codes
 const ESC = '\x1b';
@@ -51,6 +52,9 @@ function showMainMenu() {
     `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[O]${RESET} ${WHITE}Operations${RESET}                                           ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}      ${DIM}Travel status, jump status, ship operations${RESET}            ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}  ${YELLOW}[R]${RESET} ${WHITE}Role Stations${RESET}                                        ${CYAN}║${RESET}\n` +
+    `${CYAN}║${RESET}      ${DIM}Captain, Pilot, Engineer bridge stations${RESET}              ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}                                                                ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}  ${YELLOW}[L]${RESET} ${WHITE}Mail${RESET}                                                 ${CYAN}║${RESET}\n` +
     `${CYAN}║${RESET}      ${DIM}Inbox, compose, drafts${RESET}                                  ${CYAN}║${RESET}\n` +
@@ -198,6 +202,13 @@ async function waitForMainSelection() {
         return;
       }
 
+      // R for Role Stations
+      if (key === 'r' || key === 'R') {
+        cleanup();
+        resolve('role');
+        return;
+      }
+
       // L for Mail
       if (key === 'l' || key === 'L') {
         cleanup();
@@ -271,6 +282,10 @@ async function main() {
 
       case 'operations':
         await runOperationsMenu();
+        break;
+
+      case 'role':
+        await runRoleMenu();
         break;
 
       case 'mail':
