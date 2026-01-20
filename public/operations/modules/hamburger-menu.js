@@ -130,9 +130,7 @@ export function handleMenuFeature(state, handlers, feature) {
       break;
 
     case 'battle-console':
-      if (state.isGM) {
-        handlers.showBattleConsole();
-      }
+      handlers.showBattleConsole();
       break;
 
     default:
