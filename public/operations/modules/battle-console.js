@@ -264,15 +264,15 @@ export function handleConsoleKey(e, socket) {
   // Captain: [G/Y/R] set alert status
   if (consoleState.role === 'captain') {
     if (key === 'g') {
-      socket.emit('ops:setAlertStatus', { status: 'GREEN' });
-      appendNarration('Alert status: GREEN');
+      socket.emit('ops:setAlertStatus', { alertStatus: 'NORMAL' });
+      appendNarration('Alert status: NORMAL');
     }
     if (key === 'y') {
-      socket.emit('ops:setAlertStatus', { status: 'YELLOW' });
+      socket.emit('ops:setAlertStatus', { alertStatus: 'YELLOW' });
       appendNarration('Alert status: YELLOW');
     }
     if (key === 'r') {
-      socket.emit('ops:setAlertStatus', { status: 'RED' });
+      socket.emit('ops:setAlertStatus', { alertStatus: 'RED' });
       appendNarration('Alert status: RED');
     }
   }
