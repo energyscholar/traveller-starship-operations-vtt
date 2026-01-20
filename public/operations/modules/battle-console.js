@@ -197,3 +197,93 @@ export function showTurnPrompt(role, message) {
     consolePrompt.classList.remove('prompt-active');
   }, 5000);
 }
+
+/**
+ * Handle keyboard input for role-specific actions
+ * @param {KeyboardEvent} e - Keyboard event
+ * @param {Object} socket - Socket.io socket
+ */
+export function handleConsoleKey(e, socket) {
+  const key = e.key.toLowerCase();
+
+  // Pilot: [E] toggle evasive
+  if (consoleState.role === 'pilot' && key === 'e') {
+    consoleState.evasive = !consoleState.evasive;
+    socket.emit('ops:setEvasive', { enabled: consoleState.evasive });
+    appendNarration(`Evasive: ${consoleState.evasive ? 'ON' : 'OFF'}`);
+  }
+
+  // Gunner: [1-9] select target, [F] fire
+  if (consoleState.role === 'gunner') {
+    if (key >= '1' && key <= '9') {
+      const idx = parseInt(key) - 1;
+      if (consoleState.targets[idx]) {
+        consoleState.selectedTarget = consoleState.targets[idx].id;
+        appendNarration(`Target locked: ${consoleState.targets[idx].name}`);
+        renderTargetList();
+      }
+    }
+    if (key === 'f' && consoleState.selectedTarget) {
+      const weapon = consoleState.weapons[consoleState.selectedWeapon];
+      if (weapon) {
+        socket.emit('ops:fireWeapon', { weaponId: weapon.id, targetId: consoleState.selectedTarget });
+        appendNarration(`Firing ${weapon.name}...`);
+      } else {
+        // Default weapon if none loaded
+        socket.emit('ops:fireWeapon', { targetId: consoleState.selectedTarget });
+        appendNarration('Firing...');
+      }
+    }
+  }
+
+  // Captain: [G/Y/R] set alert status
+  if (consoleState.role === 'captain') {
+    if (key === 'g') {
+      socket.emit('ops:setAlertStatus', { status: 'GREEN' });
+      appendNarration('Alert status: GREEN');
+    }
+    if (key === 'y') {
+      socket.emit('ops:setAlertStatus', { status: 'YELLOW' });
+      appendNarration('Alert status: YELLOW');
+    }
+    if (key === 'r') {
+      socket.emit('ops:setAlertStatus', { status: 'RED' });
+      appendNarration('Alert status: RED');
+    }
+  }
+}
+
+/**
+ * Render target list for gunner
+ */
+function renderTargetList() {
+  const promptArea = document.getElementById('console-prompt');
+  if (!promptArea || consoleState.role !== 'gunner') return;
+
+  let html = '<div class="target-list">';
+  consoleState.targets.forEach((t, i) => {
+    const selected = t.id === consoleState.selectedTarget ? ' selected' : '';
+    html += `<div class="target${selected}">[${i + 1}] ${t.name} (${t.range_band || 'unknown'})</div>`;
+  });
+  html += '<div class="hint">[1-9] Select target, [F] Fire</div></div>';
+  promptArea.innerHTML = html;
+}
+
+/**
+ * Update console state with targets
+ * @param {Array} contacts - Targetable contacts
+ */
+export function updateTargets(contacts) {
+  consoleState.targets = contacts || [];
+  if (consoleState.role === 'gunner') {
+    renderTargetList();
+  }
+}
+
+/**
+ * Update console phase
+ * @param {string} phase - Current combat phase
+ */
+export function updatePhase(phase) {
+  consoleState.phase = phase;
+}
