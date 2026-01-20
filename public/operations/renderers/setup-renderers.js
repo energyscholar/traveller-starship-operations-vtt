@@ -317,41 +317,36 @@ export function renderRoleSelection() {
     `;
   }).join('');
 
-  // Add role selection handlers for available roles
-  container.querySelectorAll('.role-option:not(.taken)').forEach(opt => {
-    opt.addEventListener('click', () => {
-      state.selectedRole = opt.dataset.roleId;
-      state.selectedRoleInstance = parseInt(opt.dataset.roleInstance) || 1;
+  // Event delegation - single handler on container catches all role clicks
+  // Use a flag to prevent duplicate listeners on re-render
+  if (!container.dataset.delegated) {
+    container.dataset.delegated = 'true';
+    container.addEventListener('click', (e) => {
+      const opt = e.target.closest('.role-option');
+      if (!opt) return;
+
+      const roleId = opt.dataset.roleId;
+      const roleInstance = parseInt(opt.dataset.roleInstance) || 1;
+      const isTaken = opt.classList.contains('taken');
+
+      // Handle taken roles with confirmation
+      if (isTaken) {
+        const roleName = opt.querySelector('.role-name')?.textContent || 'this role';
+        const takenByName = opt.dataset.takenBy || 'another player';
+        if (!confirm(`Replace ${takenByName} as ${roleName}?`)) return;
+        helpers.showNotification(`Taking over ${roleName}`, 'info');
+      }
+
+      state.selectedRole = roleId;
+      state.selectedRoleInstance = roleInstance;
       state.socket.emit('ops:assignRole', {
         playerId: state.player.id,
-        role: state.selectedRole,
-        roleInstance: state.selectedRoleInstance
+        role: roleId,
+        roleInstance: roleInstance
       });
+      renderRoleSelection(); // Re-render to show selection
     });
-  });
-
-  // AR-143: Add click handlers for taken roles (with confirmation)
-  container.querySelectorAll('.role-option.taken').forEach(opt => {
-    opt.style.cursor = 'pointer'; // Make it clear it's clickable
-    opt.addEventListener('click', () => {
-      const roleName = opt.querySelector('.role-name')?.textContent || 'this role';
-      const takenByName = opt.dataset.takenBy || 'another player';
-
-      // Show confirmation dialog
-      const confirmed = confirm(`Replace ${takenByName} as ${roleName}?\n\nThis will remove them from this station.`);
-
-      if (confirmed) {
-        state.selectedRole = opt.dataset.roleId;
-        state.selectedRoleInstance = parseInt(opt.dataset.roleInstance) || 1;
-        state.socket.emit('ops:assignRole', {
-          playerId: state.player.id,
-          role: state.selectedRole,
-          roleInstance: state.selectedRoleInstance
-        });
-        showNotification(`Taking over ${roleName} from ${takenByName}`, 'info');
-      }
-    });
-  });
+  }
 }
 
 /**
