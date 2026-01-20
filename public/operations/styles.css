@@ -11219,3 +11219,115 @@ body.show-ui-status [data-status-note] {
 .btn:hover .hotkey-hint {
   opacity: 1;
 }
+
+/* ==================== Battle Console ==================== */
+#battle-console-screen {
+  background: #1a1a2e;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.console-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.console-header {
+  color: #0ff;
+  font-family: monospace;
+  font-size: 1.5rem;
+  border-bottom: 1px solid #0ff;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.console-log {
+  font-family: monospace;
+  color: #0f0;
+  height: 60vh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  background: #0a0a14;
+  padding: 1rem;
+  border: 1px solid #333;
+  border-radius: 4px;
+}
+
+.console-line {
+  line-height: 1.4;
+  margin-bottom: 0.25rem;
+}
+
+.console-prompt {
+  border: 2px solid #ff0;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: #1a1a2e;
+  border-radius: 4px;
+}
+
+.prompt-label {
+  font-family: monospace;
+}
+
+/* ANSI color classes */
+.ansi-green { color: #0f0; }
+.ansi-red { color: #f00; }
+.ansi-yellow { color: #ff0; }
+.ansi-blue { color: #66f; }
+.ansi-magenta { color: #f0f; }
+.ansi-cyan { color: #0ff; }
+.ansi-white { color: #fff; }
+.ansi-bold { font-weight: bold; }
+.ansi-dim { opacity: 0.6; }
+
+/* Role picker */
+.role-picker {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem;
+  flex-wrap: wrap;
+}
+
+.role-picker button,
+.btn-role {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background: #2a2a4e;
+  border: 2px solid #0ff;
+  color: #0ff;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.role-picker button:hover,
+.btn-role:hover {
+  background: #3a3a6e;
+  transform: translateY(-2px);
+}
+
+.role-icon {
+  font-size: 2rem;
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid #0ff;
+  color: #0ff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-back:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
