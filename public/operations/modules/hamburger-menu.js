@@ -24,6 +24,12 @@ export function openHamburgerMenu() {
         localStorage.setItem('ops-setting-animate-camera', e.target.checked ? 'true' : 'false');
       };
     }
+
+    // Show GM section only for GMs (uses window.state from app.js)
+    const gmSection = document.getElementById('menu-section-gm');
+    if (gmSection && typeof window.state !== 'undefined') {
+      gmSection.style.display = window.state.isGM ? 'block' : 'none';
+    }
   }
 }
 
@@ -106,6 +112,21 @@ export function handleMenuFeature(state, handlers, feature) {
 
     case 'system-map':
       handlers.showSystemMap();
+      break;
+
+    case 'enter-combat':
+      if (state.isGM) {
+        const targets = (state.contacts || []).filter(c => c.is_targetable !== false).map(c => c.id);
+        state.socket.emit('ops:enterCombat', { selectedContacts: targets });
+        handlers.showNotification('Entering combat...', 'info');
+      }
+      break;
+
+    case 'load-drill':
+      if (state.isGM) {
+        state.socket.emit('ops:getAvailableDrills');
+        handlers.showNotification('Loading drills...', 'info');
+      }
       break;
 
     default:

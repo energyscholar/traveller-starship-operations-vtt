@@ -399,6 +399,7 @@ const state = {
 
 // Expose state globally for cross-module access (system-map.js, etc.)
 window.state = state;
+window.appState = state; // Alias for hamburger-menu.js GM check
 
 // ==================== Socket Setup ====================
 function initSocket() {
