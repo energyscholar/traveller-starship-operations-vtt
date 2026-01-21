@@ -67,6 +67,11 @@ function initLoginScreen(state, helpers) {
               title="Click to use this code">${code}</span>
       </div>`;
     }).join('');
+
+    // Auto-fill first campaign code for convenience
+    if (campaigns.length > 0) {
+      document.getElementById('campaign-code').value = campaigns[0].id.substring(0, 8);
+    }
   });
 
   // AR-289: Solo Demo Campaign - Join pre-built demo campaign
