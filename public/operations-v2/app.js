@@ -314,6 +314,14 @@ function handleBridgeJoined(data) {
   state.adapter.setText('bridge-date', data.campaign?.current_date || '---');
   state.adapter.setText('bridge-user-role', data.role || 'GM');
   state.adapter.setText('bridge-user-name', data.isGM ? 'GM' : (state.userName || 'Player'));
+  state.isGM = data.isGM || false;
+
+  // Show GM menu section if user is GM
+  const gmSection = document.getElementById('gm-menu-section');
+  if (gmSection) {
+    gmSection.style.display = state.isGM ? 'block' : 'none';
+  }
+
   renderCrewList(); renderContacts(); renderRolePanel(); state.adapter.showScreen('bridge-screen');
 
   // Store system data for viewscreen
@@ -406,6 +414,7 @@ const actionHandlers = {
   selectRole: (d) => selectRole(d.roleId),
   closeToast: () => state.adapter.setVisible('error-toast', false),
   openMenu: toggleMenu,
+  closeMenu: toggleMenu,
   setAlert: (d) => state.socket.emit('ops:setAlertStatus', { alertStatus: d.alert }),
   openSharedMap: () => { toggleMenu(); SharedMap.show(state); },
   closeMap: () => SharedMap.close(),
@@ -419,6 +428,15 @@ const actionHandlers = {
   saveDraft: () => EmailPanel.saveDraft(state),
   backToInbox: () => EmailPanel.backToInbox(),
   openSettings: () => showToast('Settings not yet implemented'),
+  logout: () => { toggleMenu(); state.adapter.showScreen('login-screen'); },
+
+  // === Menu Actions ===
+  openBattleConsole: () => { toggleMenu(); if (window.BattleConsole) window.BattleConsole.show(state.socket); },
+  enterCombat: () => { toggleMenu(); state.socket.emit('ops:enterCombat', {}); showToast('Entering combat...'); },
+  loadDrill: () => { toggleMenu(); showToast('Drill loading not yet implemented'); },
+  openContacts: () => { toggleMenu(); showToast('NPC contacts not yet implemented'); },
+  openSystemMap: () => { toggleMenu(); if (window.v2SystemMap) window.v2SystemMap.toggle(); },
+  openShipLog: () => { toggleMenu(); showToast('Ship log not yet implemented'); },
 
   // === Combat Actions (TASK 1) ===
   fireWeapon: (d) => {
