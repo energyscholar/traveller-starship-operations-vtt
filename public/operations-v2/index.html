@@ -213,24 +213,70 @@
 
       <!-- Hamburger Menu -->
       <nav id="hamburger-menu" class="hamburger-menu hidden">
-        <button class="menu-item" id="menu-shared-map" data-action="openSharedMap">
-          <span class="menu-icon">🗺️</span>
-          <span class="menu-label">Shared Map</span>
-          <span class="menu-badge shared-map-badge hidden" id="shared-map-badge">LIVE</span>
-        </button>
-        <button class="menu-item" id="menu-email" data-action="openEmail">
-          <span class="menu-icon">📧</span>
-          <span class="menu-label">Mail</span>
-          <span class="menu-badge email-badge hidden" id="email-badge">0</span>
-        </button>
-        <button class="menu-item" id="menu-settings" data-action="openSettings">
-          <span class="menu-icon">⚙️</span>
-          <span class="menu-label">Settings</span>
-        </button>
-        <button class="menu-item" id="menu-logout" data-action="logout">
-          <span class="menu-icon">🚪</span>
-          <span class="menu-label">Leave Bridge</span>
-        </button>
+        <div class="menu-header">
+          <h3>Ship Operations</h3>
+          <button id="btn-close-menu" class="btn-close">×</button>
+        </div>
+        <div class="menu-content">
+          <div class="menu-section">
+            <h4>Communications</h4>
+            <button class="menu-item" data-action="openEmail">
+              <span class="menu-icon">📧</span>
+              <span class="menu-label">Ship Mail</span>
+            </button>
+            <button class="menu-item" data-action="openContacts">
+              <span class="menu-icon">👥</span>
+              <span class="menu-label">NPC Contacts</span>
+            </button>
+          </div>
+          <div class="menu-section">
+            <h4>Navigation</h4>
+            <button class="menu-item" data-action="openSharedMap">
+              <span class="menu-icon">🗺️</span>
+              <span class="menu-label">Shared Map</span>
+            </button>
+            <button class="menu-item" data-action="openSystemMap">
+              <span class="menu-icon">🪐</span>
+              <span class="menu-label">Star System</span>
+            </button>
+          </div>
+          <div class="menu-section" id="gm-menu-section" style="display: none;">
+            <h4>GM Controls</h4>
+            <button class="menu-item" data-action="enterCombat">
+              <span class="menu-icon">⚔️</span>
+              <span class="menu-label">Enter Combat</span>
+            </button>
+            <button class="menu-item" data-action="loadDrill">
+              <span class="menu-icon">🎯</span>
+              <span class="menu-label">Load Drill</span>
+            </button>
+            <button class="menu-item" data-action="openBattleConsole">
+              <span class="menu-icon">🖥️</span>
+              <span class="menu-label">Battle Console</span>
+            </button>
+          </div>
+          <div class="menu-section">
+            <h4>Reference</h4>
+            <button class="menu-item" data-action="openBattleConsole">
+              <span class="menu-icon">🖥️</span>
+              <span class="menu-label">Battle Console</span>
+            </button>
+            <button class="menu-item" data-action="openShipLog">
+              <span class="menu-icon">📜</span>
+              <span class="menu-label">Ship Log</span>
+            </button>
+          </div>
+          <div class="menu-section">
+            <button class="menu-item" data-action="openSettings">
+              <span class="menu-icon">⚙️</span>
+              <span class="menu-label">Settings</span>
+            </button>
+            <button class="menu-item" data-action="logout">
+              <span class="menu-icon">🚪</span>
+              <span class="menu-label">Leave Bridge</span>
+            </button>
+          </div>
+        </div>
       </nav>
     </div>
 
