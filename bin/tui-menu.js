@@ -13,6 +13,7 @@
 
 const { spawn } = require('child_process');
 const path = require('path');
+const { ProcessSession } = require('../lib/tui/process-session');
 const { runOperationsMenu } = require('../lib/tui/operations-menu');
 const { runCampaignMenu } = require('../lib/tui/campaign-menu');
 const { runEmailMenu } = require('../lib/tui/email-menu');
@@ -40,7 +41,7 @@ const VERSION = '1.0.0';
 // MAIN MENU
 // ════════════════════════════════════════════════════════════════════
 
-function showMainMenu() {
+function showMainMenu(session) {
   const out = CLEAR + HOME +
     `${CYAN}${BOLD}╔══════════════════════════════════════════════════════════════╗${RESET}\n` +
     `${CYAN}${BOLD}║${RESET}      ${WHITE}${BOLD}TRAVELLER OPERATIONS VTT - TUI MODE${RESET}                   ${CYAN}${BOLD}║${RESET}\n` +
@@ -79,14 +80,14 @@ function showMainMenu() {
     `${CYAN}║${RESET}  ${DIM}Press Q or Ctrl+C to quit${RESET}                                   ${CYAN}║${RESET}\n` +
     `${CYAN}${BOLD}╚══════════════════════════════════════════════════════════════╝${RESET}\n`;
 
-  process.stdout.write(out);
+  session.write(out);
 }
 
 // ════════════════════════════════════════════════════════════════════
 // STUB SCREENS
 // ════════════════════════════════════════════════════════════════════
 
-function showStubScreen(title, description) {
+function showStubScreen(session, title, description) {
   const out = CLEAR + HOME +
     `${YELLOW}${BOLD}╔══════════════════════════════════════════════════════════════╗${RESET}\n` +
     `${YELLOW}${BOLD}║${RESET}  ${WHITE}${BOLD}${title}${RESET}${' '.repeat(60 - title.length)}${YELLOW}${BOLD}║${RESET}\n` +
@@ -101,36 +102,36 @@ function showStubScreen(title, description) {
     `${YELLOW}║${RESET}  ${GREEN}Press any key to return to main menu${RESET}                       ${YELLOW}║${RESET}\n` +
     `${YELLOW}${BOLD}╚══════════════════════════════════════════════════════════════╝${RESET}\n`;
 
-  process.stdout.write(out);
+  session.write(out);
 }
 
-async function waitForAnyKey() {
+async function waitForAnyKey(session) {
   return new Promise((resolve) => {
-    if (process.stdin.isTTY) {
-      process.stdin.setRawMode(true);
+    if (session.isTTY()) {
+      session.setRawMode(true);
     }
-    process.stdin.resume();
-    process.stdin.setEncoding('utf8');
+    session.resume();
+    session.setEncoding('utf8');
 
     const onData = (key) => {
       cleanup();
       // Ctrl+C
       if (key === '\u0003') {
-        process.stdout.write('\n');
+        session.write('\n');
         process.exit();
       }
       resolve();
     };
 
     const cleanup = () => {
-      process.stdin.removeListener('data', onData);
-      if (process.stdin.isTTY) {
-        process.stdin.setRawMode(false);
+      session.removeInput(onData);
+      if (session.isTTY()) {
+        session.setRawMode(false);
       }
-      process.stdin.pause();
+      session.pause();
     };
 
-    process.stdin.on('data', onData);
+    session.onInput(onData);
   });
 }
 
@@ -138,9 +139,9 @@ async function waitForAnyKey() {
 // COMBAT DEMO LAUNCHER
 // ════════════════════════════════════════════════════════════════════
 
-async function launchCombatDemo() {
+async function launchCombatDemo(session) {
   // Clear screen and run combat demo as child process
-  process.stdout.write(CLEAR + HOME);
+  session.write(CLEAR + HOME);
 
   const combatDemoPath = path.join(__dirname, '..', 'tests', 'e2e', 'helpers', 'combat-demo.js');
 
@@ -155,7 +156,7 @@ async function launchCombatDemo() {
     });
 
     child.on('error', (err) => {
-      process.stdout.write(`${RED}Error launching combat demo: ${err.message}${RESET}\n`);
+      session.write(`${RED}Error launching combat demo: ${err.message}${RESET}\n`);
       reject(err);
     });
   });
@@ -165,26 +166,26 @@ async function launchCombatDemo() {
 // MAIN SELECTION HANDLER
 // ════════════════════════════════════════════════════════════════════
 
-async function waitForMainSelection() {
+async function waitForMainSelection(session) {
   return new Promise((resolve) => {
-    if (process.stdin.isTTY) {
-      process.stdin.setRawMode(true);
+    if (session.isTTY()) {
+      session.setRawMode(true);
     }
-    process.stdin.resume();
-    process.stdin.setEncoding('utf8');
+    session.resume();
+    session.setEncoding('utf8');
 
     const onData = (key) => {
       // Ctrl+C
       if (key === '\u0003') {
         cleanup();
-        process.stdout.write('\n');
+        session.write('\n');
         process.exit();
       }
 
       // Q to quit
       if (key === 'q' || key === 'Q') {
         cleanup();
-        process.stdout.write(`${CLEAR}${HOME}${DIM}Goodbye, Traveller.${RESET}\n`);
+        session.write(`${CLEAR}${HOME}${DIM}Goodbye, Traveller.${RESET}\n`);
         process.exit(0);
       }
 
@@ -255,14 +256,14 @@ async function waitForMainSelection() {
     };
 
     const cleanup = () => {
-      process.stdin.removeListener('data', onData);
-      if (process.stdin.isTTY) {
-        process.stdin.setRawMode(false);
+      session.removeInput(onData);
+      if (session.isTTY()) {
+        session.setRawMode(false);
       }
-      process.stdin.pause();
+      session.pause();
     };
 
-    process.stdin.on('data', onData);
+    session.onInput(onData);
   });
 }
 
@@ -270,54 +271,63 @@ async function waitForMainSelection() {
 // MAIN LOOP
 // ════════════════════════════════════════════════════════════════════
 
-async function main() {
+async function main(session) {
+  // Default to ProcessSession if not provided
+  if (!session) {
+    session = new ProcessSession();
+  }
+
   while (true) {
-    showMainMenu();
-    const selection = await waitForMainSelection();
+    showMainMenu(session);
+    const selection = await waitForMainSelection(session);
 
     switch (selection) {
       case 'campaign':
-        await runCampaignMenu();
+        await runCampaignMenu(session);
         break;
 
       case 'operations':
-        await runOperationsMenu();
+        await runOperationsMenu(session);
         break;
 
       case 'role':
-        await runRoleMenu();
+        await runRoleMenu(session);
         break;
 
       case 'mail':
-        await runEmailMenu();
+        await runEmailMenu(session);
         break;
 
       case 'npc':
-        await runNPCMenu();
+        await runNPCMenu(session);
         break;
 
       case 'combat':
-        await launchCombatDemo();
+        await launchCombatDemo(session);
         break;
 
       case 'simulation':
-        await runBattleMenu();
+        await runBattleMenu(session);
         break;
 
       case 'editor':
-        showStubScreen('SHIP EDITOR', 'Design and modify starship configurations');
-        await waitForAnyKey();
+        showStubScreen(session, 'SHIP EDITOR', 'Design and modify starship configurations');
+        await waitForAnyKey(session);
         break;
 
       case 'map':
-        showStubScreen('SYSTEM MAP BROWSER', 'Browse Spinward Marches stellar systems');
-        await waitForAnyKey();
+        showStubScreen(session, 'SYSTEM MAP BROWSER', 'Browse Spinward Marches stellar systems');
+        await waitForAnyKey(session);
         break;
     }
   }
 }
 
+// Entry point
 main().catch((err) => {
   console.error(`${RED}Fatal error: ${err.message}${RESET}`);
   process.exit(1);
 });
+
+// Export for testing
+module.exports = { main };

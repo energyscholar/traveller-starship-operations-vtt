@@ -52,7 +52,7 @@ test('runBattleMenu is imported', () => {
 // Test 4: Battle simulation case exists
 test('Simulation case triggers battle menu', () => {
   assertTrue(tuiMenuContent.includes("case 'simulation'"), 'Should have simulation case');
-  assertTrue(tuiMenuContent.includes('await runBattleMenu()'), 'Should call runBattleMenu');
+  assertTrue(tuiMenuContent.includes('await runBattleMenu(session)'), 'Should call runBattleMenu with session');
 });
 
 // Test 5: Battle viewer module exists
