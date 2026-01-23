@@ -20,9 +20,10 @@ const cookieParser = require('cookie-parser');
 const config = require('./config');
 const { server: log, socket: socketLog } = require('./lib/logger');
 
-// Auth routes
+// Auth routes and middleware
 const authRoutes = require('./lib/auth/routes/auth-routes');
 const testAuthRoutes = require('./lib/auth/routes/test-auth');
+const { httpAuthMiddleware } = require('./lib/auth/middleware/http-auth');
 
 // AR-250: Extracted setup modules
 const { createSocketConfig } = require('./lib/server/socket-setup');
@@ -74,6 +75,7 @@ app.use('/data', express.static('data'));
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
+app.use(httpAuthMiddleware);
 
 // Auth routes
 app.use('/auth', authRoutes);
