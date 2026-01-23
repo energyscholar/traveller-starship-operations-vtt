@@ -156,6 +156,7 @@ const unitTests = [
   // Auth tests
   'tests/auth/auth-negative.test.js',  // Auth negative scenarios (18 tests)
   'tests/auth/auth-routes.test.js',  // Auth routes (10 tests)
+  'tests/auth/auth-integration.test.js',  // Auth integration (8 tests)
   // AR-194/199/200 tests
   'tests/unit/ship-failures-ui.test.js',  // AR-194 Ship failures UI
   'tests/unit/map-labels.test.js'  // AR-199/200 Map labels and tooltips
