@@ -9,6 +9,7 @@ const WebTUI = {
   socket: null,
   isConnected: false,
   overlay: null,
+  heartbeatInterval: null,
 
   /**
    * Initialize the Web TUI module
@@ -50,6 +51,16 @@ const WebTUI = {
       console.error('[WebTUI] Error:', data.message);
       if (this.terminal) {
         this.terminal.write(`\r\n\x1b[31mError: ${data.message}\x1b[0m\r\n`);
+      }
+    });
+
+    this.socket.on('tui:heartbeat:ack', (data) => {
+      if (!data.valid) {
+        console.warn('[WebTUI] Heartbeat failed:', data.reason);
+        if (data.reason === 'auth_expired') {
+          this.terminal?.write('\r\n\x1b[33mSession expired. Please re-authenticate.\x1b[0m\r\n');
+          this.close();
+        }
       }
     });
   },
@@ -183,6 +194,13 @@ const WebTUI = {
       // Connect to server TUI
       this.socket.emit('tui:connect');
 
+      // Start heartbeat interval (every 30 seconds)
+      this.heartbeatInterval = setInterval(() => {
+        if (this.isConnected) {
+          this.socket.emit('tui:heartbeat');
+        }
+      }, 30000);
+
       // Focus terminal
       this.terminal.focus();
 
@@ -196,6 +214,12 @@ const WebTUI = {
    * Close the TUI terminal
    */
   close() {
+    // Stop heartbeat
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = null;
+    }
+
     // Disconnect from server
     if (this.socket && this.isConnected) {
       this.socket.emit('tui:disconnect');
