@@ -124,6 +124,11 @@ function connectSocket() {
   state.socket.on('ops:mailSent', () => { showToast('Message sent'); state.socket.emit('ops:getMail'); });
   state.socket.on('ops:newMail', (d) => { EmailPanel.updateBadge(d.unreadCount || 1); });
   state.socket.on('ops:mailUpdated', () => { state.socket.emit('ops:getMail'); });
+
+  // Initialize WebTUI with socket
+  if (window.WebTUI) {
+    window.WebTUI.init(state.socket);
+  }
 }
 
 function handleConnect() {
@@ -467,6 +472,7 @@ const actionHandlers = {
 
   // === Menu Actions ===
   openBattleConsole: () => { toggleMenu(); if (window.BattleConsole) window.BattleConsole.show(state.socket); },
+  openTUI: () => { toggleMenu(); if (window.WebTUI) window.WebTUI.open(); },
   enterCombat: () => { toggleMenu(); state.socket.emit('ops:enterCombat', {}); showToast('Entering combat...'); },
   loadDrill: () => { toggleMenu(); showToast('Drill loading not yet implemented'); },
   openContacts: () => { toggleMenu(); showToast('NPC contacts not yet implemented'); },

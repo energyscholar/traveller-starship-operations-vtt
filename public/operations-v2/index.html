@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Operations VTT - V2</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/web-tui.css">
 </head>
 <body>
   <div id="app">
@@ -265,6 +266,10 @@
               <span class="menu-icon">📜</span>
               <span class="menu-label">Ship Log</span>
             </button>
+            <button class="menu-item" data-action="openTUI">
+              <span class="menu-icon">💻</span>
+              <span class="menu-label">TUI Terminal</span>
+            </button>
           </div>
           <div class="menu-section">
             <button class="menu-item" data-action="openSettings">
@@ -413,6 +418,7 @@
   <script src="modules/system-map-viewscreen.js"></script>
   <script src="modules/battle-console.js"></script>
   <script src="modules/auth-check.js"></script>
+  <script src="modules/web-tui.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
