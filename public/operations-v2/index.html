@@ -276,6 +276,21 @@
               <span class="menu-label">Leave Bridge</span>
             </button>
           </div>
+          <div class="menu-section" id="account-menu-section">
+            <h4>Account</h4>
+            <div id="account-user-info" class="menu-item-text" style="display: none;">
+              <span class="menu-icon">👤</span>
+              <span id="account-username" class="menu-label">Username</span>
+            </div>
+            <button id="btn-account-login" class="menu-item" data-action="accountLogin" style="display: none;">
+              <span class="menu-icon">🔑</span>
+              <span class="menu-label">Login</span>
+            </button>
+            <button id="btn-account-logout" class="menu-item" data-action="accountLogout" style="display: none;">
+              <span class="menu-icon">🚪</span>
+              <span class="menu-label">Logout</span>
+            </button>
+          </div>
         </div>
       </nav>
     </div>
@@ -397,6 +412,7 @@
   <script src="modules/modals/advanced-modals.js"></script>
   <script src="modules/system-map-viewscreen.js"></script>
   <script src="modules/battle-console.js"></script>
+  <script src="modules/auth-check.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

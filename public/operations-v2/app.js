@@ -24,8 +24,14 @@ const state = {
 };
 
 
-function init() {
+async function init() {
   console.log('[OPS-V2] Initializing V2 interface...');
+
+  // Check auth status first
+  if (window.AuthCheck) {
+    const authStatus = await window.AuthCheck.check();
+    updateAccountMenu(authStatus);
+  }
 
   // Initialize GUI adapter
   state.adapter = new GUIAdapter({
@@ -37,6 +43,35 @@ function init() {
   connectSocket();
 
   console.log('[OPS-V2] V2 interface ready');
+}
+
+function updateAccountMenu(authStatus) {
+  const userInfo = document.getElementById('account-user-info');
+  const usernameEl = document.getElementById('account-username');
+  const loginBtn = document.getElementById('btn-account-login');
+  const logoutBtn = document.getElementById('btn-account-logout');
+  const section = document.getElementById('account-menu-section');
+
+  if (!authStatus.enabled) {
+    // Auth disabled - hide entire section
+    if (section) section.style.display = 'none';
+    return;
+  }
+
+  if (section) section.style.display = 'block';
+
+  if (authStatus.user) {
+    // Logged in
+    if (userInfo) userInfo.style.display = 'flex';
+    if (usernameEl) usernameEl.textContent = authStatus.user.username;
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (logoutBtn) logoutBtn.style.display = 'flex';
+  } else {
+    // Not logged in
+    if (userInfo) userInfo.style.display = 'none';
+    if (loginBtn) loginBtn.style.display = 'flex';
+    if (logoutBtn) logoutBtn.style.display = 'none';
+  }
 }
 
 
@@ -437,6 +472,16 @@ const actionHandlers = {
   openContacts: () => { toggleMenu(); showToast('NPC contacts not yet implemented'); },
   openSystemMap: () => { toggleMenu(); if (window.v2SystemMap) window.v2SystemMap.toggle(); },
   openShipLog: () => { toggleMenu(); showToast('Ship log not yet implemented'); },
+
+  // === Account Actions ===
+  accountLogin: () => { window.location.href = '/login.html'; },
+  accountLogout: async () => {
+    if (window.AuthCheck) {
+      await window.AuthCheck.logout();
+    } else {
+      window.location.href = '/login.html';
+    }
+  },
 
   // === Combat Actions (TASK 1) ===
   fireWeapon: (d) => {
