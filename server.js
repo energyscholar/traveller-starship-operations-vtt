@@ -70,6 +70,8 @@ app.use(express.static('public/operations-v2'));
 app.use('/operations', express.static('public/operations-v2'));
 app.use('/lib', express.static('lib'));
 app.use('/data', express.static('data'));
+// Auth pages served from public/
+app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
 
