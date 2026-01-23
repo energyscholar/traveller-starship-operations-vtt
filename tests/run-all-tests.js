@@ -147,6 +147,8 @@ const unitTests = [
   'tests/tui/menus/battle-viewer.test.js',
   // TUI Integration tests
   'tests/tui/integration/tui-flow.test.js',
+  // TUI Session tests
+  'tests/tui/session.test.js',
   // V2 Bug Fix tests
   'tests/v2/v2-bugs.test.js',
   'tests/v2/modals.test.js',  // V2 modal system tests
