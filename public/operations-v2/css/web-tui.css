@@ -1,0 +1,85 @@
+/**
+ * Web TUI Styles
+ * Fullscreen terminal overlay
+ */
+
+.web-tui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-primary, #0a0a1a);
+  z-index: 10000;
+  display: none;
+  flex-direction: column;
+}
+
+.web-tui-overlay.visible {
+  display: flex;
+}
+
+.web-tui-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: var(--bg-secondary, #12122a);
+  border-bottom: 1px solid var(--border-color, #333);
+}
+
+.web-tui-title {
+  color: var(--accent-blue, #00d4ff);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.web-tui-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #aaa);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.web-tui-close:hover {
+  color: var(--accent-red, #ff4444);
+}
+
+.web-tui-terminal {
+  flex: 1;
+  padding: 8px;
+  overflow: hidden;
+}
+
+/* Override xterm.js styles for better fit */
+.web-tui-terminal .xterm {
+  height: 100%;
+}
+
+.web-tui-terminal .xterm-viewport {
+  overflow-y: auto;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .web-tui-header {
+    padding: 12px 16px;
+  }
+
+  .web-tui-title {
+    font-size: 16px;
+  }
+
+  .web-tui-close {
+    font-size: 28px;
+    padding: 0 12px;
+  }
+
+  .web-tui-terminal {
+    padding: 4px;
+  }
+}
