@@ -16,8 +16,13 @@
 //   4. Starts the server
 
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const config = require('./config');
 const { server: log, socket: socketLog } = require('./lib/logger');
+
+// Auth routes
+const authRoutes = require('./lib/auth/routes/auth-routes');
+const testAuthRoutes = require('./lib/auth/routes/test-auth');
 
 // AR-250: Extracted setup modules
 const { createSocketConfig } = require('./lib/server/socket-setup');
@@ -66,6 +71,13 @@ app.use('/operations', express.static('public/operations-v2'));
 app.use('/lib', express.static('lib'));
 app.use('/data', express.static('data'));
 app.use(express.json());
+app.use(cookieParser());
+
+// Auth routes
+app.use('/auth', authRoutes);
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/auth/test', testAuthRoutes);
+}
 
 // AR-250: Register all API routes from extracted module
 registerAllRoutes(app, { log });
