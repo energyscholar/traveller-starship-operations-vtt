@@ -149,6 +149,7 @@ const unitTests = [
   'tests/tui/integration/tui-flow.test.js',
   // TUI Session tests
   'tests/tui/session.test.js',
+  'tests/tui/websocket-session.test.js',  // WebSocket session (11 tests)
   // V2 Bug Fix tests
   'tests/v2/v2-bugs.test.js',
   'tests/v2/modals.test.js',  // V2 modal system tests
