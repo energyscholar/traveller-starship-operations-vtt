@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Traveller Operations VTT</title>
+  <link rel="stylesheet" href="/operations-v2/styles.css">
+  <style>
+    .auth-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .auth-form {
+      background: var(--bg-secondary);
+      padding: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .auth-form h2 {
+      color: var(--accent-blue);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .auth-form .form-group {
+      margin-bottom: 20px;
+    }
+
+    .auth-form label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .auth-form input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+
+    .error-message {
+      background: rgba(255, 68, 68, 0.1);
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    .success-message {
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .success-message.visible {
+      display: block;
+    }
+
+    .auth-links {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .auth-links a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
+
+    .password-hint {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <h1 class="title" style="text-align: center; margin-bottom: 30px;">Traveller Operations VTT</h1>
+
+    <div class="auth-form">
+      <h2>Create Account</h2>
+
+      <div id="error-message" class="error-message"></div>
+      <div id="success-message" class="success-message"></div>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required autocomplete="username" minlength="3">
+          <p class="password-hint">At least 3 characters</p>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email (optional)</label>
+          <input type="email" id="email" name="email" autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required autocomplete="new-password" minlength="8">
+          <p class="password-hint">At least 8 characters</p>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" name="confirm-password" required autocomplete="new-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+      </form>
+
+      <div class="auth-links">
+        <p>Already have an account? <a href="/login.html">Login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/register.js"></script>
+</body>
+</html>
