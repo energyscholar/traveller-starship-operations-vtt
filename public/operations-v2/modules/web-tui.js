@@ -10,6 +10,7 @@ const WebTUI = {
   isConnected: false,
   overlay: null,
   heartbeatInterval: null,
+  boundResizeHandler: null,
 
   /**
    * Initialize the Web TUI module
@@ -188,8 +189,9 @@ const WebTUI = {
         }
       });
 
-      // Handle resize
-      window.addEventListener('resize', this.handleResize.bind(this));
+      // Handle resize (store bound handler for cleanup)
+      this.boundResizeHandler = this.handleResize.bind(this);
+      window.addEventListener('resize', this.boundResizeHandler);
 
       // Connect to server TUI
       this.socket.emit('tui:connect');
@@ -227,7 +229,10 @@ const WebTUI = {
     }
 
     // Remove resize handler
-    window.removeEventListener('resize', this.handleResize.bind(this));
+    if (this.boundResizeHandler) {
+      window.removeEventListener('resize', this.boundResizeHandler);
+      this.boundResizeHandler = null;
+    }
 
     // Dispose terminal
     if (this.terminal) {
