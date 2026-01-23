@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Roll20 Claude Assistant",
+  "version": "1.0.0",
+  "description": "Claude AI integration for Roll20 VTT - Traveller RPG assistant",
+
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "*://app.roll20.net/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://app.roll20.net/editor/*"],
+      "js": ["content-roll20.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
