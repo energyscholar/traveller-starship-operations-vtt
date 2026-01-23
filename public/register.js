@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Success - show message and redirect
-      showSuccess('Account created! Redirecting to login...');
+      // Success - show message and redirect to app (auto-login already happened)
+      showSuccess('Account created! Redirecting...');
       setTimeout(() => {
-        window.location.href = '/login.html';
+        window.location.href = '/operations';
       }, 1500);
     } catch (err) {
       showError('Network error. Please try again.');

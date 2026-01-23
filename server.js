@@ -24,6 +24,7 @@ const { server: log, socket: socketLog } = require('./lib/logger');
 const authRoutes = require('./lib/auth/routes/auth-routes');
 const testAuthRoutes = require('./lib/auth/routes/test-auth');
 const { httpAuthMiddleware } = require('./lib/auth/middleware/http-auth');
+const { cleanupExpiredSessions } = require('./lib/auth/token-service');
 
 // AR-250: Extracted setup modules
 const { createSocketConfig } = require('./lib/server/socket-setup');
@@ -116,6 +117,14 @@ intervals.push(setInterval(() => {
   services.updateMetrics(connections.size, activeSessions.size);
   log.info('📊 Performance Metrics:', services.getFormattedMetrics());
 }, 60000));
+
+// Auth session cleanup (hourly)
+intervals.push(setInterval(() => {
+  const cleaned = cleanupExpiredSessions();
+  if (cleaned > 0) {
+    log.info(`🔐 Cleaned ${cleaned} expired auth sessions`);
+  }
+}, 60 * 60 * 1000));
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
