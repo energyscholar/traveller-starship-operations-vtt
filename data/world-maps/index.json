@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "generatedAt": "2026-02-08T15:00:53.896Z",
+  "generatedAt": "2026-02-08T15:42:16.909Z",
   "dataDir": "data/world-maps/",
   "schemaVersion": "1.0",
   "totalWorlds": 9,
   "statusCounts": {
-    "enriched": 0,
-    "terrain-only": 9,
+    "enriched": 7,
+    "terrain-only": 2,
     "cached": 0
   },
   "worlds": {
@@ -41,18 +41,34 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1337-Judice.features.json",
         "png": "1337-Judice.png",
         "svg": "1337-Judice.svg",
         "terrain": "1337-Judice.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 996,
         "dominantTerrain": "rural",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "106x30"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Judice Depot",
+          "type": "starport",
+          "hex": [
+            35,
+            0
+          ]
+        }
+      ],
+      "regions": [
+        "Corrosive Barrens",
+        "Chemical Oceans"
+      ],
+      "culturalGroups": []
     },
     "1433": {
       "name": "Noctocol",
@@ -62,18 +78,46 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1433-Noctocol.features.json",
         "png": "1433-Noctocol.png",
         "svg": "1433-Noctocol.svg",
         "terrain": "1433-Noctocol.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 624,
         "dominantTerrain": "ocean",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "83x25"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Noctocol Downport",
+          "type": "starport",
+          "hex": [
+            25,
+            0
+          ]
+        },
+        {
+          "name": "Acid Haven",
+          "type": "settlement",
+          "hex": [
+            30,
+            3
+          ]
+        }
+      ],
+      "regions": [
+        "Corrosive Mists",
+        "Fluid Oceans"
+      ],
+      "culturalGroups": [
+        "Habitat dwellers (insular)",
+        "Industrial workers",
+        "Scientists"
+      ]
     },
     "1434": {
       "name": "Tarkine",
@@ -85,18 +129,70 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1434-Tarkine.features.json",
         "png": "1434-Tarkine.png",
         "svg": "1434-Tarkine.svg",
         "terrain": "1434-Tarkine.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 343,
         "dominantTerrain": "ocean",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "59x20"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Tarkine Downport",
+          "type": "starport",
+          "hex": [
+            20,
+            0
+          ]
+        },
+        {
+          "name": "Greenholme",
+          "type": "settlement",
+          "hex": [
+            22,
+            1
+          ]
+        },
+        {
+          "name": "Tide Reach",
+          "type": "settlement",
+          "hex": [
+            35,
+            -3
+          ]
+        },
+        {
+          "name": "Ember Hollow",
+          "type": "settlement",
+          "hex": [
+            10,
+            5
+          ]
+        },
+        {
+          "name": "Otarri Settlement",
+          "type": "settlement",
+          "hex": [
+            45,
+            7
+          ]
+        }
+      ],
+      "regions": [
+        "The Grasslands",
+        "Shallow Seas"
+      ],
+      "culturalGroups": [
+        "Agricultural colonists",
+        "Forinean expats (small)",
+        "Otarri (TL-0 amphibians)"
+      ]
     },
     "1435": {
       "name": "Dallia",
@@ -107,18 +203,64 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1435-Dallia.features.json",
         "png": "1435-Dallia.png",
         "svg": "1435-Dallia.svg",
         "terrain": "1435-Dallia.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 797,
         "dominantTerrain": "ocean",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "94x27"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Dallia Starport",
+          "type": "starport",
+          "hex": [
+            30,
+            0
+          ]
+        },
+        {
+          "name": "Dalport",
+          "type": "settlement",
+          "hex": [
+            32,
+            1
+          ]
+        },
+        {
+          "name": "Sverdheim",
+          "type": "settlement",
+          "hex": [
+            55,
+            -5
+          ]
+        },
+        {
+          "name": "Brightwater",
+          "type": "settlement",
+          "hex": [
+            70,
+            5
+          ]
+        }
+      ],
+      "regions": [
+        "Tundra Plains",
+        "The Great Ocean",
+        "Polar Reaches"
+      ],
+      "culturalGroups": [
+        "Urban professionals",
+        "Industrial workers",
+        "Agricultural communities",
+        "Darrian expats"
+      ]
     },
     "1436": {
       "name": "Talos",
@@ -129,18 +271,46 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1436-Talos.features.json",
         "png": "1436-Talos.png",
         "svg": "1436-Talos.svg",
         "terrain": "1436-Talos.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 233,
         "dominantTerrain": "clear",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "48x17"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Talos Downport",
+          "type": "starport",
+          "hex": [
+            15,
+            0
+          ]
+        },
+        {
+          "name": "Dustfall",
+          "type": "settlement",
+          "hex": [
+            18,
+            1
+          ]
+        }
+      ],
+      "regions": [
+        "Dust Plains",
+        "Southern Wastes"
+      ],
+      "culturalGroups": [
+        "Frontier settlers",
+        "Miners",
+        "Transit population"
+      ]
     },
     "1532": {
       "name": "Elixabeth",
@@ -150,18 +320,54 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1532-Elixabeth.features.json",
         "png": "1532-Elixabeth.png",
         "svg": "1532-Elixabeth.svg",
         "terrain": "1532-Elixabeth.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 233,
         "dominantTerrain": "ocean",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "48x17"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Elixabeth Orbital Station",
+          "type": "starport",
+          "hex": [
+            24,
+            0
+          ]
+        },
+        {
+          "name": "Port Town",
+          "type": "settlement",
+          "hex": [
+            24,
+            -2
+          ]
+        },
+        {
+          "name": "Freedome Settlement",
+          "type": "settlement",
+          "hex": [
+            12,
+            3
+          ]
+        }
+      ],
+      "regions": [
+        "Polar Ice Fields",
+        "Tainted Lowlands"
+      ],
+      "culturalGroups": [
+        "Naval personnel",
+        "Port Town civilians",
+        "Freedome dissidents"
+      ]
     },
     "1533": {
       "name": "Forine",
@@ -197,18 +403,81 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1632-Milagro.features.json",
         "png": "1632-Milagro.png",
         "svg": "1632-Milagro.svg",
         "terrain": "1632-Milagro.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 147,
         "dominantTerrain": "wasteland",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "36x14"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Milagro Downport",
+          "type": "starport",
+          "hex": [
+            8,
+            0
+          ]
+        },
+        {
+          "name": "Downport Dome",
+          "type": "domed_city",
+          "hex": [
+            8,
+            1
+          ]
+        },
+        {
+          "name": "Exile's Rest",
+          "type": "domed_city",
+          "hex": [
+            2,
+            4
+          ]
+        },
+        {
+          "name": "Haven",
+          "type": "domed_city",
+          "hex": [
+            18,
+            1
+          ]
+        },
+        {
+          "name": "Crystalline",
+          "type": "domed_city",
+          "hex": [
+            28,
+            2
+          ]
+        },
+        {
+          "name": "Last Light",
+          "type": "domed_city",
+          "hex": [
+            32,
+            -1
+          ]
+        }
+      ],
+      "regions": [
+        "The Barrens",
+        "Brine Basin",
+        "Southern Ice Cap",
+        "The Dome Corridor"
+      ],
+      "culturalGroups": [
+        "Old Transportees",
+        "Resettlement Wave",
+        "Elite Exiles",
+        "Post-Collapse"
+      ]
     }
   },
   "lookups": {
@@ -264,17 +533,18 @@
         "1435"
       ]
     },
-    "enriched": [],
-    "terrainOnly": [
-      "1237",
+    "enriched": [
       "1337",
       "1433",
       "1434",
       "1435",
       "1436",
       "1532",
-      "1533",
       "1632"
+    ],
+    "terrainOnly": [
+      "1237",
+      "1533"
     ]
   }
 }
