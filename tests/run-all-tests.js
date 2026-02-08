@@ -160,7 +160,10 @@ const unitTests = [
   'tests/auth/auth-integration.test.js',  // Auth integration (8 tests)
   // AR-194/199/200 tests
   'tests/unit/ship-failures-ui.test.js',  // AR-194 Ship failures UI
-  'tests/unit/map-labels.test.js'  // AR-199/200 Map labels and tooltips
+  'tests/unit/map-labels.test.js',  // AR-199/200 Map labels and tooltips
+  // Battle C1: Enemy auto-fire + alert FK regression
+  'tests/unit/enemy-fire.test.js',  // Enemy auto-fire system (16 tests)
+  'tests/unit/alert-status.test.js'  // Alert FK constraint regression (6 tests)
 ];
 
 // Integration tests

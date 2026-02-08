@@ -1,0 +1,70 @@
+{
+  "id": "astral-dawn-ambush",
+  "name": "Astral Dawn Ambush: Blood Profit Pack",
+  "description": "3 corsairs from the Blood Profit Pack ambush the Astral Dawn at long range. Full enemy auto-fire engagement. The Q-ship must reveal its hidden weapons and fight back.",
+  "difficulty": "hard",
+  "startConditions": {
+    "range_band": "long",
+    "alert_status": "YELLOW",
+    "auto_fire": true,
+    "pcShip": "astral_dawn"
+  },
+  "contacts": [
+    {
+      "name": "Corsair Alpha (Howling Fury)",
+      "type": "corsair",
+      "disposition": "hostile",
+      "auto_fire": true,
+      "bearing": 315,
+      "range_km": 25000,
+      "range_band": "long",
+      "health": 40,
+      "max_health": 40,
+      "armor": 4,
+      "gunner_skill": 2,
+      "transponder": "Disabled",
+      "signature": "military",
+      "weapons": [
+        { "name": "Triple Turret Laser", "damage": "3d6", "range": "medium" },
+        { "name": "Missile Rack", "damage": "4d6", "range": "long" }
+      ]
+    },
+    {
+      "name": "Corsair Bravo (Red Fang)",
+      "type": "corsair",
+      "disposition": "hostile",
+      "auto_fire": true,
+      "bearing": 340,
+      "range_km": 28000,
+      "range_band": "long",
+      "health": 35,
+      "max_health": 35,
+      "armor": 3,
+      "gunner_skill": 1,
+      "transponder": "Disabled",
+      "signature": "military",
+      "weapons": [
+        { "name": "Double Turret Laser", "damage": "2d6", "range": "medium" },
+        { "name": "Missile Rack", "damage": "4d6", "range": "long" }
+      ]
+    },
+    {
+      "name": "Corsair Charlie (Pack Runner)",
+      "type": "corsair",
+      "disposition": "hostile",
+      "auto_fire": true,
+      "bearing": 30,
+      "range_km": 22000,
+      "range_band": "long",
+      "health": 30,
+      "max_health": 30,
+      "armor": 2,
+      "gunner_skill": 1,
+      "transponder": "Disabled",
+      "signature": "normal",
+      "weapons": [
+        { "name": "Triple Turret Laser", "damage": "3d6", "range": "medium" }
+      ]
+    }
+  ]
+}
