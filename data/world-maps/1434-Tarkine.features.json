@@ -1,0 +1,73 @@
+{
+  "hex": "1434",
+  "name": "Tarkine",
+  "enrichedAt": "2026-02-08T16:30:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [20, 0],
+      "type": "starport",
+      "name": "Tarkine Downport",
+      "class": "C",
+      "description": "Routine facilities administered by Oberlindes Lines. No construction, major repair available, unrefined fuel. IISS Scout Base adjacent. Relaxed atmosphere — Law 2.",
+      "campaignNotes": "Patch (Vargr mechanic) works here. Hanne Brekke (Oberlindes) runs port operations."
+    },
+    {
+      "mapHex": [22, 1],
+      "type": "settlement",
+      "name": "Greenholme",
+      "population": "~200K",
+      "culture": "Main town. Agricultural hub. Small Forinean expat community.",
+      "description": "Largest settlement on Tarkine. Starport-adjacent. Agricultural processing, trade, and the closest thing to a city on this pastoral world. Buildings are low, spread out, surrounded by farmland.",
+      "campaignNotes": "Base of operations for S3. Forinean cultural echo (light) detectable in expat community."
+    },
+    {
+      "mapHex": [35, -3],
+      "type": "settlement",
+      "name": "Tide Reach",
+      "population": "~80K",
+      "culture": "Coastal fishing and aquaculture community.",
+      "description": "Seaside settlement on Tarkine's temperate coast. Fishing boats, aquaculture pens, fresh seafood. The most visually striking settlement — colorful buildings against blue ocean.",
+      "campaignNotes": "Peaceful contrast scene. Real food, real sky, real water."
+    },
+    {
+      "mapHex": [10, 5],
+      "type": "settlement",
+      "name": "Ember Hollow",
+      "population": "~30K",
+      "culture": "Inland agricultural community. Ember Church presence.",
+      "description": "Quiet inland settlement near forested hills. The Ember Church maintains a retreat here — meditation halls, flame-lamp gardens. Sister Maren Vosk is based here.",
+      "campaignNotes": "Psionic underground contact point. Von Sydo's spotlight scene. Maren warns about Ghersak."
+    },
+    {
+      "mapHex": [45, 7],
+      "type": "settlement",
+      "name": "Otarri Settlement",
+      "population": "~400",
+      "culture": "TL-0 amphibian community. Otarri from Faldor.",
+      "description": "Remote wetland community. Dome-less — the Otarri live in partially submerged structures adapted to Tarkine's shallow marshlands. Primitive by technological standards but sophisticated in ecological understanding.",
+      "campaignNotes": "Max spotlight. Keloru (Otarri who tracks Max) lives here. Pirate scout activity intelligence."
+    }
+  ],
+  "regions": [
+    {
+      "name": "The Grasslands",
+      "hexes": [[15,2],[18,1],[22,1],[25,0],[28,-1],[32,-2]],
+      "terrain": "rural",
+      "description": "Vast rolling grasslands covering Tarkine's temperate zone. Primary agricultural region. Tall grasses adapted to low gravity — some reaching 3 meters. Amber Zone predators lurk here."
+    },
+    {
+      "name": "Shallow Seas",
+      "hexes": [[30,-5],[35,-3],[40,-1],[42,0],[45,2],[48,5]],
+      "terrain": "ocean",
+      "description": "Tarkine's warm shallow oceans. Rich marine ecosystem. Aquaculture and fishing sustain coastal communities. The Otarri settlement sits at the edge of the eastern marshlands."
+    }
+  ],
+  "arrivalBriefing": "After the gray ice of Milagro and the industrial haze of Forine, Tarkine is a shock of green. The world fills the viewport with color — blue oceans, green grasslands, white cloud formations against a standard atmosphere sky. The crew can breathe here.\n\nThe C-class starport sits beside Greenholme, a low-spread agricultural town that looks tiny against the vast grasslands. There are no domes, no sealed corridors, no recycled air. Just open sky and growing things.",
+  "gmQuickRef": {
+    "population": "3M spread across agricultural communities. No major cities.",
+    "hazards": "Amber Zone wildlife (large predators). Low gravity (0.45G). Otherwise safe.",
+    "firstImpressions": "Green, open, peaceful. Real food, real air, real sky. The relief is palpable after Milagro/Forine.",
+    "culturalGroups": ["Agricultural colonists", "Forinean expats (small)", "Otarri (TL-0 amphibians)"]
+  }
+}

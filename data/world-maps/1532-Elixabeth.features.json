@@ -1,0 +1,62 @@
+{
+  "hex": "1532",
+  "name": "Elixabeth",
+  "enrichedAt": "2026-02-08T16:30:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [24, 0],
+      "type": "starport",
+      "name": "Elixabeth Orbital Station",
+      "class": "B",
+      "description": "Class B orbital starport. Spacecraft construction, overhaul, refined fuel. Imperial Naval Base attached. The station gleams against the darkness — military precision in vacuum.",
+      "campaignNotes": "PCs departed from here Jan 20. Vasquez gave mission briefing. Cold Comfort bar is in Port Town below."
+    },
+    {
+      "mapHex": [24, -2],
+      "type": "settlement",
+      "name": "Port Town",
+      "population": "~7,000",
+      "culture": "Support services for naval base. Transient population. Cold Comfort bar.",
+      "description": "Surface settlement below the orbital station. Domes and sealed buildings. Support services, civilian commerce, the Cold Comfort bar where Gristle sells information.",
+      "campaignNotes": "Gristle operates here. Harlan's apartment is in Port Town — bugged by pirates."
+    },
+    {
+      "mapHex": [12, 3],
+      "type": "settlement",
+      "name": "Freedome Settlement",
+      "population": "~5,000",
+      "culture": "Forinean dissident descendants. Anti-authoritarian, proud of independence won in 975.",
+      "description": "Original colony founded by Forinean political and religious dissidents. The Closed-Fist Greeting is used proudly here. Scratch-art visible on dome walls — same tradition as Milagro but with defiant rather than bitter tone.",
+      "campaignNotes": "Cultural echo — PCs who visited may have already seen cultural items without recognizing their significance."
+    },
+    {
+      "mapHex": [24, 2],
+      "type": "military",
+      "name": "Elixabeth Naval Base",
+      "description": "Primary Imperial Navy facility for the Collace Arm approach. Houses patrol squadrons, intelligence operations, and supply infrastructure. Lt. Kowal operates from here.",
+      "campaignNotes": "Naval Leak thread originates here. Kowal feeds patrol routes to pirates. Vasquez is unaware."
+    }
+  ],
+  "regions": [
+    {
+      "name": "Polar Ice Fields",
+      "hexes": [[5,7],[10,8],[15,7],[20,8],[25,7],[30,8],[35,7],[40,8]],
+      "terrain": "ice_cap",
+      "description": "Extensive polar ice covering northern and southern latitudes. Chemical ice with sulfur taint compounds. Wilderness refueling possible by mining and processing ice."
+    },
+    {
+      "name": "Tainted Lowlands",
+      "hexes": [[8,0],[12,0],[16,1],[20,0],[28,0],[32,-1]],
+      "terrain": "rural",
+      "description": "Low-lying regions with concentrated atmospheric taint. Filter masks required. Sparse dome-agriculture and mining operations."
+    }
+  ],
+  "arrivalBriefing": "Elixabeth appears on sensors as a small, pale world scarred by ice fields, orbiting twin red dwarfs that cast everything in ruddy light. The Class B orbital station is the first thing you see — a bright structure against the dark, bristling with docking arms and the silhouettes of naval vessels.\n\nBelow, the surface is frozen and wind-scoured, dotted with sealed settlements connected by surface transit tubes. The atmospheric taint is invisible but ever-present — filter masks are mandatory outside sealed structures.",
+  "gmQuickRef": {
+    "population": "20K total. Naval base 8K, Port Town 7K, Freedome 5K.",
+    "hazards": "Very thin tainted atmosphere. Filter masks required. Low gravity (0.37G). Cold.",
+    "firstImpressions": "Military precision at the station, frontier resilience below. Everyone seems to be watching.",
+    "culturalGroups": ["Naval personnel", "Port Town civilians", "Freedome dissidents"]
+  }
+}

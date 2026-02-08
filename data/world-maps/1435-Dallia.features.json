@@ -1,0 +1,70 @@
+{
+  "hex": "1435",
+  "name": "Dallia",
+  "enrichedAt": "2026-02-08T16:30:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [30, 0],
+      "type": "starport",
+      "name": "Dallia Starport",
+      "class": "B",
+      "description": "Full-service Class B facility. Spacecraft construction, overhaul, refined fuel. Industrial starport supported by TL-9 manufacturing base. Clean, efficient, well-staffed.",
+      "campaignNotes": "The contrast with Milagro's cracked pad is stark. Everything works here."
+    },
+    {
+      "mapHex": [32, 1],
+      "type": "settlement",
+      "name": "Dalport",
+      "population": "~80M",
+      "culture": "Capital city. Government, finance, commerce. Civil service bureaucracy (functional version).",
+      "description": "Dallia's capital. A proper city with buildings (not domes), transportation networks, industry, and culture. Nordic industrial aesthetic under dense atmosphere. Starport-adjacent.",
+      "campaignNotes": "Base of operations S4. Darrian consulate, McClellan factor office, trade interest offices. Comfortable."
+    },
+    {
+      "mapHex": [55, -5],
+      "type": "settlement",
+      "name": "Sverdheim",
+      "population": "~40M",
+      "culture": "Industrial center. Manufacturing hub for District 268.",
+      "description": "Dallia's manufacturing heartland. Factories, processing plants, automated assembly lines. TL-9 industrial production that supplies much of the corridor.",
+      "campaignNotes": "McClellan tours. Industrial intelligence about CCF's shipping capacity vs. declared capacity."
+    },
+    {
+      "mapHex": [70, 5],
+      "type": "settlement",
+      "name": "Brightwater",
+      "population": "~25M",
+      "culture": "Coastal cultural center. Universities, arts, leisure.",
+      "description": "Dallia's cultural capital on the coast. Universities, theaters, galleries. The dense atmosphere creates spectacular twilight colors over the ocean. Darrian Consul Telas Irvan hosts formal dinners here.",
+      "campaignNotes": "Darrian dinner scene. James's intelligence exchange. Cultural respite before storm."
+    }
+  ],
+  "regions": [
+    {
+      "name": "Tundra Plains",
+      "hexes": [[10,3],[15,2],[20,1],[25,0],[35,-1],[40,-2],[45,-3]],
+      "terrain": "rural",
+      "description": "Cool tundra grasslands covering Dallia's temperate zone. Short growing seasons but rich soil. Agricultural communities interspersed with manufacturing settlements."
+    },
+    {
+      "name": "The Great Ocean",
+      "hexes": [[50,0],[55,2],[60,5],[65,3],[70,5],[75,7],[80,8]],
+      "terrain": "ocean",
+      "description": "Dallia's primary ocean covering the eastern hemisphere. Warm currents from the dense atmosphere create rich marine ecosystems. Brightwater sits on its western shore."
+    },
+    {
+      "name": "Polar Reaches",
+      "hexes": [[20,12],[30,13],[40,12],[50,13],[60,12]],
+      "terrain": "ice_cap",
+      "description": "Northern polar ice cap. Less extensive than colder worlds due to the dense atmosphere's greenhouse effect. Mining operations extract minerals."
+    }
+  ],
+  "arrivalBriefing": "Dallia fills the viewport like a proper world should — blue-white atmosphere haze, visible continents, cloud formations that suggest weather rather than chemical processes. The dense atmosphere scatters the F2 primary's light into a warm glow.\n\nThe Class B starport is immediately obvious: a proper industrial facility with multiple docking arms, fuel processing towers, and the steady traffic of commercial shipping. This is civilization — the first real city the crew has seen since leaving the Imperium proper.\n\nDescent through the dense atmosphere is smooth. The starport grounds are clean, well-maintained, and staffed by people who look healthy, fed, and unhurried. After Milagro and Forine, it feels like arriving in a different century.",
+  "gmQuickRef": {
+    "population": "600M across proper cities and settlements. Real civilization.",
+    "hazards": "Dense atmosphere (safe, breathable). Cool tundra climate. Near-standard gravity (0.90G).",
+    "firstImpressions": "Things work. Food is real. Beds are soft. The infrastructure is maintained. Comfortable competence.",
+    "culturalGroups": ["Urban professionals", "Industrial workers", "Agricultural communities", "Darrian expats"]
+  }
+}
