@@ -2,9 +2,9 @@
   "$schema": "../schemas/ship-template-v2.schema.json",
   "id": "light_fighter",
   "type": "Small Craft",
-  "name": "Light Fighter",
+  "name": "Tlatl Light Fighter",
   "designation": "Fighter",
-  "className": "Light Fighter",
+  "className": "Tlatl-class Light Fighter",
   "tonnage": 10,
   "techLevel": 12,
   "role": "military",
@@ -12,6 +12,11 @@
   "turrets": [
     {
       "id": "fixed_1",
+      "type": "single",
+      "weapons": ["missile_rack"]
+    },
+    {
+      "id": "fixed_2",
       "type": "single",
       "weapons": ["pulse_laser"]
     }
@@ -25,10 +30,10 @@
   },
 
   "armour": {
-    "type": "crystaliron",
-    "rating": 4,
-    "tonnage": 0.5,
-    "cost": 120000
+    "type": "none",
+    "rating": 0,
+    "tonnage": 0,
+    "cost": 0
   },
 
   "drives": {
@@ -76,11 +81,25 @@
 
   "weapons": [
     {
-      "mount": "fixed_mount",
+      "mount": "fixed_mount_1",
+      "weapons": ["missile_rack"],
+      "tonnage": 1,
+      "cost": 750000,
+      "power": 0,
+      "damage": "4d6",
+      "range": "long",
+      "ammo": 12,
+      "notes": "Primary weapon — extreme range standoff doctrine"
+    },
+    {
+      "mount": "fixed_mount_2",
       "weapons": ["pulse_laser"],
       "tonnage": 1,
       "cost": 500000,
-      "power": 2
+      "power": 2,
+      "damage": "2d6",
+      "range": "medium",
+      "notes": "Secondary — close defense only"
     }
   ],
 
@@ -126,9 +145,17 @@
     "description": "Pilot (pilot also operates weapons)"
   },
 
+  "squadron": {
+    "callsigns": ["Hardpoint", "Whisper", "Brick", "Ghost", "Preacher", "Dice"],
+    "gunner_skill": 2,
+    "pilot_skill": 2,
+    "doctrine": "extreme_range_standoff",
+    "notes": "Hang off at extreme range, dodge with M-6 + pilot skill, volley missiles. NOT dogfighters."
+  },
+
   "costs": {
-    "base": 6350000,
-    "maintenance": 529
+    "base": 6850000,
+    "maintenance": 571
   },
 
   "powerRequirements": {
@@ -141,5 +168,5 @@
     "total": 10
   },
 
-  "notes": "The 10-ton Light Fighter is a nimble interceptor designed for carrier operations. High thrust-to-weight ratio (6G acceleration) and crystaliron armour make it effective against pirates and small craft. Fixed-mount pulse laser provides reasonable firepower for its size. Limited endurance (2 weeks fuel) requires carrier or base support. Standard complement for X-Carriers and fleet auxiliary vessels. Zhodani variant: Tlatl Missile Fighter (same basic hull)."
+  "notes": "Tlatl-class Light Fighter. Missile-primary standoff doctrine: hang at extreme range and volley missiles, using M-6 thrust and pilot skill for evasion. Pulse laser as secondary for close defense. No armor — relies on speed and distance. 10-ton hull, 4 HP. Carrier-dependent (2 weeks endurance). The Astral Dawn carries 6 Tlatl fighters crewed by NPC pilots."
 }
