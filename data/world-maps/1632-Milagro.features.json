@@ -1,0 +1,106 @@
+{
+  "hex": "1632",
+  "name": "Milagro",
+  "enrichedAt": "2026-02-08T15:30:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [8, 0],
+      "type": "starport",
+      "name": "Milagro Downport",
+      "class": "E",
+      "description": "Cracked ferrocrete landing pad, single nav beacon, prefab customs shack. No refined fuel. More customs officers than landing pads. Law Level A means exhaustive inspections.",
+      "campaignNotes": "PCs arrive here. Comedic bureaucratic customs (Inspector Brak). Asao WANTED poster moment. Anagathics risk."
+    },
+    {
+      "mapHex": [8, 1],
+      "type": "settlement",
+      "subtype": "domed_city",
+      "name": "Downport Dome",
+      "population": "~20M",
+      "culture": "Mixed — most diverse dome, most transient. Trade district.",
+      "description": "Surrounds the starport. Where offworlders stay. Shipping offices, freight companies, cheap accommodations. CCF and other trade interest offices located here.",
+      "campaignNotes": "James investigates shipping district here. Splicer Mako operates here. Renna Vasik (CCF office) here."
+    },
+    {
+      "mapHex": [2, 4],
+      "type": "settlement",
+      "subtype": "domed_city",
+      "name": "Exile's Rest",
+      "population": "~12M",
+      "culture": "Old Transportees — original 750s penal colony settlers. Proudest, most bitter.",
+      "description": "Oldest dome (founded 756). Forinean scratch-art covers every corridor. The Voiceless Song echoes through hydroponics bays. Remembrance gatherings held monthly.",
+      "campaignNotes": "Cultural intel items strongest here. Brother Caspar Dane's meditation hall. The Closed-Fist Greeting is universal."
+    },
+    {
+      "mapHex": [18, 1],
+      "type": "settlement",
+      "subtype": "domed_city",
+      "name": "Haven",
+      "population": "~35M",
+      "culture": "Resettlement Wave — 992 mass deportation survivors. Largest group, pragmatic.",
+      "description": "Largest dome. Government center, civil service headquarters, food distribution hub. Functional but grim. Delia Cade's office is here.",
+      "campaignNotes": "Delia Cade operates from here. Synthi-bread sharing ritual. Government bureaucracy. Act 2 investigation base."
+    },
+    {
+      "mapHex": [28, 2],
+      "type": "settlement",
+      "subtype": "domed_city",
+      "name": "Crystalline",
+      "population": "~8M",
+      "culture": "Elite Exiles — fallen Forinean oligarchs. Better-maintained, imported fixtures.",
+      "description": "Elite dome with higher maintenance standards. Residents preserve Forinean high-culture: education, social hierarchy, aesthetic refinement. Pre-deportation corporate documentation archives.",
+      "campaignNotes": "Anagathics buyer from here. Corporate intelligence for James. Elite Exiles disdain 'common' Milagrans."
+    },
+    {
+      "mapHex": [32, -1],
+      "type": "settlement",
+      "subtype": "domed_city",
+      "name": "Last Light",
+      "population": "~15M",
+      "culture": "Post-Collapse survivors. Tightest community, deepest distrust of authority.",
+      "description": "Newest dome (built 1082 during post-abandonment chaos). Emergency construction visible — mismatched hull plating, improvised life support. Residents teach children escape routes before reading.",
+      "campaignNotes": "Splicer Mako's territory. Post-Collapse witnesses with Forine horror stories. Adventure seed: pressure seal failure."
+    },
+    {
+      "mapHex": [14, 3],
+      "type": "natural",
+      "name": "The Brine Flats",
+      "description": "Milagro's largest liquid body — technically a frozen brine lake. Ice mining operations extract water. Spiritual significance to Old Transportees.",
+      "campaignNotes": "Visible from Exile's Rest and Haven. The Remembrance tradition includes memorial for those who died trying to cross it on foot during the chaos years."
+    }
+  ],
+  "regions": [
+    {
+      "name": "The Barrens",
+      "hexes": [[0,4],[1,5],[2,6],[1,3],[2,4],[3,3],[4,4],[5,3]],
+      "terrain": "wasteland",
+      "description": "Northern polar wastes. Cratered ice and regolith. Nothing survives unprotected. The earliest penal colony survey teams mapped this region and declared it 'worthless' — the name stuck."
+    },
+    {
+      "name": "Brine Basin",
+      "hexes": [[13,3],[14,4],[15,3],[14,2],[13,1],[15,1],[16,2]],
+      "terrain": "ocean",
+      "description": "Central frozen ocean and surrounding ice fields. Subsurface liquid water detected. Ice mining operations supply the domes. The Basin is Milagro's most valuable natural resource."
+    },
+    {
+      "name": "Southern Ice Cap",
+      "hexes": [[4,-2],[10,-2],[16,-2],[22,-3],[25,-4],[28,-5]],
+      "terrain": "ice_cap",
+      "description": "Permanent ice cap at southern latitudes. Kilometers thick. Contains trace organics useful for CHONP processing. Automated mining rigs operate here."
+    },
+    {
+      "name": "The Dome Corridor",
+      "hexes": [[2,2],[5,3],[8,1],[12,1],[18,1],[24,1],[28,2],[32,-1]],
+      "terrain": "clear",
+      "description": "The arc of relatively flat terrain connecting all five domes. Surface transit routes (sealed vehicles) follow this corridor. Most infrastructure runs underground along this path."
+    }
+  ],
+  "arrivalBriefing": "Milagro resolves on sensors as a gray-brown marble scarred by impact craters and ice sheets, orbiting a sullen red dwarf that barely qualifies as a sun. The world's five domes appear as pale blisters on the nightside — clusters of light in an ocean of frozen nothing.\n\nDescent reveals the scale of desolation: regolith plains stretching to every horizon, exposed bedrock ridges, and the dull gleam of the Brine Basin's frozen surface. The atmosphere is essentially vacuum — trace gases that wouldn't sustain a candle flame.\n\nMilagro Downport is a cracked ferrocrete pad surrounded by prefab structures. The customs shack looms larger than the landing facilities. Even before the ramp lowers, the crew can see the inspectors lining up — clipboards, scanners, and the weary patience of professionals who have all day and nothing better to do.",
+  "gmQuickRef": {
+    "population": "90M in 5 domed cities. Rest is frozen wasteland/ice.",
+    "hazards": "Trace atmosphere (vacc suit outside domes). 0.26G. -25°C average. Crumbling dome infrastructure.",
+    "firstImpressions": "Narrow corridors, harsh fluorescent light, recycled air, scratch-art everywhere, armed customs officers, gallows humor.",
+    "culturalGroups": ["Old Transportees", "Resettlement Wave", "Elite Exiles", "Post-Collapse"]
+  }
+}
