@@ -1,0 +1,61 @@
+{
+  "hex": "1436",
+  "name": "Talos",
+  "enrichedAt": "2026-02-08T17:00:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [15, 0],
+      "type": "starport",
+      "name": "Talos Downport",
+      "class": "E",
+      "description": "Flat pad, fuel depot, cluster of prefab buildings. No repair facilities. No customs worth mentioning. Law 2 and nobody cares.",
+      "campaignNotes": "Agent Thale encounter occurs in system, not necessarily at port."
+    },
+    {
+      "mapHex": [18, 1],
+      "type": "settlement",
+      "name": "Dustfall",
+      "population": "~300K",
+      "culture": "Frontier town. Miners, traders, outcasts. Nobody asks questions.",
+      "description": "Main settlement. Sprawling, improvised architecture grown from prefab cores. Surface-level buildings connected by covered walkways. Thin atmosphere requires filter masks outside.",
+      "campaignNotes": "Kelsa Vorn (info broker) operates here. Frontier atmosphere — Law 2, armed populace."
+    },
+    {
+      "mapHex": [30, -4],
+      "type": "industrial",
+      "name": "The Pits",
+      "population": "~100K",
+      "description": "Mining settlement in old underground workings. Tunnels extend deep into the bedrock. Harsh conditions but mineral extraction is Talos's only real industry.",
+      "campaignNotes": "Underground setting if combat scene needed."
+    },
+    {
+      "mapHex": [15, 5],
+      "type": "other",
+      "name": "Spindle Station",
+      "description": "Orbital fuel processing facility and transit point. Small, functional. Where Patch (recurring NPC) works. Pirate scouts occasionally refuel here.",
+      "campaignNotes": "Patch has intel about Whisper's nemesis. Blood Profit scouts refuel here — potential encounter."
+    }
+  ],
+  "regions": [
+    {
+      "name": "Dust Plains",
+      "hexes": [[5,2],[10,1],[15,0],[20,-1],[25,-2],[30,-3]],
+      "terrain": "clear",
+      "description": "Rocky desert with scattered ice deposits. Fine dust covers everything. Visibility can drop to meters during dust storms. Thin atmosphere carries the dust high."
+    },
+    {
+      "name": "Southern Wastes",
+      "hexes": [[10,-5],[15,-6],[20,-7],[25,-8]],
+      "terrain": "ice_cap",
+      "description": "Polar ice deposits. Too small and contaminated for efficient mining. Automated surveying equipment left by long-departed prospectors."
+    }
+  ],
+  "arrivalBriefing": "Talos is the kind of world you forget you visited. A dusty rock ball with a faded landing pad, a fuel depot, and a settlement that looks like it grew by accident. The very thin atmosphere is a pale smear above the horizon — not enough to breathe, barely enough to notice.\n\nDustfall sprawls beside the downport, a collection of prefab buildings and improvised structures. Armed people walk the covered walkways. Nobody looks up when a new ship lands.",
+  "gmQuickRef": {
+    "population": "500K total. Frontier culture. Nobody asks questions.",
+    "hazards": "Very thin atmosphere (filter required). Low gravity (0.28G). Cold. No emergency services.",
+    "firstImpressions": "Dusty, worn, frontier. Armed populace. The corridor runs thin here.",
+    "culturalGroups": ["Frontier settlers", "Miners", "Transit population"]
+  }
+}

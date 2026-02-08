@@ -1,0 +1,44 @@
+{
+  "hex": "1337",
+  "name": "Judice",
+  "enrichedAt": "2026-02-08T17:00:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [35, 0],
+      "type": "starport",
+      "name": "Judice Depot",
+      "class": "E",
+      "description": "Automated refueling station. Unmanned. Reinforced landing pad with sealed fuel dispensing. Maintained by periodic drone visits from Collace. Unreliable — roll for contamination.",
+      "campaignNotes": "Someone has installed a passive sensor logging transponder data. Pirates? Intelligence?"
+    },
+    {
+      "mapHex": [50, 5],
+      "type": "other",
+      "name": "Survey Station Judice-7 (Wreck)",
+      "description": "Abandoned Imperial Survey station from the Second Survey era (~1040s). Partially collapsed, atmosphere penetrated. On raised promontory overlooking fluid ocean. Some sealed sections may still hold.",
+      "campaignNotes": "Blood Profit dead drop. Encrypted data chips cached here. PCs may find early intelligence bonus."
+    }
+  ],
+  "regions": [
+    {
+      "name": "Corrosive Barrens",
+      "hexes": [[10,5],[20,3],[30,1],[40,-1],[50,-3],[60,-5]],
+      "terrain": "rural",
+      "description": "Barren rock surface scoured by insidious corrosive atmosphere. Chemical weathering creates alien landscapes — pillars, arches, dissolved formations. Strangely beautiful, utterly hostile."
+    },
+    {
+      "name": "Chemical Oceans",
+      "hexes": [[30,10],[40,8],[50,5],[60,3],[70,0],[80,-5]],
+      "terrain": "ocean",
+      "description": "Hot, chemically active fluid oceans. Non-water compounds that dissolve most materials on contact. Surface shimmers with heat distortion and chemical reactions. Wilderness refueling possible but extremely hazardous."
+    }
+  ],
+  "arrivalBriefing": "Judice is dead. A large, hostile world wrapped in insidious corrosive atmosphere, its surface baked by greenhouse heat. The fluid oceans shimmer with chemical iridescence — beautiful the way a venomous animal is beautiful.\n\nThe automated fuel depot beacon is the only signal. No traffic control, no communications, no population. The refueling station sits on the only flat ground worth landing on, surrounded by corroded rock formations that look like melted sculpture.",
+  "gmQuickRef": {
+    "population": "0. Uninhabited. Automated fuel station only.",
+    "hazards": "Insidious corrosive atmosphere (penetrates seals over time). Hot. High gravity (1.20G). No rescue available.",
+    "firstImpressions": "Dead, hostile, beautiful in a poisonous way. The perfect place for an ambush.",
+    "culturalGroups": []
+  }
+}

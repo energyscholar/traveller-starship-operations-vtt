@@ -1,0 +1,62 @@
+{
+  "hex": "1433",
+  "name": "Noctocol",
+  "enrichedAt": "2026-02-08T17:00:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [25, 0],
+      "type": "starport",
+      "name": "Noctocol Downport",
+      "class": "E",
+      "description": "Sealed landing pad with corrosion-resistant coating. No refined fuel. Limited provisions. Constant maintenance against atmospheric degradation.",
+      "campaignNotes": "Barely functional. The corrosive atmosphere eats everything."
+    },
+    {
+      "mapHex": [30, 3],
+      "type": "settlement",
+      "name": "Acid Haven",
+      "population": "~12M",
+      "culture": "Largest floating habitat. Government center. Close-knit isolation culture.",
+      "description": "Floating habitat complex on the fluid oceans. Multiple connected pressure vessels linked by sealed tubes. The community's survival depends on absolute seal integrity.",
+      "campaignNotes": "Director Kai Osmund runs this. Psionic contact Brother Fen lives here."
+    },
+    {
+      "mapHex": [50, -5],
+      "type": "industrial",
+      "name": "Processing Rig Seven",
+      "population": "~8M",
+      "description": "Industrial platform for exotic chemical processing. Harvests compounds from the corrosive atmosphere and fluid oceans for export.",
+      "campaignNotes": "SuSAG sampling station attached. Dr. Vetch operates here."
+    },
+    {
+      "mapHex": [15, -8],
+      "type": "research",
+      "name": "The Deep Station",
+      "population": "~5M",
+      "description": "Subsurface research facility studying the fluid ocean chemistry. Partially submerged. Scientific community with unique environmental expertise.",
+      "campaignNotes": "Potential adventure seed: deep sample retrieval."
+    }
+  ],
+  "regions": [
+    {
+      "name": "Corrosive Mists",
+      "hexes": [[10,5],[15,3],[20,1],[25,0],[30,-2],[35,-4]],
+      "terrain": "rural",
+      "description": "Landmasses exposed above the fluid oceans. Scoured by corrosive winds. The rock surface shows chemical weathering patterns. Iridescent mineral deposits visible."
+    },
+    {
+      "name": "Fluid Oceans",
+      "hexes": [[30,3],[35,5],[40,3],[45,0],[50,-3],[55,-5],[60,-8]],
+      "terrain": "ocean",
+      "description": "Non-water hydrocarbon oceans. Chemical composition varies by region. Surface shimmers with iridescent patterns. Floating habitats anchor to subsurface geological features."
+    }
+  ],
+  "arrivalBriefing": "Noctocol resolves as a world wrapped in sickly orange-yellow haze. The corrosive atmosphere is visible even from orbit — a toxic blanket that obscures the surface. Occasional breaks reveal the fluid oceans: shimmering, iridescent, and utterly lethal to unprotected materials.\n\nThe downport beacon guides you through the haze to a sealed landing pad. Even through the ship's hull, the atmospheric analysis reads like a chemistry textbook of things that dissolve metal.",
+  "gmQuickRef": {
+    "population": "30M in sealed habitats. Nobody goes outside without specialized equipment.",
+    "hazards": "Corrosive atmosphere (eats metal/organic). Exotic fluid oceans. Standard vacc suits corrode in hours.",
+    "firstImpressions": "Orange haze, sealed everything, intense community bonds, outsiders tolerated not trusted.",
+    "culturalGroups": ["Habitat dwellers (insular)", "Industrial workers", "Scientists"]
+  }
+}
