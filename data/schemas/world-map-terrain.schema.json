@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "World Map Terrain (Tier 2)",
+  "description": "Automated extraction of hex-by-hex terrain from TravellerWorlds SVG maps.",
+  "type": "object",
+  "required": ["hex", "name", "uwp", "tradeCodes", "extractedAt", "grid", "hexes", "summary"],
+  "properties": {
+    "hex": {
+      "type": "string",
+      "pattern": "^\\d{4}$",
+      "description": "Sector hex code (e.g., 1632)"
+    },
+    "name": { "type": "string" },
+    "uwp": {
+      "type": "string",
+      "pattern": "^[A-EX][0-9A-Z]{6}-[0-9A-Z]$",
+      "description": "Universal World Profile"
+    },
+    "tradeCodes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "mapSeed": { "type": "string" },
+    "sourceUrl": { "type": "string", "format": "uri" },
+    "extractedAt": { "type": "string", "format": "date-time" },
+    "grid": {
+      "type": "object",
+      "required": ["cols", "rows", "coordinateSystem", "colRange", "latRange"],
+      "properties": {
+        "cols": { "type": "integer", "minimum": 1 },
+        "rows": { "type": "integer", "minimum": 1 },
+        "coordinateSystem": { "type": "string", "const": "col,lat" },
+        "colRange": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "latRange": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "terrainColorMap": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Observed fill colors mapped to terrain types"
+    },
+    "hexes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["col", "lat", "terrain"],
+        "properties": {
+          "col": { "type": "integer", "minimum": 0 },
+          "lat": { "type": "integer" },
+          "terrain": {
+            "type": "string",
+            "enum": [
+              "ocean", "ice_cap", "clear", "wasteland", "mountain",
+              "rural", "forest", "grassland", "desert", "vegetation",
+              "domed_city", "starport", "exotic_terrain", "unknown"
+            ]
+          }
+        }
+      }
+    },
+    "icons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "cx", "cy"],
+        "properties": {
+          "type": { "type": "string" },
+          "cx": { "type": "number" },
+          "cy": { "type": "number" },
+          "fill": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["totalHexes", "terrainCounts"],
+      "properties": {
+        "totalHexes": { "type": "integer", "minimum": 0 },
+        "terrainCounts": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

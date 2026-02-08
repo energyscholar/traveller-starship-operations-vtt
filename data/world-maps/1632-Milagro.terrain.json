@@ -1,0 +1,1062 @@
+{
+  "hex": "1632",
+  "name": "Milagro",
+  "uwp": "E31178A-7",
+  "tradeCodes": [
+    "Ic",
+    "Na",
+    "Pi"
+  ],
+  "mapSeed": "16321632",
+  "sourceUrl": "https://www.travellerworlds.com/?hex=1632&sector=Spinward+Marches&name=Milagro&uwp=E31178A-7&seed=16321632&mapOnly=1",
+  "extractedAt": "2026-02-08T14:59:35.603Z",
+  "grid": {
+    "cols": 36,
+    "rows": 14,
+    "coordinateSystem": "col,lat",
+    "colRange": [
+      0,
+      35
+    ],
+    "latRange": [
+      -6,
+      7
+    ]
+  },
+  "terrainColorMap": {
+    "rgb(103, 74, 53)": "wasteland",
+    "rgb(65, 103, 183)": "ocean",
+    "white": "ice_cap",
+    "rgb(181, 100, 59)": "clear"
+  },
+  "hexes": [
+    {
+      "col": 2,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 1,
+      "lat": 5,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 3,
+      "lat": 5,
+      "terrain": "ocean"
+    },
+    {
+      "col": 1,
+      "lat": 7,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 0,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 2,
+      "lat": 4,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 4,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 1,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 3,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 2,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 5,
+      "lat": 3,
+      "terrain": "clear"
+    },
+    {
+      "col": 4,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 6,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 3,
+      "lat": 1,
+      "terrain": "clear"
+    },
+    {
+      "col": 5,
+      "lat": 1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 7,
+      "lat": 1,
+      "terrain": "clear"
+    },
+    {
+      "col": 4,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 6,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 5,
+      "lat": -1,
+      "terrain": "clear"
+    },
+    {
+      "col": 4,
+      "lat": -2,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 8,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 7,
+      "lat": 5,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 9,
+      "lat": 5,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 7,
+      "lat": 7,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 6,
+      "lat": 4,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 8,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 10,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 7,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 9,
+      "lat": 3,
+      "terrain": "clear"
+    },
+    {
+      "col": 8,
+      "lat": 2,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 11,
+      "lat": 3,
+      "terrain": "clear"
+    },
+    {
+      "col": 10,
+      "lat": 2,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 12,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 9,
+      "lat": 1,
+      "terrain": "clear"
+    },
+    {
+      "col": 11,
+      "lat": 1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 13,
+      "lat": 1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 10,
+      "lat": 0,
+      "terrain": "clear"
+    },
+    {
+      "col": 12,
+      "lat": 0,
+      "terrain": "clear"
+    },
+    {
+      "col": 11,
+      "lat": -1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 10,
+      "lat": -2,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 14,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 13,
+      "lat": 5,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 15,
+      "lat": 5,
+      "terrain": "clear"
+    },
+    {
+      "col": 13,
+      "lat": 7,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 12,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 14,
+      "lat": 4,
+      "terrain": "ocean"
+    },
+    {
+      "col": 16,
+      "lat": 4,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 13,
+      "lat": 3,
+      "terrain": "ocean"
+    },
+    {
+      "col": 15,
+      "lat": 3,
+      "terrain": "ocean"
+    },
+    {
+      "col": 14,
+      "lat": 2,
+      "terrain": "ocean"
+    },
+    {
+      "col": 17,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 16,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 18,
+      "lat": 2,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 15,
+      "lat": 1,
+      "terrain": "ocean"
+    },
+    {
+      "col": 17,
+      "lat": 1,
+      "terrain": "clear"
+    },
+    {
+      "col": 19,
+      "lat": 1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 16,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 18,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 17,
+      "lat": -1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 16,
+      "lat": -2,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 20,
+      "lat": 6,
+      "terrain": "ocean"
+    },
+    {
+      "col": 19,
+      "lat": 5,
+      "terrain": "ocean"
+    },
+    {
+      "col": 21,
+      "lat": 5,
+      "terrain": "ocean"
+    },
+    {
+      "col": 19,
+      "lat": 7,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 18,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 20,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 22,
+      "lat": 4,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 19,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 21,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 20,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 23,
+      "lat": 3,
+      "terrain": "clear"
+    },
+    {
+      "col": 22,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 24,
+      "lat": 2,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 21,
+      "lat": 1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 23,
+      "lat": 1,
+      "terrain": "clear"
+    },
+    {
+      "col": 25,
+      "lat": 1,
+      "terrain": "clear"
+    },
+    {
+      "col": 22,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 24,
+      "lat": 0,
+      "terrain": "clear"
+    },
+    {
+      "col": 23,
+      "lat": -1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 22,
+      "lat": -2,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 26,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 25,
+      "lat": 5,
+      "terrain": "ocean"
+    },
+    {
+      "col": 27,
+      "lat": 5,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 25,
+      "lat": 7,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 24,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 26,
+      "lat": 4,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 28,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 25,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 27,
+      "lat": 3,
+      "terrain": "clear"
+    },
+    {
+      "col": 26,
+      "lat": 2,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 29,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 28,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 30,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 27,
+      "lat": 1,
+      "terrain": "clear"
+    },
+    {
+      "col": 29,
+      "lat": 1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 31,
+      "lat": 1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 28,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 30,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 29,
+      "lat": -1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 28,
+      "lat": -2,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 32,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 31,
+      "lat": 5,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 33,
+      "lat": 5,
+      "terrain": "ocean"
+    },
+    {
+      "col": 31,
+      "lat": 7,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 30,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 32,
+      "lat": 4,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 34,
+      "lat": 4,
+      "terrain": "clear"
+    },
+    {
+      "col": 31,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 33,
+      "lat": 3,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 32,
+      "lat": 2,
+      "terrain": "clear"
+    },
+    {
+      "col": 6,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 5,
+      "lat": 5,
+      "terrain": "ocean"
+    },
+    {
+      "col": 12,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 11,
+      "lat": 5,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 18,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 17,
+      "lat": 5,
+      "terrain": "clear"
+    },
+    {
+      "col": 24,
+      "lat": 6,
+      "terrain": "ocean"
+    },
+    {
+      "col": 23,
+      "lat": 5,
+      "terrain": "ocean"
+    },
+    {
+      "col": 30,
+      "lat": 6,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 29,
+      "lat": 5,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 9,
+      "lat": -1,
+      "terrain": "clear"
+    },
+    {
+      "col": 8,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 15,
+      "lat": -1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 14,
+      "lat": 0,
+      "terrain": "clear"
+    },
+    {
+      "col": 21,
+      "lat": -1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 20,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 27,
+      "lat": -1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 26,
+      "lat": 0,
+      "terrain": "clear"
+    },
+    {
+      "col": 3,
+      "lat": -1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 2,
+      "lat": 0,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 1,
+      "lat": 1,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 2,
+      "lat": -1,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 2,
+      "lat": -3,
+      "terrain": "clear"
+    },
+    {
+      "col": 18,
+      "lat": -3,
+      "terrain": "clear"
+    },
+    {
+      "col": 33,
+      "lat": -3,
+      "terrain": "clear"
+    },
+    {
+      "col": 35,
+      "lat": -3,
+      "terrain": "clear"
+    },
+    {
+      "col": 2,
+      "lat": -4,
+      "terrain": "ice_cap"
+    },
+    {
+      "col": 18,
+      "lat": -4,
+      "terrain": "ocean"
+    },
+    {
+      "col": 33,
+      "lat": -4,
+      "terrain": "wasteland"
+    },
+    {
+      "col": 35,
+      "lat": -4,
+      "terrain": "clear"
+    },
+    {
+      "col": 2,
+      "lat": -5,
+      "terrain": "ocean"
+    },
+    {
+      "col": 18,
+      "lat": -5,
+      "terrain": "clear"
+    },
+    {
+      "col": 33,
+      "lat": -5,
+      "terrain": "clear"
+    },
+    {
+      "col": 35,
+      "lat": -5,
+      "terrain": "clear"
+    },
+    {
+      "col": 2,
+      "lat": -6,
+      "terrain": "clear"
+    },
+    {
+      "col": 18,
+      "lat": -6,
+      "terrain": "clear"
+    },
+    {
+      "col": 33,
+      "lat": -6,
+      "terrain": "ice_cap"
+    }
+  ],
+  "icons": [
+    {
+      "type": "circle",
+      "cx": 51,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 58,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 65,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 99,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 106,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 113,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 147,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 154,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 161,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 202,
+      "cy": 385,
+      "fill": "none"
+    },
+    {
+      "type": "circle",
+      "cx": 195,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 202,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 209,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 243,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 250,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 257,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 266,
+      "cy": 273,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 282,
+      "cy": 301,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 291,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 298,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 305,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 362,
+      "cy": 217,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 346,
+      "cy": 245,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 378,
+      "cy": 245,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 339,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 346,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 353,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 387,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 394,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 401,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 442,
+      "cy": 245,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 435,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 442,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 449,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 483,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 490,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 497,
+      "cy": 430,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 531,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 538,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 545,
+      "cy": 178,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 426,
+      "cy": 217,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 410,
+      "cy": 245,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 67,
+      "cy": 536,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 74,
+      "cy": 536,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 81,
+      "cy": 536,
+      "fill": "rgb(81,81,81)"
+    },
+    {
+      "type": "circle",
+      "cx": 324,
+      "cy": 547,
+      "fill": "#687033"
+    },
+    {
+      "type": "circle",
+      "cx": 74,
+      "cy": 627,
+      "fill": "none"
+    }
+  ],
+  "summary": {
+    "totalHexes": 147,
+    "terrainCounts": {
+      "wasteland": 65,
+      "ocean": 16,
+      "ice_cap": 14,
+      "clear": 52
+    }
+  }
+}

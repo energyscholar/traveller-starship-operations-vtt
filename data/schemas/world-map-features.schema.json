@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "World Map Features (Tier 3)",
+  "description": "AI-enriched named features, regions, and GM notes for world maps.",
+  "type": "object",
+  "required": ["hex", "name", "enrichedAt", "enrichedFrom", "features"],
+  "properties": {
+    "hex": {
+      "type": "string",
+      "pattern": "^\\d{4}$"
+    },
+    "name": { "type": "string" },
+    "enrichedAt": { "type": "string", "format": "date-time" },
+    "enrichedFrom": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Data sources used for enrichment (e.g., wiki-cache, campaign:BruceCampaignA)"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["mapHex", "type", "name", "description"],
+        "properties": {
+          "mapHex": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "[col, lat] position on terrain grid"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["starport", "settlement", "military", "industrial", "natural", "religious", "research", "other"]
+          },
+          "subtype": { "type": "string" },
+          "name": { "type": "string" },
+          "class": { "type": "string" },
+          "population": { "type": "string" },
+          "culture": { "type": "string" },
+          "description": { "type": "string" },
+          "campaignNotes": { "type": "string" }
+        }
+      }
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "hexes", "terrain", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "hexes": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": { "type": "integer" },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "terrain": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "arrivalBriefing": {
+      "type": "string",
+      "description": "Narrative text for PC arrival at this world"
+    },
+    "gmQuickRef": {
+      "type": "object",
+      "properties": {
+        "population": { "type": "string" },
+        "hazards": { "type": "string" },
+        "firstImpressions": { "type": "string" },
+        "culturalGroups": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

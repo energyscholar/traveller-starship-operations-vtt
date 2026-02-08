@@ -1,0 +1,280 @@
+{
+  "version": 1,
+  "generatedAt": "2026-02-08T15:00:53.896Z",
+  "dataDir": "data/world-maps/",
+  "schemaVersion": "1.0",
+  "totalWorlds": 9,
+  "statusCounts": {
+    "enriched": 0,
+    "terrain-only": 9,
+    "cached": 0
+  },
+  "worlds": {
+    "1237": {
+      "name": "Collace",
+      "uwp": "B628943-D",
+      "tradeCodes": [
+        "Hi",
+        "In"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1237-Collace.png",
+        "svg": "1237-Collace.svg",
+        "terrain": "1237-Collace.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 471,
+        "dominantTerrain": "ocean",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "71x22"
+      }
+    },
+    "1337": {
+      "name": "Judice",
+      "uwp": "E9B2000-0",
+      "tradeCodes": [
+        "Ba",
+        "Fl"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1337-Judice.png",
+        "svg": "1337-Judice.svg",
+        "terrain": "1337-Judice.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 996,
+        "dominantTerrain": "rural",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "106x30"
+      }
+    },
+    "1433": {
+      "name": "Noctocol",
+      "uwp": "E7A5747-8",
+      "tradeCodes": [
+        "Fl"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1433-Noctocol.png",
+        "svg": "1433-Noctocol.svg",
+        "terrain": "1433-Noctocol.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 624,
+        "dominantTerrain": "ocean",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "83x25"
+      }
+    },
+    "1434": {
+      "name": "Tarkine",
+      "uwp": "C566662-7",
+      "tradeCodes": [
+        "Ag",
+        "Ni",
+        "Ri"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1434-Tarkine.png",
+        "svg": "1434-Tarkine.svg",
+        "terrain": "1434-Tarkine.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 343,
+        "dominantTerrain": "ocean",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "59x20"
+      }
+    },
+    "1435": {
+      "name": "Dallia",
+      "uwp": "B885883-9",
+      "tradeCodes": [
+        "Ri",
+        "Ga"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1435-Dallia.png",
+        "svg": "1435-Dallia.svg",
+        "terrain": "1435-Dallia.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 797,
+        "dominantTerrain": "ocean",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "94x27"
+      }
+    },
+    "1436": {
+      "name": "Talos",
+      "uwp": "E433532-9",
+      "tradeCodes": [
+        "Ni",
+        "Po"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1436-Talos.png",
+        "svg": "1436-Talos.svg",
+        "terrain": "1436-Talos.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 233,
+        "dominantTerrain": "clear",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "48x17"
+      }
+    },
+    "1532": {
+      "name": "Elixabeth",
+      "uwp": "B426467-8",
+      "tradeCodes": [
+        "Ni"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1532-Elixabeth.png",
+        "svg": "1532-Elixabeth.svg",
+        "terrain": "1532-Elixabeth.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 233,
+        "dominantTerrain": "ocean",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "48x17"
+      }
+    },
+    "1533": {
+      "name": "Forine",
+      "uwp": "D3129B8-A",
+      "tradeCodes": [
+        "Hi",
+        "In",
+        "Na",
+        "Va"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1533-Forine.png",
+        "svg": "1533-Forine.svg",
+        "terrain": "1533-Forine.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 148,
+        "dominantTerrain": "clear",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "36x14"
+      }
+    },
+    "1632": {
+      "name": "Milagro",
+      "uwp": "E31178A-7",
+      "tradeCodes": [
+        "Ic",
+        "Na",
+        "Pi"
+      ],
+      "subsector": "Unknown",
+      "files": {
+        "png": "1632-Milagro.png",
+        "svg": "1632-Milagro.svg",
+        "terrain": "1632-Milagro.terrain.json"
+      },
+      "status": "terrain-only",
+      "quickStats": {
+        "totalHexes": 147,
+        "dominantTerrain": "wasteland",
+        "hasOcean": true,
+        "hasIceCap": true,
+        "gridSize": "36x14"
+      }
+    }
+  },
+  "lookups": {
+    "byName": {
+      "Collace": "1237",
+      "Judice": "1337",
+      "Noctocol": "1433",
+      "Tarkine": "1434",
+      "Dallia": "1435",
+      "Talos": "1436",
+      "Elixabeth": "1532",
+      "Forine": "1533",
+      "Milagro": "1632"
+    },
+    "bySubsector": {
+      "Unknown": [
+        "1237",
+        "1337",
+        "1433",
+        "1434",
+        "1435",
+        "1436",
+        "1532",
+        "1533",
+        "1632"
+      ]
+    },
+    "byTerrain": {
+      "ocean_worlds": [
+        "1237",
+        "1337",
+        "1433",
+        "1434",
+        "1435",
+        "1436",
+        "1532",
+        "1533",
+        "1632"
+      ],
+      "ice_worlds": [
+        "1237",
+        "1337",
+        "1433",
+        "1434",
+        "1435",
+        "1436",
+        "1532",
+        "1533",
+        "1632"
+      ],
+      "garden_worlds": [
+        "1434",
+        "1435"
+      ]
+    },
+    "enriched": [],
+    "terrainOnly": [
+      "1237",
+      "1337",
+      "1433",
+      "1434",
+      "1435",
+      "1436",
+      "1532",
+      "1533",
+      "1632"
+    ]
+  }
+}
