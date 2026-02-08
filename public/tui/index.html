@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISS Astral Dawn — Terminal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a1a;
+      color: #eee;
+      font-family: Menlo, Monaco, 'Courier New', monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tui-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      background: #12122a;
+      border-bottom: 1px solid #333;
+      flex-shrink: 0;
+    }
+
+    .tui-title {
+      color: #00d4ff;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .tui-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tui-player {
+      color: #00ff88;
+      font-size: 12px;
+    }
+
+    .tui-connection {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tui-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #666;
+    }
+
+    .tui-dot.connected { background: #00ff88; }
+    .tui-dot.error { background: #ff4444; }
+
+    .tui-back {
+      background: none;
+      border: 1px solid #333;
+      color: #aaa;
+      padding: 4px 12px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      border-radius: 3px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tui-back:hover {
+      color: #00d4ff;
+      border-color: #00d4ff;
+    }
+
+    #terminal-container {
+      flex: 1;
+      padding: 8px;
+      overflow: hidden;
+    }
+
+    #terminal-container .xterm {
+      height: 100%;
+    }
+
+    /* Mobile warning */
+    .mobile-warning {
+      display: none;
+      background: #332200;
+      border-bottom: 1px solid #665500;
+      padding: 6px 16px;
+      font-size: 11px;
+      color: #ffdd00;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-warning { display: block; }
+      .tui-header { padding: 12px 16px; }
+      .tui-title { font-size: 16px; }
+      #terminal-container { padding: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-warning">Terminal works best on desktop. Rotate to landscape for better experience.</div>
+  <div class="tui-header">
+    <span class="tui-title">ISS Astral Dawn &mdash; Terminal</span>
+    <div class="tui-status">
+      <span id="player-label" class="tui-player"></span>
+      <span class="tui-connection">
+        <span id="status-dot" class="tui-dot"></span>
+        <span id="status-text">Connecting...</span>
+      </span>
+      <button class="tui-back" id="btn-back" title="Return to Operations (Esc)">&#x2190; Operations</button>
+    </div>
+  </div>
+  <div id="terminal-container"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
+  <script>
+    // Parse URL params
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role') || null;
+    const player = params.get('player') || null;
+
+    // Show player identity
+    if (player) {
+      document.getElementById('player-label').textContent = player;
+    }
+
+    // Connection status helpers
+    const statusDot = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
+
+    function setStatus(state, text) {
+      statusDot.className = 'tui-dot ' + state;
+      statusText.textContent = text;
+    }
+
+    // Back button
+    document.getElementById('btn-back').addEventListener('click', () => {
+      window.location.href = '/operations';
+    });
+
+    // Escape key handler
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && e.target === document.body) {
+        window.location.href = '/operations';
+      }
+    });
+
+    // Create terminal
+    const terminal = new window.Terminal({
+      cursorBlink: true,
+      fontSize: 14,
+      fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+      theme: {
+        background: '#0a0a1a',
+        foreground: '#eee',
+        cursor: '#00d4ff',
+        cursorAccent: '#0a0a1a',
+        selection: 'rgba(0, 212, 255, 0.3)',
+        black: '#000000',
+        red: '#ff4444',
+        green: '#00ff88',
+        yellow: '#ffdd00',
+        blue: '#00d4ff',
+        magenta: '#ff44ff',
+        cyan: '#00d4ff',
+        white: '#ffffff',
+        brightBlack: '#666666',
+        brightRed: '#ff6666',
+        brightGreen: '#88ff88',
+        brightYellow: '#ffff00',
+        brightBlue: '#66ccff',
+        brightMagenta: '#ff88ff',
+        brightCyan: '#88ffff',
+        brightWhite: '#ffffff'
+      }
+    });
+
+    // Fit addon
+    const fitAddon = new window.FitAddon.FitAddon();
+    terminal.loadAddon(fitAddon);
+
+    // Open terminal
+    terminal.open(document.getElementById('terminal-container'));
+    fitAddon.fit();
+
+    // Handle resize
+    window.addEventListener('resize', () => fitAddon.fit());
+
+    // Socket.io connection
+    const socket = io({ transports: ['websocket', 'polling'] });
+    let isConnected = false;
+    let heartbeatInterval = null;
+
+    socket.on('connect', () => {
+      // Emit tui:connect with optional role and player
+      const payload = {};
+      if (role) payload.role = role;
+      if (player) payload.player = player;
+      socket.emit('tui:connect', payload);
+    });
+
+    socket.on('tui:connected', () => {
+      isConnected = true;
+      setStatus('connected', 'Connected');
+    });
+
+    socket.on('tui:output', (data) => {
+      terminal.write(data);
+    });
+
+    socket.on('tui:mode', (data) => {
+      // Mode change notification from server
+    });
+
+    socket.on('tui:closed', () => {
+      isConnected = false;
+      setStatus('', 'Disconnected');
+      terminal.write('\r\n\x1b[33mSession ended.\x1b[0m\r\n');
+    });
+
+    socket.on('tui:error', (data) => {
+      setStatus('error', 'Error');
+      terminal.write('\r\n\x1b[31mError: ' + data.message + '\x1b[0m\r\n');
+    });
+
+    socket.on('tui:heartbeat:ack', (data) => {
+      if (!data.valid && data.reason === 'auth_expired') {
+        terminal.write('\r\n\x1b[33mSession expired. Please re-authenticate.\x1b[0m\r\n');
+        isConnected = false;
+        setStatus('error', 'Expired');
+      }
+    });
+
+    socket.on('tui:narration', (data) => {
+      // GM narration — display as styled narrative block
+      terminal.write('\r\n\x1b[33m' + '\u2550'.repeat(60) + '\x1b[0m\r\n');
+      terminal.write('\x1b[1;33m  NARRATION\x1b[0m\r\n');
+      terminal.write('\x1b[33m' + '\u2500'.repeat(60) + '\x1b[0m\r\n');
+      const lines = (data.text || '').split('\n');
+      for (const line of lines) {
+        terminal.write('  \x1b[37m' + line + '\x1b[0m\r\n');
+      }
+      terminal.write('\x1b[33m' + '\u2550'.repeat(60) + '\x1b[0m\r\n');
+    });
+
+    socket.on('disconnect', () => {
+      isConnected = false;
+      setStatus('error', 'Disconnected');
+      clearInterval(heartbeatInterval);
+    });
+
+    socket.on('reconnect', () => {
+      setStatus('', 'Reconnecting...');
+    });
+
+    // Send input to server
+    terminal.onData((data) => {
+      if (isConnected) {
+        socket.emit('tui:input', data);
+      }
+    });
+
+    // Heartbeat
+    heartbeatInterval = setInterval(() => {
+      if (isConnected) {
+        socket.emit('tui:heartbeat');
+      }
+    }, 30000);
+
+    // Focus terminal
+    terminal.focus();
+  </script>
+</body>
+</html>

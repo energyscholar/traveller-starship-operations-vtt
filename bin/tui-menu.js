@@ -271,10 +271,22 @@ async function waitForMainSelection(session) {
 // MAIN LOOP
 // ════════════════════════════════════════════════════════════════════
 
-async function main(session) {
+async function main(session, options = {}) {
   // Default to ProcessSession if not provided
   if (!session) {
     session = new ProcessSession();
+  }
+
+  // Role-aware: if a role was requested, go directly to role station
+  if (options.role) {
+    const { ROLES } = require('../lib/tui/role-menu');
+    const validRole = ROLES.find(r => r.id === options.role);
+    if (validRole) {
+      // Jump directly to role menu (will loop within role stations)
+      await runRoleMenu(session);
+      return; // Exit when role menu exits
+    }
+    // Invalid role — fall through to main menu
   }
 
   while (true) {

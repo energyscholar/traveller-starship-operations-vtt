@@ -163,7 +163,9 @@ const unitTests = [
   'tests/unit/map-labels.test.js',  // AR-199/200 Map labels and tooltips
   // Battle C1: Enemy auto-fire + alert FK regression
   'tests/unit/enemy-fire.test.js',  // Enemy auto-fire system (16 tests)
-  'tests/unit/alert-status.test.js'  // Alert FK constraint regression (6 tests)
+  'tests/unit/alert-status.test.js',  // Alert FK constraint regression (6 tests)
+  // C4: TUI standalone + role-aware + GM handlers
+  'tests/tui/tui-standalone.test.js'  // TUI standalone page + GM handlers (32 tests)
 ];
 
 // Integration tests
