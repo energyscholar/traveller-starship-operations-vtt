@@ -1,0 +1,120 @@
+{
+  "hex": "1533",
+  "name": "Forine",
+  "enrichedAt": "2026-02-08T21:30:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [8, 4],
+      "type": "starport",
+      "name": "Forine Downport",
+      "class": "D",
+      "description": "Poor-quality surface starport on cracked ferrocrete. Chronically overwhelmed by traffic from 6 billion in-system. Unrefined fuel only, no shipyard, minimal repair. Would be Class A if not sabotaged — the 1104 construction strike destroyed facilities and every repair attempt since has been quietly undermined by oligarch interests.",
+      "campaignNotes": "PCs dock here. Long customs queues, armed inspectors (Law 8). Oligarchs use private orbital facilities instead. Two-tier system: this port for the masses, Prosperity Station for the elite."
+    },
+    {
+      "mapHex": [10, 4],
+      "type": "settlement",
+      "subtype": "dome_city",
+      "name": "Prosperity Dome",
+      "population": "~400M",
+      "culture": "Elite/commercial — neutral ground between oligarch factions",
+      "description": "The most cosmopolitan of Forine's surface domes. Houses corporate offices, offworld trade consulates, and the closest thing Forine has to a diplomatic quarter. Better-maintained than most domes — filtered air, functioning infrastructure, private security.",
+      "campaignNotes": "Silena Vos 'Silk' operates here (information broker, Syndicate-adjacent). CCF and trade interest offices present. Neutral ground for negotiations."
+    },
+    {
+      "mapHex": [7, 3],
+      "type": "settlement",
+      "subtype": "dome_city",
+      "name": "Undertown",
+      "population": "~200M",
+      "culture": "Working-class — below-dome slums, organized crime territory",
+      "description": "Sub-level sprawl beneath the main domes near the downport. Cramped corridors, failing life support, jury-rigged power. Crime lord Gregor Yulkin controls this district from 'The Pit' bar. Black market pharmaceuticals, weapons, information. Vacc suit patches sold on every corner.",
+      "campaignNotes": "Dr. Hektor Grish (anagathics buyer) operates here. Gregor Yulkin offers alliance against Syndicate. Selling anagathics here puts crew on Anya Korvax's radar."
+    },
+    {
+      "mapHex": [18, 4],
+      "type": "settlement",
+      "subtype": "dome_city",
+      "name": "Haven Cluster",
+      "population": "~600M",
+      "culture": "Industrial worker population — largest surface settlement",
+      "description": "Forine's largest dome cluster. Government administrative center (such as it is), food distribution hub, worker housing blocks. Dense, functional, grim. Chairman Vesik's executive offices are here. The dome walls display propaganda about ongoing starport 'repairs.'",
+      "campaignNotes": "Government center. Chairman Oran Vesik (Non-Charismatic Dictator, dying of neural degradation) rules from here. Food-as-control visible — ration card checkpoints, synthetic food dispensaries."
+    },
+    {
+      "mapHex": [11, 3],
+      "type": "settlement",
+      "subtype": "industrial",
+      "name": "Forge District",
+      "population": "~300M",
+      "culture": "Industrial — manufacturing and processing",
+      "description": "Primary surface manufacturing zone. TL-10 fabrication plants produce goods for export through the Belt. Heavy industry under dome — smelters, electronics assembly, vacc suit manufacture. Worker conditions are harsh but employment is reliable. The 1104 strike originated here.",
+      "campaignNotes": "Labor unrest simmers. Periodic sabotage of starport repair attempts organized from here. Underground worker resistance movement."
+    },
+    {
+      "mapHex": [15, 3],
+      "type": "natural",
+      "name": "The Frozen Sea",
+      "description": "Forine's largest surface water body — kilometers of frozen ocean beneath regolith dust. Subsurface liquid water detected by surveys. Ice mining operations supply the domes with water and CHONP elements. Spiritual significance to long-term residents.",
+      "campaignNotes": "Visible from several dome clusters. Ice mining operations are critical infrastructure — controlled by oligarch interests."
+    },
+    {
+      "mapHex": [26, 4],
+      "type": "settlement",
+      "subtype": "dome_city",
+      "name": "Rimward Domes",
+      "population": "~100M",
+      "culture": "Mixed — newer construction, frontier mentality",
+      "description": "Smaller dome cluster on Forine's eastern hemisphere. Newer construction, less stratified than older domes. Houses belt transit facilities and system defense boat maintenance. Navy personnel stationed here are less corrupt than those at Haven.",
+      "campaignNotes": "System Defense Boats launch from here. Less Syndicate presence. Possible safe harbor if crew needs to avoid oligarch attention."
+    },
+    {
+      "mapHex": [2, 6],
+      "type": "natural",
+      "name": "Northern Polar Wastes",
+      "description": "Permanent ice cap at Forine's north pole. Kilometers-thick ice over ancient rock. Cratered surface, extreme cold (-180C), zero visibility in dust storms. Automated sensor arrays monitor for unauthorized landings. The oligarchs dumped political prisoners here before the practice was 'officially' ended.",
+      "campaignNotes": "Remote. Emergency landing possible but survival depends on vacc suit endurance. Old detention facility ruins might contain Syndicate records."
+    },
+    {
+      "mapHex": [22, 2],
+      "type": "orbital",
+      "name": "Prosperity Station",
+      "description": "Private orbital facility at Forine's L4 Trojan point. Effective Class B/C starport — full repair, refined fuel, no Imperial inspection. Owned by oligarch consortium. Membership or connections required for docking. The elite's starport while the masses queue at the Class D downport.",
+      "campaignNotes": "Oligarch private port. If crew has the right contacts (Silk?), they can access better facilities. Dragan Prime in the Belt is another option (cash accepted, no questions)."
+    }
+  ],
+  "regions": [
+    {
+      "name": "Dome Corridor",
+      "hexes": [[7,3],[8,4],[10,4],[11,3],[12,4],[14,2],[18,4],[22,4],[26,4]],
+      "terrain": "clear",
+      "description": "The arc of relatively flat terrain connecting Forine's major dome clusters. Sealed vehicle transit routes and underground infrastructure corridors run between domes. Most of the 1.6 billion surface residents live along this band."
+    },
+    {
+      "name": "Frozen Basin",
+      "hexes": [[15,3],[21,3],[22,2],[24,2],[27,3],[28,2],[30,2]],
+      "terrain": "ocean",
+      "description": "Forine's frozen ocean band. Subsurface liquid water beneath kilometers of ice. Mining operations extract water and trace organics. The most valuable natural resource on the surface."
+    },
+    {
+      "name": "Northern Ice Cap",
+      "hexes": [[2,6],[8,6],[14,6],[20,6],[26,6],[32,6]],
+      "terrain": "ice_cap",
+      "description": "Permanent polar ice. Uninhabited except for automated sensor arrays and the ruins of old detention facilities. Extreme cold, cratered surface."
+    },
+    {
+      "name": "Southern Ice Cap",
+      "hexes": [[5,-1],[11,-1],[17,-1],[23,-1],[29,-1],[4,-2],[10,-2],[16,-2],[22,-2],[28,-2]],
+      "terrain": "ice_cap",
+      "description": "Southern polar ice fields. Thicker than the north. Contains trace organics useful for CHONP processing. Automated mining rigs operate at the fringes."
+    }
+  ],
+  "arrivalBriefing": "Forine resolves on sensors as a small, dark sphere marred by craters and ice sheets, orbiting a dim yellow star. At 4,800 kilometers diameter it's barely larger than Luna. The trace atmosphere is invisible — this is effectively a vacuum world.\n\nAs the ship approaches, the nightside tells the real story: thousands of dome lights scattered across the surface like bioluminescent organisms on a deep-sea floor. Six billion souls live in this system — 1.6 billion on the surface in those domes, 3 billion in the Dragan Belt, the rest in trojan clusters. The domes are so densely distributed that from orbit the nightside gives the illusion of a single world-spanning structure.\n\nForine Downport is a disaster. Class D — cracked ferrocrete, minimal nav beacons, queue times measured in hours. The 1104 construction strike destroyed the facilities and nobody with power wants them fixed. Armed customs officers (Law Level 8) await with scanners and patience.",
+  "gmQuickRef": {
+    "population": "6B system-wide: 1.6B surface (domes), 3B Dragan Belt, rest in trojan clusters.",
+    "hazards": "Trace atmosphere (vacc suit required outside domes). 0.24-0.34G. -146C average. Law 8 (no blades/firearms). Syndicate surveillance.",
+    "firstImpressions": "Dome corridors, armed checkpoints, ration card dispensaries, propaganda screens, worker crowds, oligarch private security, synthetic food smell.",
+    "culturalGroups": ["Dome Workers", "Belt Miners", "Oligarch Elite", "Underground Resistance"]
+  }
+}

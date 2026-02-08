@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "generatedAt": "2026-02-08T15:42:16.909Z",
+  "generatedAt": "2026-02-08T16:27:41.571Z",
   "dataDir": "data/world-maps/",
   "schemaVersion": "1.0",
   "totalWorlds": 9,
   "statusCounts": {
-    "enriched": 7,
-    "terrain-only": 2,
+    "enriched": 9,
+    "terrain-only": 0,
     "cached": 0
   },
   "worlds": {
@@ -19,18 +19,89 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1237-Collace.features.json",
         "png": "1237-Collace.png",
         "svg": "1237-Collace.svg",
         "terrain": "1237-Collace.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 471,
         "dominantTerrain": "ocean",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "71x22"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Collace Highport",
+          "type": "starport",
+          "hex": [
+            22,
+            5
+          ]
+        },
+        {
+          "name": "Arco Prime",
+          "type": "arcology",
+          "hex": [
+            21,
+            4
+          ]
+        },
+        {
+          "name": "Havelock Industrial Zone",
+          "type": "arcology",
+          "hex": [
+            16,
+            3
+          ]
+        },
+        {
+          "name": "Port Kessler",
+          "type": "downport",
+          "hex": [
+            20,
+            3
+          ]
+        },
+        {
+          "name": "The Sink",
+          "type": "undercity",
+          "hex": [
+            15,
+            2
+          ]
+        },
+        {
+          "name": "Meridian Residential",
+          "type": "arcology",
+          "hex": [
+            23,
+            4
+          ]
+        },
+        {
+          "name": "Deepwater Arcos",
+          "type": "arcology",
+          "hex": [
+            7,
+            4
+          ]
+        }
+      ],
+      "regions": [
+        "Western Archipelago",
+        "Central Highlands",
+        "Polar Ice Shelves",
+        "Open Ocean"
+      ],
+      "culturalGroups": [
+        "Upper Arcos Elite",
+        "Mid Arcos Workers",
+        "Lower Arcos Industrial",
+        "Undercity Criminal"
+      ]
     },
     "1337": {
       "name": "Judice",
@@ -380,18 +451,81 @@
       ],
       "subsector": "Unknown",
       "files": {
+        "features": "1533-Forine.features.json",
         "png": "1533-Forine.png",
         "svg": "1533-Forine.svg",
         "terrain": "1533-Forine.terrain.json"
       },
-      "status": "terrain-only",
+      "status": "enriched",
       "quickStats": {
         "totalHexes": 148,
         "dominantTerrain": "clear",
         "hasOcean": true,
         "hasIceCap": true,
         "gridSize": "36x14"
-      }
+      },
+      "settlements": [
+        {
+          "name": "Forine Downport",
+          "type": "starport",
+          "hex": [
+            8,
+            4
+          ]
+        },
+        {
+          "name": "Prosperity Dome",
+          "type": "dome_city",
+          "hex": [
+            10,
+            4
+          ]
+        },
+        {
+          "name": "Undertown",
+          "type": "dome_city",
+          "hex": [
+            7,
+            3
+          ]
+        },
+        {
+          "name": "Haven Cluster",
+          "type": "dome_city",
+          "hex": [
+            18,
+            4
+          ]
+        },
+        {
+          "name": "Forge District",
+          "type": "industrial",
+          "hex": [
+            11,
+            3
+          ]
+        },
+        {
+          "name": "Rimward Domes",
+          "type": "dome_city",
+          "hex": [
+            26,
+            4
+          ]
+        }
+      ],
+      "regions": [
+        "Dome Corridor",
+        "Frozen Basin",
+        "Northern Ice Cap",
+        "Southern Ice Cap"
+      ],
+      "culturalGroups": [
+        "Dome Workers",
+        "Belt Miners",
+        "Oligarch Elite",
+        "Underground Resistance"
+      ]
     },
     "1632": {
       "name": "Milagro",
@@ -534,17 +668,16 @@
       ]
     },
     "enriched": [
+      "1237",
       "1337",
       "1433",
       "1434",
       "1435",
       "1436",
       "1532",
+      "1533",
       "1632"
     ],
-    "terrainOnly": [
-      "1237",
-      "1533"
-    ]
+    "terrainOnly": []
   }
 }

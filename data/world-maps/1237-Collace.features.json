@@ -1,0 +1,122 @@
+{
+  "hex": "1237",
+  "name": "Collace",
+  "enrichedAt": "2026-02-08T21:30:00.000Z",
+  "enrichedFrom": ["wiki-cache", "campaign:BruceCampaignA"],
+  "features": [
+    {
+      "mapHex": [22, 5],
+      "type": "starport",
+      "name": "Collace Highport",
+      "class": "B",
+      "description": "Orbital station above the mainworld. B-class facility with refined fuel, full repair docks, spacecraft construction capability, and commercial brokerage. The largest and best-equipped port in District 268. Heavy traffic from the Spinward Main and Collace Arm trade routes.",
+      "campaignNotes": "Crew docks here first. JSI contacts meet them at the highport. Commander Vasquez sends encrypted message: 'Report to Kirkton. Priority Alpha.' Ship repairs available after battle damage."
+    },
+    {
+      "mapHex": [21, 4],
+      "type": "settlement",
+      "subtype": "arcology",
+      "name": "Arco Prime",
+      "population": "~800M",
+      "culture": "Political/corporate elite — government center, foreign embassies",
+      "description": "The largest arcology cluster, housing the elected Assembly, government offices, foreign embassies, and megacorp headquarters. Clean, well-patrolled, filter-conditioned air. Upper levels feature filtered-air gardens and luxury residences. McClellan Factors and Tukera Lines have their corridor headquarters in adjacent towers.",
+      "campaignNotes": "Senator Adama Koss (pro-Imperial faction leader) operates from Assembly Hall. Reva Teng (Vemene/Tukera) in Tukera Tower. Kellan Marsh (McClellan) in McClellan Tower. Political endgame plays out here."
+    },
+    {
+      "mapHex": [16, 3],
+      "type": "settlement",
+      "subtype": "arcology",
+      "name": "Havelock Industrial Zone",
+      "population": "~600M",
+      "culture": "Industrial workers — well-paid by D268 standards but politically restless",
+      "description": "Major manufacturing district spanning three connected arcologies. Produces the high-tech goods (TL-13) that drive Collace's economy and compete with Imperial manufacturers. Workers are well-paid but frustrated by decades of political stagnation over Imperial membership.",
+      "campaignNotes": "SuSAG pharmaceutical campus occupies Havelock-3. Dr. Wen Sato (campus director) approaches crew about Ghersak/anagathics. Ethical dilemma: SuSAG's psionic 'research' is questionable."
+    },
+    {
+      "mapHex": [20, 3],
+      "type": "starport",
+      "subtype": "downport",
+      "name": "Port Kessler",
+      "class": "B",
+      "description": "Surface starport under filter domes protecting the landing pads from Collace's tainted thin atmosphere. Commercial district caters to spacers and traders. Less polished than the highport — working port with character.",
+      "campaignNotes": "Oberlindes Lines district office here. CCF Collace subsidiary in commercial annex — small, unremarkable, staffed by careful people. 'Magistrate' Ilya Voronov (Syndicate political fixer) maintains office here."
+    },
+    {
+      "mapHex": [15, 2],
+      "type": "settlement",
+      "subtype": "undercity",
+      "name": "The Sink",
+      "population": "~50M",
+      "culture": "Criminal underworld — black market, information trade",
+      "description": "Collace's largest black market, operating in sub-basement levels beneath old Arco-7. Information, weapons, forged documents, illegal substances. The criminal ecosystem here is older than the Drakon Syndicate — they operate within it but don't control it. Minimal policing, syndicate safe houses scattered throughout.",
+      "campaignNotes": "Patch (if he survived) would know where to find it. Voronov's undercity safe houses are here. When Syndicate intelligence is exposed, Voronov tries to flee through these levels to reach Trexalon."
+    },
+    {
+      "mapHex": [23, 4],
+      "type": "settlement",
+      "subtype": "arcology",
+      "name": "Meridian Residential",
+      "population": "~1.2B",
+      "culture": "Middle-class housing — Collace's population backbone",
+      "description": "The largest residential arcology cluster by population. Mid-Arcos housing for Collace's commercial and service workers. Moderate crime, police patrols, functional public services. Where most of Collace's 4 billion live their daily lives. Anti-Imperial media broadcasts are common here — the Syndicate's information warfare targets this demographic.",
+      "campaignNotes": "Syndicate-backed media outlets push anti-Imperial narratives here. 'Imperial membership means Imperial taxes, Imperial law, Imperial control of YOUR arcologies.' The information war battlefield."
+    },
+    {
+      "mapHex": [7, 4],
+      "type": "settlement",
+      "subtype": "arcology",
+      "name": "Deepwater Arcos",
+      "population": "~400M",
+      "culture": "Lower Arcos — industrial workers, old infrastructure",
+      "description": "Older arcology cluster on the western archipelago. Cramped quarters, aging infrastructure, minimal maintenance budgets. Gangs and organized crime operate openly in lower levels. The original colonial settlement before the arcology boom — some sections date back centuries.",
+      "campaignNotes": "Lower Arcos atmosphere. Gang territory. Syndicate recruitment ground — economic desperation makes people vulnerable to Drakon money."
+    },
+    {
+      "mapHex": [35, 2],
+      "type": "natural",
+      "name": "The Great Ocean",
+      "description": "Collace's dominant feature — 80% of the surface is ocean beneath a tainted thin atmosphere. Cold, dark waters stretching to every horizon between the scattered archipelagos. Subsurface mineral extraction provides raw materials for industry. Ocean thermal vents power some arcology clusters.",
+      "campaignNotes": "Limits dry land severely — forces the arcology lifestyle. The ocean is why 4 billion people live in building-cities instead of spreading out."
+    },
+    {
+      "mapHex": [13, 6],
+      "type": "orbital",
+      "name": "Kirkton Scout Base",
+      "description": "Imperial Scout Service base on Collace's largest moon Kirkton (F200562-D). The largest Scout facility in District 268. Handles system surveys, courier routes, and — quietly — intelligence gathering. Secure facilities for classified debriefs.",
+      "campaignNotes": "JSI debrief happens here, not on the mainworld. Commander Lira Vasquez (JSI handler) stationed here. Evidence catalogued, hazard pay authorized. The crew's recommendations on intelligence distribution carry weight."
+    }
+  ],
+  "regions": [
+    {
+      "name": "Western Archipelago",
+      "hexes": [[7,4],[8,3],[7,2],[7,0],[9,0]],
+      "terrain": "rural",
+      "description": "Scattered island chain on Collace's western hemisphere. Older settlements, including Deepwater Arcos. Rocky terrain above the waterline, filter-dome protected."
+    },
+    {
+      "name": "Central Highlands",
+      "hexes": [[16,3],[20,3],[15,2],[17,2],[19,2],[16,1],[21,4],[22,3],[23,4]],
+      "terrain": "rural",
+      "description": "Collace's main landmass — the largest contiguous dry land on the planet. Houses Arco Prime, Havelock, Port Kessler, and Meridian. Where most of the population and industry concentrate."
+    },
+    {
+      "name": "Polar Ice Shelves",
+      "hexes": [[11,10],[17,10],[23,10],[29,10],[35,10],[41,10]],
+      "terrain": "ice_cap",
+      "description": "Permanent ice covering both poles. Extends further than on most worlds due to the thin atmosphere and limited greenhouse effect. Some automated mining operations."
+    },
+    {
+      "name": "Open Ocean",
+      "hexes": [[30,2],[35,2],[40,2],[45,2],[50,2],[55,2]],
+      "terrain": "ocean",
+      "description": "Collace's vast ocean — cold, deep, and largely unexplored. Subsurface mineral extraction and thermal energy harvesting. No permanent surface installations beyond automated buoys."
+    }
+  ],
+  "arrivalBriefing": "Collace resolves on sensors as a blue-gray marble wrapped in cloud bands, orbiting close to the white-hot primary Gorie with its red companion Sonor visible as a distant ember. At 9,600 kilometers it's a proper world — and at first glance, a wet one. Eighty percent ocean, the surface is an endless expanse of dark water broken by scattered archipelagos of rocky land.\n\nThe arcologies are visible from orbit — massive structures rising from the islands like geometric mountains, their upper levels catching Gorie's harsh light. Filter domes cap the tallest towers. Between the arcology clusters, the tainted thin atmosphere is a hazy blue shimmer that you'd barely notice if you didn't know it would kill you in minutes without a respirator.\n\nCollace Highport is a different world from the frontier ports of D268. B-class — clean docking bays, refined fuel, automated cargo handling, commercial brokerage services. Ships from across the Spinward Main dock here. This is the wealthiest, most advanced world in District 268, and the highport shows it.",
+  "gmQuickRef": {
+    "population": "4B in arcology clusters on limited dry land. 80% ocean surface.",
+    "hazards": "Thin tainted atmosphere (filter respirator required outside). 0.7G. Binary star system (harsh UV from F1 primary). Political intrigue.",
+    "firstImpressions": "Massive arcology towers, ocean horizons, clean highport, corporate logos everywhere, political advertising, filter-dome skylights, well-dressed crowds.",
+    "culturalGroups": ["Upper Arcos Elite", "Mid Arcos Workers", "Lower Arcos Industrial", "Undercity Criminal"]
+  }
+}
