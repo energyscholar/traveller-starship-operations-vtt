@@ -168,7 +168,9 @@ const unitTests = [
   'tests/tui/tui-standalone.test.js',  // TUI standalone page + GM handlers (34 tests)
   // C2: Fighter operations + boarding
   'tests/combat/fighter-ops.test.js',  // Fighter launch, alpha strike, recover (28 tests)
-  'tests/combat/boarding.test.js'  // Boarding action mechanics (22 tests)
+  'tests/combat/boarding.test.js',  // Boarding action mechanics (22 tests)
+  // Phase 0a: Broadcast helpers
+  'tests/socket-handlers/broadcast-helpers.test.js'  // Broadcast helper tests (13 tests)
 ];
 
 // Integration tests
