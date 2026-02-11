@@ -36,24 +36,6 @@ describe('Combat Simulator', () => {
       expect(hits).toBeGreaterThan(90);
     });
 
-    it('should apply called shot penalty', () => {
-      const attacker = { fireControl: 0 };
-      const defender = { armour: 0, hull: 100, power: 100, systems: {} };
-      const weapon = { gunnerSkill: 2, type: 'particle' };
-
-      // Run many attacks with called shot
-      let hits = 0;
-      for (let i = 0; i < 100; i++) {
-        const result = simulateAttack(attacker, defender, weapon, { calledShot: true });
-        if (result.hit) hits++;
-      }
-
-      // With +2 DM - 4 (called shot) = -2, hit rate should be lower
-      // Need 8+ on 2d6-2 = 10+ on 2d6 = ~17%
-      expect(hits).toBeLessThan(40);
-      expect(hits).toBeGreaterThan(5);
-    });
-
     it('should drain power with ion weapons', () => {
       const attacker = { fireControl: 4 };
       const defender = { armour: 0, hull: 100, power: 200, maxPower: 200 };
@@ -110,17 +92,6 @@ describe('Combat Simulator', () => {
       expect(result).toHaveProperty('playerHullPct');
       expect(result).toHaveProperty('enemyHullPct');
       expect(result.rounds).toBeLessThanOrEqual(5);
-    });
-
-    it('should track called shots', async () => {
-      const result = await simulateBattle({
-        startRange: 'Close',
-        maxRounds: 10
-      });
-
-      expect(result).toHaveProperty('calledShotsAttempted');
-      expect(result).toHaveProperty('calledShotsHit');
-      expect(result.calledShotsAttempted).toBeGreaterThan(0);
     });
 
     it('should track missile launches', async () => {

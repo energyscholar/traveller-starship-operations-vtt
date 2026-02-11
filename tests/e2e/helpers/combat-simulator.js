@@ -36,12 +36,11 @@ function getRangeDM(range) {
  * Simulate a single attack
  */
 function simulateAttack(attacker, defender, weapon, options = {}) {
-  const { calledShot, rangeDM = 0 } = options;
+  const { rangeDM = 0 } = options;
 
   const fc = attacker.fireControl || 0;
   const gunner = weapon.gunnerSkill || 0;
-  const calledShotDM = calledShot ? -4 : 0;
-  const totalDM = fc + gunner + rangeDM + calledShotDM;
+  const totalDM = fc + gunner + rangeDM;
 
   const roll = roll2d6();
   const total = roll.total + totalDM;
@@ -53,34 +52,34 @@ function simulateAttack(attacker, defender, weapon, options = {}) {
 
   if (hit) {
     const weaponType = weapon.type || weapon.weapons?.[0] || 'pulse_laser';
+    const damageMultiple = weapon.damageMultiple || 1;
 
     if (weaponType.includes('ion')) {
-      const ionDice = rollNd6(3);
-      powerDrain = (ionDice + effect) * 10;
+      // Ion: 7d6 power drain, ignores armour
+      const ionDice = rollNd6(7);
+      powerDrain = (ionDice + effect) * damageMultiple;
       defender.power = Math.max(0, (defender.power || defender.maxPower || 100) - powerDrain);
     } else if (weaponType.includes('particle')) {
-      const damageRoll = rollNd6(6);
-      damage = Math.max(0, damageRoll - (defender.armour || 0));
+      // Particle: 4d6 barbette
+      const damageRoll = rollNd6(4);
+      const rawDamage = damageRoll + effect;
+      damage = Math.max(0, rawDamage - (defender.armour || 0)) * damageMultiple;
       defender.hull = Math.max(0, defender.hull - damage);
-
-      if (calledShot) {
-        if (!defender.systems) defender.systems = {};
-        if (!defender.systems.powerPlant) defender.systems.powerPlant = { hits: 0 };
-        defender.systems.powerPlant.hits++;
-      }
     } else if (weaponType.includes('missile')) {
       const damageRoll = rollNd6(4);
-      damage = Math.max(0, damageRoll - (defender.armour || 0));
+      const rawDamage = damageRoll + effect;
+      damage = Math.max(0, rawDamage - (defender.armour || 0));
       defender.hull = Math.max(0, defender.hull - damage);
     } else {
       // Laser
       const damageRoll = rollNd6(2);
-      damage = Math.max(0, damageRoll - (defender.armour || 0));
+      const rawDamage = damageRoll + effect;
+      damage = Math.max(0, rawDamage - (defender.armour || 0));
       defender.hull = Math.max(0, defender.hull - damage);
     }
   }
 
-  return { hit, damage, powerDrain, effect, calledShot };
+  return { hit, damage, powerDrain, effect };
 }
 
 /**
@@ -92,37 +91,24 @@ function simulateCoordinatedBarrage(qship, defender, rangeDM) {
     ionHit: false,
     particleDamage: 0,
     powerDrain: 0,
-    calledShotHit: false,
     knockout: false
   };
 
-  // Particle attack (called shot on power plant)
-  const particleBarbette = qship.barbettes?.find(b => b.id === 'particle');
-  if (particleBarbette) {
-    const pResult = simulateAttack(qship, defender,
-      { ...particleBarbette, type: 'particle' },
-      { calledShot: true, rangeDM }
-    );
-    results.particleHit = pResult.hit;
-    results.particleDamage = pResult.damage;
-    results.calledShotHit = pResult.hit;
-  }
-
-  // Ion attack (power drain)
+  // Marina fires one barbette per round, alternating ion/particle
+  // Ion barbette attack (power drain, ignores armour)
   const ionBarbette = qship.barbettes?.find(b => b.id === 'ion');
   if (ionBarbette) {
     const iResult = simulateAttack(qship, defender,
-      { ...ionBarbette, type: 'ion' },
+      { ...ionBarbette, type: 'ion', damageMultiple: ionBarbette.damageMultiple || 3 },
       { rangeDM }
     );
     results.ionHit = iResult.hit;
     results.powerDrain = iResult.powerDrain;
   }
 
-  // Check knockout
-  const ppDisabled = defender.systems?.powerPlant?.hits >= 3;
+  // Check knockout (power dead)
   const powerDead = defender.power <= 0;
-  results.knockout = ppDisabled && powerDead;
+  results.knockout = powerDead;
 
   return results;
 }
@@ -136,7 +122,6 @@ async function simulateBattle(config = {}) {
   const {
     scenario = 'qship-vs-destroyer',
     startRange = 'Medium',
-    marinaCalledShotRate = 0.8,
     maxRounds = 10
   } = config;
 
@@ -171,14 +156,10 @@ async function simulateBattle(config = {}) {
   const results = {
     scenario,
     startRange,
-    marinaCalledShotRate,
     rounds: 0,
     winner: null,
     playerHullPct: 100,
     enemyHullPct: 100,
-    calledShotsAttempted: 0,
-    calledShotsHit: 0,
-    powerPlantsDisabled: 0,
     knockouts: 0,
     missilesLaunched: 0,
     flees: 0,
@@ -249,16 +230,9 @@ async function simulateBattle(config = {}) {
 
     // Q-Ship coordinated barrage
     if (!qship.destroyed && !enemy.destroyed) {
-      results.calledShotsAttempted++;
       const barrage = simulateCoordinatedBarrage(qship, enemy, rangeDM);
-      if (barrage.calledShotHit) results.calledShotsHit++;
       if (barrage.knockout) {
         results.knockouts++;
-        results.powerPlantsDisabled++;
-      }
-      if (enemy.systems?.powerPlant?.hits >= 3 && !enemy.systems.powerPlant.counted) {
-        results.powerPlantsDisabled++;
-        enemy.systems.powerPlant.counted = true;
       }
     }
 
@@ -322,8 +296,6 @@ async function runExperiment(config = {}) {
   // Aggregate stats
   const wins = results.filter(r => r.winner === 'player').length;
   const knockouts = results.reduce((sum, r) => sum + r.knockouts, 0);
-  const calledShotsAttempted = results.reduce((sum, r) => sum + r.calledShotsAttempted, 0);
-  const calledShotsHit = results.reduce((sum, r) => sum + r.calledShotsHit, 0);
   const avgRounds = results.reduce((sum, r) => sum + r.rounds, 0) / runs;
   const avgPlayerHull = results.reduce((sum, r) => sum + r.playerHullPct, 0) / runs;
   const totalFlees = results.reduce((sum, r) => sum + r.flees, 0);
@@ -335,7 +307,6 @@ async function runExperiment(config = {}) {
     config: battleConfig,
     winRate: Math.round((wins / runs) * 100),
     knockoutRate: Math.round((knockouts / runs) * 100),
-    calledShotAccuracy: calledShotsAttempted > 0 ? Math.round((calledShotsHit / calledShotsAttempted) * 100) : 0,
     avgRounds: Math.round(avgRounds * 10) / 10,
     avgPlayerHull: Math.round(avgPlayerHull),
     flees: totalFlees,
@@ -361,8 +332,7 @@ if (require.main === module) {
     console.log('Running quick combat simulation test...\n');
 
     const result = await simulateBattle({
-      startRange: 'Medium',
-      marinaCalledShotRate: 0.8
+      startRange: 'Medium'
     });
 
     console.log('Battle Result:');
@@ -370,7 +340,6 @@ if (require.main === module) {
     console.log(`  Rounds: ${result.rounds}`);
     console.log(`  Q-Ship Hull: ${result.playerHullPct}%`);
     console.log(`  Enemy Hull: ${result.enemyHullPct}%`);
-    console.log(`  Called Shots: ${result.calledShotsHit}/${result.calledShotsAttempted}`);
     console.log(`  Knockouts: ${result.knockouts}`);
   })();
 }

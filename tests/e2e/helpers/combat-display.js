@@ -55,7 +55,7 @@ function getPowerLabel(power, maxPower) {
 
 /**
  * Format attack modifiers breakdown
- * @param {Object} modifiers - { skill, range, evasive, other, calledShot }
+ * @param {Object} modifiers - { skill, range, evasive, other }
  * @returns {string} Formatted modifier string
  */
 function formatModifiers(modifiers) {
@@ -64,7 +64,6 @@ function formatModifiers(modifiers) {
   if (modifiers.skill) parts.push(`${modifiers.skill >= 0 ? '+' : ''}${modifiers.skill}skill`);
   if (modifiers.range) parts.push(`${modifiers.range >= 0 ? '+' : ''}${modifiers.range}range`);
   if (modifiers.evasive) parts.push(`${modifiers.evasive}evade`);
-  if (modifiers.calledShot) parts.push(`${modifiers.calledShot}called`);
   if (modifiers.other) parts.push(`${modifiers.other >= 0 ? '+' : ''}${modifiers.other}other`);
   return parts.join(' ');
 }

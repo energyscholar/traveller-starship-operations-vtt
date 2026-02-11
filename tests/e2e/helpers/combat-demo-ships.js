@@ -136,13 +136,15 @@ function createAstralDawn() {
     name: 'Astral Dawn',
     shipType: 'Q-Ship',
     hull: 240, maxHull: 240,       // 600t = 240 HP
-    armour: 1,                      // Bonded Superdense
+    armour: 1,                      // Standard liner hull (Q-ship cover)
     power: 548, maxPower: 548,
     thrust: 3, thrustUsed: 0,
     jump: 3,
     // Combat modifiers
     fireControl: 4,                 // Computer/25 fire control (+4 DM)
-    sensorDM: 1,                    // Improved sensors
+    sensorDM: 2,                    // Advanced Sensors TL15 (+2 DM)
+    sensorGrade: 'advanced',        // Advanced grade sensors
+    sensorOperator: { name: 'Von Sydo', skill: 2 },  // Electronics (Sensors)-2
     pilotSkill: 2,
     captain: { name: 'James', skill_tactics_naval: 3 },
     evasive: false,
@@ -152,20 +154,35 @@ function createAstralDawn() {
     smartMissiles: 6,               // Smart missiles for tough targets
     tonnage: 600,
     hardpoints: 6,
-    // Marina's weapons - she does called shots on Power Plant
     barbettes: [
-      { id: 'ion', name: 'Ion Barbette', damage: '3d6×10 pwr', gunner: 'Recruit Yuki', gunnerSkill: 3 },
-      { id: 'particle', name: 'Particle Barbette', damage: '6d6 hull', gunner: 'Marina', gunnerSkill: 6, calledShot: true }
+      {
+        id: 'ion',
+        name: 'Ion Cannon Barbette',
+        damage: '7d6',
+        damageMultiple: 3,
+        range: 'medium',
+        traits: ['ion'],
+        gunner: 'Marina',
+        gunnerSkill: 6      // Marina (Gunner-6) — primary barbette operator
+      },
+      {
+        id: 'particle',
+        name: 'Particle Barbette',
+        damage: '4d6',
+        damageMultiple: 3,
+        range: 'vlong',
+        traits: ['radiation'],
+        gunner: 'Marina',
+        gunnerSkill: 6      // Marina fires one barbette per round, alternating
+      }
     ],
-    // All turrets identical for maximum flexibility:
-    // - Beam laser: precision fire at any range
-    // - Missile rack: long-range alpha strike capability
-    // - Sandcaster: point defense vs missiles
     turrets: [
-      { id: 1, type: 'triple', weapons: ['beam_laser', 'missile_rack', 'sandcaster'], gunner: 'Gunnery Mate Chen', gunnerSkill: 2 },
-      { id: 2, type: 'triple', weapons: ['beam_laser', 'missile_rack', 'sandcaster'], gunner: 'Gunnery Mate Torres', gunnerSkill: 2 },
-      { id: 3, type: 'triple', weapons: ['beam_laser', 'missile_rack', 'sandcaster'], gunner: 'Gunnery Mate Kim', gunnerSkill: 2 },
-      { id: 4, type: 'triple', weapons: ['beam_laser', 'missile_rack', 'sandcaster'], gunner: 'Gunnery Mate Patel', gunnerSkill: 2 }
+      // Turrets 1-2: VISIBLE (Q-ship cover — looks like normal liner defenses)
+      { id: 1, type: 'triple', weapons: ['pulse_laser', 'sandcaster', 'sandcaster'], gunner: 'AI/Gunnery Mate Chen', gunnerSkill: 2, visible: true },
+      { id: 2, type: 'triple', weapons: ['pulse_laser', 'sandcaster', 'sandcaster'], gunner: 'AI/Gunnery Mate Torres', gunnerSkill: 2, visible: true },
+      // Turrets 3-4: HIDDEN POP-UP (Q-ship strike package)
+      { id: 3, type: 'triple', weapons: ['pulse_laser', 'sandcaster', 'missile_rack_advanced'], gunner: 'AI/Gunnery Mate Kim', gunnerSkill: 2, popup: true },
+      { id: 4, type: 'triple', weapons: ['pulse_laser', 'sandcaster', 'missile_rack_advanced'], gunner: 'AI/Gunnery Mate Patel', gunnerSkill: 2, popup: true }
     ]
   };
 }

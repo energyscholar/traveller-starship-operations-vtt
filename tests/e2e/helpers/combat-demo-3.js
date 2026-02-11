@@ -145,8 +145,6 @@ let combatStats = {
   battlesRun: 0,
   victories: 0,
   defeats: 0,
-  calledShotsAttempted: 0,
-  calledShotsHit: 0,
   powerPlantsDisabled: 0
 };
 
@@ -382,9 +380,6 @@ function render() {
   process.stdout.write(out);
 }
 
-// Called shot targets for random selection (10% chance)
-const CALLED_SHOT_TARGETS = ['mDrive', 'sensors', 'fuel', 'weapon'];
-
 // AR-236: Resolve attack using shared CombatEngine
 async function resolveAttack(attacker, defender, weapon) {
   state.actingShip = attacker.id;
@@ -405,11 +400,6 @@ async function resolveAttack(attacker, defender, weapon) {
   const isPlayer = state.playerFleet.includes(attacker);
   const attackerColor = isPlayer ? GREEN : RED;
 
-  // 10% chance of called shot for regular gunners (not missiles)
-  const canCalledShot = !['missile_rack'].includes(turret.weapons?.[0]);
-  const useCalledShot = canCalledShot && Math.random() < 0.1;
-  const calledShotTarget = useCalledShot ? CALLED_SHOT_TARGETS[Math.floor(Math.random() * CALLED_SHOT_TARGETS.length)] : null;
-
   // Check if should auto-fire missiles at long range
   const isLongRange = engine.isLongRange();
   const hasMissiles = (attacker.missiles || 0) > 0 && turret.weapons?.includes('missile_rack');
@@ -424,7 +414,6 @@ async function resolveAttack(attacker, defender, weapon) {
   // Use combat engine for attack resolution
   const result = engine.resolveAttack(attacker, defender, {
     weapon: turret,
-    calledShot: calledShotTarget,
     autoMissile: shouldFireMissile
   });
 
@@ -437,23 +426,9 @@ async function resolveAttack(attacker, defender, weapon) {
   }
 
   // Generate narrative output
-  if (calledShotTarget && !shouldFireMissile) {
-    combatStats.calledShotsAttempted++;
-    if (result.hit) {
-      combatStats.calledShotsHit++;
-      addNarrative(narrative.calledShotLine(attacker, defender, calledShotTarget, true, result.roll, result.damage, {
-        isPlayer, mods: result.totalDM, systemHits: defender.systems?.[calledShotTarget]?.hits || 1
-      }));
-    } else {
-      addNarrative(narrative.calledShotLine(attacker, defender, calledShotTarget, false, result.roll, 0, {
-        isPlayer, mods: result.totalDM
-      }));
-    }
-  } else {
-    addNarrative(narrative.attackLine(attacker, defender, result.weapon, result.hit, result.roll, result.damage, {
-      isPlayer, mods: result.totalDM
-    }));
-  }
+  addNarrative(narrative.attackLine(attacker, defender, result.weapon, result.hit, result.roll, result.damage, {
+    isPlayer, mods: result.totalDM
+  }));
 
   if (result.destroyed) {
     addNarrative(narrative.destroyedNarrative(defender));
@@ -552,7 +527,7 @@ async function ionAttack(attacker, defender) {
   return hit ? { hit: true, powerDrain } : { hit: false };
 }
 
-// Marina's particle barbette attack with called shots
+// Marina's particle barbette attack
 async function particleAttack(attacker, defender) {
   state.actingShip = attacker.id;
   render();
@@ -564,57 +539,31 @@ async function particleAttack(attacker, defender) {
   const gunner = barbette.gunnerSkill || 0;
   const rangeDM = getRangeDM(state.range);
 
-  // Marina uses called shots 80% of the time targeting Power Plant
-  const useCalledShot = barbette.calledShot && Math.random() < 0.8;
-  const calledShotDM = useCalledShot ? -4 : 0;
-
-  if (useCalledShot) combatStats.calledShotsAttempted++;
-
-  const totalDM = fc + gunner + rangeDM + calledShotDM;
+  const totalDM = fc + gunner + rangeDM;
   const roll = roll2d6();
   const total = roll.total + totalDM;
   const hit = total >= 8;
   const effect = hit ? total - 8 : 0;
 
-  // Calculate damage upfront
+  // Calculate damage: 4d6 + effect - armour, × damageMultiple
   let damage = 0;
-  let ppHits = 0;
   if (hit) {
-    const damageRoll = rollNd6(6);
-    damage = Math.max(0, damageRoll - (defender.armour || 0));
+    const damageRoll = rollNd6(4);
+    const damageMultiple = barbette.damageMultiple || 3;
+    damage = Math.max(0, damageRoll + effect - (defender.armour || 0)) * damageMultiple;
     defender.hull = Math.max(0, defender.hull - damage);
-
-    if (useCalledShot && damage > 0) {
-      if (!defender.systems) defender.systems = {};
-      if (!defender.systems.powerPlant) defender.systems.powerPlant = { hits: 0 };
-      defender.systems.powerPlant.hits++;
-      ppHits = defender.systems.powerPlant.hits;
-      combatStats.calledShotsHit++;
-    }
   }
 
-  // Consolidated single-line output
-  if (useCalledShot) {
-    addNarrative(narrative.calledShotLine(attacker, defender, 'powerPlant', hit, roll, damage, {
-      isPlayer: true, mods: totalDM, systemHits: ppHits
-    }));
-    if (hit && ppHits >= 3) {
-      defender.systems.powerPlant.disabled = true;
-      combatStats.powerPlantsDisabled++;
-      addNarrative(narrative.victoryBanner(`${defender.name} POWER PLANT DISABLED!`, true));
-    }
-  } else {
-    addNarrative(narrative.attackLine(attacker, defender, 'particle', hit, roll, damage, {
-      isPlayer: true, mods: totalDM
-    }));
-  }
+  addNarrative(narrative.attackLine(attacker, defender, 'particle', hit, roll, damage, {
+    isPlayer: true, mods: totalDM
+  }));
 
   if (hit && defender.hull <= 0) {
     defender.destroyed = true;
     addNarrative(narrative.destroyedNarrative(defender));
   }
 
-  return hit ? { hit: true, damage, effect, calledShot: useCalledShot ? 'powerPlant' : null } : { hit: false };
+  return hit ? { hit: true, damage, effect } : { hit: false };
 }
 
 /**
@@ -652,32 +601,21 @@ async function coordinatedBarrage(attacker, defender) {
   const fc = attacker.fireControl || 0;
   const rangeDM = getRangeDM(state.range);
 
-  // === PARTICLE ATTACK (Called Shot: Power Plant) ===
+  // === PARTICLE ATTACK ===
   const particleGunner = particleBarbette.gunnerSkill || 0;
-  const calledShotDM = -4;  // Power Plant penalty
-  const particleTotalDM = fc + particleGunner + rangeDM + calledShotDM;
+  const particleTotalDM = fc + particleGunner + rangeDM;
   const particleRoll = roll2d6();
   const particleTotal = particleRoll.total + particleTotalDM;
   const particleHit = particleTotal >= 8;
   const particleEffect = particleHit ? particleTotal - 8 : 0;
 
-  // === PARTICLE ATTACK (Called Shot: Power Plant) ===
   let particleDamage = 0;
-  let ppHits = 0;
-  combatStats.calledShotsAttempted++;
-
   if (particleHit) {
-    const damageRoll = rollNd6(6);
+    const damageRoll = rollNd6(4);
     const armor = defender.armour || 0;
-    particleDamage = Math.max(0, damageRoll - armor);
+    const damageMultiple = particleBarbette.damageMultiple || 3;
+    particleDamage = Math.max(0, damageRoll + particleEffect - armor) * damageMultiple;
     defender.hull = Math.max(0, defender.hull - particleDamage);
-
-    // Called shot system damage
-    if (!defender.systems) defender.systems = {};
-    if (!defender.systems.powerPlant) defender.systems.powerPlant = { hits: 0 };
-    defender.systems.powerPlant.hits++;
-    ppHits = defender.systems.powerPlant.hits;
-    combatStats.calledShotsHit++;
   }
 
   // === ION ATTACK (Power Drain) ===
@@ -690,14 +628,15 @@ async function coordinatedBarrage(attacker, defender) {
 
   let powerDrain = 0;
   if (ionHit) {
-    const ionDice = rollNd6(3);
-    powerDrain = (ionDice + ionEffect) * 10;
+    const ionDice = rollNd6(7);
+    const ionMultiple = ionBarbette.damageMultiple || 3;
+    powerDrain = (ionDice + ionEffect) * ionMultiple;
     defender.power = Math.max(0, (defender.power || defender.maxPower || 100) - powerDrain);
   }
 
-  // Consolidated barrage output (2 lines instead of 8)
+  // Consolidated barrage output
   const barrageLines = narrative.barrageSummary(
-    { hit: particleHit, ppHits, damage: particleDamage },
+    { hit: particleHit, ppHits: 0, damage: particleDamage },
     { hit: ionHit, drain: powerDrain, remaining: defender.power || 0 },
     defender
   );
@@ -706,20 +645,12 @@ async function coordinatedBarrage(attacker, defender) {
   await delay(400);
 
   // === COMBO RESULT ===
-  const ppDisabled = defender.systems?.powerPlant?.hits >= 3;
   const powerDead = defender.power <= 0;
 
-  if (ppDisabled) {
-    defender.systems.powerPlant.disabled = true;
-    combatStats.powerPlantsDisabled++;
-  }
-
-  if (ppDisabled && powerDead) {
+  if (powerDead) {
     addNarrative(narrative.victoryBanner('KNOCKOUT! Target disabled for capture!', true));
-    addNarrative(narrative.quote('MARINA', 'Power plant destroyed. She\'s dead in space. Prize secured.'));
-  } else if (ppDisabled || powerDead) {
-    addNarrative(`${YELLOW}${BOLD}Target crippled!${RESET} ${ppDisabled ? 'Power plant disabled.' : ''} ${powerDead ? 'No power remaining.' : ''}`);
-    addNarrative(narrative.quote('MARINA', 'Good hit. One more pass should finish it.'));
+    addNarrative(narrative.quote('MARINA', 'Power drained. She\'s dead in space. Prize secured.'));
+    combatStats.powerPlantsDisabled++;
   } else if (particleHit || ionHit) {
     addNarrative(`${YELLOW}Hits scored but target still fighting.${RESET}`);
   } else {
@@ -741,7 +672,7 @@ async function coordinatedBarrage(attacker, defender) {
     ionHit,
     particleDamage,
     powerDrain,
-    knockout: ppDisabled && powerDead
+    knockout: powerDead
   };
 }
 

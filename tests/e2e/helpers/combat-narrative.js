@@ -80,13 +80,6 @@ const TEMPLATES = {
     'Too fast! The missile evades point defense!',
     'Sand cloud disperses too late - missile inbound!',
   ],
-  calledShotHit: [
-    'Precision shot! {system} takes a direct hit!',
-    '{attacker} targets the {system} - hit!',
-    'Called shot connects! {system} damaged!',
-    'Expert marksmanship! {system} sparks and smokes!',
-    'Surgical strike! {system} suffers critical damage!',
-  ],
   destroyed: [
     '{ship} breaks apart in a bloom of fire and debris!',
     '{ship} is destroyed! Hull breach catastrophic!',
@@ -120,7 +113,7 @@ const TEMPLATES = {
     'Prize money beats debris fields.',
     'Disable, don\'t destroy. We can sell that.',
     'Power plant first. They can\'t run without power.',
-    'Called shot. Power systems. Now.',
+    'Target their power plant. Yuki, ion on my mark.',
   ],
   // Yuki responses
   yukiQuotes: [
@@ -224,18 +217,6 @@ function ionDrainNarrative(target, drain, remaining) {
 }
 
 /**
- * Generate narrative for called shot
- */
-function calledShotNarrative(attacker, target, system, hit) {
-  if (!hit) {
-    return `${MAGENTA}Called shot on ${system} - missed!${RESET}`;
-  }
-  const template = pickTemplate('calledShotHit');
-  const text = format(template, { attacker: attacker.name, system });
-  return `${MAGENTA}${BOLD}★ ${text} ★${RESET}`;
-}
-
-/**
  * Format dice roll as crunch (dimmed)
  */
 function crunch(text) {
@@ -321,29 +302,6 @@ function ionDrainLine(attacker, defender, hit, roll, drain, remaining, options =
 }
 
 /**
- * Generate single-line called shot result
- */
-function calledShotLine(attacker, defender, system, hit, roll, damage, options = {}) {
-  const color = options.isPlayer ? GREEN : RED;
-  const systemName = system.replace(/([A-Z])/g, ' $1').trim();
-
-  let result;
-  if (hit) {
-    const ppHits = options.systemHits || 1;
-    const hitsText = ppHits >= 3 ? `${RED}${BOLD}DISABLED!${RESET}` : `${YELLOW}${ppHits}/3 hits${RESET}`;
-    result = `${MAGENTA}★${RESET} ${color}${attacker.name}${RESET} → ${systemName} ${GREEN}HIT${RESET}! ${hitsText}`;
-    if (damage > 0) {
-      result += ` ${YELLOW}-${damage} hull${RESET}`;
-    }
-  } else {
-    result = `${color}${attacker.name}${RESET} → ${systemName} ${DIM}MISS${RESET}`;
-  }
-
-  const total = roll.total + (options.mods || 0);
-  return `${result} ${DIM}[${total} vs 8, -4 called]${RESET}`;
-}
-
-/**
  * Generate alpha strike summary line
  * @param {Array} results - Array of { fighter, hit, damage }
  */
@@ -397,12 +355,9 @@ module.exports = {
   damageNarrative,
   destroyedNarrative,
   ionDrainNarrative,
-  calledShotNarrative,
-
   // Consolidated line functions (AR-233)
   attackLine,
   ionDrainLine,
-  calledShotLine,
   alphaStrikeSummary,
   barrageSummary,
 

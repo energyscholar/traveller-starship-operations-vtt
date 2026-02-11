@@ -357,77 +357,6 @@ function handleModalInput(key, menuItems) {
 }
 
 /**
- * Render called shot target selection menu
- *
- * @param {Array} targets - Array of target options from getCalledShotMenuItems()
- * @param {string} weapon - Weapon being fired
- * @param {number} width - Modal width
- * @returns {string} Rendered modal
- */
-function renderCalledShotMenu(targets, weapon = 'weapon', width = 55) {
-  const lines = [];
-  const innerWidth = width - 4;
-
-  // Header
-  const header = `CALLED SHOT: Select Target System`;
-  const subheader = `Weapon: ${weapon}`;
-
-  lines.push(YELLOW + BOLD + BOX.tl + BOX.h.repeat(width - 2) + BOX.tr + RESET);
-  lines.push(YELLOW + BOLD + BOX.v + RESET + ' ' + WHITE + BOLD + header.padEnd(innerWidth) + ' ' + YELLOW + BOLD + BOX.v + RESET);
-  lines.push(YELLOW + BOX.v + RESET + ' ' + DIM + subheader.padEnd(innerWidth) + ' ' + YELLOW + BOX.v + RESET);
-  lines.push(YELLOW + BOLD + BOX.ml + BOX.h.repeat(width - 2) + BOX.mr + RESET);
-
-  // Empty line
-  lines.push(YELLOW + BOX.v + RESET + ' '.repeat(width - 2) + YELLOW + BOX.v + RESET);
-
-  // Target options
-  for (const target of targets) {
-    const color = target.available ? WHITE : DIM;
-    const strikethrough = target.disabled ? '(DISABLED) ' : '';
-    const label = `${target.number}. ${target.label}`.padEnd(22);
-    const tactical = target.tactical.slice(0, 25);
-    const line = `  ${strikethrough}${label} ${DIM}${tactical}${RESET}`;
-
-    lines.push(YELLOW + BOX.v + RESET + color + line.slice(0, width - 2).padEnd(width - 2) + RESET + YELLOW + BOX.v + RESET);
-  }
-
-  // Empty line
-  lines.push(YELLOW + BOX.v + RESET + ' '.repeat(width - 2) + YELLOW + BOX.v + RESET);
-
-  // Footer
-  lines.push(YELLOW + BOLD + BOX.ml + BOX.h.repeat(width - 2) + BOX.mr + RESET);
-  lines.push(YELLOW + BOX.v + RESET + DIM + '  1-7 = Select target, ESC = Cancel'.padEnd(width - 2) + RESET + YELLOW + BOX.v + RESET);
-  lines.push(YELLOW + BOLD + BOX.bl + BOX.h.repeat(width - 2) + BOX.br + RESET);
-
-  return lines.join('\n');
-}
-
-/**
- * Handle called shot menu input
- *
- * @param {string} key - Key pressed
- * @param {Array} targets - Target options
- * @returns {Object|null} { target, cancel } or null if key not recognized
- */
-function handleCalledShotInput(key, targets) {
-  // ESC = cancel
-  if (key === '\x1b' || key === '\u001b') {
-    return { target: null, cancel: true };
-  }
-
-  // Number keys 1-7 select targets
-  const num = parseInt(key, 10);
-  if (num >= 1 && num <= targets.length) {
-    const target = targets[num - 1];
-    if (target.available) {
-      return { target, cancel: false };
-    }
-  }
-
-  return null;
-}
-
-/**
  * Center a modal on screen (returns positioned output)
  *
  * @param {string} modal - Modal string
@@ -461,10 +390,6 @@ module.exports = {
   renderActionModal,
   handleModalInput,
   centerModal,
-
-  // Called shot menu
-  renderCalledShotMenu,
-  handleCalledShotInput,
 
   // Screen positioning
   moveTo,

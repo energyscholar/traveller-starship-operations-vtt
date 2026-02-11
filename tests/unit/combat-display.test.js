@@ -93,12 +93,6 @@ assertEqual(
 );
 
 assertEqual(
-  formatModifiers({ calledShot: -4 }),
-  '-4called',
-  'Called shot penalty'
-);
-
-assertEqual(
   formatModifiers(null),
   '',
   'Null modifiers returns empty'

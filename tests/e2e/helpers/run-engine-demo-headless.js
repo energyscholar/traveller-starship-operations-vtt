@@ -109,12 +109,8 @@ async function coordinatedBarrage(qship, target) {
   for (const turret of qship.turrets || []) {
     if (turret.disabled) continue;
 
-    const isBeam = turret.weapons?.includes('beam_laser');
-    const calledShot = isBeam && Math.random() < 0.3 ? 'powerPlant' : null;
-
     engine.resolveAttack(qship, target, {
       weapon: turret,
-      calledShot,
       autoMissile: engine.isLongRange()
     });
     await delay(20);
@@ -256,7 +252,6 @@ async function runDemo() {
   console.log(`    Attacks: ${stats.attacks}`);
   console.log(`    Hits: ${stats.hits} (${stats.attacks > 0 ? Math.round(stats.hits/stats.attacks*100) : 0}%)`);
   console.log(`    Damage dealt: ${stats.damageDealt}`);
-  console.log(`    Called shots: ${stats.calledShotsHit}/${stats.calledShotsAttempted}`);
   console.log(`    Missiles launched: ${stats.missilesLaunched}`);
 
   console.log('\n═══════════════════════════════════════════════════════════════════');

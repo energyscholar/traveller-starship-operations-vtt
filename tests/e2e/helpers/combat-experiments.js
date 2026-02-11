@@ -34,21 +34,12 @@ const EXPERIMENTS = {
     { name: 'Very Long Range', startRange: 'Very Long' },
   ],
 
-  // Called shot rate experiments
-  calledShotRates: [
-    { name: '0% Called Shots', marinaCalledShotRate: 0 },
-    { name: '25% Called Shots', marinaCalledShotRate: 0.25 },
-    { name: '50% Called Shots', marinaCalledShotRate: 0.5 },
-    { name: '75% Called Shots', marinaCalledShotRate: 0.75 },
-    { name: '100% Called Shots', marinaCalledShotRate: 1.0 },
-  ],
-
-  // Combined tactics
-  optimalTactics: [
-    { name: 'Aggressive Close', startRange: 'Close', marinaCalledShotRate: 1.0 },
-    { name: 'Balanced Medium', startRange: 'Medium', marinaCalledShotRate: 0.8 },
-    { name: 'Cautious Long', startRange: 'Long', marinaCalledShotRate: 0.5 },
-    { name: 'Sniper Distance', startRange: 'Very Long', marinaCalledShotRate: 1.0 },
+  // Scenario comparison
+  scenarioComparison: [
+    { name: 'Q-Ship vs Destroyer', scenario: 'qship-vs-destroyer' },
+    { name: 'Q-Ship vs Pirates', scenario: 'qship-vs-pirates' },
+    { name: 'Kimbly vs Pirate', scenario: 'kimbly-vs-pirate' },
+    { name: 'Astral vs Corvette', scenario: 'astral-vs-corvette' },
   ],
 };
 
@@ -76,7 +67,6 @@ async function runExperimentSet(name, configs, runs) {
       `  ${config.name.padEnd(20)} ` +
       `Win: ${winColor}${String(result.winRate).padStart(3)}%${RESET}  ` +
       `KO: ${String(result.knockoutRate).padStart(3)}%  ` +
-      `CalledShot: ${String(result.calledShotAccuracy).padStart(3)}%  ` +
       `Rounds: ${result.avgRounds}  ` +
       `Hull: ${result.avgPlayerHull}%`
     );
@@ -99,7 +89,6 @@ function analyzeResults(experimentName, results) {
   insights.push(`Best: ${best.name} (${best.winRate}% win rate)`);
   insights.push(`Worst: ${worst.name} (${worst.winRate}% win rate)`);
 
-  // Check if called shots are worth it
   const highKO = results.filter(r => r.knockoutRate > 30);
   if (highKO.length > 0) {
     insights.push(`Prize capture viable: ${highKO.map(r => r.name).join(', ')}`);
@@ -130,11 +119,11 @@ function generateReport(allResults, runs) {
   for (const [setName, results] of Object.entries(allResults)) {
     lines.push(`## ${setName.replace(/([A-Z])/g, ' $1').trim()}`);
     lines.push('');
-    lines.push('| Configuration | Win % | KO % | Called Shot % | Avg Rounds | Hull % |');
-    lines.push('|---------------|-------|------|---------------|------------|--------|');
+    lines.push('| Configuration | Win % | KO % | Avg Rounds | Hull % |');
+    lines.push('|---------------|-------|------|------------|--------|');
 
     for (const r of results) {
-      lines.push(`| ${r.name} | ${r.winRate}% | ${r.knockoutRate}% | ${r.calledShotAccuracy}% | ${r.avgRounds} | ${r.avgPlayerHull}% |`);
+      lines.push(`| ${r.name} | ${r.winRate}% | ${r.knockoutRate}% | ${r.avgRounds} | ${r.avgPlayerHull}% |`);
     }
 
     lines.push('');
@@ -155,20 +144,19 @@ function generateReport(allResults, runs) {
   lines.push('');
   lines.push('### Marina\'s Knockout Combo');
   lines.push('');
-  lines.push('The **Particle + Ion coordinated barrage** is Marina\'s signature move:');
+  lines.push('The **Ion coordinated barrage** is Marina\'s signature move:');
   lines.push('');
-  lines.push('1. **Particle Barbette** (called shot on Power Plant, -4 DM)');
-  lines.push('   - Marina\'s Gunner-6 + Fire Control +4 = effective +6 before called shot penalty');
-  lines.push('   - Net +2 DM even with called shot - still reliable');
-  lines.push('   - 3 Power Plant hits = disabled');
+  lines.push('1. **Particle Barbette** (Marina, Gunner-6)');
+  lines.push('   - 4D6 × 3 damage (barbette multiplier)');
+  lines.push('   - High damage output against hull');
   lines.push('');
   lines.push('2. **Ion Barbette** (Yuki, Gunner-3)');
-  lines.push('   - (3d6 + Effect) × 10 power drain');
-  lines.push('   - Average 10-11 × 10 = 100+ power drain per hit');
+  lines.push('   - 7D6 power drain × 3 (barbette multiplier)');
+  lines.push('   - Ignores armour, drains power directly');
   lines.push('   - Most ships have 100-400 power');
   lines.push('');
   lines.push('3. **Combo Result**');
-  lines.push('   - Power Plant disabled + 0 power = KNOCKOUT');
+  lines.push('   - Power drained to 0 = KNOCKOUT');
   lines.push('   - Ship intact for prize capture');
   lines.push('   - Marina\'s preferred outcome');
   lines.push('');
@@ -176,7 +164,7 @@ function generateReport(allResults, runs) {
   lines.push('');
   lines.push('- **Close/Short Range**: Best for knockout combos (no range penalty)');
   lines.push('- **Medium Range**: Balanced risk/reward');
-  lines.push('- **Long Range**: Called shots less reliable (-2 DM stacks with -4)');
+  lines.push('- **Long Range**: -2 DM reduces hit rate');
   lines.push('');
   lines.push('### Fighter Alpha Strike');
   lines.push('');

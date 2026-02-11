@@ -16,19 +16,14 @@ const {
   renderActiveOverlay,
   renderActionModal,
   handleModalInput,
-  renderCalledShotMenu,
-  handleCalledShotInput,
   ANSI
 } = require('./turn-notification-tui');
 const {
   shouldShowWarning,
   shouldShowTurnModal,
   getRoleMenuItems,
-  getActiveRole,
-  getCalledShotPenalty,
-  getCalledShotMenuItems
+  getActiveRole
 } = require('../../../lib/combat/turn-notification');
-const { canUseCalledShot } = require('../../../lib/combat/called-shot-ai');
 const {
   cycleControlMode,
   needsPlayerInput,
@@ -41,66 +36,6 @@ const {
 } = require('../../../lib/combat/control-mode');
 
 // ============================================================================
-// CALLED SHOTS IMPLEMENTATION (AR-216)
-// ============================================================================
-// Called shots allow targeting specific ship systems with attack penalty.
-// See lib/combat/turn-notification.js for CALLED_SHOT_TARGETS and penalties.
-// ============================================================================
-
-/**
- * Marina's Called Shot Logic
- * Marina (Gunner-6) prefers to disable ships for prize capture
- * She uses called shots 60% of the time, targeting power systems
- * @param {Object} defenderShip - Defender ship
- * @param {Object} defenderSystems - Defender's systems state
- * @param {string} weapon - Weapon being used
- * @returns {string|null} Target system ID or null for normal attack
- */
-function getMarinaCalledShotTarget(defenderShip, defenderSystems, weapon) {
-  // AR-216: Use centralized weapon validation for called shots
-  if (!canUseCalledShot(weapon)) return null;
-
-  // 60% chance Marina uses called shot
-  if (Math.random() > 0.6) return null;
-
-  // Priority for prize capture: powerPlant > mDrive > jDrive
-  // (Disable power first, they can't do anything)
-  if (defenderSystems?.powerPlant && !defenderSystems.powerPlant.disabled) {
-    return 'powerPlant';
-  }
-  if (defenderSystems?.mDrive && !defenderSystems.mDrive.disabled) {
-    return 'mDrive';
-  }
-  if (defenderSystems?.jDrive && !defenderSystems.jDrive.disabled) {
-    return 'jDrive';
-  }
-  return null;
-}
-
-/**
- * Enemy AI: Decide if enemy should use a called shot
- * @param {Object} attackerShip - Attacker ship
- * @param {Object} defenderShip - Defender (player) ship
- * @param {Object} defenderSystems - Defender's systems state
- * @returns {string|null} Target system ID or null for normal attack
- */
-function getEnemyCalledShotTarget(attackerShip, defenderShip, defenderSystems) {
-  // 25% chance to use called shot when defender below 50% hull
-  if (defenderShip.hull < defenderShip.maxHull * 0.5 && Math.random() < 0.25) {
-    // Priority: jDrive (prevent escape) > powerPlant (cripple) > mDrive (stop)
-    if (defenderSystems.jDrive && !defenderSystems.jDrive.disabled && defenderSystems.jDrive.hp > 0) {
-      return 'jDrive';
-    }
-    if (defenderSystems.powerPlant && !defenderSystems.powerPlant.disabled && defenderSystems.powerPlant.hp > 0) {
-      return 'powerPlant';
-    }
-    if (defenderSystems.mDrive && !defenderSystems.mDrive.disabled && defenderSystems.mDrive.hp > 0) {
-      return 'mDrive';
-    }
-  }
-  return null;
-}
-
 // ANSI codes
 const ESC = '\x1b';
 const CLEAR = `${ESC}[2J`;
@@ -1031,39 +966,6 @@ async function showPlayerTurn(phase, ship, render) {
 
       const result = handleModalInput(key, menuItems);
       if (result) {
-        // Check if "Called Shot" was selected
-        if (result.action?.id === 'called_shot') {
-          process.stdin.removeListener('data', onKey);
-
-          // Show called shot target menu
-          const defender = state.enemy; // Assume attacking enemy
-          const targets = getCalledShotMenuItems(defender.systems);
-          const turret = ship.turrets?.[0];
-          const csModal = renderCalledShotMenu(targets, turret?.weapons?.[0] || 'weapon');
-          process.stdout.write('\n' + csModal);
-
-          // Wait for target selection
-          const targetResult = await waitForCalledShotTarget(targets);
-          if (targetResult.cancel) {
-            // User cancelled, go back to main menu
-            render();
-            process.stdout.write('\n' + modal);
-            process.stdin.on('data', onKey);
-            return;
-          }
-
-          // Return action with target system
-          if (process.stdin.isTTY) {
-            process.stdin.setRawMode(false);
-          }
-          process.stdin.pause();
-          resolve({
-            action: { ...result.action, targetSystem: targetResult.target.id },
-            skip: false
-          });
-          return;
-        }
-
         process.stdin.removeListener('data', onKey);
         if (process.stdin.isTTY) {
           process.stdin.setRawMode(false);
@@ -1077,29 +979,8 @@ async function showPlayerTurn(phase, ship, render) {
   });
 }
 
-// Helper to wait for called shot target selection
-function waitForCalledShotTarget(targets) {
-  return new Promise((resolve) => {
-    const onKey = (key) => {
-      if (key === '\u0003') {
-        process.stdout.write('\n');
-        process.exit();
-      }
-
-      const result = handleCalledShotInput(key, targets);
-      if (result) {
-        process.stdin.removeListener('data', onKey);
-        resolve(result);
-      }
-    };
-
-    process.stdin.on('data', onKey);
-  });
-}
-
 // Resolve a single attack
-// targetSystem: optional called shot target (e.g., 'jDrive', 'powerPlant')
-async function resolveAttack(attacker, defender, attackerShip, defenderShip, turret, targetSystem = null) {
+async function resolveAttack(attacker, defender, attackerShip, defenderShip, turret) {
   const mods = getTurretDM(attackerShip, turret, state.range, defenderShip);
 
   // Weapon selection: Both sides use missiles at long range or randomly
@@ -1119,9 +1000,7 @@ async function resolveAttack(attacker, defender, attackerShip, defenderShip, tur
     await delay(600);
   }
 
-  // Apply called shot penalty
-  const calledShotPenalty = getCalledShotPenalty(targetSystem);
-  const totalMod = mods.total + calledShotPenalty;
+  const totalMod = mods.total;
 
   const roll = roll2d6();
   const total = roll.total + totalMod;
@@ -1137,13 +1016,7 @@ async function resolveAttack(attacker, defender, attackerShip, defenderShip, tur
   let breakdown = `2d6=${roll.total} +FC=${mods.fc} +Gun=${mods.gunner} +Sns=${mods.sensor} +Rng=${mods.rangeDM} +Wpn=${mods.weaponDM}`;
   if (mods.evasiveDM !== 0) breakdown += ` ${YELLOW}Evasive=${mods.evasiveDM}${DIM}`;
   if (mods.ewDM !== 0) breakdown += ` ${BLUE}EW=${mods.ewDM > 0 ? '+' : ''}${mods.ewDM}${DIM}`;
-  if (calledShotPenalty !== 0) breakdown += ` ${YELLOW}Called=${calledShotPenalty}${DIM}`;
 
-  // Narrative for called shot
-  if (targetSystem) {
-    const targetName = targetSystem.replace(/([A-Z])/g, ' $1').trim();
-    addNarrative(`${col}${BOLD}${turret.gunner} targets ${targetName.toUpperCase()}! (${calledShotPenalty})${RESET}`);
-  }
   addNarrative(`${col}${turret.gunner} fires ${weaponType}${RESET}`);
   addNarrative(`${DIM}${breakdown} = ${total} vs 8${RESET}`);
   render();
@@ -1505,8 +1378,7 @@ async function runDemo() {
   // Final exchanges - Round 2
   state.currentActor = 'player';
   const r2pTurret = state.player.turrets[0];
-  const r2pTarget = getMarinaCalledShotTarget(state.enemy, state.enemy.systems, r2pTurret.weapons[0]);
-  await resolveAttack('player', 'enemy', state.player, state.enemy, r2pTurret, r2pTarget);
+  await resolveAttack('player', 'enemy', state.player, state.enemy, r2pTurret);
   await delay(800);
 
   if (state.enemy.hull <= 0) {
@@ -1519,8 +1391,7 @@ async function runDemo() {
 
   state.currentActor = 'enemy';
   const r2eTurret = state.enemy.turrets[0];
-  const r2eTarget = getEnemyCalledShotTarget(state.enemy, state.player, state.playerSystems);
-  await resolveAttack('enemy', 'player', state.enemy, state.player, r2eTurret, r2eTarget);
+  await resolveAttack('enemy', 'player', state.enemy, state.player, r2eTurret);
   await delay(800);
 
   if (state.player.hull <= 0) {
@@ -1585,8 +1456,7 @@ async function runDemo() {
   // Round 3 attacks
   state.currentActor = 'player';
   const r3pTurret = state.player.turrets[0];
-  const r3pTarget = getMarinaCalledShotTarget(state.enemy, state.enemy.systems, r3pTurret.weapons[0]);
-  await resolveAttack('player', 'enemy', state.player, state.enemy, r3pTurret, r3pTarget);
+  await resolveAttack('player', 'enemy', state.player, state.enemy, r3pTurret);
   await delay(800);
 
   if (state.enemy.hull <= 0) {
@@ -1599,8 +1469,7 @@ async function runDemo() {
 
   state.currentActor = 'enemy';
   const r3eTurret = state.enemy.turrets[0];
-  const r3eTarget = getEnemyCalledShotTarget(state.enemy, state.player, state.playerSystems);
-  await resolveAttack('enemy', 'player', state.enemy, state.player, r3eTurret, r3eTarget);
+  await resolveAttack('enemy', 'player', state.enemy, state.player, r3eTurret);
   await delay(800);
 
   if (state.player.hull <= 0) {
@@ -1653,8 +1522,7 @@ async function runDemo() {
   // Round 4 attacks
   state.currentActor = 'player';
   const r4pTurret = state.player.turrets[0];
-  const r4pTarget = getMarinaCalledShotTarget(state.enemy, state.enemy.systems, r4pTurret.weapons[0]);
-  await resolveAttack('player', 'enemy', state.player, state.enemy, r4pTurret, r4pTarget);
+  await resolveAttack('player', 'enemy', state.player, state.enemy, r4pTurret);
   await delay(800);
 
   if (state.enemy.hull <= 0) {
@@ -1667,8 +1535,7 @@ async function runDemo() {
 
   state.currentActor = 'enemy';
   const r4eTurret = state.enemy.turrets[0];
-  const r4eTarget = getEnemyCalledShotTarget(state.enemy, state.player, state.playerSystems);
-  await resolveAttack('enemy', 'player', state.enemy, state.player, r4eTurret, r4eTarget);
+  await resolveAttack('enemy', 'player', state.enemy, state.player, r4eTurret);
   await delay(800);
 
   if (state.player.hull <= 0) {
@@ -1707,8 +1574,7 @@ async function runExtraRound() {
   // Player attacks - Marina uses called shots
   state.currentActor = 'player';
   const pTurret = state.player.turrets[0];
-  const pTarget = getMarinaCalledShotTarget(state.enemy, state.enemy.systems, pTurret.weapons[0]);
-  await resolveAttack('player', 'enemy', state.player, state.enemy, pTurret, pTarget);
+  await resolveAttack('player', 'enemy', state.player, state.enemy, pTurret);
   await delay(800);
 
   if (state.enemy.hull <= 0) {
@@ -1722,8 +1588,7 @@ async function runExtraRound() {
   // Enemy attacks
   state.currentActor = 'enemy';
   const eTurret = state.enemy.turrets[0];
-  const eTarget = getEnemyCalledShotTarget(state.enemy, state.player, state.playerSystems);
-  await resolveAttack('enemy', 'player', state.enemy, state.player, eTurret, eTarget);
+  await resolveAttack('enemy', 'player', state.enemy, state.player, eTurret);
   await delay(800);
 
   if (state.player.hull <= 0) {
