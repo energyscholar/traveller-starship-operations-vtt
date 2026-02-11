@@ -1,12 +1,13 @@
 {
   "attackTarget": 8,
   "rangeDMs": {
-    "adjacent": 2,
-    "close": 1,
-    "short": 0,
+    "adjacent": 0,
+    "close": 0,
+    "short": 1,
     "medium": 0,
     "long": -2,
-    "veryLong": -4
+    "veryLong": -4,
+    "distant": -6
   },
   "dodgeDMs": {
     "none": 0,

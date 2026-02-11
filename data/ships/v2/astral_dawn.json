@@ -6,22 +6,31 @@
   "designation": "Q-Ship/Auxiliary Carrier",
   "className": "Trojan Horse (Type-R Conversion)",
   "tonnage": 600,
-  "techLevel": 13,
+  "techLevel": 15,
   "role": "military",
   "thrust": 3,
   "jump": 3,
 
   "hull": {
     "tonnage": 600,
-    "configuration": "streamlined",
+    "configuration": "semi_streamlined",
     "hullPoints": 240,
-    "baseDesign": "Subsidized Merchant (Type-R) Conversion"
+    "reinforced": true,
+    "reinforcedHP": 60,
+    "baseDesign": "Subsidized Liner (600t) Conversion"
   },
 
   "armour": {
     "type": "Bonded Superdense",
-    "rating": 1,
-    "tonnage": 8
+    "rating": 14,
+    "tonnage": 67.2,
+    "coatings": {
+      "reflective": true,
+      "emissionAbsorption": true,
+      "heatShielding": true,
+      "radiationShielding": true
+    },
+    "_review": "DISCUSS WITH JAMES: Armor 14 is capital-ship grade. May conflict with Q-ship disguise — any scan penetrating the exterior would flag this immediately. Confirm this is intentional."
   },
 
   "drives": {
@@ -31,21 +40,28 @@
     },
     "jump": {
       "rating": 3,
-      "tonnage": 60
+      "tonnage": 45
     }
   },
 
   "power": {
-    "type": "fusion_tl13",
-    "output": 548,
-    "tonnage": 37
+    "type": "fusion_tl15",
+    "output": {
+      "basic": 120,
+      "manoeuvre": 180,
+      "jumpDrive": 180
+    },
+    "tonnage": 20
   },
 
   "fuel": {
-    "total": 125,
+    "total": 242.4,
     "jump": 120,
     "powerPlant": 5,
-    "weeks": 4
+    "weeks": 4,
+    "jumpNet": 200,
+    "collapsibleTanks": 240,
+    "_review": "DISCUSS WITH JAMES: 240t collapsible tanks + 200t jump net is enormous extra fuel capacity. Confirm tonnage budget."
   },
 
   "bridge": {
@@ -59,9 +75,10 @@
   },
 
   "sensors": {
-    "grade": "improved",
-    "tonnage": 3,
-    "dm": 1
+    "grade": "advanced",
+    "techLevel": 15,
+    "tonnage": 5,
+    "dm": 2
   },
 
   "turrets": [
@@ -69,23 +86,23 @@
       "id": "turret_1",
       "type": "triple",
       "popup": true,
-      "weapons": ["sandcaster", "sandcaster", "sandcaster"],
-      "role": "point_defense",
+      "weapons": ["pulse_laser", "sandcaster", "sandcaster"],
+      "role": "mixed",
       "operator": "AI Gunner"
     },
     {
       "id": "turret_2",
       "type": "triple",
       "popup": true,
-      "weapons": ["sandcaster", "sandcaster", "sandcaster"],
-      "role": "point_defense",
+      "weapons": ["pulse_laser", "sandcaster", "sandcaster"],
+      "role": "mixed",
       "operator": "AI Gunner"
     },
     {
       "id": "turret_3",
       "type": "triple",
       "popup": true,
-      "weapons": ["beam_laser", "missile_rack", "missile_rack"],
+      "weapons": ["pulse_laser", "sandcaster", "missile_rack_advanced"],
       "role": "strike",
       "operator": "AI Gunner"
     },
@@ -93,7 +110,7 @@
       "id": "turret_4",
       "type": "triple",
       "popup": true,
-      "weapons": ["beam_laser", "missile_rack", "missile_rack"],
+      "weapons": ["pulse_laser", "sandcaster", "missile_rack_advanced"],
       "role": "strike",
       "operator": "AI Gunner"
     }
@@ -104,6 +121,8 @@
       "id": "barbette_ion",
       "type": "ion",
       "range": "medium",
+      "damage": "7d6",
+      "damageMultiple": 3,
       "tonnage": 5,
       "power": 10,
       "operator": "Marina (Gunner-6)"
@@ -112,6 +131,8 @@
       "id": "barbette_particle",
       "type": "particle",
       "range": "very_long",
+      "damage": "4d6",
+      "damageMultiple": 3,
       "tonnage": 5,
       "power": 15,
       "operator": "Marina (Gunner-6)"
@@ -167,10 +188,10 @@
       "sensors": 1,
       "steward": 0,
       "medic": 1,
-      "marines": 8,
+      "marines": 6,
       "fighterPilots": 6
     },
-    "description": "Captain James, Marina (Gunner-6), Max (Engineer), Asao (Marines), Von Sydo (Sensors), Wellen Stova (Medic), 6 Fighter Pilots, 8 Marines. AI Gunners handle turrets. Engineering and Steward droids."
+    "description": "Captain Delleron (Commander, Admin-1, Leader-1, J3 backup engineer). Marina (Gunnery 4+2, Remote Ops). Max Planck (E2, J1, M1, P1, Mech-1). Asao (Marine Leader). Von Sydo (Sensors ECM-2, Pilot SC-1, Astro-1, Comp-1). Wellen Stova (Medic). Jerry (Computer-3). Anemone (Asst Gunner). 4x Gunner Droids, Engineering Droid, Steward Droid. 6 Fighter Pilots, 6 Marines."
   },
 
   "crewRequirements": {
@@ -181,7 +202,7 @@
     "sensors": 1,
     "steward": 0,
     "medic": 1,
-    "marines": 8,
+    "marines": 6,
     "fighterPilots": 6
   },
 
@@ -192,14 +213,40 @@
   },
 
   "staterooms": {
-    "standard": {
-      "count": 10,
-      "tonnage": 40
+    "doubleOccupancy": {
+      "count": 8,
+      "tonnage": 32,
+      "assigned": ["Delleron", "Marina", "Max", "Asao+Wife", "VonSydo+Vera", "Jerry+Anemone", "Empty", "Empty"]
+    },
+    "highPassage": {
+      "count": 6
+    },
+    "luxury": {
+      "count": 10
     },
     "barracks": {
-      "count": 8,
-      "tonnage": 16
+      "count": 12,
+      "tonnage": 24,
+      "assigned": "6 Pilots, 6 Marines"
+    },
+    "lowBerths": {
+      "count": 12
     }
+  },
+
+  "facilities": {
+    "medicalBay": {"patients": 5, "bonus": "+1 Medic"},
+    "laboratory": true,
+    "library": {"tonnage": 4},
+    "armoury": {"tonnage": 1},
+    "biosphere": true,
+    "briefingRoom": {"bonus": "+1 Tactics"},
+    "workshop": {"tonnage": 15, "bonus": "+2 Mechanic"},
+    "trainingFacility": true,
+    "vault": {"tonnage": 12},
+    "gamingSpace": true,
+    "studio": true,
+    "concealedCompartment": {"sensorDM": -2, "investigateDM": -4}
   },
 
   "software": [
@@ -220,18 +267,26 @@
     "mining": 10
   },
 
+  "boardingEquipment": {
+    "breachingTube": true,
+    "dockingClampSmall": {"maxTonnage": 30, "count": 1},
+    "dockingClampMedium": {"maxTonnage": 100, "count": 1},
+    "forcedLinkage": {"techLevel": 15, "dm": 2},
+    "launchTubes": true,
+    "recoveryDeck": true
+  },
+
   "specialFeatures": {
     "qShipDisguise": true,
     "popUpTurrets": true,
     "jumpNet": true,
     "fuelScoops": true,
     "fuelProcessor": 200,
-    "collapsibleTanks": 5,
+    "collapsibleTanks": 240,
     "aiGunners": 5,
     "engineeringDroid": true,
     "stewardDroid": true,
     "miningDrones": true,
-    "breachingTube": true,
     "armoury": true,
     "medicalBay": true,
     "workshop": true,
@@ -244,11 +299,11 @@
   },
 
   "costs": {
-    "base": 290000000,
+    "base": 994131200,
     "maintenance": 24000
   },
 
-  "description": "The Amishi is a Q-ship operated by JSI under Letter of Marque. Built on a converted Type-R hull, she's externally indistinguishable from a battered freighter. Her equally battered armored pinnace rides on external clamps. Six light fighters, ion and particle barbettes (operated by Marina at Gunner-6), and pop-up turrets (AI-controlled) provide formidable firepower. Captain James Delleron commands, with Asao Ora leading marines for boarding ops.",
+  "description": "The Astral Dawn is a Q-ship operated by JSI under Letter of Marque. Built on a converted 600-ton Subsidized Liner hull, she's externally indistinguishable from a battered freighter. Her equally battered armored pinnace rides on external clamps. Six light fighters, ion and particle barbettes (operated by Marina at Gunner-6), and pop-up turrets (AI-controlled) provide formidable firepower. Armor-14 Bonded Superdense with reflective coating makes her nearly impervious to pirate weapons. Captain James Delleron commands, with Asao Ora leading marines for boarding ops.",
 
   "notes": {
     "operator": "JSI (Joint Services Initiative)",
@@ -258,7 +313,16 @@
     "marineCommander": "Asao Ora",
     "sensorOperator": "Von Sydo",
     "medic": "Wellen Stova",
+    "computerChief": "Jerry (Computer-3)",
     "mission": "Commerce raiding, prize-taking, convoy escort",
-    "highguardLegal": true
+    "highguardLegal": true,
+    "sourceDocument": "Traveller_600_Ton_Subsidized_Liner_2.pdf (jaimesbeam, 2026-02-08)",
+    "_reviewItems": [
+      "Armor 14 + Q-ship disguise tension — confirm with James this is intentional",
+      "Collapsible tanks 240t + jump net 200t — confirm tonnage budget adds up",
+      "Roger Wilcox (James's lead fighter pilot) vs Lt. Dex Morain (our NPC registry) — reconcile",
+      "Marines: James says 6, our model had 8 — confirm count",
+      "Weapon Bay Point Defense (Rating 1) — not yet modeled in VTT combat system"
+    ]
   }
 }

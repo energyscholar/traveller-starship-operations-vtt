@@ -7,7 +7,9 @@
       "id": "pulse_laser",
       "name": "Pulse Laser",
       "type": "energy",
+      "mount": "turret",
       "damage": "2d6",
+      "damageMultiple": 1,
       "traits": {
         "ammo": null,
         "rangeRestriction": null,
@@ -18,7 +20,9 @@
       "id": "beam_laser",
       "name": "Beam Laser",
       "type": "energy",
+      "mount": "turret",
       "damage": "1d6",
+      "damageMultiple": 1,
       "traits": {
         "ammo": null,
         "rangeRestriction": ["adjacent", "close", "short", "medium"],
@@ -29,7 +33,26 @@
       "id": "missile_rack",
       "name": "Missile Rack",
       "type": "missile",
+      "mount": "turret",
       "damage": "4d6",
+      "damageMultiple": 1,
+      "traits": {
+        "ammo": 12,
+        "rangeRestriction": null,
+        "rangeBonuses": {
+          "long": 2,
+          "very_long": 2,
+          "distant": 2
+        }
+      }
+    },
+    {
+      "id": "missile_rack_advanced",
+      "name": "Advanced Missile Rack",
+      "type": "missile",
+      "mount": "turret",
+      "damage": "5d6",
+      "damageMultiple": 1,
       "traits": {
         "ammo": 12,
         "rangeRestriction": null,
@@ -44,7 +67,9 @@
       "id": "sandcaster",
       "name": "Sandcaster",
       "type": "defense",
+      "mount": "turret",
       "damage": "0d6",
+      "damageMultiple": 1,
       "traits": {
         "ammo": 20,
         "rangeRestriction": ["adjacent", "close"],
@@ -55,7 +80,9 @@
       "id": "particle_beam",
       "name": "Particle Beam",
       "type": "energy",
+      "mount": "turret",
       "damage": "3d6",
+      "damageMultiple": 1,
       "traits": {
         "ammo": null,
         "rangeRestriction": null,
@@ -68,7 +95,9 @@
       "id": "railgun",
       "name": "Railgun",
       "type": "projectile",
+      "mount": "turret",
       "damage": "3d6",
+      "damageMultiple": 1,
       "traits": {
         "ammo": 200,
         "rangeRestriction": null,
@@ -76,6 +105,34 @@
           "medium": 1,
           "long": 1
         }
+      }
+    },
+    {
+      "id": "particle_barbette",
+      "name": "Particle Barbette",
+      "type": "energy",
+      "mount": "barbette",
+      "damage": "4d6",
+      "damageMultiple": 3,
+      "traits": {
+        "radiation": true,
+        "ammo": null,
+        "rangeRestriction": null,
+        "rangeBonuses": {}
+      }
+    },
+    {
+      "id": "ion_barbette",
+      "name": "Ion Cannon Barbette",
+      "type": "energy",
+      "mount": "barbette",
+      "damage": "7d6",
+      "damageMultiple": 3,
+      "traits": {
+        "ion": true,
+        "ammo": null,
+        "rangeRestriction": null,
+        "rangeBonuses": {}
       }
     }
   ]

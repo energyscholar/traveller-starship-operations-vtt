@@ -124,18 +124,18 @@ test('rollDamage handles invalid format', () => {
 console.log('\n=== Range Modifier Tests ===\n');
 
 test('RANGE_DM has correct values', () => {
-  assertEqual(RANGE_DM.adjacent, 1, 'adjacent should be +1');
+  assertEqual(RANGE_DM.adjacent, 0, 'adjacent should be 0');
   assertEqual(RANGE_DM.close, 0, 'close should be 0');
-  assertEqual(RANGE_DM.short, 0, 'short should be 0');
-  assertEqual(RANGE_DM.medium, -1, 'medium should be -1');
+  assertEqual(RANGE_DM.short, 1, 'short should be +1');
+  assertEqual(RANGE_DM.medium, 0, 'medium should be 0');
   assertEqual(RANGE_DM.long, -2, 'long should be -2');
-  assertEqual(RANGE_DM.extreme, -4, 'extreme should be -4');
+  assertEqual(RANGE_DM.very_long, -4, 'very_long should be -4');
   assertEqual(RANGE_DM.distant, -6, 'distant should be -6');
 });
 
 test('getRangeModifier returns correct base modifier', () => {
-  assertEqual(getRangeModifier('medium', 'short'), 0, 'short range should be 0');
-  assertEqual(getRangeModifier('medium', 'medium'), -1, 'medium range should be -1');
+  assertEqual(getRangeModifier('medium', 'short'), 1, 'short range should be +1');
+  assertEqual(getRangeModifier('medium', 'medium'), 0, 'medium range should be 0');
   assertEqual(getRangeModifier('medium', 'long'), -2, 'long range should be -2');
 });
 

@@ -165,9 +165,9 @@ console.log('\nTest 6: Attack resolution - hit');
 // Test 7: Attack miss
 console.log('\nTest 7: Attack resolution - miss');
 {
-  // Roll 1+1=2, with +4 modifiers = 6, will miss (need 8)
+  // Roll 1+1=2, fc(0)+gunner(2)+weaponDM(2)=+4, total 6 → miss (need 8)
   const engine = new CombatEngine({ rng: createDeterministicRNG([1, 1]) });
-  engine.initCombat([{ ...playerShip }], [{ ...enemyShip }]);
+  engine.initCombat([{ ...playerShip, fireControl: 0 }], [{ ...enemyShip }]);
 
   const attacker = engine.getShip('player1');
   const defender = engine.getShip('enemy1');
@@ -198,8 +198,8 @@ console.log('\nTest 8: Damage application');
 // Test 9: Armor
 console.log('\nTest 9: Armor protection');
 {
-  // Roll 4+4=8 hit, then 3+3=6 damage vs armor 10 = 0 damage
-  const engine = new CombatEngine({ rng: createDeterministicRNG([4, 4, 3, 3]) });
+  // Roll 1+1=2+6DM=8 (barely hit, effect=0), then 3+3=6 damage vs armor 10 = 0 damage
+  const engine = new CombatEngine({ rng: createDeterministicRNG([1, 1, 3, 3]) });
   engine.initCombat(
     [{ ...playerShip }],
     [{ ...enemyShip, armour: 10 }]
@@ -250,8 +250,8 @@ console.log('\nTest 11: Statistics tracking');
 // Test 12: Evasive penalty
 console.log('\nTest 12: Evasive maneuvers penalty');
 {
-  // Roll 4+4=8, but -6 evasive = 2, miss
-  const engine = new CombatEngine({ rng: createDeterministicRNG([4, 4]) });
+  // Roll 3+4=7, +6DM -6evasive = 7, miss (need 8)
+  const engine = new CombatEngine({ rng: createDeterministicRNG([3, 4]) });
   engine.initCombat(
     [{ ...playerShip }],
     [{ ...enemyShip, thrust: 6, evasive: true }]
@@ -557,9 +557,12 @@ console.log('\nTest 33: Event replay');
 console.log('\nTest 34: Constants defined');
 {
   assert(RANGE_DMS.Adjacent === 0, 'Adjacent range DM');
+  assert(RANGE_DMS.Short === 1, 'Short range DM');
   assert(RANGE_DMS.Distant === -6, 'Distant range DM');
   assert(WEAPON_DAMAGE.pulse_laser === 2, 'Pulse laser damage dice');
+  assert(WEAPON_DAMAGE.beam_laser === 1, 'Beam laser damage dice');
   assert(WEAPON_DAMAGE.missile_rack === 4, 'Missile damage dice');
+  assert(WEAPON_DAMAGE.particle === 4, 'Particle barbette damage dice');
   assert(WEAPON_DAMAGE.ion === 7, 'Ion barbette damage dice');
   assert(COMBAT_PHASES.includes('attack'), 'Attack phase defined');
 }
