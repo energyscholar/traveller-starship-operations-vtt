@@ -100,7 +100,6 @@ const unitTests = [
   'tests/unit/travellermap-proxy.test.js',  // AR-121: TravellerMap proxy tests (17 tests)
   'tests/engine/starsystem-generator.test.js',  // AR-240: Star system generator (39 tests)
   'tests/combat/captain-ai.test.js',  // BATCH 3.B: Combat Captain AI (29 tests)
-  'tests/combat/called-shot-ai.test.js',  // AR-223: Called shot AI (20 tests)
   'tests/combat/escape-mechanics.test.js',  // AR-223: Escape mechanics (15 tests)
   // Factory tests
   'tests/factories/CrewFactory.test.js',

@@ -7,7 +7,6 @@ const {
   CombatEngine,
   RANGE_DMS,
   WEAPON_DAMAGE,
-  CALLED_SHOT_TARGETS,
   COMBAT_PHASES
 } = require('../../lib/engine/combat-engine');
 const { EventTypes } = require('../../lib/engine/event-bus');
@@ -248,60 +247,8 @@ console.log('\nTest 11: Statistics tracking');
   assert(stats.hits === 1, 'Hit counted');
 }
 
-// Test 12: Called shot penalty
-console.log('\nTest 12: Called shot penalty');
-{
-  // High roll: 5+5=10, -4 penalty = 6, miss (need 8)
-  const engine = new CombatEngine({ rng: createDeterministicRNG([5, 5]) });
-  engine.initCombat([{ ...playerShip }], [{ ...enemyShip }]);
-
-  const attacker = engine.getShip('player1');
-  const defender = engine.getShip('enemy1');
-
-  const result = engine.resolveAttack(attacker, defender, {
-    calledShot: 'powerPlant'
-  });
-
-  assert(result.calledShot === 'powerPlant', 'Called shot recorded');
-  assert(result.modifiers.calledShotDM === -4, 'Power plant penalty is -4');
-  // 10 + 4 (modifiers) - 4 (called shot) = 10, should hit
-  assert(result.hit === true, 'Called shot hit with high roll');
-}
-
-// Test 13: System damage
-console.log('\nTest 13: System damage from called shot');
-{
-  // Guarantee hit and damage
-  const engine = new CombatEngine({ rng: createDeterministicRNG([6, 6, 6, 6]) });
-  engine.initCombat([{ ...playerShip }], [{ ...enemyShip }]);
-
-  const attacker = engine.getShip('player1');
-  const defender = engine.getShip('enemy1');
-
-  engine.resolveAttack(attacker, defender, { calledShot: 'mDrive' });
-
-  assert(defender.systems.mDrive.hits === 1, 'System hit recorded');
-}
-
-// Test 14: System disabled at 3 hits
-console.log('\nTest 14: System disabled at 3 hits');
-{
-  const engine = new CombatEngine({ rng: createDeterministicRNG([6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]) });
-  engine.initCombat([{ ...playerShip }], [{ ...enemyShip }]);
-
-  const attacker = engine.getShip('player1');
-  const defender = engine.getShip('enemy1');
-
-  for (let i = 0; i < 3; i++) {
-    engine.resolveAttack(attacker, defender, { calledShot: 'sensors' });
-  }
-
-  assert(defender.systems.sensors.hits === 3, 'System has 3 hits');
-  assert(defender.systems.sensors.disabled === true, 'System disabled');
-}
-
-// Test 15: Evasive penalty
-console.log('\nTest 15: Evasive maneuvers penalty');
+// Test 12: Evasive penalty
+console.log('\nTest 12: Evasive maneuvers penalty');
 {
   // Roll 4+4=8, but -6 evasive = 2, miss
   const engine = new CombatEngine({ rng: createDeterministicRNG([4, 4]) });
@@ -613,7 +560,7 @@ console.log('\nTest 34: Constants defined');
   assert(RANGE_DMS.Distant === -6, 'Distant range DM');
   assert(WEAPON_DAMAGE.pulse_laser === 2, 'Pulse laser damage dice');
   assert(WEAPON_DAMAGE.missile_rack === 4, 'Missile damage dice');
-  assert(CALLED_SHOT_TARGETS.powerPlant.penalty === -4, 'Power plant called shot penalty');
+  assert(WEAPON_DAMAGE.ion === 7, 'Ion barbette damage dice');
   assert(COMBAT_PHASES.includes('attack'), 'Attack phase defined');
 }
 

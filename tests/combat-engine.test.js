@@ -217,7 +217,8 @@ test('resolveAttack applies armor reduction on hit', () => {
 
   if (result.hit) {
     assert(result.armorReduction <= 4, 'armor reduction should not exceed armor value');
-    assert(result.actualDamage <= result.damage, 'actual damage should not exceed raw damage');
+    // actualDamage = (dice + effect - armor) × damageMultiple, can exceed raw dice
+    assert(result.actualDamage >= 0, 'actual damage should not be negative');
   }
 });
 

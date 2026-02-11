@@ -372,15 +372,6 @@ console.log('\n--- 1.5: Critical Hit Tests ---\n');
   }
 }
 
-// Test: Called shot targets exist
-{
-  console.log('\nTest 1.5.2: Called shot targets defined');
-  const { CALLED_SHOT_TARGETS } = require('../../lib/engine/combat-engine');
-
-  assert(CALLED_SHOT_TARGETS !== undefined, 'Called shot targets exported');
-  // Should have common systems as targets
-}
-
 // =============================================================================
 // SUMMARY
 // =============================================================================

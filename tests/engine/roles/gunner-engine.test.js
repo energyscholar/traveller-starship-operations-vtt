@@ -178,23 +178,6 @@ describe('GunnerEngine', () => {
     });
   });
 
-  describe('called_shot action', () => {
-    it('should target specific system', () => {
-      const result = engine.execute('called_shot', {
-        system: 'powerPlant'
-      });
-
-      assert.strictEqual(result.success, true);
-    });
-
-    it('should fail without target system', () => {
-      const result = engine.execute('called_shot', {});
-
-      assert.strictEqual(result.success, false);
-      assert.ok(result.error.includes('system'));
-    });
-  });
-
   describe('turret management', () => {
     it('should get usable turrets (not disabled, not used)', () => {
       mockShip.turrets[0].usedThisRound = true;
@@ -225,7 +208,6 @@ describe('GunnerEngine', () => {
       assert.ok(ids.includes('fire_secondary'));
       assert.ok(ids.includes('fire_missiles'));
       assert.ok(ids.includes('point_defense'));
-      assert.ok(ids.includes('called_shot'));
     });
 
     it('should exclude used weapons', () => {
