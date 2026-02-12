@@ -486,12 +486,12 @@ console.log('\n--- Phase 1d: Observer State ---\n');
   assert(canUseECM('Civilian') === false, 'Civilian cannot use ECM');
   assert(canUseECM('Basic') === false, 'Basic cannot use ECM');
 
-  // Sensor lock bonus tests
-  console.log('Test: Sensor lock bonus');
-  assert(calculateSensorLockBonus({ sensorLock: 'target1' }, 'target1', true) === 1, 'Locked guided gets +1');
-  assert(calculateSensorLockBonus({ sensorLock: 'target1' }, 'target2', true) === 0, 'Wrong target gets 0');
-  assert(calculateSensorLockBonus({ sensorLock: 'target1' }, 'target1', false) === 0, 'Non-guided gets 0');
-  assert(calculateSensorLockBonus({}, 'target1', true) === 0, 'No lock gets 0');
+  // Sensor lock Boon tests (RAW: locked target → 3D6 keep best 2)
+  console.log('Test: Sensor lock Boon');
+  assert(calculateSensorLockBonus({ sensorLock: 'target1' }, 'target1', true).isBoon === true, 'Locked guided gets Boon');
+  assert(calculateSensorLockBonus({ sensorLock: 'target1' }, 'target2', true).isBoon === false, 'Wrong target no Boon');
+  assert(calculateSensorLockBonus({ sensorLock: 'target1' }, 'target1', false).isBoon === false, 'Non-guided no Boon');
+  assert(calculateSensorLockBonus({}, 'target1', true).isBoon === false, 'No lock no Boon');
 
   // Combined modifier tests
   console.log('Test: Combined attack modifiers');

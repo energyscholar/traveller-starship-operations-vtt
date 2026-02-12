@@ -88,10 +88,10 @@ async function testECMMechanicsUnit() {
       return;
     }
 
-    // Test sensor lock bonus
-    const lockBonus = sensors.calculateSensorLockBonus({ sensorLock: 'target1' }, 'target1', true);
-    if (lockBonus !== 1) {
-      log('fail', 'AR-255: Sensor lock guided weapon bonus should be 1', `got ${lockBonus}`);
+    // Test sensor lock Boon (RAW: locked target → 3D6 keep best 2)
+    const lockResult = sensors.calculateSensorLockBonus({ sensorLock: 'target1' }, 'target1', true);
+    if (!lockResult.isBoon) {
+      log('fail', 'AR-255: Sensor lock guided weapon should grant Boon', `got isBoon=${lockResult.isBoon}`);
       return;
     }
 
