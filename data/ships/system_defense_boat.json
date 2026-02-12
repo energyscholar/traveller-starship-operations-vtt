@@ -14,10 +14,10 @@
   "passengers": 0,
   "lowBerths": 0,
   "turrets": [
-    { "id": "turret1", "type": "triple", "weapons": ["Pulse Laser", "Pulse Laser", "Pulse Laser"] },
-    { "id": "turret2", "type": "triple", "weapons": ["Pulse Laser", "Pulse Laser", "Pulse Laser"] },
-    { "id": "turret3", "type": "triple", "weapons": ["Missile Rack", "Missile Rack", "Missile Rack"] },
-    { "id": "turret4", "type": "triple", "weapons": ["Missile Rack", "Missile Rack", "Missile Rack"] }
+    { "id": "turret1", "type": "triple", "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"] },
+    { "id": "turret2", "type": "triple", "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"] },
+    { "id": "turret3", "type": "triple", "weapons": ["missile_rack", "missile_rack", "missile_rack"] },
+    { "id": "turret4", "type": "triple", "weapons": ["missile_rack", "missile_rack", "missile_rack"] }
   ],
   "hardpoints": 4,
   "hardpointsUsed": 4,

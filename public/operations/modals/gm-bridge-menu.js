@@ -58,7 +58,7 @@ function setupGMBridgeMenuModal(modal, state, helpers) {
   const templateSelect = document.getElementById('god-template-select');
   if (templateSelect) {
     // Request templates from server
-    state.socket.emit('ops:getShipTemplates');
+    state.socket.emit('ops:getContactTemplates');
 
     // Handle template list response
     const handleTemplates = (data) => {
@@ -71,7 +71,7 @@ function setupGMBridgeMenuModal(modal, state, helpers) {
         templateSelect.appendChild(opt);
       }
     };
-    state.socket.once('ops:shipTemplates', handleTemplates);
+    state.socket.once('ops:contactTemplates', handleTemplates);
   }
 
   // Range band dropdown sync - when dropdown changes, update the input

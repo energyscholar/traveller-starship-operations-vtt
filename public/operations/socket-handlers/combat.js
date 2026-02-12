@@ -198,6 +198,8 @@ registerHandler('ops:combatStarted', handleCombatStarted);
 registerHandler('ops:combatEnded', handleCombatEnded);
 registerHandler('ops:combatState', handleCombatState);
 registerHandler('ops:phaseChanged', handlePhaseChanged);
+// TODO: Listens for ops:weaponsAuthorized but no server emits this event.
+// Server ops:weaponsAuthorizationChanged sends { contactId, contactName } — shapes incompatible. (audit 2026-02-11)
 registerHandler('ops:weaponsAuthorized', handleWeaponsAuthorized);
 registerHandler('ops:fireResult', handleFireResult);
 registerHandler('ops:targetAcquired', handleTargetAcquired);

@@ -14,14 +14,14 @@ function setupEncounterBuilderModal(modal, state, helpers) {
   const { showNotification, closeModal } = helpers;
 
   // Request templates from server
-  state.socket.emit('ops:getShipTemplates');
+  state.socket.emit('ops:getContactTemplates');
 
   const templateListEl = document.getElementById('encounter-template-list');
   const rosterEl = document.getElementById('encounter-roster');
   const searchEl = document.getElementById('encounter-template-search');
 
   // Handle template list response
-  state.socket.once('ops:shipTemplates', (data) => {
+  state.socket.once('ops:contactTemplates', (data) => {
     templates = data.templates || [];
     renderTemplateList();
   });

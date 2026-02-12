@@ -1,447 +1,387 @@
 # High Guard Reference Tables
-## Mongoose Traveller 2nd Edition - High Guard 2022 Update
+## Mongoose Traveller 2nd Edition — High Guard 2022 Update + CRB
 
-**Source:** Mongoose Traveller 2E High Guard 2022 Update
-**Purpose:** Complete reference tables for ship design
-**Status:** Comprehensive extraction from official rulebook
-**Last Updated:** 2025-11-13
-
----
-
-## Table of Contents
-
-1. [Hull Types and Configurations](#hull-types-and-configurations)
-2. [Manoeuvre Drives](#manoeuvre-drives)
-3. [Jump Drives](#jump-drives)
-4. [Power Plants](#power-plants)
-5. [Armour](#armour)
-6. [Turrets and Weapon Mounts](#turrets-and-weapon-mounts)
-7. [Weapons](#weapons)
-8. [Sensors](#sensors)
-9. [Computer Systems](#computer-systems)
-10. [Bridge Types](#bridge-types)
-11. [Crew and Staterooms](#crew-and-staterooms)
+**Sources:** HG 2022 Update (HG), Core Rulebook 2016 (CRB)
+**Purpose:** Verified RAW reference for VTT development
+**Status:** RAW-verified from PDF scans 2026-02-09
+**Verification key:** [V] = verified from PDF graphic/text, [P] = page cited
 
 ---
 
-## Hull Types and Configurations
+## Spacecraft Combat (CRB p155-163) [V]
 
-### Hull Configuration Modifiers
+### Range Bands [V] (CRB p155-156)
 
-| Configuration | Hull Cost Multiplier | Notes |
-|--------------|---------------------|--------|
-| **Standard** | ×1.0 | Basic hull, no special features |
-| **Streamlined** | ×1.1 | Can enter atmosphere, +2 DM on atmospheric maneuvers |
-| **Needle** | ×1.2 | Optimized for speed, +6 DM on atmospheric maneuvers |
-| **Cylinder** | ×0.9 | No atmospheric entry capability |
-| **Sphere** | ×0.8 | No atmospheric entry capability, cheapest option |
-| **Dispersed** | ×0.8 | Very large structures, no atmospheric entry |
-| **Planetoid** | ×0.5 | Hollowed-out asteroid, free armor, no atmospheric entry |
-| **Buffered Planetoid** | ×0.7 | Advanced version with better internal structure |
+| Range Band | Distance | Thrust to Change |
+|------------|----------|------------------|
+| Adjacent | 1 km or less | 1 |
+| Close | 1-10 km | 1 |
+| Short | 11-1,250 km | 2 |
+| Medium | 1,251-10,000 km | 5 |
+| Long | 10,001-25,000 km | 10 |
+| Very Long | 25,001-50,000 km | 25 |
+| Distant | More than 50,000 km | 50 |
 
-### Hull Base Cost (per ton)
+### Attack Roll (CRB p156) [V]
 
-| Hull Tonnage | Cost per Ton (Cr) |
-|-------------|-------------------|
-| 100-2000 | 10,000 |
-| 2,001-75,000 | 5,000 |
-| 75,001+ | 2,500 |
+**Standard check:** 2D + Gunner (appropriate speciality) + DEX DM ≥ 8
+
+### Common Modifiers to Spacecraft Attacks [V] (CRB p156)
+
+| Bonuses | DM | Penalties | DM |
+|---------|----|----------|----|
+| Short Range | **+1** | Long Range | **-2** |
+| Using a Pulse Laser | +2 | Very Long Range | **-4** |
+| Using a Beam Laser | +4 | Distant Range | **-6** |
+
+**Medium Range = 0 (baseline, not listed)**
+**Adjacent/Close = 0 (not listed)**
+
+### Sensor Lock (CRB p161) [V]
+
+Successful Electronics (sensors) check → attacks against that target gain a **Boon** (roll 3D, keep best 2) until sensor lock is broken (by electronic warfare or range band change with emission absorption).
+
+**Note:** Sensor lock is a Boon, NOT a flat DM. This is significant — a Boon shifts the 2D mean from 7 to ~8.46.
+
+### Damage Resolution (CRB p158, HG p29) [V]
+
+1. Roll weapon damage dice
+2. Add Effect of attack roll to damage
+3. Subtract target's Armour (after AP reduction)
+4. Multiply by **Damage Multiple** (barbettes ×3, bays ×10/20/100, spinal ×1000)
+5. Result = Hull damage dealt
+
+**Damage multiples do NOT apply to missiles and torpedoes.**
+
+### Damage Multiples [V] (HG p29)
+
+| Weapon Type | Damage Multiple |
+|-------------|----------------|
+| Barbette | **3** |
+| Small Bay | 10 |
+| Medium Bay | 20 |
+| Large Bay | 100 |
+| Spinal Mounts | 1,000 |
+
+### Critical Hits (CRB p158) [V]
+
+**Trigger:** Attack Effect ≥ 6 AND attack causes damage.
+**Location:** Roll 2D on Critical Hits Location table (random — no RAW mechanic to choose location).
+**Severity:** Final damage dealt to hull ÷ 10, rounded up.
+
+**Critical Hits Location Table:**
+
+| 2D | Location |
+|----|----------|
+| 2 | Sensors |
+| 3 | Power Plant |
+| 4 | Fuel |
+| 5 | Weapon |
+| 6 | Armour |
+| 7 | Hull |
+| 8 | M-Drive |
+| 9 | Cargo |
+| 10 | J-Drive |
+| 11 | Crew |
+| 12 | Computer |
+
+### Sustained Damage (CRB p158) [V]
+
+A ship suffers a Severity 1 critical hit every time it loses 10% of its starting Hull.
+
+### Critical Hit Effects [V] (CRB p159)
+
+| Location | Sev 1 | Sev 2 | Sev 3 | Sev 4 |
+|----------|-------|-------|-------|-------|
+| **Sensors** | DM-2 to sensor checks | Inoperative beyond Medium | Inoperative beyond Short | Inoperative beyond Close |
+| **Power Plant** | Thrust -1, Power -10% | Thrust -1, Power -10% | Thrust -1, Power -50% | Thrust 0, Power 0 |
+| **Fuel** | Leak: lose 1D tons/hour | Leak: lose 1D tons/round | Leak: lose 10% fuel | Tank destroyed |
+| **Weapon** | Random weapon: Bane | Random weapon disabled | Random weapon destroyed | Random weapon explodes, Hull Sev +1 |
+| **Armour** | Armour -1 | Armour -D3 | Armour -1D | Armour -1D, Hull Sev +1 |
+| **Hull** | 1D extra damage | 3D extra damage | 4D extra damage | 5D extra damage |
+| **M-Drive** | DM-1 all checks, DM-1 spacecraft | DM-2 all checks, Thrust -1 | DM-3 all checks, Thrust -1 | DM-4 all checks, Thrust -1 |
+| **Cargo** | 10% cargo destroyed | 1D×10% cargo destroyed | 2D×10% cargo destroyed | All cargo destroyed |
+| **J-Drive** | DM-2 to jump checks | Jump drive disabled | Jump drive destroyed | Jump drive destroyed, Hull Sev +1 |
+| **Crew** | Random occupant takes 1D | Life support fails in 1D hours | 1D occupants take 2D | Life support fails in 1D rounds |
+| **Computer** | DM-2 to computer checks | Computer rating -1 | Computer rating -1 | Computer disabled |
+
+(Sev 5-6 continue with escalating effects. All effects cumulative. Max Severity per location = 6, then +6D hull damage per additional hit.)
+
+---
+
+## Weapon Trait: Ion [V] (HG p30)
+
+Ion weapons overload power systems, temporarily disabling critical systems.
+
+**Rules:**
+1. Roll damage dice, **ignore any armour** the target possesses
+2. Apply Damage Multiple (barbette ×3)
+3. Deduct result from target's **Power** (not Hull)
+4. Duration: **until target completes its next set of actions** (current round or next = ~1 round)
+5. If Effect of attack ≥ 6: duration is **D3 rounds**
+
+**Hardened Systems:** If a system is hardened (e.g. computers), the crew may allocate Power to it **before** ion deductions are applied. Ensures hardened systems always function if Power was available before the attack.
+
+**Ion weapons and criticals:** CRB says criticals trigger when Effect ≥ 6 AND "causes damage." Ion damage is to Power, not Hull. **RAW is ambiguous** — GM ruling needed on whether Ion triggers criticals.
+
+---
+
+## Turrets and Fixed Mounts [V] (HG p28)
+
+### Mount Types
+
+| Mount | TL | Power | Tons | Cost |
+|-------|-----|-------|------|------|
+| Fixed Mount | — | 0 | 0 | MCr0.1 |
+| Single Turret | 7 | 1 | 1 | MCr0.2 |
+| Double Turret | 8 | 1 | 1 | MCr0.5 |
+| Triple Turret | 9 | 1 | 1 | MCr1 |
+| Pop-Up Mounting | 10 | +0 | **+1** | MCr1 |
+
+**Pop-Up Mounting:** Applied to any turret or fixed mount. Concealed until deployed. Ship with all weapons in pop-up mounts appears unarmed to sensor scan. Adds +1 ton and MCr1 to the base mount.
+
+**Hardpoints:** 1 per 100 tons hull (CRB p157). 600t ship = 6 hardpoints.
+
+### Turret Weapons [V] (HG p28)
+
+| Weapon | TL | Range | Power | Damage | Cost | Traits |
+|--------|-----|-------|-------|--------|------|--------|
+| Beam Laser | 10 | Medium | 4 | 1D | MCr0.5 | — |
+| Fusion Gun | 14 | Medium | 12 | 4D | MCr2 | Radiation |
+| Laser Drill | 8 | Adjacent | 4 | 2D | Cr150,000 | AP 4 |
+| Missile Rack | 7 | Special | 0 | 4D | MCr0.75 | Smart |
+| Particle Beam | 12 | Very Long | 8 | 3D | MCr4 | Radiation |
+| Plasma Gun | 11 | Medium | 6 | 3D | MCr2.5 | — |
+| Pulse Laser | 9 | Long | 4 | 2D | MCr1 | — |
+| Railgun | 10 | Short | 2 | 2D | MCr1 | AP 4 |
+| Sandcaster | 9 | Special | 0 | Special | MCr0.25 | — |
+
+**Beam Laser turrets receive DM+4 to attack rolls.** (CRB p156)
+**Pulse Laser turrets receive DM+2 to attack rolls.** (CRB p156)
+
+**Linked Fire:** If 2+ weapons of same type in a turret fire together, make one attack roll. Each additional weapon adds +1 per damage die to total. Example: triple pulse laser = one roll, 2D+4 damage.
+
+---
+
+## Barbettes [V] (HG p29-30)
+
+Barbettes are heavy turret weapons. Military-only (civilian purchase requires black market). Each barbette uses 1 Hardpoint, requires Gunner (turret) skill, and **consumes 5 tons**.
+
+**Barbette Damage Multiple: 3**
+
+### Barbette Weapons Table [V] (HG p30)
+
+| Weapon | TL | Range | Power | Damage | Cost | Traits |
+|--------|-----|-------|-------|--------|------|--------|
+| Beam Laser Barbette | 10 | Medium | 12 | 2D | MCr3 | — |
+| Fusion Barbette | 12 | Medium | 20 | 5D | MCr4 | AP 3, Radiation |
+| **Ion Cannon** | **12** | **Medium** | **10** | **7D** | **MCr6** | **Ion** |
+| Missile Barbette | 7 | Special | 0 | 4D | MCr4 | Smart |
+| **Particle Barbette** | **11** | **Very Long** | **15** | **4D** | **MCr8** | **Radiation** |
+| Plasma Barbette | 11 | Medium | 12 | 4D | MCr5 | AP 2 |
+| Pulse Laser Barbette | 9 | Long | 12 | 3D | MCr6 | — |
+| Railgun Barbette | 10 | Medium | 5 | 3D | MCr2 | AP 5 |
+| Torpedo | 7 | Special | 2 | 6D | MCr3 | Smart |
+
+**Beam Laser Barbette:** DM+4 to attacks (same as turret beam laser).
+
+---
+
+## Customising Ships [V] (HG p70-72)
+
+### Prototype/Advanced Table [V] (HG p70)
+
+Components built at higher or lower TL than base acquire Advantages or Disadvantages.
+
+| Level | TL Difference | Tonnage | Cost | Modifications |
+|-------|---------------|---------|------|---------------|
+| Early Prototype | -2 | +100% | +1000% | 2 Disadvantages |
+| Prototype | -1 | — | +500% | 1 Disadvantage |
+| Budget | +0 | — | -25% | 1 Disadvantage |
+| Advanced | +1 | — | +10% | 1 Advantage |
+| Very Advanced | +2 | — | +25% | 2 Advantages |
+| **High Technology** | **+3** | **—** | **+50%** | **3 Advantages** |
+
+**Maximum is +3 TL = 3 Advantages. Table does not extend beyond +3 in either HG 2016 or HG 2022.**
+
+### Key Rules [V] (HG p71)
+
+- A component may have **either Advantages or Disadvantages but not both**
+- The same Advantage/Disadvantage **can be applied more than once**
+- All alterations are **additive** (two +10% = +20%)
+- Calculate modified price from **original size**, not modified size
+- Referees may restrict spinal mount weapons (they have their own TL table)
+
+### Weapon and Screen Advantages [V] (HG p71-72)
+
+| Advantage | Effect | Cost (Advantages) | Notes |
+|-----------|--------|-------------------|-------|
+| **Accurate** | DM+1 to all attack rolls | **2** | |
+| **Easy to Repair** | DM+1 to all repair attempts | 1 | |
+| **Energy Efficient** | -25% Power | 1 | |
+| **High Yield** | 1's on damage dice count as 2's | **1** | Not missiles/torpedoes |
+| **Very High Yield** | 1's AND 2's count as 3's | **2** | Not missiles/torpedoes |
+| **Intense Focus** | AP+2 | **2** | Lasers and particle weapons only |
+| **Long Range** | +1 range band (max Very Long) | **2** | May only be applied once |
+| **Resilient** | -1 Severity on criticals to this weapon | 1 | |
+| **Size Reduction** | -10% tonnage consumed by weapon | 1 | Not turret weapons |
+
+**HIGH YIELD IS NOT "+1D DAMAGE".** It rerolls 1's as 2's. Average increase per die: +0.167 (from 3.5 to 3.667). This is a ~4.8% damage increase, NOT the 28.6% that "+1D" would give.
+
+### Weapon and Screen Disadvantages [V] (HG p72)
+
+| Disadvantage | Effect | Notes |
+|-------------|--------|-------|
+| Energy Inefficient | +30% Power | Not turret weapons |
+| Inaccurate | DM-1 to all attack rolls | |
+| Increased Size | +20% tonnage | |
+
+### Other Component Advantages [V] (HG p71)
+
+**Jump Drive:** Decreased Fuel (-5%), Early Jump (10% closer to gravity well), Energy Efficient (-25% Power), Size Reduction (-10% tonnage, min 10t), Stealth Jump (minimise jump radiation, 2 Adv)
+
+**Manoeuvre Drive:** Energy Efficient (-25% Power), Size Reduction (-10% tonnage)
+
+**Power Plant:** Increased Power (+10% output, round up, 2 Adv), Size Reduction (-10% tonnage)
+
+---
+
+## Sensors [V] (HG p76-78, CRB p160)
+
+### Sensor Suites
+
+| Grade | Min TL | Tonnage | Power | Cost | DM |
+|-------|--------|---------|-------|------|----|
+| Basic | — | 0 | 0 | Included | -4 |
+| Civilian | 9 | 1 | 1 | MCr0.05 | -2 |
+| Military | 10 | 2 | 2 | MCr1 | +0 |
+| Improved | 12 | 3 | 3 | MCr2 | +1 |
+| Advanced | 15 | 5 | 5 | MCr5.4 | +2 |
+
+**DM applies to:** Electronics (sensors) checks for detection, scanning, and sensor lock.
+**DM does NOT directly add to weapon attack rolls** — the sensor lock mechanic provides a Boon instead.
+
+**IMPORTANT:** The sensor DM is for sensor skill checks. To aid gunners, the sensor operator performs a **Sensor Lock** action (separate Electronics check), granting a **Boon** to attacks against that target. The sensor DM helps the operator achieve the lock, but doesn't stack with the attack roll.
+
+---
+
+## Spacecraft Options (Selected) [V]
+
+### Adjustable Hull [V] (HG p43)
+
+Available at TL15. Consumes 1% of hull tonnage. **Increases hull cost by +100%.** All turrets and barbettes automatically gain pop-up capability at no extra cost. The ship can present a completely different external appearance.
+
+"The primary users of such a hull are pirates and Q-ships" — HG p43.
+
+### Hull Coatings [V]
+
+| Coating | TL | Tonnage | Cost | Effect |
+|---------|-----|---------|------|--------|
+| Emission Absorption Grid | 13 | 2% hull | MCr2/ton | -3 DM to detect (passive) |
+| Reflective | 10 | 0 | 10% hull cost | +3 Armour vs lasers only |
+| Heat Shielding | 10 | 0 | 10% hull cost | Protection from close star/atmosphere |
+| Radiation Shielding | 7 | 0 | 25% hull cost | Protection from radiation |
+
+---
+
+## Ship Design Basics [V]
 
 ### Hull Points
 
-**Formula:** Hull Points = Hull Tonnage ÷ 50 (round up, minimum 1)
+**NEEDS VERIFICATION** — Two conflicting sources:
+- CRB personal vehicle combat: different system
+- HG/CRB spacecraft: damage dealt directly to "Hull" stat
+- 600t hull with reinforced structure gets +60 HP per James's PDF
 
-**Example:** 400-ton hull = 400 ÷ 50 = 8 Hull Points
+### Hardpoints
 
----
+1 per 100 tons hull. 600t = 6 hardpoints. Each turret or barbette uses 1 hardpoint.
 
-## Manoeuvre Drives
+### Staterooms [V] (HG p24)
 
-### Thrust Performance Table (Page 18)
+- Standard: 4 tons, MCr0.5, 1-2 occupants
+- Low Berth: 0.5 tons, Cr50,000, 1 occupant (cryogenic)
+- Emergency Low Berth: 1 ton, MCr1, up to 4 occupants
+- Common areas: MCr0.1 per ton
 
-| Thrust Rating | Minimum TL | Drive Tonnage | Power Required | Cost per Ton |
-|--------------|-----------|---------------|----------------|--------------|
-| 0 | 9 | 0.5% hull | 0 | MCr 2 |
-| 1 | 9 | 1% hull | 10% hull | MCr 2 |
-| 2 | 10 | 2% hull | 20% hull | MCr 2 |
-| 3 | 10 | 3% hull | 30% hull | MCr 2 |
-| 4 | 11 | 4% hull | 40% hull | MCr 2 |
-| 5 | 11 | 5% hull | 50% hull | MCr 2 |
-| 6 | 12 | 6% hull | 60% hull | MCr 2 |
-| 7 | 12 | 7% hull | 70% hull | MCr 2 |
-| 8 | 13 | 8% hull | 80% hull | MCr 2 |
-| 9 | 13 | 9% hull | 90% hull | MCr 2 |
-| 10 | 16 | 10% hull | 100% hull | MCr 2 |
-| 11 | 17 | 11% hull | 110% hull | MCr 2 |
+### Crew Requirements [V] (HG p23)
 
-**Notes:**
-- Thrust-0 is 0.5% hull tonnage and requires no power (stationary keeping)
-- Power requirement = Hull Tonnage × Thrust × 10%
-- Small craft (<100t) with high thrust require very high TL
+| Position | Commercial | Military |
+|----------|-----------|----------|
+| Captain | 1 (leading officer) | 1 |
+| Pilot | 1 + 1 per small craft | 3 + 1 per small craft |
+| Engineer | 1 per 35t drives+PP+craft | 1 per 35t drives+PP+craft |
+| Gunner | 1 per turret/barbette/screen | 1 per turret; 2 per bay; 4 per large bay |
+| Sensor Operator | 1 per 7,500t ship | 3 per 7,500t ship |
+| Medic | 1 per 120 crew+passengers | 1 per 120 crew |
 
 ---
 
-## Jump Drives
+## Fire Control Software
 
-### Jump Performance Table
+| Software | TL | Bandwidth | Effect | Cost |
+|----------|-----|-----------|--------|------|
+| Fire Control/1 | 9 | 1 | +1 DM to attacks | MCr1 |
+| Fire Control/2 | 10 | 2 | +2 DM (split as needed) | MCr2 |
+| Fire Control/3 | 11 | 3 | +3 DM (split as needed) | MCr4 |
+| Fire Control/4 | 12 | 4 | +4 DM (split as needed) | MCr8 |
+| Fire Control/5 | 13 | 5 | +5 DM (split as needed) | MCr10 |
 
-| Jump Rating | Minimum TL | Drive Tonnage | Fuel Required | Power Required | Cost per Ton |
-|------------|-----------|---------------|---------------|----------------|--------------|
-| 1 | 9 | 2% hull | 10% hull | 10% hull | MCr 10 |
-| 2 | 11 | 4% hull | 20% hull | 20% hull | MCr 10 |
-| 3 | 12 | 6% hull | 30% hull | 30% hull | MCr 10 |
-| 4 | 13 | 8% hull | 40% hull | 40% hull | MCr 10 |
-| 5 | 14 | 10% hull | 50% hull | 50% hull | MCr 10 |
-| 6 | 15 | 12% hull | 60% hull | 60% hull | MCr 10 |
-
-**Notes:**
-- Jump fuel is consumed per jump (single use)
-- Power requirement is during jump only
-- Small craft (<100t) cannot mount jump drives by definition
-- Jump rating determines parsecs traveled per week in jump space
+Fire Control can **act as gunners** or **assist gunners**. When assisting, the DM can be split among weapons/targets as the gunner wishes.
 
 ---
 
-## Power Plants
+## Combat Actions Summary (CRB p160-161) [V]
 
-### Power Plant Types
+### Manoeuvre Step
+- **Movement:** Allocate Thrust to change range bands
+- **Combat Manoeuvring:** Aid Gunners (Pilot check → task chain), Docking, Evasive Action (unspent Thrust → dodge)
 
-| Type | Minimum TL | Tonnage Formula | Fuel Consumption | Cost per Ton |
-|------|-----------|-----------------|------------------|--------------|
-| **Fusion (TL8)** | 8 | Output × 1% hull | 1% hull per 2 weeks | MCr 0.5 |
-| **Fusion (TL12)** | 12 | Output × 0.75% hull | 1% hull per 4 weeks | MCr 1.0 |
-| **Fusion (TL15)** | 15 | Output × 0.5% hull | 1% hull per 6 weeks | MCr 1.5 |
-| **Antimatter (TL17)** | 17 | Output × 0.4% hull | 0.5% hull per 4 weeks | MCr 2.0 |
+### Attack Step
+- **Fire Weapons:** 2D + Gunner + DEX DM + modifiers ≥ 8
 
-**Power Output:** Rated in units equal to ship tonnage
-- Example: 400-ton ship with Power Plant-4 produces 400 × 4 = 1,600 power units
+### Reactions
+- **Evasive Action (Pilot):** Each point of unspent Thrust allows dodging one attack. Attack suffers negative DM equal to pilot's skill.
+- **Point Defence (Gunner):** Turret-mounted laser/pulse vs incoming missiles. Effect removes missiles from salvo.
+- **Disperse Sand (Gunner):** Sandcaster vs laser attack. Success adds 1D + Effect to ship's armour vs that attack.
 
-**Basic Ship Power:** 20% of hull tonnage (life support, gravity, computers, etc.)
-
----
-
-## Armour
-
-### Armour Types (Page 13)
-
-| Armour Type | Minimum TL | Hull % per Point | Cost per Ton | Max Protection |
-|------------|-----------|------------------|--------------|----------------|
-| **Titanium Steel** | 7 | 2.5% × Multiplier | Cr 50,000 | TL or 9 (whichever less) |
-| **Crystaliron** | 10 | 1.25% × Multiplier | Cr 200,000 | TL or 13 (whichever less) |
-| **Bonded Superdense** | 14 | 0.80% × Multiplier | Cr 500,000 | TL (no limit) |
-| **Molecular Bonded** | 16 | 0.50% × Multiplier | Cr 1,500,000 | TL + 4 |
-
-### Hull Size Multiplier
-
-| Hull Tonnage | Armour Multiplier |
-|-------------|------------------|
-| 5-15 tons | ×4 |
-| 16-25 tons | ×3 |
-| 26-99 tons | ×2 |
-| 100+ tons | ×1 |
-
-**Armour Tonnage Formula:**
-`(Hull % per Point × Rating × Hull Multiplier) ÷ 100 × Hull Tonnage`
-
-**Example:** 20-ton hull with Crystaliron-2 at TL10
-- Multiplier: ×3 (16-25 ton hull)
-- Tonnage: (1.25% × 2 × 3) = 7.5% of hull = 1.5 tons
-- Cost: 1.5 tons × Cr 200,000 = Cr 300,000
-
-**Note:** Small craft have very expensive armour due to high multipliers
+### Actions Step
+- **Improve Initiative (Captain):** Leadership check, Effect → next round initiative
+- **Jump (Engineer):** Emergency jump in combat with DM-2 penalties
+- **Offline System (Engineer):** Power down systems to free Power
+- **Overload Drive (Engineer):** +1 Thrust next round (Difficult check, Sev 1 crit on Effect ≤ -6)
+- **Overload Plant (Engineer):** +10% Power next round (Difficult check, Sev 1 crit on Effect ≤ -6)
+- **Repair System (Engineer):** Average (8+) Engineer check, -DM equal to Severity. Fixes effects only (not Hull/destroyed items).
+- **Sensor Lock (Sensor Operator):** Electronics (sensors) check → Boon to attacks vs target
+- **Electronic Warfare (Sensor Operator):** Jam comms or misdirect missiles
 
 ---
 
-## Turrets and Weapon Mounts
+## Errata Log
 
-### Hardpoint Calculation
+### Corrections from 2026-02-09 RAW Audit
 
-**Formula:** 1 hardpoint per 100 tons of hull (round down)
-
-**Examples:**
-- 400-ton ship: 4 hardpoints
-- 50-ton craft: 0 hardpoints (can use fixed mounts only)
-- 200-ton ship: 2 hardpoints
-
-### Turret Types
-
-| Turret Type | Minimum TL | Tonnage | Hardpoints | Max Weapons | Cost (Cr) |
-|------------|-----------|---------|-----------|-------------|-----------|
-| **Fixed Mount** | 7 | 0 | 0 | 1 | 100,000 |
-| **Single Turret** | 7 | 1 | 1 | 1 | 200,000 |
-| **Double Turret** | 8 | 1 | 1 | 2 | 500,000 |
-| **Triple Turret** | 9 | 1 | 1 | 3 | 1,000,000 |
-| **Pop-Up Turret** | 10 | 0 | 1 | 1 | 1,000,000 |
-
-**Notes:**
-- Fixed mounts require 0 hardpoints (for small craft <100t)
-- Pop-up turrets are concealed until deployed
-- Each weapon in turret fires separately or in linked fire
+| Item | Old (Wrong) Value | Corrected (RAW) Value | Source |
+|------|-------------------|----------------------|--------|
+| Range DM: Short | -2 | **+1** | CRB p156 |
+| Range DM: Medium | -4 | **0 (baseline)** | CRB p156 |
+| Range DM: Long | -6 | **-2** | CRB p156 |
+| Range DM: Very Long | -8 | **-4** | CRB p156 |
+| Range DM: Distant | -10 | **-6** | CRB p156 |
+| High Yield effect | +1D damage | **1's count as 2's** (+4.8%) | HG p72 |
+| Upgrade system | "Slots" (fabricated) | **Advantages** from Prototype/Advanced table | HG p70-72 |
+| Max TL bonus | +5 TL = 3 slots | **+3 TL = 3 Advantages** (table max) | HG p70 |
+| Accurate cost | 2 slots | **2 Advantages** | HG p71 |
+| Long Range cost | 1 slot | **2 Advantages** | HG p72 |
+| Beam Laser TL | 9 | **10** | HG p28 |
+| Critical Severity | Effect-based | **Damage÷10** (rounded up) | CRB p158 |
+| Critical Location | Chosen (Called Shot) | **Random 2D roll** (no Called Shot RAW) | CRB p158 |
+| Ion duration | Permanent (VTT) | **1 round** (D3 if Effect ≥ 6) | HG p30 |
+| Sensor DM | +2 flat to attacks | **Sensor Lock = Boon** (3D keep 2) | CRB p161 |
 
 ---
 
-## Weapons
-
-### Energy Weapons
-
-| Weapon | TL | Power | Damage | Range | Cost (Cr) | Ammo |
-|--------|---|-------|--------|-------|-----------|------|
-| **Beam Laser** | 9 | 4 | 1D6 | Medium | 500,000 | — |
-| **Pulse Laser** | 9 | 4 | 2D6 | Long | 1,000,000 | — |
-| **Particle Beam** | 12 | 8 | 3D6 | Very Long | 4,000,000 | — |
-| **Plasma Gun** | 11 | 6 | 3D6 | Medium | 2,500,000 | — |
-| **Fusion Gun** | 14 | 12 | 4D6 | Medium | 2,000,000 | — |
-
-### Projectile Weapons
-
-| Weapon | TL | Power | Damage | Range | Cost (Cr) | Ammo per Ton |
-|--------|---|-------|--------|-------|-----------|--------------|
-| **Railgun** | 10 | 2 | 2D6 | Short | 1,000,000 | 100 shots |
-| **Missile Rack** | 7 | 0 | 4D6 | Special | 750,000 | 12 missiles |
-| **Sandcaster** | 9 | 0 | — | Special | 250,000 | 20 canisters |
-
-### Range Bands
-
-| Range | Distance | Attack DM |
-|-------|----------|-----------|
-| **Adjacent** | <1km | +1 |
-| **Close** | 1-10km | +0 |
-| **Short** | 10-1,250km | -2 |
-| **Medium** | 1,250-10,000km | -4 |
-| **Long** | 10,000-25,000km | -6 |
-| **Very Long** | 25,000-50,000km | -8 |
-| **Distant** | 50,000km+ | -10 |
-
-**Notes:**
-- Missiles use special targeting rules (not affected by range DM the same way)
-- Sandcasters provide defense against missiles and lasers
-
----
-
-## Weapon Upgrades (High Guard 2022 - Customising Ships)
-
-### Upgrade Slots by Tech Level
-
-Weapons built at higher TL than their base requirement gain upgrade slots:
-
-| TL Above Base | Upgrade Slots |
-|---------------|---------------|
-| +1-2 TL | 1 slot |
-| +3-4 TL | 2 slots |
-| +5+ TL | 3 slots |
-
-**Example:** Ion Cannon (base TL 12) built at TL 15 = 3 upgrade slots
-
-### Available Weapon Upgrades
-
-| Upgrade | Slots | Effect | Notes |
-|---------|-------|--------|-------|
-| **Accurate** | 2 | +1 DM to attack rolls | Best for skilled gunners |
-| **High Yield** | 1 | +1D damage | Cost-effective damage boost |
-| **Very High Yield** | 2 | +2D damage | Not for missiles/torpedoes |
-| **Long Range** | 1 | +1 range band | Extends effective range |
-| **Resilient** | 1 | Harder to disable (crit resistance) | Defensive option |
-| **Variable Range** | 1 | Can attack at any range without penalty | Rare, specialized |
-
-### Barbette-Specific Notes
-
-- Barbettes at TL 12+ commonly upgraded
-- Ion Barbettes benefit most from: Accurate (more hits = more drain) or High Yield (+1D × 30 = +105 avg drain)
-- Particle Barbettes often: High Yield or Very High Yield for maximum destruction
-
-### Fire Control Software
-
-Fire Control software provides attack DM bonus. Can be split among weapons/targets.
-
-| Software | TL | Bandwidth | Effect | Cost (Cr) |
-|----------|---|-----------| -------|-----------|
-| **Fire Control/1** | 9 | 1 | +1 DM or 1 auto-attack | 1,000,000 |
-| **Fire Control/2** | 10 | 2 | +2 DM (split as needed) | 2,000,000 |
-| **Fire Control/3** | 11 | 3 | +3 DM (split as needed) | 4,000,000 |
-| **Fire Control/4** | 12 | 4 | +4 DM (split as needed) | 8,000,000 |
-| **Fire Control/5** | 13 | 5 | +5 DM (split as needed) | 10,000,000 |
-
-**Usage:** A ship with FC/4 firing one barbette can grant full +4 DM to that attack.
-
----
-
-## Sensors
-
-### Sensor Grades
-
-| Grade | Minimum TL | Tonnage | Power | Range | DM | Cost (Cr) |
-|-------|-----------|---------|-------|-------|-----|-----------|
-| **Basic** | 8 | 0 | 0 | Limited | -2 | Included in hull |
-| **Civilian** | 9 | 1 | 1 | Standard | +0 | 50,000 |
-| **Military** | 11 | 2 | 2 | Enhanced | +1 | 1,000,000 |
-| **Advanced** | 13 | 3 | 3 | Long Range | +2 | 2,000,000 |
-| **Very Advanced** | 15 | 5 | 4 | Very Long | +3 | 4,000,000 |
-
-**Range Definitions:**
-- **Limited (Basic):** 5,000km
-- **Standard (Civilian):** 50,000km
-- **Enhanced (Military):** 500,000km (Very Long)
-- **Long Range (Advanced):** 5,000,000km
-- **Very Long (Very Advanced):** 50,000,000km
-
-**DM:** Applies to Sensors skill checks for detection, scanning, and targeting
-
----
-
-## Computer Systems
-
-### Computer Ratings and Bandwidth
-
-| Model | TL | Processing Power | Bandwidth | Cost (Cr) |
-|-------|---|------------------|-----------|-----------|
-| **Computer/1** | 7 | 5 | 5 | 30,000 |
-| **Computer/2** | 9 | 10 | 10 | 160,000 |
-| **Computer/5** | 10 | 25 | 25 | 1,000,000 |
-| **Computer/10** | 11 | 50 | 50 | 5,000,000 |
-| **Computer/15** | 12 | 75 | 75 | 20,000,000 |
-| **Computer/20** | 13 | 100 | 100 | 30,000,000 |
-| **Computer/25** | 14 | 125 | 125 | 60,000,000 |
-| **Computer/30** | 15 | 150 | 150 | 90,000,000 |
-| **Computer/35** | 16 | 175 | 175 | 120,000,000 |
-| **Computer/40** | 17 | 200 | 200 | 150,000,000 |
-| **Computer/45** | 18 | 225 | 225 | 180,000,000 |
-| **Computer/50** | 19 | 250 | 250 | 210,000,000 |
-
-**Notes:**
-- Processing Power determines AI capabilities and simultaneous calculations
-- Bandwidth determines how many software packages can run simultaneously
-- Computer tonnage: 0 (integrated into ship systems)
-- Computer power: 0 (included in basic power)
-
-### Software Bandwidth Costs
-
-| Software Type | Bandwidth Cost | Notes |
-|--------------|----------------|-------|
-| **Manoeuvre/0** | 0 | Free, basic maneuvering |
-| **Jump Control/rating** | rating | Required for jump travel |
-| **Library** | 0 | General knowledge database |
-| **Fire Control/rating** | rating | Weapon targeting assistance |
-| **Auto-Repair/rating** | rating | Damage control automation |
-| **Evade/rating** | rating | Defensive maneuvers |
-| **Intellect** | 1 | Ship AI personality |
-
----
-
-## Bridge Types
-
-### Bridge Requirements by Hull Size
-
-| Hull Tonnage | Bridge Type | Tonnage | Cost (Cr) | Notes |
-|-------------|------------|---------|-----------|-------|
-| **Small Craft (<100t)** | Cockpit | 1.5 | 75,000 | Up to 2 crew positions |
-| **100-1,000t** | Bridge | 20 | 500,000 | Standard bridge |
-| **1,001-2,000t** | Bridge | 40 | 1,000,000 | Larger bridge for capital ships |
-| **2,001-5,000t** | Bridge | 60 | 2,500,000 | Major warship bridge |
-| **5,001-100,000t** | Bridge | 100 | 5,000,000 | Dreadnought bridge |
-
-**Special Bridge Types:**
-
-| Type | Modifier | Effect |
-|------|----------|--------|
-| **Holographic Controls** | +TL% cost | Enhanced crew efficiency |
-| **Command Bridge** | ×2 cost | +1 DM to Tactics checks |
-
----
-
-## Crew and Staterooms
-
-### Minimum Crew Requirements
-
-| Position | Requirement | Notes |
-|----------|------------|-------|
-| **Pilot** | 1 | Required for all ships |
-| **Astrogator** | 1 if Jump-capable | Navigation for jump travel |
-| **Engineer** | 1 per 35 tons drives/power | Maintain propulsion |
-| **Gunner** | 1 per turret | Weapon operation |
-| **Medic** | 1 if crew >10 | Medical officer |
-| **Steward** | 1 per 8 High Passengers | Passenger service |
-| **Marines** | Variable | Security and boarding actions |
-
-### Stateroom Types
-
-| Type | Tonnage | Cost (Cr) | Occupants | Notes |
-|------|---------|-----------|-----------|-------|
-| **Standard** | 4 | 500,000 | 1-2 crew | Basic accommodations |
-| **Luxury** | 8 | 1,000,000 | 1 passenger | High passage quality |
-| **Emergency Low Berth** | 0.5 | 50,000 | 1 frozen | Cryogenic suspension |
-| **Barracks** | 2 per marine | 100,000 | 1 marine | Military housing |
-
-**Notes:**
-- Crew can double-up in staterooms (2 per room)
-- Passengers require individual staterooms
-- Low berths require Medical-3 to safely revive occupants
-
----
-
-## Fuel Requirements
-
-### Power Plant Fuel Consumption
-
-| Power Plant Type | Fuel per 2 Weeks Operation |
-|-----------------|---------------------------|
-| Fusion TL8 | 1% hull tonnage |
-| Fusion TL12 | 1% hull tonnage (4 weeks) |
-| Fusion TL15 | 1% hull tonnage (6 weeks) |
-| Antimatter TL17 | 0.5% hull tonnage (4 weeks) |
-
-### Jump Fuel
-
-**Formula:** 10% of hull tonnage per jump rating
-
-**Examples:**
-- Jump-1: 10% hull
-- Jump-2: 20% hull
-- Jump-3: 30% hull
-
-### Fuel Tankage
-
-- **Cost:** Cr 0 (free)
-- **Tonnage:** Exact amount needed
-- **Placement:** Can be jettisoned in emergency (drop tanks)
-
----
-
-## Construction Times
-
-### Standard Construction Time
-
-| Hull Tonnage | Construction Time |
-|-------------|-------------------|
-| 100-2,000 | 2 months per 100 tons |
-| 2,001-75,000 | 1 month per 100 tons |
-| 75,001+ | 2 weeks per 100 tons |
-
-**Rushed Construction:** -25% time, +10% cost, Quality check required
-
-**Careful Construction:** +50% time, -10% cost, +1 Quality
-
----
-
-## Ship Maintenance
-
-### Annual Maintenance
-
-**Cost:** 0.1% of total ship cost per month (1.2% per year)
-
-**Effect:** Failure to perform annual maintenance:
-- -1 DM to all ship system checks per missed month
-- Cumulative degradation
-- Major overhaul required after 3+ missed maintenances
-
-### Overhaul
-
-**Cost:** 10% of hull and drive costs
-**Frequency:** Every 20 years
-**Time:** 1 month per 1,000 tons
-
----
-
-**Document Status:** Complete extraction from Mongoose Traveller 2E High Guard 2022
-**Validation:** All values match lib/ship-*.js validation modules
-**Purpose:** Quick reference for ship design and autonomous development
-**Next Update:** When new official errata or supplements released
+**Document Status:** RAW-verified from HG 2022 Update PDF + CRB 2016 PDF
+**Audit Date:** 2026-02-09
+**Auditor:** Bruce (GM) with AI assistance
+**Next:** VTT code gap analysis against these corrected values

@@ -6177,147 +6177,67 @@
     {
       "hex": "1632",
       "name": "Milagro",
-      "stellar": "G2 V",
+      "stellar": "M2 V",
       "uwp": "E31178A-7",
-      "objectCount": 16,
+      "objectCount": 12,
       "isBinary": false,
       "isTrinary": false,
       "habitableZone": {
-        "inner": 0.6699578026147692,
-        "outer": 1.5737725928824955,
-        "frostLine": 2.414953415699773
+        "inner": 0.25,
+        "outer": 0.48,
+        "frostLine": 0.64
+      },
+      "canonOverrides": {
+        "gasGiants": 0,
+        "planetoidBelts": 2,
+        "source": "wiki.travellerrpg.com/Milagro_(world)",
+        "correctedFrom": "astrophysics-v2 (G2 V, 3 gas giants)",
+        "correctedAt": "2026-02-10"
       },
       "objects": [
         {
           "id": "1632-star-0-dd8e",
           "type": "Star",
           "name": "Milagro",
-          "stellarClass": "G2 V",
+          "stellarClass": "M2 V",
           "orbitAU": 0,
           "bearing": 0,
-          "radiusKm": 697887,
-          "temperature": 5822.222222222223,
-          "luminosity": 0.7999999999999999,
-          "color": "#fff4ea",
-          "description": "Yellow (Sol-type)",
+          "radiusKm": 306108,
+          "temperature": 3515,
+          "luminosity": 0.0565,
+          "mass": 0.44,
+          "color": "#ffad6a",
+          "description": "Red Dwarf (M-type)",
           "habitableZone": {
-            "inner": 0.67,
-            "outer": 1.57,
-            "frostLine": 2.41
+            "inner": 0.25,
+            "outer": 0.48,
+            "frostLine": 0.64
           }
-        },
-        {
-          "id": "1632-1632-planet-1-25e4-moon-0-8a61",
-          "type": "Moon",
-          "name": "Milagro II a",
-          "parentId": "1632-planet-1-25e4",
-          "orbitRadii": 30.9,
-          "orbitKm": 1992153,
-          "bearing": 209,
-          "radiusKm": 473,
-          "tideLocked": false
-        },
-        {
-          "id": "1632-1632-planet-1-25e4-moon-1-8a61",
-          "type": "Moon",
-          "name": "Milagro II b",
-          "parentId": "1632-planet-1-25e4",
-          "orbitRadii": 39.9,
-          "orbitKm": 2570011,
-          "bearing": 267,
-          "radiusKm": 468,
-          "tideLocked": false
-        },
-        {
-          "id": "1632-1632-planet-2-25e4-moon-0-8d6d",
-          "type": "Moon",
-          "name": "Milagro III Moon 1",
-          "parentId": "1632-planet-2-25e4",
-          "orbitRadii": 40.7,
-          "orbitKm": 339822,
-          "bearing": 334,
-          "radiusKm": 130,
-          "tideLocked": false
-        },
-        {
-          "id": "1632-1632-planet-2-25e4-moon-1-8d6d",
-          "type": "Moon",
-          "name": "Milagro III Moon 2",
-          "parentId": "1632-planet-2-25e4",
-          "orbitRadii": 44,
-          "orbitKm": 368032,
-          "bearing": 338,
-          "radiusKm": 869,
-          "tideLocked": false
-        },
-        {
-          "id": "1632-1632-planet-2-25e4-moon-2-8d6d",
-          "type": "Moon",
-          "name": "Milagro III Moon 3",
-          "parentId": "1632-planet-2-25e4",
-          "orbitRadii": 27.3,
-          "orbitKm": 228311,
-          "bearing": 59,
-          "radiusKm": 1219,
-          "tideLocked": false
-        },
-        {
-          "id": "1632-1632-gas-giant-0-66b8-moon-0-101d",
-          "type": "Moon",
-          "name": "Milagro Major a",
-          "parentId": "1632-gas-giant-0-66b8",
-          "orbitRadii": 19.5,
-          "orbitKm": 423530,
-          "bearing": 112,
-          "radiusKm": 804,
-          "tideLocked": false
         },
         {
           "id": "1632-planet-0-25e4",
           "type": "Planet",
-          "subtype": "Molten",
+          "subtype": "Rocky",
           "name": "Milagro I",
-          "orbitAU": 0.14,
+          "orbitAU": 0.07,
           "bearing": 229,
-          "radiusKm": 3825,
+          "radiusKm": 1820,
           "zone": "hot",
           "atmosphere": false,
+          "tideLocked": true,
           "moons": []
         },
         {
           "id": "1632-planet-1-25e4",
           "type": "Planet",
-          "subtype": "Hot Jupiter",
+          "subtype": "Rocky",
           "name": "Milagro II",
-          "orbitAU": 0.33,
-          "bearing": 359,
-          "radiusKm": 64419,
-          "zone": "hot",
-          "atmosphere": true,
-          "moons": [
-            {
-              "id": "1632-1632-planet-1-25e4-moon-0-8a61",
-              "type": "Moon",
-              "name": "Milagro II a",
-              "parentId": "1632-planet-1-25e4",
-              "orbitRadii": 30.9,
-              "orbitKm": 1992153,
-              "bearing": 209,
-              "radiusKm": 473,
-              "tideLocked": false
-            },
-            {
-              "id": "1632-1632-planet-1-25e4-moon-1-8a61",
-              "type": "Moon",
-              "name": "Milagro II b",
-              "parentId": "1632-planet-1-25e4",
-              "orbitRadii": 39.9,
-              "orbitKm": 2570011,
-              "bearing": 267,
-              "radiusKm": 468,
-              "tideLocked": false
-            }
-          ]
+          "orbitAU": 0.15,
+          "bearing": 142,
+          "radiusKm": 3210,
+          "zone": "warm",
+          "atmosphere": "Thin",
+          "moons": []
         },
         {
           "id": "1632-mainworld-0-2cdc",
@@ -6328,26 +6248,37 @@
           "uwp": "E31178A-7",
           "orbitAU": 0.51,
           "bearing": 359,
-          "radiusKm": 5400,
-          "zone": "inner",
+          "radiusKm": 2400,
+          "zone": "outer",
           "atmosphere": "Trace",
           "moons": []
         },
         {
           "id": "1632-planet-2-25e4",
           "type": "Planet",
-          "subtype": "Super-Earth",
-          "name": "Milagro III",
+          "subtype": "Rocky",
+          "name": "Milagro IV",
           "orbitAU": 0.83,
           "bearing": 61,
-          "radiusKm": 8356,
-          "zone": "inner",
-          "atmosphere": true,
+          "radiusKm": 4180,
+          "zone": "outer",
+          "atmosphere": "Thin, Tainted",
           "moons": [
             {
               "id": "1632-1632-planet-2-25e4-moon-0-8d6d",
               "type": "Moon",
-              "name": "Milagro III Moon 1",
+              "name": "Milagro IV a",
+              "parentId": "1632-planet-2-25e4",
+              "orbitRadii": 27.3,
+              "orbitKm": 228311,
+              "bearing": 59,
+              "radiusKm": 1219,
+              "tideLocked": false
+            },
+            {
+              "id": "1632-1632-planet-2-25e4-moon-1-8d6d",
+              "type": "Moon",
+              "name": "Milagro IV b",
               "parentId": "1632-planet-2-25e4",
               "orbitRadii": 40.7,
               "orbitKm": 339822,
@@ -6356,59 +6287,35 @@
               "tideLocked": false
             },
             {
-              "id": "1632-1632-planet-2-25e4-moon-1-8d6d",
+              "id": "1632-1632-planet-2-25e4-moon-2-8d6d",
               "type": "Moon",
-              "name": "Milagro III Moon 2",
+              "name": "Milagro IV c",
               "parentId": "1632-planet-2-25e4",
               "orbitRadii": 44,
               "orbitKm": 368032,
               "bearing": 338,
               "radiusKm": 869,
               "tideLocked": false
-            },
-            {
-              "id": "1632-1632-planet-2-25e4-moon-2-8d6d",
-              "type": "Moon",
-              "name": "Milagro III Moon 3",
-              "parentId": "1632-planet-2-25e4",
-              "orbitRadii": 27.3,
-              "orbitKm": 228311,
-              "bearing": 59,
-              "radiusKm": 1219,
-              "tideLocked": false
             }
           ]
         },
         {
-          "id": "1632-gas-giant-0-66b8",
-          "type": "Gas Giant",
-          "subtype": "Ice Giant",
-          "name": "Milagro Major",
-          "orbitAU": 2.64,
-          "bearing": 328,
-          "radiusKm": 21711,
-          "hasRings": false,
+          "id": "1632-belt-0",
+          "type": "Planetoid Belt",
+          "name": "Inner Belt",
+          "orbitAU": 1.4,
+          "bearing": 0,
+          "widthAU": 0.3,
           "zone": "outer",
-          "moons": [
-            {
-              "id": "1632-1632-gas-giant-0-66b8-moon-0-101d",
-              "type": "Moon",
-              "name": "Milagro Major a",
-              "parentId": "1632-gas-giant-0-66b8",
-              "orbitRadii": 19.5,
-              "orbitKm": 423530,
-              "bearing": 112,
-              "radiusKm": 804,
-              "tideLocked": false
-            }
-          ]
+          "composition": "Carbonaceous, silicate",
+          "description": "Source of CHONP elements mined for food synthesis"
         },
         {
           "id": "1632-planet-4-25e4",
           "type": "Planet",
-          "subtype": "Ice Dwarf",
+          "subtype": "Ice World",
           "name": "Milagro V",
-          "orbitAU": 7.78,
+          "orbitAU": 3.2,
           "bearing": 276,
           "radiusKm": 2517,
           "zone": "outer",
@@ -6416,45 +6323,45 @@
           "moons": []
         },
         {
-          "id": "1632-gas-giant-1-66b8",
-          "type": "Gas Giant",
-          "subtype": "Jupiter-like",
-          "name": "Milagro Minor",
-          "orbitAU": 12.63,
-          "bearing": 154,
-          "radiusKm": 63612,
-          "hasRings": true,
-          "zone": "outer",
-          "moons": []
+          "id": "1632-belt-1",
+          "type": "Planetoid Belt",
+          "name": "Outer Belt",
+          "orbitAU": 5.8,
+          "bearing": 0,
+          "widthAU": 0.8,
+          "zone": "farOuter",
+          "composition": "Ice, carbonaceous asteroids",
+          "description": "Remote mining operations for water ice and volatiles"
         },
         {
           "id": "1632-planet-5-25e4",
           "type": "Planet",
           "subtype": "Ice Dwarf",
           "name": "Milagro VI",
-          "orbitAU": 16.62,
-          "bearing": 224,
+          "orbitAU": 9.5,
+          "bearing": 154,
           "radiusKm": 2890,
           "zone": "farOuter",
           "atmosphere": "trace",
           "moons": []
         },
         {
-          "id": "1632-gas-giant-2-66b8",
-          "type": "Gas Giant",
-          "subtype": "Jupiter-like",
-          "name": "Milagro Minor",
-          "orbitAU": 19.35,
-          "bearing": 203,
-          "radiusKm": 56088,
-          "hasRings": false,
-          "zone": "outer",
+          "id": "1632-planet-6-25e4",
+          "type": "Planet",
+          "subtype": "Ice Dwarf",
+          "name": "Milagro VII",
+          "orbitAU": 16.6,
+          "bearing": 224,
+          "radiusKm": 1650,
+          "zone": "farOuter",
+          "atmosphere": false,
           "moons": []
         }
       ],
       "generated": "2026-01-07T11:11:04.851Z",
       "generator": "astrophysics-v2",
-      "hasWikiData": false
+      "canonCorrected": "2026-02-10",
+      "hasWikiData": true
     },
     {
       "hex": "1634",

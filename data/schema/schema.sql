@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS campaigns (
   name TEXT NOT NULL,
   gm_name TEXT NOT NULL,
   current_date TEXT DEFAULT '1105-001',      -- Imperial calendar date (DDD-YYYY)
-  current_system TEXT DEFAULT 'Regina',       -- Current star system
+  current_system TEXT DEFAULT 'Milagro',       -- Current star system
   god_mode INTEGER DEFAULT 0,                 -- GM god mode enabled
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP

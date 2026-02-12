@@ -1,0 +1,265 @@
+ISS ASTRAL DAWN — DESIGN REVIEW
+Ship Design: James  |  Rules Review: Bruce (GM)
+Mongoose Traveller 2e, High Guard (2022 Update)
+
+═══════════════════════════════════════════════════════════
+WHAT CHANGED AND WHY
+═══════════════════════════════════════════════════════════
+
+James's original design builds a TANK — heavy armor, dedicated point
+defense, built to absorb punishment through a long engagement.
+
+The review shifts toward AMBUSH PREDATOR — look harmless, strike
+devastatingly, end fights fast. This is the Q-ship doctrine: the ship
+that never gets identified as a warship wins more fights than the ship
+that survives 10 rounds of incoming fire.
+
+Here's the tradeoff at a glance:
+
+  DEFENSE LOST                      OFFENSE GAINED
+  ────────────────────────────────  ────────────────────────────────
+  Armor 14 → 1 (-13 protection)    Ion: Medium → Long range
+  Weapon Bay PD removed (-20t)      Ion: HY damage boost (~5%)
+                                    Particle: AP+2 (Intense Focus)
+                                    Particle: HY damage boost (~5%)
+                                    Particle: avg Severity 5 crits
+
+  COVER IMPROVED                    SPACE FREED
+  ────────────────────────────────  ────────────────────────────────
+  Armor invisible to sensors        ~65 tons net freed
+  2 visible turrets = normal liner  Available for cargo, fuel,
+  4 passenger cabins = believable   or resolving tonnage overrun
+  Ship passes port inspection
+
+WHY LESS ARMOR IS MORE SHIP:
+
+James's armor solved for "survive a long engagement." But with Marina
+at Gunner-6 and FC/4, that's the wrong problem. Her first ion shot
+drains ~43% of a pirate's power for D3 rounds. Her second shot
+(particle barbette) averages 50+ hull damage with a Severity 5
+critical — that's a random system destroyed or crippled. Fight
+effectively over in 2 rounds. We don't need to absorb 10 rounds of
+incoming because there won't BE 10 rounds of incoming.
+
+And we have a fighter screen. Six fighters at extreme range plus an
+armed launch are already massive force projection for a 600t ship.
+The fighters handle standoff work. Marina handles precision kills.
+The turrets provide PD and missile volleys under AI control. Armor 14
+was belt-and-suspenders on a ship that already has a belt, suspenders,
+and a pair of overalls.
+
+Meanwhile, Armor 14 was actively HURTING us. Every port approach,
+every passive sensor sweep, every customs inspection — the hull
+density screams "warship." The Q-ship mission depends on ships
+APPROACHING us. Pirates don't approach warships. They approach
+battered liners. Armor 1 is what a battered liner has.
+
+═══════════════════════════════════════════════════════════
+WHAT JAMES GOT RIGHT (a lot)
+═══════════════════════════════════════════════════════════
+
+  • Pop-up turrets: correct Q-ship feature
+  • Pulse lasers + sandcasters + adv missiles: excellent layered defense
+  • Ion + Particle barbettes: exactly the right heavy weapons for the
+    mission (disable then kill)
+  • Computer/25 with FC/4: top-tier military software, undetectable
+    from outside the ship
+  • Emission Absorption Grid: essential for the mission
+  • Boarding suite (breech tube + forced linkage + clamps): comprehensive
+    prize-taking capability
+  • Crew assignments and backup roles: very thoughtful
+  • Collapsible tanks + jump net: massive operational range
+  • All four hull coatings: solid defensive package
+
+═══════════════════════════════════════════════════════════
+A. CHANGES NEEDED (5 items)
+═══════════════════════════════════════════════════════════
+
+A1. ARMOR: 14 → 1
+─────────────────────────────────────────────────────────
+  Was:  Armor 14 Bonded Superdense (67.2t, MCr33.6M)
+  Now:  Armor 1 (standard for this hull class)
+
+The Amishi had Armor 1 when we salvaged her. That's standard for a
+600t liner of this type. Changing it to anything higher would itself
+be visible — any yard that touched her hull would notice the upgrade.
+More importantly, Armor 14 is capital-ship grade. Even passive sensors
+detect hull density anomalies at that level.
+
+This is the one item I'm firm on. Everything else is negotiable.
+
+Frees: ~61 tons.
+
+A2. WEAPON BAY PD: Remove
+─────────────────────────────────────────────────────────
+  Was:  20t Weapon Bay Point Defense (Rating 1)
+  Now:  Removed
+
+600t hull = 6 hardpoints. We're using all 6 (4 turrets + 2 barbettes).
+The weapon bay PD would need a 7th hardpoint that doesn't exist. Our
+6 sandcasters already provide excellent PD coverage.
+
+Frees: 20 tons.
+
+A3. TURRET VISIBILITY: 2 Visible, 2 Hidden
+─────────────────────────────────────────────────────────
+  Turrets 1-2 (VISIBLE):     Pulse laser + 2× sandcaster each
+  Turrets 3-4 (HIDDEN POP-UP): Pulse laser + sandcaster + adv missile
+
+A standard Type-R 600t liner shows 2 defensive turrets. Having exactly
+2 visible maintains cover perfectly. The strike turrets (with advanced
+missiles) stay hidden until combat.
+
+A4. PASSENGER CABINS: Add 4
+─────────────────────────────────────────────────────────
+  Was:  Zero passenger staterooms
+  Now:  4 passenger staterooms (~16t)
+
+A "subsidized liner" that can't carry a single passenger fails basic
+port inspection. These 4 cabins create a Potemkin village — a small
+section of the ship that looks like a working liner. When we don't
+have actual passengers (almost always), crew expands into them. Key
+is having a civilian-face area to bring visitors aboard that does NOT
+look like a naval vessel.
+
+Costs: ~16 tons.
+
+A5. TONNAGE BUDGET: Needs Clean Pass
+─────────────────────────────────────────────────────────
+The spreadsheet's "Remaining" shows 30,006.9999 — formula error.
+Several other formula issues:
+  • Low berths: shows -600% instead of -6t
+  • Probe drones: shows -100% instead of -5t
+  • Hull HP: shows 600 instead of 240 (should be tonnage × 0.4)
+  • Fighter hangar for 6×10t fighters (~66t) has no line item
+
+The ~65t freed from armor + PD removal helps absorb any overrun, but
+the full tonnage budget needs a clean recalculation. James, when you
+get a chance, a pass through the formulas (especially anything showing
+percentages) would be great.
+
+═══════════════════════════════════════════════════════════
+B. BARBETTE UPGRADES
+═══════════════════════════════════════════════════════════
+
+Marina has +10 DM before range (Gunner-6 + FC/4). Sensor operator
+can grant a Boon (3D keep best 2) via Sensor Lock — separate action.
+She auto-hits at every range up to Very Long. At Distant she only
+misses on snake-eyes.
+
+The upgrade system uses High Guard's Prototype/Advanced table:
+building a weapon at +3 TL above base = "High Technology" = 3
+Advantages, at +50% base cost. Both barbettes qualify (TL12/11
+base, built at TL15 = +3 TL).
+
+ION CANNON BARBETTE — High Yield + Long Range
+─────────────────────────────────────────────────────────
+  Was:  TL12 standard. Medium range, 7D×3 Ion.         MCr 6
+  Now:  TL15 High Technology. Long range, 7D×3 (HY).   MCr 9
+
+  • High Yield: 1's on damage dice count as 2's (~5% more damage)
+  • Long Range: Medium → Long (start disabling one band sooner)
+  • Result: One hit drains ~85-90 Power from target (×3 barbette
+    multiplier). Against a 200t pirate (~200 Power), that's ~43%
+    of their power plant knocked out for 1 round (D3 if Effect 6+).
+
+  The ion cannon's job is DISABLE. Long Range is the star here —
+  starting the power drain at Long instead of Medium is huge.
+  HY adds a modest damage bonus on top.
+
+PARTICLE CANNON BARBETTE — High Yield + Intense Focus
+─────────────────────────────────────────────────────────
+  Was:  TL11 standard. Very Long, 4D×3 + Radiation.    MCr 8
+  Now:  TL15 High Technology. Very Long, 4D×3 (HY, AP2). MCr 12
+
+  • High Yield: 1's on damage dice count as 2's
+  • Intense Focus: AP+2 (cuts through 2 points of armour)
+  • Result: Against Armour 4 pirates, avg 50 hull damage + random
+    critical at Severity 5. Against Armour 8+ ships, AP+2 pushes
+    damage across a Severity threshold.
+
+  The particle cannon's job is KILL. AP+2 matters because barbettes
+  multiply damage ×3 after armour — every point of armour you negate
+  becomes 3 points of final damage. Against even lightly armoured
+  targets, Intense Focus outperforms Accurate.
+
+  ALTERNATIVE: Accurate(2) + HY(1) if we want better critical trigger
+  chance at Very Long range (41.7% → 58.3%). Worth discussing.
+
+TL NOTE: +3 TL above base = 3 Advantages per High Guard's
+Prototype/Advanced table (p70). Costs +50% of base price. Legal
+at any TL15 shipyard. JSI has TL15 access.
+
+═══════════════════════════════════════════════════════════
+C. CREW RECONCILIATION
+═══════════════════════════════════════════════════════════
+
+MARINES: 8 (not 6)
+  PDF shows 6, crew roster has 8. Going with 8:
+  Asao, Sgt. Reyes, Cpl. Henriksen, Cpl. Woo-Park,
+  Kowalski, Mbeki, O'Brien, Chen.
+  NCOs in staterooms 2/18-2/20. Enlisted in barracks.
+  Current 12 barracks bunks works (6 pilots + 4 enlisted + 2 spare).
+
+LEAD FIGHTER PILOT: Lt. Dex Morain (not Roger Wilcox)
+  Per established crew roster. Callsign "Hardpoint."
+  James, if Wilcox is a separate character you had in mind, let me know.
+
+═══════════════════════════════════════════════════════════
+D. UNCHANGED (All Approved)
+═══════════════════════════════════════════════════════════
+
+  ✓ All four hull coatings (Reflective, Emission Absorption,
+    Heat Shielding, Radiation Shielding)
+  ✓ 4 triple turrets (no conversion to 2nd ion barbette)
+  ✓ 6×10t light fighters + armed launch + armored pinnace
+  ✓ Computer/25 with FC/4
+  ✓ Advanced Sensors TL15 (+2 DM)
+  ✓ Hardened Systems (ion immunity)
+  ✓ Full boarding suite
+  ✓ Collapsible tanks (240t) + jump net (200t)
+  ✓ Fuel processor + fuel scoops
+  ✓ All facilities (med bay, workshop, lab, vault, briefing room, etc.)
+
+═══════════════════════════════════════════════════════════
+E. CHANGE SUMMARY
+═══════════════════════════════════════════════════════════
+
+  ITEM                    WAS              NOW               TONS
+  ──────────────────────  ───────────────  ────────────────  ─────
+  Armor                   14 Bonded SD     1 (stock)         +61
+  Weapon Bay PD           20t installed    Removed           +20
+  Turrets visible         4 pop-up         2 vis / 2 pop-up   0
+  Passenger cabins        0                4 (Potemkin)      -16
+  Ion Barbette            Standard         HY + Long Range     0
+  Particle Barbette       Standard         HY + Intense Focus  0
+  Marines                 6                8                   0
+  Lead Pilot              Roger Wilcox     Lt. Dex Morain      0
+  ──────────────────────  ───────────────  ────────────────  ─────
+  NET TONNAGE FREED                                          +65
+
+  Additional cost for barbette mods: +MCr 7
+  (Ion: MCr6 → MCr9, Particle: MCr8 → MCr12)
+  (Ion: +MCr4.5, Particle: +MCr8)
+
+═══════════════════════════════════════════════════════════
+F. OPEN ITEMS (need James to verify in spreadsheet)
+═══════════════════════════════════════════════════════════
+
+  1. Fix percentage formulas (low berths, probe drones, etc.)
+  2. Add explicit fighter hangar line item (~66t)
+  3. Verify internal fuel = J-3 requirement + 4 weeks power plant
+     (should be ~200t; sheet shows 242.4t — where's the extra 42t?)
+  4. Verify power budget with weapons firing (120 basic + M-drive +
+     weapons + sensors = total demand vs plant output)
+  5. Recalculate total tonnage with above changes
+
+═══════════════════════════════════════════════════════════
+
+James — armor is my one hard line (cover story depends on it).
+Everything else here is a proposal and I'm happy to discuss any of
+it. The barbette upgrades in particular were a fun exercise in
+optimization — Marina's combat math is ridiculous.
+
+Happy to walk through any of this on the call.
+— Bruce

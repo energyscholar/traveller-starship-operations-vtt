@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <!-- Layer 1: Base gradient -->
+    <radialGradient id="baseGrad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="40%" stop-color="#120822"/>
+      <stop offset="100%" stop-color="#0a0612"/>
+    </radialGradient>
+
+    <!-- Core glow gradient -->
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="15%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="20%" stop-color="#bb88ff" stop-opacity="0.25"/>
+      <stop offset="50%" stop-color="#6633cc" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#6633cc" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Outer core haze -->
+    <radialGradient id="coreHaze" cx="50%" cy="50%" r="30%">
+      <stop offset="0%" stop-color="#7744dd" stop-opacity="0.18"/>
+      <stop offset="50%" stop-color="#4422aa" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#1a0a2e" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Nebula blob gradients -->
+    <radialGradient id="nebula1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6633cc" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#6633cc" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4488ff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#4488ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#aa44ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#aa44ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula4" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#33ccaa" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#33ccaa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula5" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffcc66" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffcc66" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Glow filter for energy tendrils -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="wideGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- LAYER 1: Base gradient background -->
+  <rect width="1920" height="1080" fill="url(#baseGrad)"/>
+
+  <!-- LAYER 2: Nebula wisps — large soft semi-transparent blobs -->
+  <ellipse cx="750" cy="350" rx="420" ry="280" fill="url(#nebula1)"/>
+  <ellipse cx="1300" cy="700" rx="380" ry="250" fill="url(#nebula2)"/>
+  <ellipse cx="960" cy="540" rx="500" ry="350" fill="url(#nebula3)"/>
+  <ellipse cx="400" cy="750" rx="350" ry="220" fill="url(#nebula4)"/>
+  <ellipse cx="1500" cy="300" rx="300" ry="200" fill="url(#nebula5)"/>
+  <ellipse cx="1100" cy="200" rx="280" ry="180" fill="url(#nebula4)"/>
+  <ellipse cx="200" cy="500" rx="250" ry="300" fill="url(#nebula1)"/>
+
+  <!-- LAYER 3: Dimensional grid — faint warped geometry -->
+  <g opacity="0.08" stroke="#8866cc" fill="none" stroke-width="0.8">
+    <!-- Concentric distorted ellipses suggesting tunnel -->
+    <ellipse cx="960" cy="540" rx="80" ry="50"/>
+    <ellipse cx="960" cy="540" rx="160" ry="100" transform="rotate(2, 960, 540)"/>
+    <ellipse cx="960" cy="540" rx="280" ry="170" transform="rotate(-3, 960, 540)"/>
+    <ellipse cx="960" cy="540" rx="440" ry="270" transform="rotate(1.5, 960, 540)"/>
+    <ellipse cx="960" cy="540" rx="650" ry="400" transform="rotate(-2, 960, 540)"/>
+    <ellipse cx="960" cy="540" rx="900" ry="560" transform="rotate(1, 960, 540)"/>
+    <!-- Faint hexagonal shapes — dimensional structure -->
+    <polygon points="960,440 1047,490 1047,590 960,640 873,590 873,490" transform="rotate(5, 960, 540)"/>
+    <polygon points="960,340 1134,440 1134,640 960,740 786,640 786,440" transform="rotate(-3, 960, 540)" stroke-width="0.5"/>
+    <polygon points="960,240 1220,390 1220,690 960,840 700,690 700,390" transform="rotate(2, 960, 540)" stroke-width="0.4"/>
+    <!-- Faint triangles — non-Euclidean hints -->
+    <polygon points="750,300 850,500 650,500" stroke-width="0.4" opacity="0.6"/>
+    <polygon points="1200,250 1280,420 1120,420" stroke-width="0.4" opacity="0.5"/>
+    <polygon points="1400,700 1500,850 1300,850" stroke-width="0.3" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 4: Star streaks — 70+ elongated lines radiating from center -->
+  <g stroke-linecap="round">
+    <!-- White-blue dominant streaks -->
+    <line x1="960" y1="540" x2="120" y2="80" stroke="#ccddff" stroke-width="1.2" opacity="0.5"/>
+    <line x1="960" y1="540" x2="250" y2="50" stroke="#aabbee" stroke-width="0.8" opacity="0.35"/>
+    <line x1="960" y1="540" x2="60" y2="200" stroke="#bbccff" stroke-width="1" opacity="0.45"/>
+    <line x1="960" y1="540" x2="30" y2="380" stroke="#ccddff" stroke-width="0.7" opacity="0.3"/>
+    <line x1="960" y1="540" x2="15" y2="540" stroke="#aabbee" stroke-width="1.1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="50" y2="700" stroke="#bbccff" stroke-width="0.9" opacity="0.35"/>
+    <line x1="960" y1="540" x2="100" y2="870" stroke="#ccddff" stroke-width="0.8" opacity="0.3"/>
+    <line x1="960" y1="540" x2="200" y2="980" stroke="#aabbee" stroke-width="1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="350" y2="1050" stroke="#bbccff" stroke-width="0.7" opacity="0.35"/>
+    <line x1="960" y1="540" x2="500" y2="1060" stroke="#ccddff" stroke-width="1.2" opacity="0.45"/>
+    <line x1="960" y1="540" x2="700" y2="1075" stroke="#aabbee" stroke-width="0.8" opacity="0.3"/>
+    <line x1="960" y1="540" x2="960" y2="1080" stroke="#bbccff" stroke-width="0.6" opacity="0.25"/>
+    <line x1="960" y1="540" x2="1200" y2="1070" stroke="#ccddff" stroke-width="1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="1400" y2="1050" stroke="#aabbee" stroke-width="0.9" opacity="0.35"/>
+    <line x1="960" y1="540" x2="1600" y2="1000" stroke="#bbccff" stroke-width="0.7" opacity="0.3"/>
+    <line x1="960" y1="540" x2="1780" y2="920" stroke="#ccddff" stroke-width="1.1" opacity="0.45"/>
+    <line x1="960" y1="540" x2="1870" y2="800" stroke="#aabbee" stroke-width="0.8" opacity="0.3"/>
+    <line x1="960" y1="540" x2="1910" y2="650" stroke="#bbccff" stroke-width="1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="1905" y2="540" stroke="#ccddff" stroke-width="0.7" opacity="0.35"/>
+    <line x1="960" y1="540" x2="1890" y2="400" stroke="#aabbee" stroke-width="0.9" opacity="0.3"/>
+    <line x1="960" y1="540" x2="1850" y2="250" stroke="#bbccff" stroke-width="1.2" opacity="0.5"/>
+    <line x1="960" y1="540" x2="1750" y2="120" stroke="#ccddff" stroke-width="0.8" opacity="0.35"/>
+    <line x1="960" y1="540" x2="1600" y2="30" stroke="#aabbee" stroke-width="1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="1400" y2="10" stroke="#bbccff" stroke-width="0.7" opacity="0.3"/>
+    <line x1="960" y1="540" x2="1200" y2="5" stroke="#ccddff" stroke-width="0.9" opacity="0.35"/>
+    <line x1="960" y1="540" x2="960" y2="0" stroke="#aabbee" stroke-width="0.6" opacity="0.25"/>
+    <line x1="960" y1="540" x2="700" y2="10" stroke="#bbccff" stroke-width="1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="450" y2="30" stroke="#ccddff" stroke-width="0.8" opacity="0.35"/>
+
+    <!-- Purple/violet streaks -->
+    <line x1="960" y1="540" x2="180" y2="160" stroke="#aa44ff" stroke-width="1.3" opacity="0.4"/>
+    <line x1="960" y1="540" x2="80" y2="450" stroke="#9944ee" stroke-width="0.9" opacity="0.35"/>
+    <line x1="960" y1="540" x2="150" y2="920" stroke="#aa44ff" stroke-width="1.1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="400" y2="20" stroke="#bb55ff" stroke-width="0.8" opacity="0.3"/>
+    <line x1="960" y1="540" x2="1700" y2="50" stroke="#aa44ff" stroke-width="1" opacity="0.35"/>
+    <line x1="960" y1="540" x2="1900" y2="300" stroke="#9944ee" stroke-width="1.2" opacity="0.4"/>
+    <line x1="960" y1="540" x2="1880" y2="750" stroke="#aa44ff" stroke-width="0.9" opacity="0.35"/>
+    <line x1="960" y1="540" x2="1700" y2="1000" stroke="#bb55ff" stroke-width="1.1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="600" y2="1070" stroke="#aa44ff" stroke-width="0.7" opacity="0.3"/>
+    <line x1="960" y1="540" x2="300" y2="1020" stroke="#9944ee" stroke-width="1" opacity="0.35"/>
+
+    <!-- Blue-bright streaks -->
+    <line x1="960" y1="540" x2="320" y2="130" stroke="#4488ff" stroke-width="1.4" opacity="0.45"/>
+    <line x1="960" y1="540" x2="40" y2="600" stroke="#5599ff" stroke-width="1" opacity="0.35"/>
+    <line x1="960" y1="540" x2="250" y2="1040" stroke="#4488ff" stroke-width="1.2" opacity="0.4"/>
+    <line x1="960" y1="540" x2="800" y2="1078" stroke="#5599ff" stroke-width="0.8" opacity="0.3"/>
+    <line x1="960" y1="540" x2="1350" y2="1060" stroke="#4488ff" stroke-width="1.1" opacity="0.4"/>
+    <line x1="960" y1="540" x2="1820" y2="600" stroke="#5599ff" stroke-width="0.9" opacity="0.35"/>
+    <line x1="960" y1="540" x2="1650" y2="80" stroke="#4488ff" stroke-width="1.3" opacity="0.45"/>
+    <line x1="960" y1="540" x2="1100" y2="5" stroke="#5599ff" stroke-width="0.7" opacity="0.3"/>
+
+    <!-- Gold/amber discharge streaks (sparse) -->
+    <line x1="960" y1="540" x2="140" y2="300" stroke="#ffcc66" stroke-width="1.5" opacity="0.35"/>
+    <line x1="960" y1="540" x2="1860" y2="180" stroke="#ffcc66" stroke-width="1.2" opacity="0.3"/>
+    <line x1="960" y1="540" x2="1500" y2="1050" stroke="#ffcc66" stroke-width="1" opacity="0.25"/>
+    <line x1="960" y1="540" x2="80" y2="800" stroke="#eebb55" stroke-width="1.3" opacity="0.3"/>
+
+    <!-- Teal-green streaks (sparse, dimensional instability) -->
+    <line x1="960" y1="540" x2="300" y2="750" stroke="#33ccaa" stroke-width="1.1" opacity="0.3"/>
+    <line x1="960" y1="540" x2="1800" y2="450" stroke="#33ccaa" stroke-width="0.9" opacity="0.25"/>
+    <line x1="960" y1="540" x2="550" y2="50" stroke="#44ddbb" stroke-width="1" opacity="0.28"/>
+
+    <!-- Slightly curved streaks — non-Euclidean space -->
+    <path d="M960,540 Q600,200 100,150" stroke="#bbccff" stroke-width="0.8" fill="none" opacity="0.3"/>
+    <path d="M960,540 Q1300,250 1850,100" stroke="#aabbee" stroke-width="0.9" fill="none" opacity="0.35"/>
+    <path d="M960,540 Q700,800 150,1000" stroke="#ccddff" stroke-width="0.7" fill="none" opacity="0.25"/>
+    <path d="M960,540 Q1250,780 1800,950" stroke="#aa44ff" stroke-width="1" fill="none" opacity="0.3"/>
+    <path d="M960,540 Q850,300 400,100" stroke="#4488ff" stroke-width="0.8" fill="none" opacity="0.28"/>
+    <path d="M960,540 Q1100,300 1500,50" stroke="#9944ee" stroke-width="0.9" fill="none" opacity="0.32"/>
+  </g>
+
+  <!-- LAYER 5: Energy tendrils — curved bezier paths -->
+  <g fill="none" filter="url(#softGlow)">
+    <!-- Major violet tendril arcing across upper left -->
+    <path d="M960,540 C750,380 500,300 200,250" stroke="#aa44ff" stroke-width="2.5" opacity="0.55" stroke-dasharray="12 6"/>
+    <path d="M960,540 C780,400 550,340 250,310" stroke="#8833dd" stroke-width="1.5" opacity="0.4" stroke-dasharray="8 4"/>
+
+    <!-- Blue tendril sweeping lower right -->
+    <path d="M960,540 C1100,650 1350,750 1750,850" stroke="#4488ff" stroke-width="2.2" opacity="0.5" stroke-dasharray="15 5"/>
+    <path d="M960,540 C1080,680 1300,790 1680,900" stroke="#5599ff" stroke-width="1.3" opacity="0.35" stroke-dasharray="10 8"/>
+
+    <!-- Teal tendril curving up and right -->
+    <path d="M960,540 C1050,420 1200,280 1550,150" stroke="#33ccaa" stroke-width="2" opacity="0.45" stroke-dasharray="18 7"/>
+
+    <!-- Amber energy discharge arcing left -->
+    <path d="M960,540 C800,600 550,680 180,750" stroke="#ffcc66" stroke-width="1.8" opacity="0.4" stroke-dasharray="6 10"/>
+
+    <!-- Violet-pink tendril downward -->
+    <path d="M960,540 C920,700 850,850 700,1000" stroke="#cc66ff" stroke-width="2" opacity="0.45" stroke-dasharray="14 6"/>
+
+    <!-- Blue-white tendril upper right -->
+    <path d="M960,540 C1100,400 1300,250 1600,100" stroke="#88aaff" stroke-width="1.8" opacity="0.5" stroke-dasharray="10 5"/>
+
+    <!-- Thin green wisps — dimensional cracks -->
+    <path d="M960,540 C850,480 650,500 350,580" stroke="#44ddbb" stroke-width="1.2" opacity="0.35" stroke-dasharray="4 12"/>
+    <path d="M960,540 C1020,480 1150,350 1400,200" stroke="#33ccaa" stroke-width="1" opacity="0.3" stroke-dasharray="3 15"/>
+
+    <!-- Additional violet tendrils for density -->
+    <path d="M960,540 C900,350 700,200 350,80" stroke="#7744dd" stroke-width="1.6" opacity="0.4" stroke-dasharray="20 8"/>
+    <path d="M960,540 C1050,700 1200,900 1500,1020" stroke="#6633cc" stroke-width="1.8" opacity="0.42" stroke-dasharray="12 10"/>
+  </g>
+
+  <!-- LAYER 6: Bright core — vanishing point glow -->
+  <ellipse cx="960" cy="540" rx="600" ry="400" fill="url(#coreHaze)"/>
+  <ellipse cx="960" cy="540" rx="200" ry="130" fill="url(#coreGlow)"/>
+  <!-- Tight bright center -->
+  <circle cx="960" cy="540" r="40" fill="#ffffff" opacity="0.12" filter="url(#wideGlow)"/>
+  <circle cx="960" cy="540" r="18" fill="#ddbbff" opacity="0.2" filter="url(#softGlow)"/>
+  <circle cx="960" cy="540" r="6" fill="#ffffff" opacity="0.35"/>
+
+  <!-- LAYER 7: Foreground particles — large, bright, close streaks for depth -->
+  <g stroke-linecap="round" filter="url(#softGlow)">
+    <!-- Large bright foreground streak upper-left -->
+    <line x1="400" y1="200" x2="350" y2="170" stroke="#ddccff" stroke-width="3.5" opacity="0.6"/>
+    <line x1="398" y1="199" x2="370" y2="182" stroke="#ffffff" stroke-width="1.5" opacity="0.7"/>
+
+    <!-- Large bright foreground streak lower-right -->
+    <line x1="1550" y1="820" x2="1620" y2="870" stroke="#ccbbff" stroke-width="3" opacity="0.55"/>
+    <line x1="1552" y1="821" x2="1600" y2="853" stroke="#ffffff" stroke-width="1.2" opacity="0.65"/>
+
+    <!-- Bright blue streak left -->
+    <line x1="250" y1="650" x2="210" y2="680" stroke="#6699ff" stroke-width="2.8" opacity="0.5"/>
+    <line x1="252" y1="651" x2="225" y2="670" stroke="#aaccff" stroke-width="1" opacity="0.6"/>
+
+    <!-- Bright amber fleck upper-right -->
+    <line x1="1400" y1="180" x2="1430" y2="155" stroke="#ffcc66" stroke-width="2.5" opacity="0.5"/>
+    <line x1="1401" y1="179" x2="1420" y2="164" stroke="#ffeeaa" stroke-width="1" opacity="0.6"/>
+
+    <!-- Bright teal fleck center-left -->
+    <line x1="500" y1="480" x2="480" y2="465" stroke="#33ccaa" stroke-width="2.2" opacity="0.45"/>
+
+    <!-- Large close violet streak bottom-left -->
+    <line x1="300" y1="900" x2="260" y2="940" stroke="#bb77ff" stroke-width="3.2" opacity="0.5"/>
+    <line x1="302" y1="901" x2="275" y2="926" stroke="#ddaaff" stroke-width="1.3" opacity="0.6"/>
+
+    <!-- Bright streak top-center -->
+    <line x1="850" y1="100" x2="840" y2="70" stroke="#ccddff" stroke-width="2.8" opacity="0.55"/>
+    <line x1="851" y1="99" x2="844" y2="80" stroke="#ffffff" stroke-width="1.1" opacity="0.65"/>
+  </g>
+</svg>

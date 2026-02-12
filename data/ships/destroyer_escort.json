@@ -14,16 +14,16 @@
   "passengers": 0,
   "lowBerths": 0,
   "turrets": [
-    { "id": "turret1", "type": "triple", "weapons": ["Pulse Laser", "Pulse Laser", "Pulse Laser"] },
-    { "id": "turret2", "type": "triple", "weapons": ["Pulse Laser", "Pulse Laser", "Pulse Laser"] },
-    { "id": "turret3", "type": "triple", "weapons": ["Beam Laser", "Beam Laser", "Beam Laser"] },
-    { "id": "turret4", "type": "triple", "weapons": ["Beam Laser", "Beam Laser", "Beam Laser"] },
-    { "id": "turret5", "type": "triple", "weapons": ["Missile Rack", "Sandcaster", "Sandcaster"] },
-    { "id": "turret6", "type": "triple", "weapons": ["Missile Rack", "Sandcaster", "Sandcaster"] }
+    { "id": "turret1", "type": "triple", "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"] },
+    { "id": "turret2", "type": "triple", "weapons": ["pulse_laser", "pulse_laser", "pulse_laser"] },
+    { "id": "turret3", "type": "triple", "weapons": ["beam_laser", "beam_laser", "beam_laser"] },
+    { "id": "turret4", "type": "triple", "weapons": ["beam_laser", "beam_laser", "beam_laser"] },
+    { "id": "turret5", "type": "triple", "weapons": ["missile_rack", "sandcaster", "sandcaster"] },
+    { "id": "turret6", "type": "triple", "weapons": ["missile_rack", "sandcaster", "sandcaster"] }
   ],
   "barbettes": [
-    { "id": "barbette1", "type": "particle", "weapons": ["Particle Barbette"] },
-    { "id": "barbette2", "type": "particle", "weapons": ["Particle Barbette"] }
+    { "id": "barbette1", "type": "particle", "weapons": ["particle_barbette"] },
+    { "id": "barbette2", "type": "particle", "weapons": ["particle_barbette"] }
   ],
   "hardpoints": 10,
   "hardpointsUsed": 8,

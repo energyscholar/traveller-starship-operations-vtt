@@ -35,23 +35,23 @@ function testPulseLaserDamage() {
 }
 
 function testBeamLaserDamage() {
-  console.log('Test 2: Beam Laser damage (3d6)');
+  console.log('Test 2: Beam Laser damage (1d6)');
 
   const weapon = SHIPS.free_trader.weapons.find(w => w.id === 'beamLaser');
   const roller = new DiceRoller(123);
   const damageRoll = rollDamageDice(roller, weapon.damage);
 
-  // 3d6 should have 3 dice
-  if (damageRoll.dice.length !== 3) {
-    throw new Error(`Beam Laser should roll 3 dice, got ${damageRoll.dice.length}`);
+  // 1d6 should have 1 die
+  if (damageRoll.dice.length !== 1) {
+    throw new Error(`Beam Laser should roll 1 die, got ${damageRoll.dice.length}`);
   }
 
-  // Total should be between 3 and 18
-  if (damageRoll.total < 3 || damageRoll.total > 18) {
+  // Total should be between 1 and 6
+  if (damageRoll.total < 1 || damageRoll.total > 6) {
     throw new Error(`Beam Laser damage out of range: ${damageRoll.total}`);
   }
 
-  console.log('✅ PASS: Beam Laser rolls 3d6');
+  console.log('✅ PASS: Beam Laser rolls 1d6');
   console.log(`   Rolled: [${damageRoll.dice.join(', ')}] = ${damageRoll.total}\n`);
 }
 

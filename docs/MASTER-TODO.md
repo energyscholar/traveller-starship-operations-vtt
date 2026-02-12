@@ -38,7 +38,7 @@
 ### From CLAUDE.md Roadmap
 | ID | Task | Status | Notes |
 |----|------|--------|-------|
-| AR-35 | Captain Orders Enhancement | Pending | Listed as NEXT in CLAUDE.md |
+| AR-35 | Captain Orders Enhancement | Complete | Implemented |
 
 ### From v81 TODOs
 | ID | Task | Status | Notes |
@@ -143,7 +143,7 @@
 ## Gaps Identified
 
 1. **Journey tests only test data layer** - UI multi-role Puppeteer tests verify elements exist but don't execute full journeys
-2. **AR-35 Captain Orders never started** - Listed as NEXT but no commits found
+2. **AR-35 Captain Orders COMPLETE** - Implemented
 3. **Ship system tooltips never done** - v81.2 still pending
 4. **scanContact duplicate** - v81.1 likely fixed but should verify
 5. **Tactical ship map** - v81.6 never started
@@ -159,7 +159,7 @@
 
 ### After Tuesday:
 4. AR-125.4 - Crew roster (2 hr)
-5. AR-35 - Captain Orders (scope TBD)
+5. AR-35 - Captain Orders (COMPLETE)
 6. v81.2 - Ship system tooltips (2 hr)
 7. AR-73/74 - Journey/scan tests (4 hr)
 8. CACHE.1 - TravellerMap cache (1 hr)

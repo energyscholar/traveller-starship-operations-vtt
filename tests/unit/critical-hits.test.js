@@ -333,13 +333,13 @@ test('Casualty deals damage',
 test('Crew health reduced',
   casualty.newHealth < 10);
 
-test('Severity scales damage',
-  casualty.damage === 2 * 3); // Severity 2 * 3
+test('Crew casualty rolls 1D6',
+  casualty.damage >= 1 && casualty.damage <= 6); // Flat 1D6 (RAW)
 
 // High severity casualty
 const deadCrew = applyCrewCasualty(crewShip, 6);
-test('High severity can kill crew',
-  deadCrew.damage === 18); // 6 * 3
+test('Crew casualty at high severity still rolls 1D6',
+  deadCrew.damage >= 1 && deadCrew.damage <= 6); // Flat 1D6 (RAW)
 
 // ========================================
 // REPAIR SYSTEM TESTS

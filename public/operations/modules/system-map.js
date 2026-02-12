@@ -2661,7 +2661,7 @@ function generatePlaces(planets, asteroidBelts, starportClass, systemName) {
 }
 
 /**
- * AR-XXX: Generate places from celestial objects for loaded sector systems
+ * Generate places from celestial objects for loaded sector systems
  * This creates destination entries for all navigable locations:
  * - Jump point (100-diameter safe distance)
  * - Planet orbits (all planets)
@@ -3296,7 +3296,7 @@ function loadSystemFromJSON(jsonData) {
     });
   }
 
-  // AR-XXX: Generate places dynamically from celestial objects
+  // Generate places dynamically from celestial objects
   // This provides complete destination coverage for all 440+ systems
   let places;
   if (isGenerated && celestialObjects.length === 0) {

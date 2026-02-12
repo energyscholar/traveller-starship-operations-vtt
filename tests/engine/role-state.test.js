@@ -469,11 +469,12 @@ console.log('\n--- Phase 1d: Observer State ---\n');
   assert(calculateECCMBonus({ eccm: true }, { ecm: false }) === 0, 'ECCM vs no ECM gives 0');
   assert(calculateECCMBonus({ eccm: false }, { ecm: true }) === 0, 'No ECCM gives 0');
 
-  // Sensor grade DM tests
+  // Sensor grade DM tests (RAW: Basic=-4, Civilian=-2, Military=0, Improved=+1, Advanced=+2)
   console.log('Test: Sensor grade DMs');
-  assert(getSensorAttackDM('Basic') === -2, 'Basic gives -2');
-  assert(getSensorAttackDM('Civilian') === 0, 'Civilian gives 0');
-  assert(getSensorAttackDM('Military') === 1, 'Military gives +1');
+  assert(getSensorAttackDM('Basic') === -4, 'Basic gives -4');
+  assert(getSensorAttackDM('Civilian') === -2, 'Civilian gives -2');
+  assert(getSensorAttackDM('Military') === 0, 'Military gives 0');
+  assert(getSensorAttackDM('Improved') === 1, 'Improved gives +1');
   assert(getSensorAttackDM('Advanced') === 2, 'Advanced gives +2');
   assert(getSensorAttackDM('Very Advanced') === 3, 'Very Advanced gives +3');
   assert(getSensorAttackDM('Unknown') === 0, 'Unknown defaults to 0');
@@ -499,19 +500,19 @@ console.log('\n--- Phase 1d: Observer State ---\n');
     { ecm: true },
     'Military'
   );
-  assert(mods1.sensorDM === 1, 'Military sensor DM is +1');
+  assert(mods1.sensorDM === 0, 'Military sensor DM is 0');
   assert(mods1.ecmPenalty === -1, 'ECCM partially counters ECM');
   assert(mods1.eccmBonus === 1, 'ECCM provides bonus vs ECM');
-  assert(mods1.total === 1, 'Total is +1 (1 - 1 + 1)');
+  assert(mods1.total === 0, 'Total is 0 (0 - 1 + 1)');
 
   const mods2 = calculateSensorAttackModifiers(
     { eccm: false },
     { ecm: true },
     'Civilian'
   );
-  assert(mods2.sensorDM === 0, 'Civilian sensor DM is 0');
+  assert(mods2.sensorDM === -2, 'Civilian sensor DM is -2');
   assert(mods2.ecmPenalty === -2, 'Full ECM penalty without ECCM');
-  assert(mods2.total === -2, 'Total is -2');
+  assert(mods2.total === -4, 'Total is -4');
 
   const mods3 = calculateSensorAttackModifiers(
     { eccm: false },

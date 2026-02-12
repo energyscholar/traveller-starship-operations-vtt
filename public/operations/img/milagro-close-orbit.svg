@@ -1,0 +1,470 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <!-- Star glow -->
+    <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff5522" stop-opacity="1"/>
+      <stop offset="20%" stop-color="#cc2200" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#ff3300" stop-opacity="0.2"/>
+      <stop offset="80%" stop-color="#ff3300" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#ff3300" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="starCore" cx="42%" cy="42%" r="50%">
+      <stop offset="0%" stop-color="#ff9955"/>
+      <stop offset="35%" stop-color="#ff5522"/>
+      <stop offset="80%" stop-color="#cc2200"/>
+      <stop offset="100%" stop-color="#991800"/>
+    </radialGradient>
+
+    <!-- Dome glows -->
+    <radialGradient id="domeGlowLarge" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffdd88" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#ffcc66" stop-opacity="0.6"/>
+      <stop offset="70%" stop-color="#ffcc66" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#ffcc66" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="domeGlowSmall" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffdd88" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#ffcc66" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ffcc66" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="domeGlowDark" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffcc66" stop-opacity="0.7"/>
+      <stop offset="30%" stop-color="#ffbb44" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ffbb44" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Surface gradient (lit from upper-right) -->
+    <linearGradient id="surfaceLit" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7a5a42"/>
+      <stop offset="40%" stop-color="#674a35"/>
+      <stop offset="70%" stop-color="#3d2820"/>
+      <stop offset="100%" stop-color="#0a0808"/>
+    </linearGradient>
+
+    <!-- Terminator shadow overlay -->
+    <linearGradient id="terminatorShadow" x1="65%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="40%" stop-color="#000000" stop-opacity="0.3"/>
+      <stop offset="70%" stop-color="#000000" stop-opacity="0.7"/>
+      <stop offset="90%" stop-color="#000000" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0a0808" stop-opacity="0.97"/>
+    </linearGradient>
+
+    <!-- Brine Basin gradient -->
+    <radialGradient id="brineBasin" cx="40%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#4167b7" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#35537a" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#2a4570" stop-opacity="0.5"/>
+    </radialGradient>
+
+    <!-- Red starlight tint overlay -->
+    <linearGradient id="starlightTint" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff6633" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ff6633" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="starBloom" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="bloom"/>
+      <feMerge><feMergeNode in="bloom"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="domeBloom" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Terrain texture (feTurbulence for natural cratered surface) -->
+    <filter id="terrainNoise" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="6" seed="42" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+      <feBlend mode="overlay" in="SourceGraphic" in2="grayNoise" result="textured"/>
+      <feComposite in="textured" in2="SourceGraphic" operator="in"/>
+    </filter>
+
+    <!-- Finer surface noise -->
+    <filter id="fineNoise" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="17" result="fn"/>
+      <feColorMatrix type="saturate" values="0" in="fn" result="gfn"/>
+      <feBlend mode="soft-light" in="SourceGraphic" in2="gfn" result="ftex"/>
+      <feComposite in="ftex" in2="SourceGraphic" operator="in"/>
+    </filter>
+
+    <!-- Planet surface clip (huge arc) -->
+    <clipPath id="surfaceClip">
+      <ellipse cx="960" cy="2800" rx="2600" ry="2400"/>
+    </clipPath>
+  </defs>
+
+  <!-- ============================================ -->
+  <!-- LAYER 1: SPACE BACKGROUND                   -->
+  <!-- ============================================ -->
+  <rect width="1920" height="1080" fill="#05050a"/>
+
+  <!-- Stars (upper portion, above planet limb ~380px) -->
+  <g>
+    <!-- White stars -->
+    <circle cx="52" cy="40" r="0.7" fill="#ffffff" opacity="0.6"/>
+    <circle cx="135" cy="95" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="210" cy="18" r="1.0" fill="#ffffff" opacity="0.8"/>
+    <circle cx="288" cy="140" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="350" cy="62" r="0.8" fill="#ffffff" opacity="0.65"/>
+    <circle cx="425" cy="30" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="500" cy="105" r="0.7" fill="#ffffff" opacity="0.55"/>
+    <circle cx="575" cy="50" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="640" cy="130" r="0.9" fill="#ffffff" opacity="0.65"/>
+    <circle cx="715" cy="72" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="790" cy="28" r="0.7" fill="#ffffff" opacity="0.55"/>
+    <circle cx="860" cy="155" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="930" cy="45" r="0.8" fill="#ffffff" opacity="0.6"/>
+    <circle cx="1010" cy="115" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="1080" cy="35" r="0.7" fill="#ffffff" opacity="0.55"/>
+    <circle cx="1165" cy="80" r="0.6" fill="#ffffff" opacity="0.45"/>
+    <circle cx="1240" cy="150" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="1310" cy="55" r="0.8" fill="#ffffff" opacity="0.6"/>
+    <circle cx="1380" cy="120" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="1450" cy="42" r="0.7" fill="#ffffff" opacity="0.55"/>
+    <circle cx="1600" cy="100" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="1680" cy="60" r="0.9" fill="#ffffff" opacity="0.7"/>
+    <circle cx="1760" cy="135" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="1840" cy="48" r="0.7" fill="#ffffff" opacity="0.55"/>
+    <circle cx="1900" cy="110" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="80" cy="200" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="170" cy="260" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="260" cy="220" r="0.8" fill="#ffffff" opacity="0.6"/>
+    <circle cx="340" cy="300" r="0.6" fill="#ffffff" opacity="0.45"/>
+    <circle cx="440" cy="250" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="530" cy="200" r="0.7" fill="#ffffff" opacity="0.55"/>
+    <circle cx="620" cy="280" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="700" cy="210" r="0.5" fill="#ffffff" opacity="0.35"/>
+    <circle cx="780" cy="300" r="0.7" fill="#ffffff" opacity="0.5"/>
+    <circle cx="860" cy="240" r="0.6" fill="#ffffff" opacity="0.45"/>
+    <circle cx="940" cy="270" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="1020" cy="220" r="0.7" fill="#ffffff" opacity="0.55"/>
+    <circle cx="1100" cy="290" r="0.6" fill="#ffffff" opacity="0.45"/>
+    <circle cx="1180" cy="230" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="1260" cy="260" r="0.8" fill="#ffffff" opacity="0.6"/>
+    <circle cx="1340" cy="200" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="1420" cy="280" r="0.5" fill="#ffffff" opacity="0.35"/>
+    <circle cx="1600" cy="260" r="0.7" fill="#ffffff" opacity="0.5"/>
+    <circle cx="1700" cy="220" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="1780" cy="295" r="0.6" fill="#ffffff" opacity="0.5"/>
+    <circle cx="1860" cy="230" r="0.7" fill="#ffffff" opacity="0.55"/>
+    <circle cx="40" cy="350" r="0.5" fill="#ffffff" opacity="0.4"/>
+    <circle cx="150" cy="330" r="0.7" fill="#ffffff" opacity="0.5"/>
+    <circle cx="480" cy="340" r="0.6" fill="#ffffff" opacity="0.45"/>
+    <circle cx="750" cy="350" r="0.5" fill="#ffffff" opacity="0.35"/>
+    <circle cx="1050" cy="340" r="0.6" fill="#ffffff" opacity="0.4"/>
+    <circle cx="1350" cy="345" r="0.5" fill="#ffffff" opacity="0.35"/>
+    <circle cx="1720" cy="340" r="0.7" fill="#ffffff" opacity="0.5"/>
+    <circle cx="1900" cy="330" r="0.5" fill="#ffffff" opacity="0.4"/>
+
+    <!-- Pale blue stars -->
+    <circle cx="100" cy="55" r="0.8" fill="#aaccff" opacity="0.6"/>
+    <circle cx="370" cy="170" r="0.7" fill="#bbddff" opacity="0.5"/>
+    <circle cx="600" cy="90" r="0.6" fill="#aaccff" opacity="0.5"/>
+    <circle cx="830" cy="85" r="0.7" fill="#bbddff" opacity="0.55"/>
+    <circle cx="1140" cy="140" r="0.6" fill="#aaccff" opacity="0.45"/>
+    <circle cx="1330" cy="30" r="0.8" fill="#bbddff" opacity="0.6"/>
+    <circle cx="1750" cy="55" r="0.7" fill="#aaccff" opacity="0.5"/>
+    <circle cx="1890" cy="180" r="0.6" fill="#bbddff" opacity="0.5"/>
+    <circle cx="250" cy="310" r="0.7" fill="#aaccff" opacity="0.45"/>
+    <circle cx="660" cy="320" r="0.6" fill="#bbddff" opacity="0.4"/>
+    <circle cx="1200" cy="310" r="0.7" fill="#aaccff" opacity="0.45"/>
+    <circle cx="1580" cy="330" r="0.6" fill="#bbddff" opacity="0.4"/>
+
+    <!-- Pale yellow stars -->
+    <circle cx="180" cy="75" r="0.7" fill="#ffeedd" opacity="0.5"/>
+    <circle cx="475" cy="160" r="0.6" fill="#ffeecc" opacity="0.45"/>
+    <circle cx="740" cy="45" r="0.8" fill="#ffeedd" opacity="0.55"/>
+    <circle cx="1060" cy="70" r="0.6" fill="#ffeecc" opacity="0.45"/>
+    <circle cx="1250" cy="105" r="0.7" fill="#ffeedd" opacity="0.5"/>
+    <circle cx="1640" cy="145" r="0.6" fill="#ffeecc" opacity="0.45"/>
+    <circle cx="550" cy="290" r="0.7" fill="#ffeedd" opacity="0.45"/>
+    <circle cx="900" cy="310" r="0.6" fill="#ffeecc" opacity="0.4"/>
+
+    <!-- Faint red stars -->
+    <circle cx="310" cy="250" r="0.6" fill="#ffaa88" opacity="0.3"/>
+    <circle cx="690" cy="170" r="0.5" fill="#ff9977" opacity="0.25"/>
+    <circle cx="1020" cy="170" r="0.6" fill="#ffaa88" opacity="0.3"/>
+    <circle cx="1440" cy="250" r="0.5" fill="#ff9977" opacity="0.25"/>
+    <circle cx="1820" cy="150" r="0.6" fill="#ffaa88" opacity="0.3"/>
+
+    <!-- Bright stars with diffraction spikes -->
+    <g filter="url(#softGlow)">
+      <circle cx="320" cy="85" r="1.8" fill="#ffffff" opacity="0.85"/>
+      <line x1="312" y1="85" x2="328" y2="85" stroke="#ffffff" stroke-width="0.4" opacity="0.5"/>
+      <line x1="320" y1="77" x2="320" y2="93" stroke="#ffffff" stroke-width="0.4" opacity="0.5"/>
+
+      <circle cx="1100" cy="55" r="1.5" fill="#ddeeff" opacity="0.8"/>
+      <line x1="1093" y1="55" x2="1107" y2="55" stroke="#ddeeff" stroke-width="0.35" opacity="0.5"/>
+      <line x1="1100" y1="48" x2="1100" y2="62" stroke="#ddeeff" stroke-width="0.35" opacity="0.5"/>
+
+      <circle cx="55" cy="290" r="2.0" fill="#ffffff" opacity="0.8"/>
+      <line x1="45" y1="290" x2="65" y2="290" stroke="#ffffff" stroke-width="0.4" opacity="0.5"/>
+      <line x1="55" y1="280" x2="55" y2="300" stroke="#ffffff" stroke-width="0.4" opacity="0.5"/>
+
+      <circle cx="1870" cy="75" r="1.6" fill="#ffeedd" opacity="0.8"/>
+      <line x1="1862" y1="75" x2="1878" y2="75" stroke="#ffeedd" stroke-width="0.35" opacity="0.5"/>
+      <line x1="1870" y1="67" x2="1870" y2="83" stroke="#ffeedd" stroke-width="0.35" opacity="0.5"/>
+    </g>
+
+    <!-- Inner belt band — faint dots across upper sky -->
+    <g opacity="0.2">
+      <circle cx="80" cy="185" r="0.4" fill="#888877"/>
+      <circle cx="200" cy="178" r="0.3" fill="#999988"/>
+      <circle cx="340" cy="190" r="0.4" fill="#777766"/>
+      <circle cx="470" cy="182" r="0.3" fill="#888877"/>
+      <circle cx="610" cy="195" r="0.4" fill="#999988"/>
+      <circle cx="730" cy="180" r="0.3" fill="#777766"/>
+      <circle cx="870" cy="192" r="0.4" fill="#888877"/>
+      <circle cx="1000" cy="185" r="0.3" fill="#999988"/>
+      <circle cx="1130" cy="190" r="0.4" fill="#777766"/>
+      <circle cx="1270" cy="183" r="0.3" fill="#888877"/>
+      <circle cx="1400" cy="193" r="0.4" fill="#999988"/>
+      <circle cx="1580" cy="188" r="0.3" fill="#777766"/>
+      <circle cx="1700" cy="195" r="0.4" fill="#888877"/>
+      <circle cx="1830" cy="182" r="0.3" fill="#999988"/>
+    </g>
+  </g>
+
+  <!-- ============================================ -->
+  <!-- LAYER 2: THE STAR (M2 V red dwarf)          -->
+  <!-- ============================================ -->
+  <g>
+    <!-- Wide corona glow -->
+    <circle cx="1500" cy="180" r="120" fill="url(#starGlow)" filter="url(#starBloom)"/>
+    <!-- Corona wisps -->
+    <ellipse cx="1500" cy="180" rx="80" ry="60" fill="#ff3300" opacity="0.06" transform="rotate(20, 1500, 180)"/>
+    <ellipse cx="1500" cy="180" rx="65" ry="90" fill="#ff3300" opacity="0.05" transform="rotate(-15, 1500, 180)"/>
+    <ellipse cx="1500" cy="180" rx="95" ry="50" fill="#ff2200" opacity="0.04" transform="rotate(40, 1500, 180)"/>
+    <!-- Star disc -->
+    <circle cx="1500" cy="180" r="26" fill="url(#starCore)" filter="url(#softGlow)"/>
+    <!-- Hot spot -->
+    <circle cx="1492" cy="172" r="8" fill="#ff9955" opacity="0.4"/>
+    <!-- Lens flare -->
+    <line x1="1350" y1="180" x2="1650" y2="180" stroke="#ff5522" stroke-width="0.6" opacity="0.12"/>
+    <line x1="1380" y1="180" x2="1620" y2="180" stroke="#ffaa66" stroke-width="0.3" opacity="0.18"/>
+    <line x1="1400" y1="183" x2="1600" y2="177" stroke="#ff7733" stroke-width="0.4" opacity="0.08"/>
+    <!-- Red light spill across the scene -->
+    <circle cx="1500" cy="180" r="400" fill="#ff3300" opacity="0.012"/>
+  </g>
+
+  <!-- ============================================ -->
+  <!-- LAYER 3: THE PLANET SURFACE                 -->
+  <!-- ============================================ -->
+
+  <!-- Planet body — massive curved horizon filling bottom 60-65% -->
+  <g clip-path="url(#surfaceClip)">
+
+    <!-- Base surface color with lighting gradient -->
+    <ellipse cx="960" cy="2800" rx="2600" ry="2400" fill="url(#surfaceLit)" filter="url(#terrainNoise)"/>
+
+    <!-- Additional fine texture layer -->
+    <ellipse cx="960" cy="2800" rx="2600" ry="2400" fill="#5a4030" opacity="0.3" filter="url(#fineNoise)"/>
+
+    <!-- ===== LEFT SIDE: Lit terrain ===== -->
+
+    <!-- Cratered wasteland — impact craters with shadow/lit rim -->
+    <!-- Large craters -->
+    <g>
+      <!-- Crater 1 (large) -->
+      <circle cx="250" cy="620" r="35" fill="#5a4030" opacity="0.6"/>
+      <ellipse cx="250" cy="620" rx="35" ry="34" fill="none" stroke="#7a5a42" stroke-width="1.5" opacity="0.4"/>
+      <path d="M225,605 A35,35 0 0,1 275,605" fill="none" stroke="#8a6a52" stroke-width="1" opacity="0.5"/>
+      <path d="M275,635 A35,35 0 0,1 225,635" fill="none" stroke="#3d2820" stroke-width="1.5" opacity="0.4"/>
+
+      <!-- Crater 2 -->
+      <circle cx="420" cy="550" r="25" fill="#5a4030" opacity="0.5"/>
+      <path d="M402,538 A25,25 0 0,1 438,538" fill="none" stroke="#8a6a52" stroke-width="1" opacity="0.4"/>
+      <path d="M438,562 A25,25 0 0,1 402,562" fill="none" stroke="#3d2820" stroke-width="1" opacity="0.4"/>
+
+      <!-- Crater 3 -->
+      <circle cx="150" cy="750" r="45" fill="#4d3828" opacity="0.5"/>
+      <path d="M118,728 A45,45 0 0,1 182,728" fill="none" stroke="#8a6a52" stroke-width="1.5" opacity="0.4"/>
+      <path d="M182,772 A45,45 0 0,1 118,772" fill="none" stroke="#3d2820" stroke-width="2" opacity="0.4"/>
+
+      <!-- Crater 4 (large) -->
+      <circle cx="500" cy="700" r="30" fill="#5a4030" opacity="0.5"/>
+      <path d="M478,682 A30,30 0 0,1 522,682" fill="none" stroke="#8a6a52" stroke-width="1" opacity="0.4"/>
+      <path d="M522,718 A30,30 0 0,1 478,718" fill="none" stroke="#3d2820" stroke-width="1.2" opacity="0.4"/>
+
+      <!-- Small craters scattered -->
+      <circle cx="180" cy="530" r="10" fill="#5a4030" opacity="0.4"/>
+      <circle cx="320" cy="480" r="8" fill="#4d3828" opacity="0.35"/>
+      <circle cx="100" cy="580" r="12" fill="#5a4030" opacity="0.4"/>
+      <circle cx="350" cy="650" r="7" fill="#4d3828" opacity="0.35"/>
+      <circle cx="460" cy="480" r="9" fill="#5a4030" opacity="0.4"/>
+      <circle cx="280" cy="720" r="14" fill="#4d3828" opacity="0.4"/>
+      <circle cx="550" cy="580" r="6" fill="#5a4030" opacity="0.35"/>
+      <circle cx="80" cy="680" r="11" fill="#4d3828" opacity="0.4"/>
+      <circle cx="380" cy="780" r="8" fill="#5a4030" opacity="0.35"/>
+      <circle cx="200" cy="850" r="15" fill="#4d3828" opacity="0.4"/>
+      <circle cx="450" cy="830" r="10" fill="#5a4030" opacity="0.35"/>
+      <circle cx="600" cy="680" r="5" fill="#4d3828" opacity="0.3"/>
+      <circle cx="330" cy="560" r="6" fill="#5a4030" opacity="0.35"/>
+      <circle cx="130" cy="450" r="8" fill="#4d3828" opacity="0.3"/>
+      <circle cx="520" cy="460" r="5" fill="#5a4030" opacity="0.3"/>
+
+      <!-- Rocky ridges — long thin shadows -->
+      <path d="M100,500 L220,520 L230,518" fill="none" stroke="#3d2820" stroke-width="1.5" opacity="0.25"/>
+      <path d="M300,600 L380,590 L420,595" fill="none" stroke="#3d2820" stroke-width="1" opacity="0.2"/>
+      <path d="M50,700 L130,690 L180,700" fill="none" stroke="#3d2820" stroke-width="1.5" opacity="0.25"/>
+      <path d="M350,740 L450,730 L500,740" fill="none" stroke="#3d2820" stroke-width="1" opacity="0.2"/>
+    </g>
+
+    <!-- Ice sheets — sharp-edged polygonal shapes -->
+    <g>
+      <!-- Large ice field upper-left -->
+      <polygon points="60,450 120,435 160,460 150,500 90,510 50,490" fill="#c8ddf0" opacity="0.4"/>
+      <polygon points="62,452 118,437 158,461 148,499 92,508 52,489" fill="none" stroke="#d4e5f7" stroke-width="0.5" opacity="0.3"/>
+
+      <!-- Ice sheet mid-left -->
+      <polygon points="300,550 370,535 400,560 380,590 320,600 290,580" fill="#c8ddf0" opacity="0.35"/>
+
+      <!-- Scattered ice patches -->
+      <polygon points="180,600 220,590 240,610 210,630 175,620" fill="#d4e5f7" opacity="0.3"/>
+      <polygon points="450,620 490,610 510,630 480,650 440,640" fill="#c8ddf0" opacity="0.3"/>
+      <polygon points="100,830 140,820 160,840 130,860 95,850" fill="#a8c0d8" opacity="0.25"/>
+      <polygon points="550,520 580,510 600,530 585,550 545,545" fill="#c8ddf0" opacity="0.3"/>
+      <polygon points="350,450 380,440 400,460 385,475 345,470" fill="#d4e5f7" opacity="0.25"/>
+
+      <!-- Pink tint on lit ice (red starlight reflection) -->
+      <polygon points="60,450 120,435 160,460 150,500 90,510 50,490" fill="#ff6633" opacity="0.06"/>
+      <polygon points="300,550 370,535 400,560 380,590 320,600 290,580" fill="#ff6633" opacity="0.05"/>
+    </g>
+
+    <!-- The Brine Basin — large frozen ocean -->
+    <g>
+      <ellipse cx="350" cy="680" rx="140" ry="90" fill="url(#brineBasin)" transform="rotate(-8, 350, 680)"/>
+      <!-- Darker deep ice interior -->
+      <ellipse cx="340" cy="675" rx="100" ry="60" fill="#2a4570" opacity="0.4" transform="rotate(-8, 340, 675)"/>
+      <!-- Fracture lines -->
+      <g stroke="#7a99bb" stroke-width="0.5" fill="none" opacity="0.35">
+        <path d="M240,650 L300,665 L380,660 L430,680"/>
+        <path d="M270,700 L340,690 L400,710"/>
+        <path d="M310,640 L330,670 L350,720 L380,740"/>
+        <path d="M250,680 L290,690 L310,720"/>
+        <path d="M360,650 L380,680 L410,700"/>
+        <path d="M280,660 L320,650 L370,670"/>
+        <path d="M330,710 L370,700 L420,720"/>
+        <path d="M260,720 L310,740 L360,730"/>
+      </g>
+      <!-- Subtle red starlight tint on basin -->
+      <ellipse cx="350" cy="680" rx="140" ry="90" fill="#ff6633" opacity="0.04" transform="rotate(-8, 350, 680)"/>
+    </g>
+
+    <!-- Clear terrain — copper-orange bare rock patches -->
+    <g>
+      <ellipse cx="550" cy="550" rx="40" ry="25" fill="#b5643b" opacity="0.3" transform="rotate(15, 550, 550)"/>
+      <ellipse cx="200" cy="700" rx="35" ry="20" fill="#a05030" opacity="0.25" transform="rotate(-10, 200, 700)"/>
+      <ellipse cx="450" cy="490" rx="30" ry="18" fill="#b5643b" opacity="0.25" transform="rotate(5, 450, 490)"/>
+      <ellipse cx="600" cy="630" rx="25" ry="15" fill="#a05030" opacity="0.2" transform="rotate(-20, 600, 630)"/>
+      <ellipse cx="150" cy="900" rx="40" ry="22" fill="#b5643b" opacity="0.2" transform="rotate(8, 150, 900)"/>
+    </g>
+
+    <!-- ===== CENTER: The Dome Corridor ===== -->
+    <g>
+      <!-- Surface transit routes (draw first, under domes) -->
+      <g stroke="#554433" stroke-width="0.8" fill="none" opacity="0.2" stroke-dasharray="4 6">
+        <path d="M750,590 L830,570 L900,580 L960,600"/>
+        <path d="M830,570 L850,620 L880,650"/>
+        <path d="M900,580 L920,540 L960,520"/>
+        <path d="M750,590 L770,650"/>
+      </g>
+
+      <!-- Haven Dome (largest) -->
+      <g filter="url(#domeBloom)">
+        <ellipse cx="830" cy="570" rx="22" ry="12" fill="url(#domeGlowLarge)"/>
+      </g>
+      <!-- Dome structure lines -->
+      <ellipse cx="830" cy="570" rx="16" ry="8" fill="none" stroke="#ffdd88" stroke-width="0.4" opacity="0.4"/>
+      <line x1="830" y1="562" x2="830" y2="578" stroke="#ffdd88" stroke-width="0.3" opacity="0.3"/>
+      <line x1="818" y1="570" x2="842" y2="570" stroke="#ffdd88" stroke-width="0.3" opacity="0.3"/>
+
+      <!-- Downport Dome -->
+      <g filter="url(#domeBloom)">
+        <ellipse cx="900" cy="580" rx="16" ry="9" fill="url(#domeGlowSmall)"/>
+      </g>
+      <!-- Starport pad cross -->
+      <line x1="895" y1="580" x2="905" y2="580" stroke="#ff4444" stroke-width="0.8" opacity="0.5"/>
+      <line x1="900" y1="575" x2="900" y2="585" stroke="#ff4444" stroke-width="0.8" opacity="0.5"/>
+
+      <!-- Smaller corridor domes -->
+      <g filter="url(#domeBloom)">
+        <ellipse cx="750" cy="590" rx="10" ry="6" fill="url(#domeGlowSmall)"/>
+        <ellipse cx="960" cy="600" rx="8" ry="5" fill="url(#domeGlowSmall)"/>
+        <ellipse cx="770" cy="650" rx="7" ry="4" fill="url(#domeGlowSmall)"/>
+      </g>
+    </g>
+
+    <!-- ===== TERMINATOR SHADOW ===== -->
+    <rect x="0" y="380" width="1920" height="700" fill="url(#terminatorShadow)"/>
+
+    <!-- ===== RIGHT SIDE: Shadow zone ===== -->
+
+    <!-- Faint craters barely visible in shadow -->
+    <circle cx="1300" cy="550" r="20" fill="#151010" opacity="0.3"/>
+    <circle cx="1450" cy="600" r="15" fill="#151010" opacity="0.25"/>
+    <circle cx="1600" cy="520" r="25" fill="#0a0808" opacity="0.2"/>
+    <circle cx="1200" cy="650" r="12" fill="#151010" opacity="0.25"/>
+    <circle cx="1350" cy="700" r="18" fill="#0a0808" opacity="0.2"/>
+
+    <!-- Last Light dome — tiny lights in the dark -->
+    <g filter="url(#domeBloom)">
+      <ellipse cx="1250" cy="580" rx="9" ry="5" fill="url(#domeGlowDark)"/>
+    </g>
+    <!-- Even smaller outlier light -->
+    <circle cx="1265" cy="590" r="1.2" fill="#ffcc66" opacity="0.5" filter="url(#domeBloom)"/>
+    <circle cx="1240" cy="575" r="0.8" fill="#ffdd88" opacity="0.4" filter="url(#domeBloom)"/>
+
+    <!-- Red starlight tint on entire lit surface -->
+    <rect x="0" y="380" width="1920" height="700" fill="url(#starlightTint)"/>
+  </g>
+
+  <!-- Atmosphere limb — the thinnest haze along the curved horizon -->
+  <g>
+    <!-- The horizon arc -->
+    <ellipse cx="960" cy="2800" rx="2600" ry="2400" fill="none" stroke="#888888" stroke-width="2.5" opacity="0.12"/>
+    <!-- Slightly brighter on the lit side (left) -->
+    <path d="M0,405 Q480,375 960,395 Q1200,400 1400,410" fill="none" stroke="#aaaaaa" stroke-width="1.5" opacity="0.1"/>
+  </g>
+
+  <!-- ============================================ -->
+  <!-- LAYER 4: FOREGROUND DETAILS                 -->
+  <!-- ============================================ -->
+
+  <!-- Orbital debris — tiny metallic glints -->
+  <g filter="url(#softGlow)">
+    <!-- Defunct satellite 1 -->
+    <rect x="680" cy="320" width="2" height="1" fill="#aaaaaa" opacity="0.5" transform="rotate(25, 681, 320)"/>
+    <circle cx="681" cy="320" r="0.6" fill="#dddddd" opacity="0.6"/>
+
+    <!-- Debris chunk 2 -->
+    <circle cx="1350" cy="370" r="0.8" fill="#bbbbbb" opacity="0.45"/>
+    <line x1="1347" y1="370" x2="1353" y2="370" stroke="#cccccc" stroke-width="0.3" opacity="0.4"/>
+
+    <!-- Debris 3 -->
+    <circle cx="450" cy="365" r="0.5" fill="#aaaaaa" opacity="0.4"/>
+  </g>
+
+  <!-- Sensor grid overlay — very faint HUD -->
+  <g opacity="0.08" stroke="#00bbbb" fill="none" stroke-width="0.4">
+    <!-- Horizontal scan lines -->
+    <line x1="0" y1="270" x2="1920" y2="270" stroke-dasharray="20 40"/>
+    <line x1="0" y1="540" x2="1920" y2="540" stroke-dasharray="20 40"/>
+    <line x1="0" y1="810" x2="1920" y2="810" stroke-dasharray="20 40"/>
+    <!-- Vertical scan lines -->
+    <line x1="480" y1="0" x2="480" y2="1080" stroke-dasharray="20 40"/>
+    <line x1="960" y1="0" x2="960" y2="1080" stroke-dasharray="20 40"/>
+    <line x1="1440" y1="0" x2="1440" y2="1080" stroke-dasharray="20 40"/>
+    <!-- Corner brackets -->
+    <path d="M30,30 L30,60 M30,30 L60,30"/>
+    <path d="M1890,30 L1890,60 M1890,30 L1860,30"/>
+    <path d="M30,1050 L30,1020 M30,1050 L60,1050"/>
+    <path d="M1890,1050 L1890,1020 M1890,1050 L1860,1050"/>
+  </g>
+</svg>

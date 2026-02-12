@@ -1,0 +1,111 @@
+MILAGRO (1632)
+District 268 · Non-Aligned
+
+═══════════════════════════════════════════
+UNIVERSAL WORLD PROFILE
+═══════════════════════════════════════════
+
+  UWP             E31178A-7
+  Population      90 million
+  Tech Level      7
+  Law Level       A (10) — ALL items subject to inspection
+  Starport        E (frontier)
+  Atmosphere      1 (trace) — vacc suits required
+  Gravity         0.26G
+  Temperature     −25°C average
+  Trade Codes     Ic (ice-capped), Na (non-agricultural), Pi (pre-industrial)
+
+═══════════════════════════════════════════
+PHYSICAL DESCRIPTION
+═══════════════════════════════════════════
+
+Milagro is a small, frozen world orbiting a dim red dwarf. The trace
+atmosphere is essentially vacuum. The landscape is cratered ice sheets,
+regolith dunes, and exposed bedrock. The sky is black with a sullen red
+sun that never quite feels like daylight.
+
+Gravity is 0.26G. Long-term residents have adapted: taller, thinner
+frames, deliberate movements. Newcomers bounce and stumble.
+
+═══════════════════════════════════════════
+THE DOMES
+═══════════════════════════════════════════
+
+Five major domed cities house the population. All were built by Forine
+during the penal colony era (TL-9+ construction, 750s–1079). Milagro's
+TL-7 population maintains them below their build level:
+
+  • Failing pressure seals — patched with scavenged polymer and prayer
+  • Rolling blackouts — power grid at 70% on good days
+  • Recycler breakdowns — when the CHONP processors fail, the smell
+    is indescribable
+  • Cracked transparencies — some dome sections permanently sealed off
+
+  Dome            Pop     Founded   Character
+  ─────────────── ─────── ───────── ──────────────────────────────────────
+  Exile's Rest    ~12M    756       Oldest. Voiceless Song echoes in corridors.
+  Haven           ~35M    993       Largest. Government center. Food distribution HQ.
+  Crystalline     ~8M     810       Elite dome. Better-maintained, imported fixtures.
+  Last Light      ~15M    1082      Newest. Tightest community, deepest distrust.
+  Downport Dome   ~20M    780       Starport. Most diverse. Crystal Houses district.
+
+═══════════════════════════════════════════
+STARPORT (CLASS E)
+═══════════════════════════════════════════
+
+Cracked ferrocrete landing pad. One nav beacon. Prefab customs shack.
+No refined fuel. The bureaucratic apparatus is immense — more customs
+officers than landing pads.
+
+  ⚠ NO EXTRALITY ZONE: Unlike normal starports, Milagro's port falls
+  under dome law (prison-era legal framework). Even refueling requires
+  customs processing. This is why advocates exist here.
+
+═══════════════════════════════════════════
+SOCIAL GROUPS
+═══════════════════════════════════════════
+
+Milagro's population descends from waves of Forinean deportees. Each
+wave carries distinct identity:
+
+OLD TRANSPORTEES (750s–990) — Political prisoners, dissidents. Iron
+pride, bitter Forine hatred. Territory: Exile's Rest. Recognizable by
+geometric tattoo patterns on forearms. The Closed-Fist Greeting
+originated here. Maintain oral histories of every deportation ship.
+
+RESETTLEMENT WAVE (992–1079) — Largest group. Civilians herded aboard
+ships at gunpoint. Pragmatic, communal, quietly furious. Territory:
+Haven. Recognizable by synthi-bread sharing rituals. Deeply suspicious
+of anyone connected to Forine.
+
+ELITE EXILES — Fallen oligarchs. Brought Forinean high-culture
+attitudes: education, hierarchy, refinement. Territory: Crystalline.
+Recognizable by formal speech, quality clothing. Still claim Forinean
+property rights.
+
+POST-COLLAPSE (post-1079) — Survivors of the 4.3 million deaths when
+Forine abandoned Milagro. Trust nothing and no one. Territory: Last
+Light. Tight groups, shared food caches. Children taught escape routes
+before they learn to read.
+
+═══════════════════════════════════════════
+CULTURAL NOTES
+═══════════════════════════════════════════
+
+  • Closed-Fist Greeting: "I hold nothing against you." Centuries old,
+    from Forinean dome-workers.
+
+  • Voiceless Song: Wordless hum in corridors. Started as grief, now
+    identity.
+
+  • Crystal Houses: High-end entertainment district. Cultural pride,
+    not stigma. Founded by earliest deportees.
+
+  • Scratch Art: Geometric patterns carved into every surface.
+    "I was here. I existed."
+
+  • Synthi-bread Sharing: Communal meal ritual. "We share because we
+    survived starvation together."
+
+  • Ancestor Dome-Naming: Introduce with dome of origin + ship name:
+    "Delia Cade, Haven, daughter of the Bitter Morning."

@@ -62,7 +62,7 @@ function initShipStatusPanel(container, shipType = 'q_ship') {
  * SVG paths for ship types
  */
 const SHIP_SVG_PATHS = {
-  'q_ship': '/img/q-ship-diagram-sideview.svg',
+  'q_ship': '/operations/img/q-ship-diagram-sideview.svg',
   // Add more SVG paths as they become available
 };
 

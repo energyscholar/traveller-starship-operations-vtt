@@ -94,7 +94,7 @@ export function renderGMSetup() {
 
   // Campaign settings
   document.getElementById('campaign-date').value = state.campaign?.current_date || '1105-001';
-  document.getElementById('campaign-system').value = state.campaign?.current_system || 'Regina';
+  document.getElementById('campaign-system').value = state.campaign?.current_system || 'Milagro';
   document.getElementById('god-mode-toggle').checked = state.campaign?.god_mode;
   // AR-124: Position verification toggle (default true if not set)
   document.getElementById('position-verify-toggle').checked = state.campaign?.require_position_verification !== 0;

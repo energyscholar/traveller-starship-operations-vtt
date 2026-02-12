@@ -14,7 +14,7 @@
   "passengers": 8,
   "lowBerths": 0,
   "turrets": [
-    { "id": "turret1", "type": "single", "weapons": ["Pulse Laser"] }
+    { "id": "turret1", "type": "single", "weapons": ["pulse_laser"] }
   ],
   "hardpoints": 1,
   "hardpointsUsed": 1,

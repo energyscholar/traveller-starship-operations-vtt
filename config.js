@@ -30,21 +30,18 @@ module.exports = {
   },
 
   // Game Configuration
+  // NOTE: These values are not yet wired into application code. See audit 2026-02-11.
   game: {
-    // Turn timer in seconds
     turnTimer: parseInt(process.env.TURN_TIMER) || 30,
-
-    // Auto-assign ships on connection
-    autoAssignShips: process.env.AUTO_ASSIGN !== 'false', // Default: true
-
-    // Default starting range
+    autoAssignShips: process.env.AUTO_ASSIGN !== 'false',
     defaultRange: process.env.DEFAULT_RANGE || 'Medium'
   },
 
   // Environment
   env: process.env.NODE_ENV || 'development',
 
-  // Feature flags (for future use)
+  // Feature flags
+  // NOTE: These values are not yet wired into application code. See audit 2026-02-11.
   features: {
     testMode: process.env.ENABLE_TEST_MODE === 'true',
     debugMode: process.env.DEBUG === 'true'

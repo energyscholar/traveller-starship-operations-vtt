@@ -550,7 +550,7 @@ function initSocket() {
       if (data.campaign?.current_system) {
         loadCurrentSystem(data.campaign.current_system);
       }
-      // AR-XXX: Reinitialize ship panel with correct ship type after reconnect
+      // Reinitialize ship panel with correct ship type after reconnect
       const shipStatusContainer = document.getElementById('ship-status-panel');
       if (shipStatusContainer && state.ship) {
         const shipType = state.ship.ship_data?.type ||
@@ -3295,9 +3295,7 @@ function closeSystemMap() {
   }
 }
 
-// Expose system map functions globally
-window.showSystemMap = showSystemMap;
-window.closeSystemMap = closeSystemMap;
+// System map functions exposed globally via AR-152 exports block below
 
 /**
  * AR-102: Load the current system data at session startup
@@ -4045,30 +4043,14 @@ document.addEventListener('fullscreenchange', () => {
 
 // ==================== Global Exports for onclick handlers ====================
 // ES6 modules scope functions, but onclick handlers need global access
+// NOTE: Sensor, pilot, refuel, map, email, and panel exports are in the AR-153 block below.
 window.attemptRepair = attemptRepair;
-window.openRefuelModal = openRefuelModal;
-window.processFuel = processFuel;
-window.updatePower = updatePower;
-window.executeRefuel = executeRefuel;
 window.completeJump = completeJump;
 window.initiateJump = initiateJump;
 window.plotJumpCourse = plotJumpCourse;
 window.verifyPosition = verifyPosition;  // AR-68
 window.initiateJumpFromPlot = initiateJumpFromPlot;
-window.performScan = performScan;
-window.toggleECM = toggleECM;
-window.toggleECCM = toggleECCM;
-window.toggleStealth = toggleStealth;
-window.setScanMode = setScanMode;  // AR-208
-window.prepareECMReaction = prepareECMReaction;  // AR-208
-window.setSensorLock = setSensorLock;
-window.acquireSensorLock = acquireSensorLock;
-window.breakSensorLock = breakSensorLock;
 window.calculateSensorDM = calculateSensorDM;
-// AR-138: Sensor panel mode
-window.toggleSensorPanelMode = toggleSensorPanelMode;
-window.checkSensorThreats = checkSensorThreats;
-window.renderMiniRadar = renderMiniRadar;
 // AR-131+: Captain panel switching
 window.switchCaptainPanel = switchCaptainPanel;
 // AR-139: GM damage controls
@@ -4126,20 +4108,9 @@ window.skipToJumpExit = skipToJumpExit;
 window.showNewsMailModal = showNewsMailModal;
 window.closeNewsMailModal = closeNewsMailModal;
 window.updateFuelEstimate = updateFuelEstimate;
-window.setRefuelMax = setRefuelMax;
-window.setProcessMax = setProcessMax;
-window.executeRefuel = executeRefuel;
-window.executeProcessFuel = executeProcessFuel;
-// Stage 6: Jump map functions
-window.updateJumpMap = updateJumpMap;
-window.selectJumpDestination = selectJumpDestination;
-// AR-15.7: Map controls
-window.setMapSize = setMapSize;
 // Autorun 6: Mail, NPC contacts, and Feedback
 window.showAddNPCContactForm = showAddNPCContactForm;
 window.submitNPCContact = submitNPCContact;
-window.hailContact = hailContact;
-window.scanContact = scanContact;  // AR-70
 window.sendBridgeChatMessage = sendBridgeChatMessage;
 // Panel copy functions
 window.copyShipLog = copyShipLog;
@@ -4180,15 +4151,6 @@ window.queueEmail = queueEmail;
 window.shareHandout = shareHandout;
 window.hideHandout = hideHandout;
 window.showHandoutDetail = showHandoutDetail;
-// AR-141: Full Email App
-window.openEmailApp = openEmailApp;
-window.closeEmailApp = closeEmailApp;
-window.showEmailCompose = showEmailCompose;
-window.sendEmail = sendEmail;
-window.cancelEmailCompose = cancelEmailCompose;
-// Stage 13.3: Expandable Role Panel
-window.expandRolePanel = expandRolePanel;
-window.collapseRolePanel = collapseRolePanel;
 window.restoreRolePanelExpansion = restoreRolePanelExpansion;
 // AR-30: Pilot Controls
 window.toggleEvasive = toggleEvasive;

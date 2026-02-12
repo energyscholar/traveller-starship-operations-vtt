@@ -14,8 +14,8 @@
   "passengers": 0,
   "lowBerths": 0,
   "turrets": [
-    { "id": "turret1", "type": "double", "weapons": ["Pulse Laser", "Pulse Laser"] },
-    { "id": "turret2", "type": "single", "weapons": ["Missile Rack"] }
+    { "id": "turret1", "type": "double", "weapons": ["pulse_laser", "pulse_laser"] },
+    { "id": "turret2", "type": "single", "weapons": ["missile_rack"] }
   ],
   "hardpoints": 2,
   "hardpointsUsed": 2,

@@ -266,7 +266,7 @@ export function toggleWeaponsFree(state, contactId) {
  */
 export function removeCombatContact(state, contactId) {
   if (!confirm('Remove this contact?')) return;
-  state.socket.emit('ops:removeContact', { contactId });
+  state.socket.emit('ops:deleteContact', { contactId });
 }
 
 /**

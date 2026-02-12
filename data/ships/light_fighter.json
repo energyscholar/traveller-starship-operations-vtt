@@ -16,7 +16,7 @@
   "turrets": [],
   "hardpoints": 1,
   "hardpointsUsed": 1,
-  "fixedMount": { "weapon": "Pulse Laser" },
+  "fixedMount": { "weapon": "pulse_laser" },
   "crewRequirements": {
     "pilot": 1,
     "gunner": 0,

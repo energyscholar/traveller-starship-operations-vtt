@@ -2,7 +2,7 @@
   "sector": "Spinward Marches",
   "generated": "2026-01-02T07:10:06.521Z",
   "generator": "AR-222 generate-spinward-marches.js",
-  "totalSystems": 439,
+  "totalSystems": 432,
   "totalEmptyHexes": 841,
   "subsectorCount": 16,
   "subsectorFiles": [
