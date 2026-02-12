@@ -79,29 +79,31 @@ function testMissileDamage() {
 function testWeaponDamageInCombat() {
   console.log('Test 4: Weapon damage applied in combat');
 
-  const scout = { ...SHIPS.scout, hull: 10 };
-  const free_trader = { ...SHIPS.free_trader, hull: 15 };
-
-  // Use missiles (4d6)
   const missile = SHIPS.scout.weapons.find(w => w.id === 'missiles');
 
-  const result = resolveAttack(scout, free_trader, {
-    range: 'medium',
-    dodge: 'none',
-    weapon: missile,
-    seed: 999
-  });
+  // Run multiple trials to guarantee a hit
+  let hitResult = null;
+  for (let i = 0; i < 100 && !hitResult; i++) {
+    const scout = { ...SHIPS.scout, hull: 10 };
+    const free_trader = { ...SHIPS.free_trader, hull: 15 };
+    const r = resolveAttack(scout, free_trader, {
+      range: 'medium',
+      dodge: 'none',
+      weapon: missile
+    });
+    if (r.hit) hitResult = r;
+  }
 
-  // If hit, damage should be calculated with 4d6
-  if (result.hit) {
-    // Damage roll should have 4 dice
-    if (result.damageRoll.dice.length !== 4) {
-      throw new Error(`Expected 4 damage dice, got ${result.damageRoll.dice.length}`);
-    }
+  if (!hitResult) {
+    throw new Error('Expected at least one hit in 100 trials');
+  }
+  // Damage roll should have 4 dice (missiles = 4d6)
+  if (hitResult.damageRoll.dice.length !== 4) {
+    throw new Error(`Expected 4 damage dice, got ${hitResult.damageRoll.dice.length}`);
   }
 
   console.log('✅ PASS: Weapon damage applied in combat');
-  console.log(`   Hit: ${result.hit}, Damage dice: ${result.hit ? result.damageRoll.dice.length : 'N/A'}\n`);
+  console.log(`   Hit: true, Damage dice: ${hitResult.damageRoll.dice.length}\n`);
 }
 
 function testMissileLongRangeBonus() {
@@ -406,36 +408,37 @@ function testDefaultWeaponSelection() {
 function testDifferentWeaponsDifferentDamage() {
   console.log('Test 18: Different weapons deal different damage');
 
-  const scout = { ...SHIPS.scout, hull: 10 };
-  const free_trader = { ...SHIPS.free_trader, hull: 15 };
-
   const pulseLaser = SHIPS.scout.weapons.find(w => w.id === 'pulseLaser');
   const missiles = SHIPS.scout.weapons.find(w => w.id === 'missiles');
 
-  // Force hits by using adjacent range and scout's good skill
-  const result1 = resolveAttack(scout, free_trader, {
-    range: 'adjacent',
-    dodge: 'none',
-    weapon: pulseLaser,
-    seed: 1000
-  });
-
-  const result2 = resolveAttack(scout, free_trader, {
-    range: 'adjacent',
-    dodge: 'none',
-    weapon: missiles,
-    seed: 2000
-  });
-
-  // Missiles (4d6, 4 dice) should have more dice than Pulse Laser (2d6, 2 dice)
-  if (result1.hit && result2.hit) {
-    if (result1.damageRoll.dice.length >= result2.damageRoll.dice.length) {
-      throw new Error('Missiles should have more damage dice than Pulse Laser');
+  // Run trials until both weapons hit
+  let laserHit = null;
+  let missileHit = null;
+  for (let i = 0; i < 500 && (!laserHit || !missileHit); i++) {
+    if (!laserHit) {
+      const r = resolveAttack({ ...SHIPS.scout, hull: 10 }, { ...SHIPS.free_trader, hull: 15 }, {
+        range: 'adjacent', dodge: 'none', weapon: pulseLaser
+      });
+      if (r.hit) laserHit = r;
+    }
+    if (!missileHit) {
+      const r = resolveAttack({ ...SHIPS.scout, hull: 10 }, { ...SHIPS.free_trader, hull: 15 }, {
+        range: 'adjacent', dodge: 'none', weapon: missiles
+      });
+      if (r.hit) missileHit = r;
     }
   }
 
+  if (!laserHit || !missileHit) {
+    throw new Error('Expected hits for both weapons in 100 trials');
+  }
+  // Missiles (4d6, 4 dice) should have more dice than Pulse Laser (2d6, 2 dice)
+  if (laserHit.damageRoll.dice.length >= missileHit.damageRoll.dice.length) {
+    throw new Error('Missiles should have more damage dice than Pulse Laser');
+  }
+
   console.log('✅ PASS: Different weapons have different damage');
-  console.log(`   Pulse Laser: 2 dice, Missiles: 4 dice\n`);
+  console.log(`   Pulse Laser: ${laserHit.damageRoll.dice.length} dice, Missiles: ${missileHit.damageRoll.dice.length} dice\n`);
 }
 
 function testWeaponPropertiesPersist() {

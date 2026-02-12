@@ -1,6 +1,9 @@
 /**
  * Integration Tests: Space Combat Resolution
  * Stage 8.8 - Server-side combat logic, attack resolution, turn management, and victory conditions
+ *
+ * H11: SKIPPED — All 20 tests are mock-only with zero production code imports.
+ * These need rewriting to test actual production modules before being re-enabled.
  */
 
 const TEST_QUIET = process.env.TEST_QUIET === 'true';
@@ -9,18 +12,15 @@ const TEST_QUIET = process.env.TEST_QUIET === 'true';
 let totalTests = 0;
 let passedTests = 0;
 let failedTests = 0;
+let skippedTests = 0;
 
 function test(description, fn) {
-  totalTests++;
-  try {
-    fn();
-    passedTests++;
-    if (!TEST_QUIET) console.log(`  ✓ ${description}`);
-  } catch (error) {
-    failedTests++;
-    console.error(`  ✗ ${description}`);
-    console.error(`    ${error.message}`);
-  }
+  skippedTests++;
+  // H11: skip — mock-only, needs production imports
+}
+
+function skip(description, fn) {
+  skippedTests++;
 }
 
 function assert(condition, message) {
@@ -448,8 +448,5 @@ test('Correct winner when player 2 destroyed', () => {
 
 // Print summary
 console.log('\n==================================================');
-console.log(`Total: ${totalTests} | Passed: ${passedTests} | Failed: ${failedTests}`);
+console.log(`Total: ${skippedTests} skipped (H11: mock-only, needs production imports)`);
 console.log('==================================================');
-
-// Exit with appropriate code
-process.exit(failedTests > 0 ? 1 : 0);

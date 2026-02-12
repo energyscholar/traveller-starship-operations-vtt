@@ -49,13 +49,16 @@ test('Attack applies weapon damage on hit', () => {
     weapons: [{ id: 'pulse_laser', damage: '2d6' }]
   };
   const target = { id: 'trader', hull: 30, armour: 0 };
-  const result = resolveSpaceCombatAttack(attacker, target, { range: 'short', weapon: 0, seed: 99999 });
-
-  if (result.hit) {
-    assertTrue(result.damage !== undefined);
-    assertTrue(result.newHull !== undefined);
-    assertEqual(result.newHull, 30 - result.damage);
+  // Run multiple trials to guarantee a hit
+  let hitResult = null;
+  for (let i = 0; i < 100 && !hitResult; i++) {
+    const r = resolveSpaceCombatAttack(attacker, { ...target }, { range: 'short', weapon: 0 });
+    if (r.hit) hitResult = r;
   }
+  assertTrue(hitResult !== null, 'Should get at least one hit in 100 trials');
+  assertTrue(hitResult.damage !== undefined);
+  assertTrue(hitResult.newHull !== undefined);
+  assertEqual(hitResult.newHull, 30 - hitResult.damage);
 });
 
 test('Attack respects armour reduction', () => {
@@ -66,11 +69,14 @@ test('Attack respects armour reduction', () => {
     weapons: [{ id: 'pulse_laser', damage: '2d6' }]
   };
   const target = { id: 'trader', hull: 30, armour: 5 };
-  const result = resolveSpaceCombatAttack(attacker, target, { range: 'short', weapon: 0, seed: 99999 });
-
-  if (result.hit) {
-    assertTrue(result.damage >= 0); // Armour prevents negative damage
+  // Run multiple trials to guarantee a hit
+  let hitResult = null;
+  for (let i = 0; i < 100 && !hitResult; i++) {
+    const r = resolveSpaceCombatAttack(attacker, { ...target }, { range: 'short', weapon: 0 });
+    if (r.hit) hitResult = r;
   }
+  assertTrue(hitResult !== null, 'Should get at least one hit in 100 trials');
+  assertTrue(hitResult.damage >= 0); // Armour prevents negative damage
 });
 
 test('Attack target must be 8+', () => {

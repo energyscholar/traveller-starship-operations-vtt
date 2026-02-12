@@ -25,15 +25,19 @@ const result1 = resolveAttack(scout, free_trader, { range: 'medium', dodge: 'non
 assert(result1.attackTotal === result1.attackRoll.total + 2 + 0 - 0, 'Attack math correct');
 console.log(`   Rolled: ${result1.attackRoll.total}, Total: ${result1.attackTotal}\n`);
 
-// Test 2: Hit with damage
+// Test 2: Damage calculation (run multiple trials to guarantee a hit)
 console.log('Test 2: Damage calculation');
-if (result1.hit) {
-  const effect = result1.attackTotal - RULES.attackTarget;
-  const expectedDamage = Math.max(0, result1.damageRoll.total + effect - free_trader.armor);
-  assert(result1.damage === expectedDamage, 'Damage math correct');
-  console.log(`   Damage: ${result1.damageRoll.total} + ${effect} (effect) - ${free_trader.armor} (armor) = ${result1.damage}\n`);
-} else {
-  console.log('   (Skipped - attack missed)\n');
+let hitResult = null;
+for (let i = 0; i < 100 && !hitResult; i++) {
+  const trial = resolveAttack({ ...SHIPS.scout }, { ...SHIPS.free_trader }, { range: 'medium', dodge: 'none' });
+  if (trial.hit) hitResult = trial;
+}
+assert(hitResult !== null, 'Should get at least one hit in 100 trials');
+{
+  const effect = hitResult.attackTotal - RULES.attackTarget;
+  const expectedDamage = Math.max(0, hitResult.damageRoll.total + effect - free_trader.armor);
+  assert(hitResult.damage === expectedDamage, 'Damage math correct');
+  console.log(`   Damage: ${hitResult.damageRoll.total} + ${effect} (effect) - ${free_trader.armor} (armor) = ${hitResult.damage}\n`);
 }
 
 // Test 3: Armor reduces damage
@@ -63,14 +67,17 @@ console.log('Test 6: Attack target is 8+');
 assert(RULES.attackTarget === 8, 'Target number is 8');
 console.log(`   Target: ${RULES.attackTarget}\n`);
 
-// Test 7: Hull reduction
+// Test 7: Hull reduction (use guaranteed hit from Test 2)
 console.log('Test 7: Hull points reduce correctly');
-if (result1.hit && result1.damage > 0) {
-  const expectedHull = free_trader.hull - result1.damage;
-  assert(result1.newHull === expectedHull, 'Hull reduces by damage amount');
-  console.log(`   Hull: ${free_trader.hull} - ${result1.damage} = ${result1.newHull}\n`);
+assert(hitResult !== null, 'Need a hit result from Test 2');
+if (hitResult.damage > 0) {
+  const expectedHull = SHIPS.free_trader.hull - hitResult.damage;
+  assert(hitResult.newHull === expectedHull, 'Hull reduces by damage amount');
+  console.log(`   Hull: ${SHIPS.free_trader.hull} - ${hitResult.damage} = ${hitResult.newHull}\n`);
 } else {
-  console.log('   (Skipped - no damage dealt)\n');
+  // Damage was 0 due to armor — hull unchanged, which is correct
+  assert(hitResult.newHull === SHIPS.free_trader.hull, 'Hull unchanged when damage is 0');
+  console.log(`   Hull unchanged (damage absorbed by armor)\n`);
 }
 
 console.log('========================================');
